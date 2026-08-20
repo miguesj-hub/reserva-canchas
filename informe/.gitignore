@@ -1,0 +1,36 @@
+# Intermedios de LaTeX.
+# Los comentarios van en su propia línea: git no admite comentario al final
+# de un patrón («*.tdo  # todonotes» busca un archivo con ese nombre literal).
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.brf
+*.fdb_latexmk
+*.fls
+*.loa
+*.lof
+*.lol
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.tdo
+*.toc
+*.upa
+*.upb
+*.xdv
+
+# beamer, si se reaprovecha la plantilla para la presentación
+*.nav
+*.snm
+*.vrb
+
+*.bak
+.texpadtmp/
+
+# SVG intermedios: pdflatex no los puede incluir, solo consume los .pdf.
+figuras/*.svg
+
+# figuras/*.pdf SÍ se versiona: regenerarlo exige Chrome y puppeteer.

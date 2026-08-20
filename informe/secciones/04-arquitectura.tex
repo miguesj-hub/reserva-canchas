@@ -1,0 +1,174 @@
+% !TeX root = ../informe.tex
+% ===========================================================================
+%  4. Arquitectura de la solución
+%
+%  Sección central del entregable E1. Las dos cosas que el documento de
+%  alcance pide con nombre propio están aquí: el diagrama de microfrontends
+%  y el de microservicios. El modelo de datos va en la sección 5.
+%
+%  Los diagramas salen de diagramas/workspace.dsl (Structurizr). Expórtalos
+%  a PDF en figuras/ con estos nombres:
+%      contexto.pdf · contenedores.pdf · componentes-reservas.pdf · despliegue.pdf
+% ===========================================================================
+
+\section{Arquitectura de la solución}
+\label{sec:arquitectura}
+
+\instruccion{Esta sección responde a una sola pregunta: por qué el sistema
+está partido así y no de otra manera. Describir los componentes es la parte
+fácil; lo que se evalúa es la justificación. Apóyate en las vistas para
+mostrar la estructura y en el registro de decisiones para explicarla.}
+
+\subsection{Visión general}
+\label{sec:vision-general}
+
+\ph{Dos o tres párrafos: qué estilo arquitectónico se aplica, en cuántas
+piezas se divide el sistema y qué principio gobierna el reparto.}
+
+\subsection{Notación}
+\label{sec:notacion}
+
+Los diagramas siguen el modelo C4 \cite{ejemplo-web}: contexto, contenedores
+y componentes, más una vista de despliegue. Están generados desde una única
+descripción en Structurizr DSL (\id{diagramas/workspace.dsl}), de modo que
+las cuatro vistas se mantienen consistentes entre sí por construcción.
+
+\subsection{Vistas arquitectónicas}
+\label{sec:vistas}
+
+\instruccion{Una subsección por vista. En cada una: el diagrama, y debajo la
+prosa que explica lo que el diagrama no puede decir — por qué esa frontera,
+qué pasa si un elemento falla, qué se decidió a propósito. Un diagrama sin
+texto no comunica; un texto que solo enumera lo que ya se ve en el diagrama,
+tampoco.}
+
+\subsubsection{\texorpdfstring{\textsf{V-01}}{V-01} Contexto del sistema}
+\label{v:01}
+
+\begin{figure}[H]
+  \centering
+  \diagrama{contexto}
+  \caption{Vista de contexto: el sistema y sus dos tipos de usuario.}
+  \label{fig:contexto}
+\end{figure}
+
+\ph{Qué resuelve el sistema y para quién. Un párrafo.}
+
+\subsubsection{\texorpdfstring{\textsf{V-02}}{V-02} Contenedores}
+\label{v:02}
+
+Es la vista principal del documento: contiene a la vez la composición de
+microfrontends y la de microservicios.
+
+\begin{figure}[p]
+  \thisfloatpagestyle{empty}
+  \centering
+  \diagramapagina{contenedores}
+  \caption{Vista de contenedores: microfrontends, gateway, microservicios y
+           bases de datos.}
+  \label{fig:contenedores}
+\end{figure}
+
+\paragraph*{Frontend.}
+\ph{Los cuatro microfrontends, qué expone cada remote y cómo los integra el
+shell en tiempo de ejecución.}
+
+\begin{table}[H]
+  \centering
+  \caption{Composición de microfrontends.}
+  \label{tab:microfrontends}
+  \begin{tabular}{L{3.6cm} L{6.4cm} L{3.4cm}}
+    \toprule
+    \textbf{Microfrontend} & \textbf{Responsabilidad} & \textbf{Tipo} \\
+    \midrule
+    \id{shell}             & \ph{...} & Host   \\
+    \id{mf-reservas}       & \ph{...} & Remote \\
+    \id{mf-administracion} & \ph{...} & Remote \\
+    \id{mf-reportes}       & \ph{...} & Remote \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph*{Backend.}
+\ph{Los cuatro microservicios y el gateway. Señala que ms-reportes no tiene
+base de datos propia y por qué.}
+
+\begin{table}[H]
+  \centering
+  \caption{Composición de microservicios.}
+  \label{tab:microservicios}
+  \begin{tabular}{L{3.2cm} L{6.4cm} L{3.6cm}}
+    \toprule
+    \textbf{Microservicio} & \textbf{Responsabilidad} & \textbf{Base de datos} \\
+    \midrule
+    \id{ms-usuarios} & \ph{...} & \id{usuarios\_db} \\
+    \id{ms-canchas}  & \ph{...} & \id{canchas\_db}  \\
+    \id{ms-reservas} & \ph{...} & \id{reservas\_db} \\
+    \id{ms-reportes} & \ph{...} & ninguna           \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph*{Comunicación.}
+\ph{Qué servicio llama a cuál, con qué protocolo, y qué ocurre si el destino
+no responde.}
+
+\subsubsection{\texorpdfstring{\textsf{V-03}}{V-03} Componentes de \id{ms-reservas}}
+\label{v:03}
+
+Se detalla este servicio y no otro porque es donde viven las reglas de
+negocio del sistema (\cref{sec:reglas-negocio}).
+
+\begin{figure}[p]
+  \thisfloatpagestyle{empty}
+  \centering
+  \diagramapagina{componentes-reservas}
+  \caption{Vista de componentes de \id{ms-reservas}.}
+  \label{fig:componentes-reservas}
+\end{figure}
+
+\ph{Recorrido de una petición de reserva a través de los componentes.}
+
+\subsubsection{\texorpdfstring{\textsf{V-04}}{V-04} Despliegue}
+\label{v:04}
+
+\begin{figure}[p]
+  \thisfloatpagestyle{empty}
+  \centering
+  \diagramapagina{despliegue}
+  \caption{Vista de despliegue: contenedores Docker, redes y volumen.}
+  \label{fig:despliegue}
+\end{figure}
+
+\ph{Cómo se materializa la arquitectura en contenedores: qué redes hay, qué
+aísla cada una y dónde persisten los datos. El detalle operativo va en el
+manual de despliegue (\ent{5}), no aquí.}
+
+\subsection{Seguridad y control de acceso}
+\label{sec:seguridad}
+
+\ph{Dónde se autentica el usuario, quién emite el token, quién lo valida y
+cómo llega la identidad a cada microservicio.}
+
+\subsection{Registro de decisiones de arquitectura}
+\label{sec:decisiones}
+
+\instruccion{Cada decisión relevante con su alternativa descartada. Una
+decisión sin alternativa no es una decisión: es una descripción. Este
+registro es lo que distingue un documento de arquitectura de un manual de
+usuario del propio sistema. Referencia las decisiones desde el texto con
+\texttt{\textbackslash adrref\{01\}}.}
+
+\decision{01}{\ph{Título de la decisión}}
+  {\ph{Qué problema o fuerza obligó a decidir.}}
+  {\ph{Qué se decidió.}}
+  {\ph{Qué otra opción se consideró y por qué se descartó.}}
+  {\ph{Qué se gana y qué se paga por ello.}}
+
+\instruccion{Candidatas a decisión en este proyecto, por si ayudan a
+arrancar: una base de datos por microservicio frente a un esquema
+compartido; la restricción de exclusión en PostgreSQL frente a validar el
+solapamiento en Java; el gateway como punto único frente a que cada
+microfrontend llame directamente a los servicios; \id{ms-reportes} agregando
+por REST frente a leer las tablas de otros servicios; el edge que unifica el
+origen frente a configurar CORS en cada remote.}
