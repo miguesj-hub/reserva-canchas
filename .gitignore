@@ -1,0 +1,9 @@
+# Structurizr — diagramas/
+diagramas/.structurizr/
+diagramas/.chrome-profile/
+diagramas/svg/
+diagramas/node_modules/
+structurizr-lite.war
+structurizr-cli/
+
+# workspace.json NO se ignora: guarda el layout de los diagramas.
