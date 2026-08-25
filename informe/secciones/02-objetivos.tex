@@ -11,13 +11,36 @@
 \subsection{Objetivo general}
 \label{sec:objetivo-general}
 
-% [Un único enunciado]
+Diseñar e implementar un sistema web para la reserva de canchas deportivas de tenis, básquet y pádel, que permita
+consultar disponibilidad, crear y cancelar reservas, gestionar canchas y usuarios, y visualizar reportes básicos,
+mediante una arquitectura basada en microfrontends y microservicios.
 
 \subsection{Objetivos específicos}
 \label{sec:objetivos-especificos}
 
 \begin{itemize}
-    \item % [Objetivo específico 1]
-    \item % [Objetivo específico 2]
-    \item % [Objetivo específico 3]
+
+    \item Implementar las funcionalidades principales del sistema, de manera que los usuarios puedan consultar
+    disponibilidad, crear y cancelar reservas, mientras que los administradores puedan gestionar canchas y
+    usuarios, cancelar reservas y consultar reportes.
+
+    \item Diseñar una arquitectura basada en microfrontends que permita separar la interfaz en módulos funcionales
+    independientes e integrarlos dentro de una misma solución web.
+
+
+    \item Diseñar una arquitectura de microservicios que distribuya de forma clara las responsabilidades relacionadas
+    con usuarios, canchas, reservas y reportes.
+
+
+    \item Definir una estrategia de persistencia que mantenga separados los datos administrados por cada microservicio
+    y evite dependencias directas entre sus modelos de información.
+
+
+    \item Implementar las reglas de negocio relacionadas con la disponibilidad, el solapamiento de reservas,
+    las cancelaciones, los estados de reserva y los permisos asociados al rol del usuario.
+
+    \item Justificar las principales decisiones arquitectónicas y tecnológicas adoptadas en la solución, considerando
+    su impacto en la modularidad, mantenibilidad y separación de responsabilidades, así como su correspondencia
+    con el alcance funcional del sistema.
+
 \end{itemize}
