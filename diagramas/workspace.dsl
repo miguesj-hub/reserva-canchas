@@ -97,7 +97,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 tags "Microservice"
 
                 // --- Driving adapter (web) --------------------------------
-                userController = component "UserController" "Exposes the registration, login, and user/role management endpoints; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                userController = component "AuthController" "Exposes POST /api/auth/registro and POST /api/auth/login, the only two public routes of the system; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
                     tags "Adapter-In"
                 }
                 errorHandlerUser = component "ErrorHandler" "Translates invalid credentials and conflicts (user already registered) into HTTP status codes." "@RestControllerAdvice" {
@@ -357,6 +357,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
         // ===================================================================
         edge -> authenticationFilter "Routes /api/*" "HTTP"
 
+        authenticationFilter -> msUsuarios "Verifies the Basic credential on every request (POST /api/auth/login). Does not read usuarios_db: it asks its owner." "JSON/HTTP"
         authenticationFilter -> routeConfig "Identity propagated, routing continues"
         authenticationFilter -> errorHandlerGateway "Missing or invalid identity"
 

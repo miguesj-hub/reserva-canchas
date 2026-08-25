@@ -19,7 +19,34 @@ principio se sigue. Si se optó por una sola instancia de PostgreSQL con
 varias bases en lugar de varias instancias, dilo aquí y justifícalo — es una
 pregunta previsible en la defensa.}
 
-\ph{Una base por microservicio: qué implica y cómo se garantiza.}
+Cada microservicio con estado es dueño de su propia base y nadie más la lee.
+La regla no admite excepciones: si \id{ms-reservas} necesita el horario de una
+cancha, se lo pregunta a \id{ms-canchas} por HTTP; no abre una conexión a
+\id{canchas\_db}.
+
+La decisión operativa es una \textbf{única instancia de PostgreSQL 16 con tres
+bases independientes}, no tres instancias. Con tres instancias el aislamiento
+sería más fuerte, pero el sistema entero tiene que levantarse con
+\id{docker compose up} en la máquina de quien lo evalúa, y triplicar el motor
+cuesta memoria y tiempo de arranque sin ganar nada demostrable en la rúbrica.
+
+Lo que sí se conserva de un despliegue con instancias separadas es la parte que
+importa: \textbf{un rol de base distinto por servicio, sin permisos cruzados}. Al
+inicializar el volumen se revoca \id{CONNECT} a \id{PUBLIC} sobre cada base y se
+concede solo a su dueño:
+
+\begin{lstlisting}[language=SQL,caption={Aislamiento por credenciales, en \id{infra/postgres/init/01-bases-y-roles.sql}.},label={lst:roles}]
+CREATE DATABASE usuarios_db OWNER usuarios_app;
+REVOKE CONNECT ON DATABASE usuarios_db FROM PUBLIC;
+GRANT  CONNECT ON DATABASE usuarios_db TO usuarios_app;
+\end{lstlisting}
+
+La diferencia es verificable: si alguien escribiera en \id{ms-reservas} una
+consulta contra \id{canchas\_db}, no obtendría datos de otro dominio sino un
+\id{FATAL: permission denied for database}. La independencia deja de ser una
+convención que hay que recordar y pasa a ser algo que el motor impone.
+
+\id{ms-reportes} no recibe rol ni credencial: no tiene base, agrega por REST.
 
 \begin{table}[H]
   \centering
@@ -29,9 +56,9 @@ pregunta previsible en la defensa.}
     \toprule
     \textbf{Base} & \textbf{Servicio dueño} & \textbf{Contenido} \\
     \midrule
-    \id{usuarios\_db} & \id{ms-usuarios} & \ph{...} \\
-    \id{canchas\_db}  & \id{ms-canchas}  & \ph{...} \\
-    \id{reservas\_db} & \id{ms-reservas} & \ph{...} \\
+    \id{usuarios\_db} & \id{ms-usuarios} & Tabla \id{usuario}: credenciales (hash BCrypt), rol y estado de activación. \\
+    \id{canchas\_db}  & \id{ms-canchas}  & Tablas \id{cancha} y \id{bloqueo\_mantenimiento}: catálogo, deporte, horario de atención y bloqueos. \\
+    \id{reservas\_db} & \id{ms-reservas} & Tablas \id{reserva} y \id{configuracion}. Aloja la restricción de exclusión que implementa \rn{02}. \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -65,7 +92,15 @@ en los scripts del anexo.}
     \toprule
     \textbf{Campo} & \textbf{Tipo} & \textbf{Descripción} \\
     \midrule
-    \ph{...} & \ph{...} & \ph{...} \\
+    \id{id}           & \id{bigint} identidad & Clave primaria. \\
+    \id{cancha\_id}   & \id{bigint}    & Cancha reservada. \textbf{Sin clave foránea}: vive en otra base (\cref{sec:integridad}). \\
+    \id{usuario\_id}  & \id{bigint}    & Dueño de la reserva. Sin clave foránea, por lo mismo. \\
+    \id{fecha}        & \id{date}      & Día del bloque reservado. \\
+    \id{hora\_inicio} & \id{time}      & Inicio del bloque, incluido. \\
+    \id{hora\_fin}    & \id{time}      & Fin del bloque, excluido. \id{CHECK hora\_fin > hora\_inicio}. \\
+    \id{estado}       & \id{varchar(20)} & \id{CONFIRMADA}, \id{CANCELADA} o \id{FINALIZADA}, con \id{CHECK}. En la tabla solo aparecen los dos primeros: \id{FINALIZADA} se deriva al leer. \\
+    \id{creada\_en}   & \id{timestamp} & Instante de creación, con \id{DEFAULT now()}. \\
+    \id{cancelada\_en} & \id{timestamp} & Nulo salvo que se haya cancelado. Alimenta el reporte de cancelaciones por período. \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -78,8 +113,36 @@ un monolito con varias tablas. Explica qué referencias cruzan la frontera
 entre bases, por qué no pueden ser claves foráneas y dónde se valida
 entonces la integridad.}
 
-\ph{Referencias lógicas sin clave foránea: cuáles son, dónde se validan y
-qué ocurre si la validación falla.}
+Dos columnas de \id{reserva} referencian entidades de otras bases:
+\id{cancha\_id} apunta a \id{canchas\_db.cancha} y \id{usuario\_id} a
+\id{usuarios\_db.usuario}. Ninguna de las dos es una clave foránea, y su
+ausencia no es un descuido: una clave foránea es una restricción \emph{dentro
+de una base}, y estas dos tablas están en bases distintas a las que la conexión
+de \id{ms-reservas} ni siquiera puede acceder. No es que se haya decidido no
+declararlas: es que no existe forma de declararlas.
+
+La integridad se valida entonces donde sí puede validarse, antes de persistir:
+
+\begin{itemize}
+  \item \textbf{La cancha}: \id{BookingService} llama a \id{ms-canchas} por
+        \id{CourtClientPort} y comprueba que existe, que está activa y que el
+        bloque cae dentro de su horario de atención. Si no existe, la petición
+        se rechaza con 404; si existe pero no admite la reserva, con 422.
+  \item \textbf{El usuario}: no hace falta comprobarlo. El identificador llega
+        en la cabecera \id{X-User-Id}, que el gateway escribe solo después de
+        verificar la credencial contra \id{ms-usuarios}, y descarta cualquier
+        \id{X-User-*} que venga del cliente. Un identificador inventado no puede
+        llegar hasta aquí.
+\end{itemize}
+
+Si \id{ms-canchas} no responde, la reserva no se crea: se devuelve un 503. La
+alternativa —persistir sin validar y reconciliar después— dejaría reservas sobre
+canchas inexistentes o inactivas, que es exactamente el estado que la clave
+foránea existía para impedir.
+
+Inactivar un usuario o una cancha no toca las reservas ya hechas
+(\textsf{FR-032}, \textsf{FR-047}): son de otro dominio, y esas bases no las
+conocen.
 
 \subsection{Restricciones que implementan reglas de negocio}
 \label{sec:restricciones}
@@ -89,5 +152,40 @@ Es el punto técnico más fuerte del modelo de datos: explica por qué está en
 el motor y no en el código de la aplicación. El detalle de la regla como tal
 va en la \cref{sec:solapamiento}; aquí solo el mecanismo de base de datos.}
 
-\ph{Restricciones e índices que sostienen las reglas y las consultas de
-disponibilidad.}
+La pieza principal es la restricción de exclusión de \id{reserva}, que impide
+el solapamiento incluso bajo peticiones concurrentes. Su definición y el
+razonamiento que la justifica están en la \cref{sec:solapamiento}; aquí interesa
+el mecanismo: es un índice \textbf{GiST} sobre el par
+$(\id{cancha\_id}, \id{tsrange(fecha + hora\_inicio, fecha + hora\_fin, '[)')})$,
+con un predicado parcial que lo limita a las filas confirmadas. PostgreSQL
+rechaza cualquier inserción cuyo rango se solape con uno ya indexado para la
+misma cancha, y lo hace serializando en el índice, no en la aplicación. Requiere
+la extensión \id{btree\_gist}, instalada al inicializar el volumen.
+
+El resto de restricciones son \id{CHECK} que fijan las enumeraciones cerradas y
+los rangos válidos, de modo que un valor inválido se rechace aunque el código lo
+dejara pasar:
+
+\begin{table}[H]
+  \centering
+  \caption{Restricciones e índices por tabla.}
+  \label{tab:restricciones}
+  \begin{tabular}{L{3.6cm} L{4.4cm} L{5.2cm}}
+    \toprule
+    \textbf{Tabla} & \textbf{Restricción o índice} & \textbf{Qué sostiene} \\
+    \midrule
+    \id{usuario} & \id{UNIQUE (username)}                       & \textsf{FR-002}: el duplicado es imposible, no solo improbable. \\
+    \id{usuario} & \id{CHECK rol IN (...)}                      & Enumeración cerrada de roles. \\
+    \id{cancha}  & \id{CHECK deporte IN (...)}                  & Enumeración cerrada de deportes. \\
+    \id{cancha}  & \id{CHECK hora\_cierre > hora\_apertura}     & \rn{07}: un horario invertido no delimita bloques. \\
+    \id{reserva} & \id{EXCLUDE USING gist (...)}                & \rn{02}, incluido el acceso concurrente. \\
+    \id{reserva} & \id{CHECK estado IN (...)}                   & \rn{08}. \\
+    \id{reserva} & \id{INDEX (usuario\_id, fecha)}              & Consulta «mis reservas». \\
+    \id{reserva} & \id{INDEX (cancha\_id, fecha)}               & Consulta de disponibilidad. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+El esquema lo versiona Flyway y Hibernate arranca con
+\id{ddl-auto: validate}: si el mapeo de una entidad y la tabla real divergen, el
+servicio no arranca, en lugar de fallar más tarde con una columna inesperada.

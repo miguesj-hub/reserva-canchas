@@ -22,8 +22,28 @@ mostrar la estructura y en el registro de decisiones para explicarla.}
 \subsection{Visión general}
 \label{sec:vision-general}
 
-\ph{Dos o tres párrafos: qué estilo arquitectónico se aplica, en cuántas
-piezas se divide el sistema y qué principio gobierna el reparto.}
+El sistema aplica \textbf{microservicios en el backend y microfrontends en el
+frontend}, con un \id{edge} nginx delante que unifica el origen y un API
+gateway que es el único camino del navegador hacia los servicios. Son once
+piezas desplegables: cuatro paquetes de frontend, cinco servicios de backend
+—cuatro de dominio más el gateway—, el edge y una instancia de PostgreSQL con
+tres bases independientes.
+
+El principio que gobierna el reparto es la \textbf{propiedad de los datos}: cada
+servicio es dueño de un dominio y de la base que lo sostiene, y nadie más la
+lee. De ahí salen las fronteras, no al revés. \id{ms-reservas} necesita el
+horario de una cancha y no lo consulta en \id{canchas\_db}: se lo pregunta a
+\id{ms-canchas}. Esa restricción es la que obliga a que cada servicio tenga una
+responsabilidad completa en lugar de ser una capa de otro.
+
+Dentro de cada microservicio de dominio la estructura es \textbf{hexagonal}: el
+modelo y los casos de uso definen puertos, y los adaptadores —web, JPA,
+cliente HTTP— dependen de ellos y nunca al revés. Es lo que permite probar las
+ocho reglas de negocio con el puerto de salida sustituido por un doble, sin
+levantar Spring ni una base de datos. El gateway es la excepción deliberada: es
+infraestructura transversal, sin dominio propio que proteger, y su estructura
+se queda en \id{AuthenticationFilter} $\rightarrow$ \id{RouteConfig}
+$\rightarrow$ \id{ErrorHandler}.
 
 \subsection{Notación}
 \label{sec:notacion}
@@ -52,7 +72,13 @@ tampoco.}
   \label{fig:contexto}
 \end{figure}
 
-\ph{Qué resuelve el sistema y para quién. Un párrafo.}
+El sistema resuelve la reserva de canchas deportivas de un club para dos tipos
+de usuario. El \textbf{usuario final} consulta la disponibilidad de una cancha
+en una fecha, reserva un bloque libre, ve sus reservas y las cancela mientras no
+hayan empezado. El \textbf{administrador} gestiona el catálogo de canchas y sus
+horarios, cancela cualquier reserva y consulta los indicadores de ocupación. No
+hay más actores ni integraciones externas: no existe pasarela de pagos ni envío
+de notificaciones, que están fuera del alcance.
 
 \subsubsection{\texorpdfstring{\textsf{V-02}}{V-02} Contenedores}
 \label{v:02}
@@ -70,8 +96,16 @@ microfrontends y la de microservicios.
 \end{figure}
 
 \paragraph*{Frontend.}
-\ph{Los cuatro microfrontends, qué expone cada remote y cómo los integra el
-shell en tiempo de ejecución.}
+Cuatro paquetes npm independientes, integrados en tiempo de ejecución con Module
+Federation. El \id{shell} es el host: enruta, mantiene la sesión y carga cada
+remote de forma perezosa, solo cuando el usuario entra en su ruta. Cada remote
+expone únicamente \id{./App} y se construye y despliega por separado, sin
+depender del ciclo de vida de los demás.
+
+Lo único que cruza la frontera entre paquetes es la prop \id{sesion} que baja el
+shell y los chunks compartidos de React. No hay imports entre remotes: si los
+hubiera, dejarían de ser desplegables por separado y el estilo se quedaría en el
+nombre.
 
 \begin{table}[H]
   \centering
@@ -81,17 +115,22 @@ shell en tiempo de ejecución.}
     \toprule
     \textbf{Microfrontend} & \textbf{Responsabilidad} & \textbf{Tipo} \\
     \midrule
-    \id{shell}             & \ph{...} & Host   \\
-    \id{mf-reservas}       & \ph{...} & Remote \\
-    \id{mf-administracion} & \ph{...} & Remote \\
-    \id{mf-reportes}       & \ph{...} & Remote \\
+    \id{shell}             & Enrutado, sesión, login y registro, y carga de los remotes. & Host   \\
+    \id{mf-reservas}       & Disponibilidad, nueva reserva y «mis reservas» del usuario final. & Remote \\
+    \id{mf-administracion} & Gestión de canchas, de reservas y de usuarios. & Remote \\
+    \id{mf-reportes}       & Los cuatro indicadores de ocupación y demanda. & Remote \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \paragraph*{Backend.}
-\ph{Los cuatro microservicios y el gateway. Señala que ms-reportes no tiene
-base de datos propia y por qué.}
+Cuatro microservicios de dominio y un gateway. Tres de los cuatro tienen base
+propia; \id{ms-reportes} \textbf{no tiene ninguna}, y es deliberado: un reporte
+de ocupación necesita cruzar reservas con canchas, y la forma cómoda de hacerlo
+sería leer las dos bases. Eso rompería la propiedad de los datos por
+conveniencia de una consulta. En su lugar agrega vía REST, llamando a
+\id{ms-reservas} y \id{ms-canchas} por puertos de salida. Ni siquiera tiene el
+driver JDBC en su \id{pom.xml}, de modo que la tentación no está disponible.
 
 \begin{table}[H]
   \centering
@@ -101,17 +140,37 @@ base de datos propia y por qué.}
     \toprule
     \textbf{Microservicio} & \textbf{Responsabilidad} & \textbf{Base de datos} \\
     \midrule
-    \id{ms-usuarios} & \ph{...} & \id{usuarios\_db} \\
-    \id{ms-canchas}  & \ph{...} & \id{canchas\_db}  \\
-    \id{ms-reservas} & \ph{...} & \id{reservas\_db} \\
-    \id{ms-reportes} & \ph{...} & ninguna           \\
+    \id{ms-usuarios} & Registro, autenticación y gestión de usuarios y roles. & \id{usuarios\_db} \\
+    \id{ms-canchas}  & Catálogo de canchas, horarios de atención y bloqueos de mantenimiento. & \id{canchas\_db}  \\
+    \id{ms-reservas} & Reservas y disponibilidad. Dueño de \rn{01}--\rn{06} y \rn{08}. & \id{reservas\_db} \\
+    \id{ms-reportes} & Indicadores de ocupación y demanda; agrega vía REST. & ninguna           \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \paragraph*{Comunicación.}
-\ph{Qué servicio llama a cuál, con qué protocolo, y qué ocurre si el destino
-no responde.}
+Todo es HTTP con JSON, síncrono. El navegador solo conoce \id{http://localhost}:
+el edge sirve el shell en la raíz, cada remote bajo su prefijo, y reenvía
+\id{/api/} al gateway. El edge es el \textbf{único contenedor conectado a las dos
+redes} de Docker, y eso es lo que impide que el navegador alcance un
+microservicio saltándose el gateway.
+
+Entre servicios hay dos llamadas, y las dos existen para no leer una base ajena:
+
+\begin{itemize}
+  \item \id{gateway} $\rightarrow$ \id{ms-usuarios}, para verificar la credencial
+        de cada petición.
+  \item \id{ms-reservas} $\rightarrow$ \id{ms-canchas}, para comprobar que la
+        cancha existe, está activa y admite el bloque antes de persistir.
+  \item \id{ms-reportes} $\rightarrow$ \id{ms-reservas} y \id{ms-canchas}, para
+        agregar los indicadores.
+\end{itemize}
+
+Si un destino no responde, el fallo se traduce a \textbf{503} y no a un 500
+genérico: la diferencia es la que permite que la pantalla diga «inténtalo de
+nuevo» en lugar de «algo se rompió». En \id{ms-reservas} eso significa que una
+reserva no se crea si no se pudo validar la cancha; persistirla y reconciliar
+después dejaría reservas sobre canchas inexistentes.
 
 \subsubsection{\texorpdfstring{\textsf{V-03}}{V-03} Componentes de \id{ms-reservas}}
 \label{v:03}
@@ -127,7 +186,34 @@ negocio del sistema (\cref{sec:reglas-negocio}).
   \label{fig:componentes-reservas}
 \end{figure}
 
-\ph{Recorrido de una petición de reserva a través de los componentes.}
+Una petición \id{POST /api/reservas} recorre el hexágono en este orden, y cada
+salto tiene un motivo:
+
+\begin{enumerate}
+  \item \id{BookingController} (\emph{adaptador de entrada}) traduce HTTP a DTO
+        y lee la identidad de \id{X-User-Id} y \id{X-User-Role}. No decide nada:
+        no hay en él un solo \id{if} de negocio.
+  \item \id{BookingUseCase} (\emph{puerto de entrada}) es lo único que el
+        controlador conoce. No sabe qué implementación hay detrás.
+  \item \id{BookingService} (\emph{aplicación}) aplica las reglas en orden:
+        \textsf{FR-018} —un administrador no reserva—, después la cancha vía
+        \id{CourtClientPort}, después \rn{06} con el tope leído por
+        \id{ConfigurationRepositoryPort}, y por último \rn{02}. El orden importa:
+        si el usuario ya llegó al tope, el bloque concreto da igual y el mensaje
+        es más útil.
+  \item \id{BookingRepositoryPort} (\emph{puerto de salida}) recibe un
+        \id{Booking} de dominio. El servicio no sabe que detrás hay JPA.
+  \item \id{BookingRepositoryAdapter} (\emph{adaptador de salida}) traduce a la
+        entidad JPA, persiste, y \textbf{captura la violación de la restricción
+        \id{EXCLUDE} traduciéndola a \id{SlotAlreadyBookedException}}. Es el
+        punto donde una excepción de PostgreSQL deja de existir para el dominio.
+\end{enumerate}
+
+El reloj se inyecta en \id{BookingService} en lugar de leerse con
+\id{LocalDateTime.now()} allí donde haga falta. Parece un detalle y no lo es:
+\rn{04} y la derivación de \id{FINALIZADA} dependen del instante actual, y sin
+poder fijarlo una prueba tendría que dormir o depender de la hora a la que se
+ejecute.
 
 \subsubsection{\texorpdfstring{\textsf{V-04}}{V-04} Despliegue}
 \label{v:04}
@@ -140,15 +226,59 @@ negocio del sistema (\cref{sec:reglas-negocio}).
   \label{fig:despliegue}
 \end{figure}
 
-\ph{Cómo se materializa la arquitectura en contenedores: qué redes hay, qué
-aísla cada una y dónde persisten los datos. El detalle operativo va en el
-manual de despliegue (\ent{5}), no aquí.}
+Dos redes bridge. La red \id{frontend} contiene el shell y los tres remotes; la
+red \id{backend}, el gateway, los cuatro microservicios y PostgreSQL. El
+\id{edge} es el único contenedor con un pie en cada una, y por tanto el único
+camino entre ellas. Un contenedor de frontend no puede alcanzar
+\id{ms-reservas} aunque conozca su nombre: no comparten red.
+
+Los datos persisten en un volumen \id{pgdata}. Los scripts de
+\id{infra/postgres/init/} —que crean las tres bases, sus roles sin permisos
+cruzados y la extensión \id{btree\_gist}— se ejecutan una sola vez, cuando el
+volumen está vacío; por eso \id{docker compose down -v} es lo que fuerza un
+arranque limpio.
+
+El orden de arranque se apoya en \id{depends\_on} con
+\id{condition: service\_healthy}, sobre el \id{health} de Actuator de cada
+servicio y \id{pg\_isready} para PostgreSQL. Sin eso el arranque es una carrera:
+Flyway intentaría migrar contra una base que todavía no acepta conexiones.
 
 \subsection{Seguridad y control de acceso}
 \label{sec:seguridad}
 
-\ph{Dónde se autentica el usuario, quién emite el token, quién lo valida y
-cómo llega la identidad a cada microservicio.}
+La autenticación es \textbf{HTTP Basic verificada en cada petición por el
+gateway}. No se emite ningún token: no hay JWT, ni sesión de servidor, ni nada
+que renovar o revocar. El alcance del proyecto pide autenticación básica con
+roles, y añadir OAuth2 sería construir un mecanismo que ningún criterio evalúa.
+
+El recorrido de una petición autenticada es:
+
+\begin{enumerate}
+  \item El navegador manda \id{Authorization: Basic} en toda petición a
+        \id{/api/**}, salvo las dos rutas públicas —\id{POST /api/auth/login} y
+        \id{POST /api/auth/registro}—, que existen precisamente para obtener la
+        credencial.
+  \item El \id{AuthenticationFilter} del gateway \textbf{descarta primero
+        cualquier cabecera \id{X-User-*} que venga del cliente}, verifica la
+        credencial contra \id{ms-usuarios} y, si es válida y la cuenta está
+        activa, añade \id{X-User-Id} y \id{X-User-Role}.
+  \item El microservicio destino lee esas dos cabeceras y aplica \rn{03} y
+        \rn{07} sobre ellas. No recibe nunca las credenciales del usuario y no
+        vuelve a autenticar.
+\end{enumerate}
+
+El orden del segundo punto es lo que hace segura la confianza entre el gateway y
+los microservicios. Un microservicio cree lo que dice \id{X-User-Id}
+precisamente porque nadie más puede escribirla: si el borrado no fuera lo
+primero que ocurre, cualquiera se declararía administrador mandando una
+cabecera. La prueba \id{AuthenticationFilterTest} fija ese comportamiento, y el
+escenario V5 del \id{quickstart} lo comprueba de extremo a extremo con
+\id{curl}.
+
+Las contraseñas se guardan hasheadas con BCrypt y nunca en claro. \id{ms-usuarios}
+depende de \id{spring-security-crypto} —la librería de criptografía— y no de
+\id{spring-boot-starter-security}: no hay cadena de filtros de seguridad en
+ningún microservicio, porque quien autentica es el gateway.
 
 \subsection{Registro de decisiones de arquitectura}
 \label{sec:decisiones}
@@ -159,11 +289,47 @@ registro es lo que distingue un documento de arquitectura de un manual de
 usuario del propio sistema. Referencia las decisiones desde el texto con
 \texttt{\textbackslash adrref\{01\}}.}
 
-\decision{01}{\ph{Título de la decisión}}
-  {\ph{Qué problema o fuerza obligó a decidir.}}
-  {\ph{Qué se decidió.}}
-  {\ph{Qué otra opción se consideró y por qué se descartó.}}
-  {\ph{Qué se gana y qué se paga por ello.}}
+\decision{01}{Restricción de exclusión en PostgreSQL para el solapamiento}
+  {\rn{02} tiene que sostenerse también cuando dos personas reservan el mismo
+   bloque simultáneamente. Una comprobación en el servicio deja una ventana
+   entre la lectura y la escritura por la que caben dos peticiones a la vez.}
+  {Se mantiene la comprobación previa en \id{BookingService}, por el mensaje
+   claro, y se añade una restricción \id{EXCLUDE USING gist} parcial sobre las
+   reservas confirmadas. \id{BookingRepositoryAdapter} traduce su violación a
+   la misma excepción de dominio que la comprobación previa.}
+  {Validar solo en Java, con un bloqueo pesimista sobre la cancha o una
+   transacción \id{SERIALIZABLE}. Se descartó: lo primero serializa todas las
+   reservas de una cancha aunque sean de días distintos, y lo segundo obliga a
+   una política de reintentos en toda la aplicación para un caso que el motor
+   ya sabe resolver en el índice.}
+  {Se gana una garantía que no depende de que el código la recuerde, y un 409
+   idéntico por los dos caminos. Se paga con una dependencia de PostgreSQL y su
+   extensión \id{btree\_gist}: el esquema deja de ser portable a otro motor.}
+
+\decision{02}{Una base por microservicio, con un rol sin permisos cruzados}
+  {La independencia de datos entre microservicios se evalúa, y una convención
+   que solo vive en la cabeza del equipo se rompe en cuanto alguien tiene prisa.}
+  {Tres bases en una única instancia de PostgreSQL, cada una con un rol
+   propietario al que se le concede \id{CONNECT} solo sobre la suya, revocándolo
+   a \id{PUBLIC}. \id{ms-reportes} no recibe rol ni driver JDBC.}
+  {Un esquema compartido con prefijos de tabla, o tres instancias separadas de
+   PostgreSQL. Lo primero no impide el acceso cruzado, solo lo desaconseja; lo
+   segundo triplica memoria y tiempo de arranque sin ganar nada verificable.}
+  {Se gana que una violación del principio falle al conectar en lugar de pasar
+   desapercibida en revisión. Se paga con una consulta imposible: cruzar
+   reservas y canchas exige una llamada HTTP, no un \id{JOIN}.}
+
+\decision{03}{Un edge que unifica el origen, en lugar de CORS por servicio}
+  {Los microfrontends federados piden sus chunks en tiempo de ejecución. Con
+   cada remote en su propio puerto, el navegador los ve como orígenes distintos
+   y bloquea la carga.}
+  {Un nginx delante que sirve el shell en la raíz, cada remote bajo su prefijo y
+   reenvía \id{/api/} al gateway. Un solo origen para todo.}
+  {Configurar cabeceras CORS permisivas en cada remote y en el gateway. Se
+   descartó porque hay que repetirlo en cinco sitios y cada uno es una
+   oportunidad de abrir de más.}
+  {Se gana que el problema desaparezca en lugar de parchearse, y un único punto
+   donde publicar el sistema. Se paga con una pieza más en el despliegue.}
 
 \instruccion{Candidatas a decisión en este proyecto, por si ayudan a
 arrancar: una base de datos por microservicio frente a un esquema

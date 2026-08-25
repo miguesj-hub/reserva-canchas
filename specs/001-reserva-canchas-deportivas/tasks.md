@@ -48,22 +48,22 @@ en algo que se ve en pantalla.
 **Purpose**: Dejar el sistema arrancable. Ninguna tarea de esta fase implementa comportamiento de
 negocio; son ficheros de infraestructura y configuración.
 
-- [ ] T001 Corregir `restart: unless-stoped` → `unless-stopped` en el servicio `shell` de `docker-compose.yml` (hoy Compose rechaza el valor y el arranque falla)
-- [ ] T002 [P] Crear `infra/postgres/init/01-bases-y-roles.sql`: las tres bases, un rol por base, `REVOKE CONNECT ... FROM PUBLIC` y `GRANT` solo al dueño, según data-model.md
-- [ ] T003 [P] Crear `infra/postgres/init/02-extensiones.sql` con `CREATE EXTENSION btree_gist` en `reservas_db` (requisito de la restricción de RN-02)
-- [ ] T004 [P] Crear `infra/edge/nginx.conf`: shell en `/`, cada remote bajo su `PUBLIC_PATH`, y `/api/` al gateway, según quickstart.md
-- [ ] T005 Añadir el servicio `postgres` (`postgres:16-alpine`), el volumen `pgdata` y su healthcheck `pg_isready` a `docker-compose.yml`, montando `infra/postgres/init/`
-- [ ] T006 Añadir el servicio `edge` a `docker-compose.yml` conectado a las redes `frontend` y `backend` —el único que toca ambas— y mover los cuatro servicios de frontend al perfil `full`
-- [ ] T007 [P] Crear `backend/api-gateway/Dockerfile` multietapa (build con `mvnw`, runtime `eclipse-temurin:21-jre`), partiendo del de `template-backend/microservice-template/`
-- [ ] T008 [P] Crear `backend/ms-usuarios/Dockerfile` con el mismo patrón
-- [ ] T009 [P] Crear `backend/ms-canchas/Dockerfile` con el mismo patrón
-- [ ] T010 [P] Crear `backend/ms-reservas/Dockerfile` con el mismo patrón
-- [ ] T011 [P] Crear `backend/ms-reportes/Dockerfile` con el mismo patrón
-- [ ] T012 [P] Configurar `backend/ms-usuarios/src/main/resources/application.yml`: datasource por variable de entorno, Flyway, `spring.jpa.hibernate.ddl-auto: validate`, Actuator (`health`, `info`, `metrics`) y springdoc en `/swagger-ui.html`
-- [ ] T013 [P] Configurar `backend/ms-canchas/src/main/resources/application.yml` igual que T012
-- [ ] T014 [P] Configurar `backend/ms-reservas/src/main/resources/application.yml` igual que T012
-- [ ] T015 [P] Configurar `backend/ms-reportes/src/main/resources/application.yml`: **sin datasource, sin Flyway**, con las URLs de `ms-reservas` y `ms-canchas` por variable de entorno, Actuator y springdoc
-- [ ] T016 [P] Configurar `backend/api-gateway/src/main/resources/application.yml`: URLs de los cuatro servicios destino por variable de entorno y Actuator
+- [X] T001 Corregir `restart: unless-stoped` → `unless-stopped` en el servicio `shell` de `docker-compose.yml` (hoy Compose rechaza el valor y el arranque falla)
+- [X] T002 [P] Crear `infra/postgres/init/01-bases-y-roles.sql`: las tres bases, un rol por base, `REVOKE CONNECT ... FROM PUBLIC` y `GRANT` solo al dueño, según data-model.md
+- [X] T003 [P] Crear `infra/postgres/init/02-extensiones.sql` con `CREATE EXTENSION btree_gist` en `reservas_db` (requisito de la restricción de RN-02)
+- [X] T004 [P] Crear `infra/edge/nginx.conf`: shell en `/`, cada remote bajo su `PUBLIC_PATH`, y `/api/` al gateway, según quickstart.md
+- [X] T005 Añadir el servicio `postgres` (`postgres:16-alpine`), el volumen `pgdata` y su healthcheck `pg_isready` a `docker-compose.yml`, montando `infra/postgres/init/`
+- [X] T006 Añadir el servicio `edge` a `docker-compose.yml` conectado a las redes `frontend` y `backend` —el único que toca ambas— y mover los cuatro servicios de frontend al perfil `full`
+- [X] T007 [P] Crear `backend/api-gateway/Dockerfile` multietapa (build con `mvnw`, runtime `eclipse-temurin:21-jre`), partiendo del de `template-backend/microservice-template/`
+- [X] T008 [P] Crear `backend/ms-usuarios/Dockerfile` con el mismo patrón
+- [X] T009 [P] Crear `backend/ms-canchas/Dockerfile` con el mismo patrón
+- [X] T010 [P] Crear `backend/ms-reservas/Dockerfile` con el mismo patrón
+- [X] T011 [P] Crear `backend/ms-reportes/Dockerfile` con el mismo patrón
+- [X] T012 [P] Configurar `backend/ms-usuarios/src/main/resources/application.yml`: datasource por variable de entorno, Flyway, `spring.jpa.hibernate.ddl-auto: validate`, Actuator (`health`, `info`, `metrics`) y springdoc en `/swagger-ui.html`
+- [X] T013 [P] Configurar `backend/ms-canchas/src/main/resources/application.yml` igual que T012
+- [X] T014 [P] Configurar `backend/ms-reservas/src/main/resources/application.yml` igual que T012
+- [X] T015 [P] Configurar `backend/ms-reportes/src/main/resources/application.yml`: **sin datasource, sin Flyway**, con las URLs de `ms-reservas` y `ms-canchas` por variable de entorno, Actuator y springdoc
+- [X] T016 [P] Configurar `backend/api-gateway/src/main/resources/application.yml`: URLs de los cuatro servicios destino por variable de entorno y Actuator
 
 **Checkpoint**: `docker compose up postgres edge` levanta; las tres bases existen con sus roles aislados.
 
@@ -78,38 +78,38 @@ se puede abrir. Esta fase corta verticalmente shell → edge → gateway → `ms
 
 ### `ms-usuarios` — dominio y autenticación
 
-- [ ] T017 [P] Crear el modelo de dominio en `backend/ms-usuarios/src/main/java/com/ups/reservacanchas/usuarios/domain/`: `User` y `Role` (`USUARIO_FINAL`, `ADMINISTRADOR` según R-001), sin ninguna anotación de framework
-- [ ] T018 [P] Crear `domain/exception/`: `InvalidCredentialsException`, `UserAlreadyExistsException`, `UserNotFoundException` — sin `HttpStatus` ni nada de `org.springframework.web`
-- [ ] T019 [P] Crear los `record` de `dto/`: `RegistroRequest`, `LoginRequest`, `UsuarioResponse` (nunca expone el hash), `ErrorResponse`, con `jakarta.validation`, según `contracts/auth-usuarios.yaml`
-- [ ] T020 Crear el puerto de entrada `application/port/in/UserUseCase.java` con las operaciones de registro, autenticación y consulta
-- [ ] T021 Crear el puerto de salida `application/port/out/UserRepositoryPort.java`
-- [ ] T022 Implementar `application/service/UserService.java`: registro siempre como `USUARIO_FINAL` activo (FR-001), rechazo de `username` duplicado (FR-002), verificación de credenciales sin revelar cuál dato falló (FR-003) y rechazo de cuenta inactiva (FR-005)
-- [ ] T023 [P] Escribir `src/test/java/com/ups/reservacanchas/usuarios/application/service/UserServiceTest.java` con el puerto mockeado: credenciales válidas, inválidas, usuario inactivo y `username` duplicado
-- [ ] T024 Implementar `adapter/out/persistence/`: `UserEntity` package-private con `@Entity`, su `JpaRepository` y `UserRepositoryAdapter` que traduce entidad ↔ dominio
-- [ ] T025 [P] Crear `src/main/resources/db/migration/V1__usuarios.sql` con la tabla `usuario`, su `CHECK` de rol y el índice único de `username`, según data-model.md
-- [ ] T026 [P] Crear `V2__seed_usuarios.sql` con `admin`, `cliente1`, `cliente2` y `inactivo`, con las contraseñas del quickstart hasheadas con BCrypt
-- [ ] T027 Implementar `adapter/in/web/AuthController.java` con `POST /api/auth/registro` y `POST /api/auth/login`, según `contracts/auth-usuarios.yaml`
-- [ ] T028 Implementar `adapter/in/web/ErrorHandler.java`: traduce las excepciones de dominio a 400/401/404/409 con el cuerpo de error uniforme de `contracts/README.md`
-- [ ] T029 [P] Crear `config/PasswordEncoderConfig.java` (solo `BCryptPasswordEncoder`, sin cadena de filtros) y `config/OpenApiConfig.java`
-- [ ] T030 Añadir el servicio `ms-usuarios` a `docker-compose.yml` con su credencial de `usuarios_db`, healthcheck de Actuator y `depends_on: postgres healthy`
+- [X] T017 [P] Crear el modelo de dominio en `backend/ms-usuarios/src/main/java/com/ups/reservacanchas/usuarios/domain/`: `User` y `Role` (`USUARIO_FINAL`, `ADMINISTRADOR` según R-001), sin ninguna anotación de framework
+- [X] T018 [P] Crear `domain/exception/`: `InvalidCredentialsException`, `UserAlreadyExistsException`, `UserNotFoundException` — sin `HttpStatus` ni nada de `org.springframework.web`
+- [X] T019 [P] Crear los `record` de `dto/`: `RegistroRequest`, `LoginRequest`, `UsuarioResponse` (nunca expone el hash), `ErrorResponse`, con `jakarta.validation`, según `contracts/auth-usuarios.yaml`
+- [X] T020 Crear el puerto de entrada `application/port/in/UserUseCase.java` con las operaciones de registro, autenticación y consulta
+- [X] T021 Crear el puerto de salida `application/port/out/UserRepositoryPort.java`
+- [X] T022 Implementar `application/service/UserService.java`: registro siempre como `USUARIO_FINAL` activo (FR-001), rechazo de `username` duplicado (FR-002), verificación de credenciales sin revelar cuál dato falló (FR-003) y rechazo de cuenta inactiva (FR-005)
+- [X] T023 [P] Escribir `src/test/java/com/ups/reservacanchas/usuarios/application/service/UserServiceTest.java` con el puerto mockeado: credenciales válidas, inválidas, usuario inactivo y `username` duplicado
+- [X] T024 Implementar `adapter/out/persistence/`: `UserEntity` package-private con `@Entity`, su `JpaRepository` y `UserRepositoryAdapter` que traduce entidad ↔ dominio
+- [X] T025 [P] Crear `src/main/resources/db/migration/V1__usuarios.sql` con la tabla `usuario`, su `CHECK` de rol y el índice único de `username`, según data-model.md
+- [X] T026 [P] Crear `V2__seed_usuarios.sql` con `admin`, `cliente1`, `cliente2` y `inactivo`, con las contraseñas del quickstart hasheadas con BCrypt
+- [X] T027 Implementar `adapter/in/web/AuthController.java` con `POST /api/auth/registro` y `POST /api/auth/login`, según `contracts/auth-usuarios.yaml`
+- [X] T028 Implementar `adapter/in/web/ErrorHandler.java`: traduce las excepciones de dominio a 400/401/404/409 con el cuerpo de error uniforme de `contracts/README.md`
+- [X] T029 [P] Crear `config/PasswordEncoderConfig.java` (solo `BCryptPasswordEncoder`, sin cadena de filtros) y `config/OpenApiConfig.java`
+- [X] T030 Añadir el servicio `ms-usuarios` a `docker-compose.yml` con su credencial de `usuarios_db`, healthcheck de Actuator y `depends_on: postgres healthy`
 
 ### `api-gateway` — identificación y enrutamiento (sin hexagonal)
 
-- [ ] T031 [P] Implementar `backend/api-gateway/src/main/java/com/ups/reservacanchas/gateway/RouteConfig.java`: `/api/auth/**` y `/api/usuarios/**` → `ms-usuarios`, `/api/canchas/**` → `ms-canchas`, `/api/reservas/**` → `ms-reservas`, `/api/reportes/**` → `ms-reportes`
-- [ ] T032 Implementar `gateway/AuthenticationFilter.java`: **descarta toda cabecera `X-User-*` entrante**, deja pasar sin credencial las dos rutas públicas de `/api/auth`, decodifica `Authorization: Basic`, verifica contra `ms-usuarios` e inyecta `X-User-Id` y `X-User-Role` (R-003)
-- [ ] T033 [P] Implementar `gateway/ErrorHandler.java`: traduce credencial ausente o inválida a 401 y el servicio destino caído a 503, con el mismo cuerpo de error uniforme
-- [ ] T034 Escribir `backend/api-gateway/src/test/java/com/ups/reservacanchas/gateway/AuthenticationFilterTest.java`: una `X-User-Role: ADMINISTRADOR` enviada por el cliente se descarta, y las rutas públicas pasan sin credencial
-- [ ] T035 Añadir el servicio `gateway` a `docker-compose.yml` con `depends_on: ms-usuarios healthy`
+- [X] T031 [P] Implementar `backend/api-gateway/src/main/java/com/ups/reservacanchas/gateway/RouteConfig.java`: `/api/auth/**` y `/api/usuarios/**` → `ms-usuarios`, `/api/canchas/**` → `ms-canchas`, `/api/reservas/**` → `ms-reservas`, `/api/reportes/**` → `ms-reportes`
+- [X] T032 Implementar `gateway/AuthenticationFilter.java`: **descarta toda cabecera `X-User-*` entrante**, deja pasar sin credencial las dos rutas públicas de `/api/auth`, decodifica `Authorization: Basic`, verifica contra `ms-usuarios` e inyecta `X-User-Id` y `X-User-Role` (R-003)
+- [X] T033 [P] Implementar `gateway/ErrorHandler.java`: traduce credencial ausente o inválida a 401 y el servicio destino caído a 503, con el mismo cuerpo de error uniforme
+- [X] T034 Escribir `backend/api-gateway/src/test/java/com/ups/reservacanchas/gateway/AuthenticationFilterTest.java`: una `X-User-Role: ADMINISTRADOR` enviada por el cliente se descarta, y las rutas públicas pasan sin credencial
+- [X] T035 Añadir el servicio `gateway` a `docker-compose.yml` con `depends_on: ms-usuarios healthy`
 
 ### Shell — fuera la autenticación de mentira
 
-- [ ] T036 [P] Crear `frontend/shell/src/api/client.ts`: adjunta `Authorization: Basic` desde `localStorage`, parsea el cuerpo de error uniforme y expone el código HTTP a la pantalla
-- [ ] T037 Reescribir `frontend/shell/src/auth/AuthContext.tsx`: eliminar `MOCK_USERS`, que `login()` llame a `POST /api/auth/login` y guarde la credencial, y exponer `sesion` con `{ usuarioId, nombre, rol }`
-- [ ] T038 Renombrar el tipo `Role` a `'USUARIO_FINAL' | 'ADMINISTRADOR'` en `frontend/shell/src/auth/AuthContext.tsx` y actualizar `HOME_BY_ROLE` en `frontend/shell/src/auth/RoleRoute.tsx` (R-001; las rutas del navegador no cambian)
-- [ ] T039 Sustituir la prop `token` por `sesion` en los tres remotes de `frontend/shell/src/App.tsx` y actualizar `RoleRoute allow={[...]}` a los nuevos valores de rol (R-002)
-- [ ] T040 [P] Actualizar la firma de props de los remotes en `frontend/shell/src/types/remotes.d.ts`
-- [ ] T041 Conectar `frontend/shell/src/pages/Login.tsx` a `/api/auth/login` y `/api/auth/registro`, mostrar el motivo del 401, y retirar de la pantalla las credenciales de demostración
-- [ ] T042 [P] Reducir `frontend/shell/src/pages/Perfil.tsx` a solo lectura sobre la prop `sesion`, retirando los controles de edición y la carga de foto (R-006)
+- [X] T036 [P] Crear `frontend/shell/src/api/client.ts`: adjunta `Authorization: Basic` desde `localStorage`, parsea el cuerpo de error uniforme y expone el código HTTP a la pantalla
+- [X] T037 Reescribir `frontend/shell/src/auth/AuthContext.tsx`: eliminar `MOCK_USERS`, que `login()` llame a `POST /api/auth/login` y guarde la credencial, y exponer `sesion` con `{ usuarioId, nombre, rol }`
+- [X] T038 Renombrar el tipo `Role` a `'USUARIO_FINAL' | 'ADMINISTRADOR'` en `frontend/shell/src/auth/AuthContext.tsx` y actualizar `HOME_BY_ROLE` en `frontend/shell/src/auth/RoleRoute.tsx` (R-001; las rutas del navegador no cambian)
+- [X] T039 Sustituir la prop `token` por `sesion` en los tres remotes de `frontend/shell/src/App.tsx` y actualizar `RoleRoute allow={[...]}` a los nuevos valores de rol (R-002)
+- [X] T040 [P] Actualizar la firma de props de los remotes en `frontend/shell/src/types/remotes.d.ts`
+- [X] T041 Conectar `frontend/shell/src/pages/Login.tsx` a `/api/auth/login` y `/api/auth/registro`, mostrar el motivo del 401, y retirar de la pantalla las credenciales de demostración
+- [X] T042 [P] Reducir `frontend/shell/src/pages/Perfil.tsx` a solo lectura sobre la prop `sesion`, retirando los controles de edición y la carga de foto (R-006)
 
 **Checkpoint**: `docker compose up` levanta edge, gateway, `ms-usuarios` y el shell. Se puede
 registrar una cuenta, entrar, ver el nombre y el rol en pantalla, y salir. Un usuario inactivo es
@@ -129,56 +129,56 @@ Es el escenario V1 del quickstart.
 
 ### `ms-canchas` — solo el lado de lectura del catálogo
 
-- [ ] T043 [P] [US1] Crear el modelo de dominio en `backend/ms-canchas/src/main/java/com/ups/reservacanchas/canchas/domain/`: `Court`, `Sport` (`PADEL`, `TENIS`, `BASQUET` según R-008) y `OpeningHours`, sin anotaciones
-- [ ] T044 [P] [US1] Crear `domain/exception/CourtNotFoundException.java`
-- [ ] T045 [P] [US1] Crear los `record` de `dto/`: `CanchaResponse`, `ErrorResponse`, según `contracts/canchas.yaml`
-- [ ] T046 [US1] Crear `application/port/in/CourtUseCase.java` con las operaciones de lectura (listar con filtro de deporte y estado, consultar una)
-- [ ] T047 [US1] Crear `application/port/out/CourtRepositoryPort.java`
-- [ ] T048 [US1] Implementar `application/service/CourtService.java` con las operaciones de lectura, devolviendo por defecto solo canchas activas (FR-011)
-- [ ] T049 [US1] Implementar `adapter/out/persistence/`: `CourtEntity` package-private, su `JpaRepository` y `CourtRepositoryAdapter`
-- [ ] T050 [P] [US1] Crear `backend/ms-canchas/src/main/resources/db/migration/V1__canchas.sql` con la tabla `cancha`, su `CHECK` de deporte y el `CHECK hora_cierre > hora_apertura`
-- [ ] T051 [P] [US1] Crear `V2__seed_canchas.sql`: al menos una cancha por deporte con horario 07:00–22:00, una cancha inactiva, y nombres que permitan demanda desigual para el ranking de US3
-- [ ] T052 [US1] Implementar `adapter/in/web/CourtController.java` con `GET /api/canchas` y `GET /api/canchas/{id}`
-- [ ] T053 [P] [US1] Implementar `adapter/in/web/ErrorHandler.java` de `ms-canchas` con el cuerpo de error uniforme
-- [ ] T054 [US1] Añadir el servicio `ms-canchas` a `docker-compose.yml` con su credencial de `canchas_db`
+- [X] T043 [P] [US1] Crear el modelo de dominio en `backend/ms-canchas/src/main/java/com/ups/reservacanchas/canchas/domain/`: `Court`, `Sport` (`PADEL`, `TENIS`, `BASQUET` según R-008) y `OpeningHours`, sin anotaciones
+- [X] T044 [P] [US1] Crear `domain/exception/CourtNotFoundException.java`
+- [X] T045 [P] [US1] Crear los `record` de `dto/`: `CanchaResponse`, `ErrorResponse`, según `contracts/canchas.yaml`
+- [X] T046 [US1] Crear `application/port/in/CourtUseCase.java` con las operaciones de lectura (listar con filtro de deporte y estado, consultar una)
+- [X] T047 [US1] Crear `application/port/out/CourtRepositoryPort.java`
+- [X] T048 [US1] Implementar `application/service/CourtService.java` con las operaciones de lectura, devolviendo por defecto solo canchas activas (FR-011)
+- [X] T049 [US1] Implementar `adapter/out/persistence/`: `CourtEntity` package-private, su `JpaRepository` y `CourtRepositoryAdapter`
+- [X] T050 [P] [US1] Crear `backend/ms-canchas/src/main/resources/db/migration/V1__canchas.sql` con la tabla `cancha`, su `CHECK` de deporte y el `CHECK hora_cierre > hora_apertura`
+- [X] T051 [P] [US1] Crear `V2__seed_canchas.sql`: al menos una cancha por deporte con horario 07:00–22:00, una cancha inactiva, y nombres que permitan demanda desigual para el ranking de US3
+- [X] T052 [US1] Implementar `adapter/in/web/CourtController.java` con `GET /api/canchas` y `GET /api/canchas/{id}`
+- [X] T053 [P] [US1] Implementar `adapter/in/web/ErrorHandler.java` de `ms-canchas` con el cuerpo de error uniforme
+- [X] T054 [US1] Añadir el servicio `ms-canchas` a `docker-compose.yml` con su credencial de `canchas_db`
 
 ### `ms-reservas` — el dominio de las reglas
 
-- [ ] T055 [P] [US1] Crear el modelo de dominio en `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/domain/`: `Booking`, `BookingStatus` (`CONFIRMADA`, `CANCELADA`, `FINALIZADA` según R-007) y `TimeSlot`, sin anotaciones
-- [ ] T056 [P] [US1] Crear `domain/exception/`: `SlotAlreadyBookedException`, `ActiveBookingLimitExceededException`, `PastBookingCancellationException`, `ForbiddenOperationException`, `BookingNotFoundException`, `CourtNotBookableException`
-- [ ] T057 [P] [US1] Crear los `record` de `dto/`: `ReservaRequest` (sin `usuarioId`), `ReservaResponse`, `Bloque`, `DisponibilidadResponse`, `ErrorResponse`, según `contracts/reservas.yaml`
-- [ ] T058 [US1] Crear `application/port/in/BookingUseCase.java`: crear, consultar disponibilidad, listar las propias y cancelar
-- [ ] T059 [US1] Crear los puertos de salida en `application/port/out/`: `BookingRepositoryPort`, `ConfigurationRepositoryPort` y `CourtClientPort`
-- [ ] T060 [P] [US1] Crear `backend/ms-reservas/src/main/resources/db/migration/V1__reservas.sql` con la tabla `reserva` y la restricción `EXCLUDE USING gist (... ) WHERE (estado = 'CONFIRMADA')` exactamente como la fija data-model.md — sin claves foráneas hacia otras bases
-- [ ] T061 [P] [US1] Crear `V2__configuracion.sql` con la tabla `configuracion` y la fila `max_reservas_activas = 3` (RN-06)
-- [ ] T062 [P] [US1] Crear `V3__seed_reservas.sql` con reservas en los tres estados y **fechas relativas al arranque**: las confirmadas futuras para poder cancelar en vivo, sin solapamientos y sin exceder el tope
-- [ ] T063 [US1] Implementar en `application/service/BookingService.java` la creación de reserva: RN-01 (cancha, fecha y bloque), RN-02 (comprobación previa de solapamiento), RN-06 (tope leído por `ConfigurationRepositoryPort`) y RN-08 (nace `CONFIRMADA`); rechaza al `ADMINISTRADOR` con 403 (FR-018)
-- [ ] T064 [US1] Implementar en `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/service/BookingService.java` el cálculo de disponibilidad: todos los bloques del horario de atención obtenido por `CourtClientPort`, marcados libre u ocupado (FR-007 a FR-009, FR-011)
-- [ ] T065 [US1] Implementar en `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/service/BookingService.java` la cancelación por el dueño: RN-03 rama `USUARIO_FINAL` con 403 sobre reservas ajenas, RN-04 (solo antes de la hora de inicio) y RN-05 (pasa a `CANCELADA` y libera el bloque)
-- [ ] T066 [US1] Implementar en `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/service/BookingService.java` la derivación de `FINALIZADA` al leer: una confirmada cuyo bloque ya terminó no cuenta como activa para RN-06 ni se puede cancelar (FR-027, FR-028)
-- [ ] T067 [P] [US1] Escribir `src/test/java/com/ups/reservacanchas/reservas/application/service/BookingServiceCreacionTest.java` con los puertos mockeados: caso feliz de RN-01, rechazo de RN-02, rechazo de RN-06 y estado inicial de RN-08
-- [ ] T068 [P] [US1] Escribir `BookingServiceCancelacionTest.java` con los puertos mockeados: RN-03 propia y ajena, RN-04 pasada y futura, RN-05 liberación del bloque y recuperación de cupo
-- [ ] T069 [US1] Implementar `adapter/out/persistence/`: `BookingEntity` package-private, su `JpaRepository` y `BookingRepositoryAdapter`, que **captura la violación de la restricción `EXCLUDE` y la traduce a `SlotAlreadyBookedException`** para que el dominio no vea la excepción de base de datos (R-004)
-- [ ] T070 [P] [US1] Implementar `adapter/out/persistence/ConfigurationRepositoryAdapter.java` y su entidad, sobre la tabla `configuracion`
-- [ ] T071 [US1] Implementar `adapter/out/client/CourtClientAdapter.java` con `RestClient` hacia `ms-canchas`, implementando `CourtClientPort` — nunca leyendo `canchas_db` (Principio IV)
-- [ ] T072 [US1] Implementar `adapter/in/web/BookingController.java`: `POST /api/reservas`, `GET /api/reservas/disponibilidad`, `GET /api/reservas/mias`, `POST /api/reservas/{id}/cancelacion`, tomando la identidad de `X-User-Id` y `X-User-Role`
-- [ ] T073 [US1] Implementar `adapter/in/web/ErrorHandler.java` de `ms-reservas`: 409 para `SlotAlreadyBookedException`, `ActiveBookingLimitExceededException` y `PastBookingCancellationException`; 403, 404 y 422 según el catálogo de `contracts/README.md`
-- [ ] T074 [P] [US1] Crear `config/RestClientConfig.java` y `config/OpenApiConfig.java` en `ms-reservas`
-- [ ] T075 [US1] Añadir el servicio `ms-reservas` a `docker-compose.yml` con su credencial de `reservas_db` y `depends_on: ms-canchas healthy`
-- [ ] T076 [US1] Escribir la prueba de concurrencia de RN-02 en `src/test/java/com/ups/reservacanchas/reservas/adapter/out/persistence/ConcurrenciaReservaIT.java`: dos hilos que reservan el mismo bloque a la vez contra PostgreSQL real; exactamente uno confirma y el otro recibe `SlotAlreadyBookedException`. Es lo que mide SC-004 y lo exige el Principio II
+- [X] T055 [P] [US1] Crear el modelo de dominio en `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/domain/`: `Booking`, `BookingStatus` (`CONFIRMADA`, `CANCELADA`, `FINALIZADA` según R-007) y `TimeSlot`, sin anotaciones
+- [X] T056 [P] [US1] Crear `domain/exception/`: `SlotAlreadyBookedException`, `ActiveBookingLimitExceededException`, `PastBookingCancellationException`, `ForbiddenOperationException`, `BookingNotFoundException`, `CourtNotBookableException`
+- [X] T057 [P] [US1] Crear los `record` de `dto/`: `ReservaRequest` (sin `usuarioId`), `ReservaResponse`, `Bloque`, `DisponibilidadResponse`, `ErrorResponse`, según `contracts/reservas.yaml`
+- [X] T058 [US1] Crear `application/port/in/BookingUseCase.java`: crear, consultar disponibilidad, listar las propias y cancelar
+- [X] T059 [US1] Crear los puertos de salida en `application/port/out/`: `BookingRepositoryPort`, `ConfigurationRepositoryPort` y `CourtClientPort`
+- [X] T060 [P] [US1] Crear `backend/ms-reservas/src/main/resources/db/migration/V1__reservas.sql` con la tabla `reserva` y la restricción `EXCLUDE USING gist (... ) WHERE (estado = 'CONFIRMADA')` exactamente como la fija data-model.md — sin claves foráneas hacia otras bases
+- [X] T061 [P] [US1] Crear `V2__configuracion.sql` con la tabla `configuracion` y la fila `max_reservas_activas = 3` (RN-06)
+- [X] T062 [P] [US1] Crear `V3__seed_reservas.sql` con reservas en los tres estados y **fechas relativas al arranque**: las confirmadas futuras para poder cancelar en vivo, sin solapamientos y sin exceder el tope
+- [X] T063 [US1] Implementar en `application/service/BookingService.java` la creación de reserva: RN-01 (cancha, fecha y bloque), RN-02 (comprobación previa de solapamiento), RN-06 (tope leído por `ConfigurationRepositoryPort`) y RN-08 (nace `CONFIRMADA`); rechaza al `ADMINISTRADOR` con 403 (FR-018)
+- [X] T064 [US1] Implementar en `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/service/BookingService.java` el cálculo de disponibilidad: todos los bloques del horario de atención obtenido por `CourtClientPort`, marcados libre u ocupado (FR-007 a FR-009, FR-011)
+- [X] T065 [US1] Implementar en `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/service/BookingService.java` la cancelación por el dueño: RN-03 rama `USUARIO_FINAL` con 403 sobre reservas ajenas, RN-04 (solo antes de la hora de inicio) y RN-05 (pasa a `CANCELADA` y libera el bloque)
+- [X] T066 [US1] Implementar en `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/service/BookingService.java` la derivación de `FINALIZADA` al leer: una confirmada cuyo bloque ya terminó no cuenta como activa para RN-06 ni se puede cancelar (FR-027, FR-028)
+- [X] T067 [P] [US1] Escribir `src/test/java/com/ups/reservacanchas/reservas/application/service/BookingServiceCreacionTest.java` con los puertos mockeados: caso feliz de RN-01, rechazo de RN-02, rechazo de RN-06 y estado inicial de RN-08
+- [X] T068 [P] [US1] Escribir `BookingServiceCancelacionTest.java` con los puertos mockeados: RN-03 propia y ajena, RN-04 pasada y futura, RN-05 liberación del bloque y recuperación de cupo
+- [X] T069 [US1] Implementar `adapter/out/persistence/`: `BookingEntity` package-private, su `JpaRepository` y `BookingRepositoryAdapter`, que **captura la violación de la restricción `EXCLUDE` y la traduce a `SlotAlreadyBookedException`** para que el dominio no vea la excepción de base de datos (R-004)
+- [X] T070 [P] [US1] Implementar `adapter/out/persistence/ConfigurationRepositoryAdapter.java` y su entidad, sobre la tabla `configuracion`
+- [X] T071 [US1] Implementar `adapter/out/client/CourtClientAdapter.java` con `RestClient` hacia `ms-canchas`, implementando `CourtClientPort` — nunca leyendo `canchas_db` (Principio IV)
+- [X] T072 [US1] Implementar `adapter/in/web/BookingController.java`: `POST /api/reservas`, `GET /api/reservas/disponibilidad`, `GET /api/reservas/mias`, `POST /api/reservas/{id}/cancelacion`, tomando la identidad de `X-User-Id` y `X-User-Role`
+- [X] T073 [US1] Implementar `adapter/in/web/ErrorHandler.java` de `ms-reservas`: 409 para `SlotAlreadyBookedException`, `ActiveBookingLimitExceededException` y `PastBookingCancellationException`; 403, 404 y 422 según el catálogo de `contracts/README.md`
+- [X] T074 [P] [US1] Crear `config/RestClientConfig.java` y `config/OpenApiConfig.java` en `ms-reservas`
+- [X] T075 [US1] Añadir el servicio `ms-reservas` a `docker-compose.yml` con su credencial de `reservas_db` y `depends_on: ms-canchas healthy`
+- [X] T076 [US1] Escribir la prueba de concurrencia de RN-02 en `src/test/java/com/ups/reservacanchas/reservas/adapter/out/persistence/ConcurrenciaReservaIT.java`: dos hilos que reservan el mismo bloque a la vez contra PostgreSQL real; exactamente uno confirma y el otro recibe `SlotAlreadyBookedException`. Es lo que mide SC-004 y lo exige el Principio II
 
 ### `mf-reservas` — conectar las tres pantallas
 
-- [ ] T077 [P] [US1] Crear `frontend/mf-reservas/src/api/client.ts` con las llamadas a `/api/canchas` y `/api/reservas`, reutilizando el patrón del cliente del shell
-- [ ] T078 [US1] Aceptar la prop `sesion` en `frontend/mf-reservas/src/App.tsx` y propagarla a las pantallas (R-002)
-- [ ] T079 [US1] Conectar `frontend/mf-reservas/src/pages/Disponibilidad.tsx`: eliminar los arreglos fijos `canchas` y `dias`, cargar el catálogo de `GET /api/canchas` y los bloques de `GET /api/reservas/disponibilidad`, y renombrar el deporte `'Basket'` a `'Básquet'` (R-008)
-- [ ] T080 [US1] Conectar `frontend/mf-reservas/src/pages/NuevaReserva.tsx` a `POST /api/reservas`, mostrando en pantalla el motivo del **409** de bloque ocupado y el del tope de RN-06
-- [ ] T081 [US1] Conectar `frontend/mf-reservas/src/pages/MisReservas.tsx`: eliminar el arreglo fijo `reservas`, cargar de `GET /api/reservas/mias`, renombrar el estado `'pasada'` a `FINALIZADA` en el tipo, las etiquetas y los filtros (R-007), y cancelar con `POST /api/reservas/{id}/cancelacion`
+- [X] T077 [P] [US1] Crear `frontend/mf-reservas/src/api/client.ts` con las llamadas a `/api/canchas` y `/api/reservas`, reutilizando el patrón del cliente del shell
+- [X] T078 [US1] Aceptar la prop `sesion` en `frontend/mf-reservas/src/App.tsx` y propagarla a las pantallas (R-002)
+- [X] T079 [US1] Conectar `frontend/mf-reservas/src/pages/Disponibilidad.tsx`: eliminar los arreglos fijos `canchas` y `dias`, cargar el catálogo de `GET /api/canchas` y los bloques de `GET /api/reservas/disponibilidad`, y renombrar el deporte `'Basket'` a `'Básquet'` (R-008)
+- [X] T080 [US1] Conectar `frontend/mf-reservas/src/pages/NuevaReserva.tsx` a `POST /api/reservas`, mostrando en pantalla el motivo del **409** de bloque ocupado y el del tope de RN-06
+- [X] T081 [US1] Conectar `frontend/mf-reservas/src/pages/MisReservas.tsx`: eliminar el arreglo fijo `reservas`, cargar de `GET /api/reservas/mias`, renombrar el estado `'pasada'` a `FINALIZADA` en el tipo, las etiquetas y los filtros (R-007), y cancelar con `POST /api/reservas/{id}/cancelacion`
 
 ### Compuerta 8 — diagrama e informe
 
-- [ ] T082 [P] [US1] Actualizar `diagramas/workspace.dsl`: la ruta `/api/auth` en `RouteConfig`, el componente `AuthController` en la vista de `ms-usuarios`, la relación `AuthenticationFilter → ms-usuarios`, y el contenedor `rc-postgres` con sus tres bases en la vista de despliegue (R-009). Regenerar los SVG
-- [ ] T083 [P] [US1] Actualizar `informe/secciones/04-arquitectura.tex`, `05-modelo-datos.tex` y `06-reglas-negocio.tex` con lo construido en esta historia, y regenerar las figuras de `informe/figuras/`
+- [X] T082 [P] [US1] Actualizar `diagramas/workspace.dsl`: la ruta `/api/auth` en `RouteConfig`, el componente `AuthController` en la vista de `ms-usuarios`, la relación `AuthenticationFilter → ms-usuarios`, y el contenedor `rc-postgres` con sus tres bases en la vista de despliegue (R-009). Regenerar los SVG
+- [X] T083 [P] [US1] Actualizar `informe/secciones/04-arquitectura.tex`, `05-modelo-datos.tex` y `06-reglas-negocio.tex` con lo construido en esta historia, y regenerar las figuras de `informe/figuras/`
 
 **Checkpoint**: US1 completa y demostrable sola. Escenarios V1 y V2 del quickstart en verde. Es el MVP.
 
