@@ -9,26 +9,51 @@
 \section{Introducción}
 \label{sec:introduccion}
 
-% [Contexto y motivación]
+En el presente informe de arquitectura de software se aborda el diseño de un sistema web para la gestión de reservas
+de canchas deportivas de tenis, básquet y pádel. Esta solución busca centralizar y facilitar la gestión de disponibilidad,
+el agendamiento y la cancelación de reservas, así como la gestión de canchas, horarios, usuarios y reportes relacionados
+con su uso.
+
+El sistema se plantea bajo el enfoque de aplicaciones empresariales, considerando tanto la operación diaria del proceso de
+reservas como la necesidad de mantener una solución organizada, escalable y mantenible. Para ello, se propone una arquitectura
+basada en microservicios y microfrontends, con una separación clara de responsabilidades entre los módulos funcionales y
+técnicos.
+
+En el frontend propone utilizar Module Federation para integrar módulos independientes, mientras que en el backend se considera el uso de
+Spring Boot para el desarrollo de microservicios y PostgreSQL para la persistencia de datos del sistema. Con esta base, cada módulo
+puede evolucionar de manera más controlada y desplegarse de forma autónoma según las necesidades del sistema.
 
 \subsection{Planteamiento del problema}
 \label{sec:problema}
 
 
-kfñlaksjdñflkjasñdlkfj
-dfoiajsdñlikfja
-sdkfjañsldkfja
-asdkljfñalskdjflñ
+La gestión de reservas de canchas deportivas presenta dificultades cuando se realiza mediante registros manuales o 
+canales no integrados entre sí, como hojas de cálculo, calendarios, pizarras cuadriculadas. En este escenario, la consulta 
+de horarios disponibles es confusa si no se mantiene un orden establecido, el registro o cancelación de reservas puede 
+depender de validaciones manuales y la administración pierde visibilidad oportuna sobre el uso de las canchas y la demanda del servicio.
 
-aklsdjfñlkajsd
+Esta situación incrementa el riesgo de inconsistencias, como el solapamiento de horarios, la falta de trazabilidad sobre 
+quién realizó una reserva y bajo qué condiciones. Además, limita la capacidad de la organización para gestionar datos personales, 
+aplicar reglas de negocio de manera uniforme y disponer de reportes que apoyen la toma de decisiones.
 
-
-% [Qué necesidad resuelve el sistema]
+Frente a este contexto, surge la necesidad de contar con un sistema web centralizado que permita consultar disponibilidad,
+registrar reservas, gestionar usuarios y canchas, y generar información útil para la operación y el control administrativo.
 
 \subsection{Justificación}
 \label{sec:justificacion}
 
-% [Por qué se aborda con microfrontends y microservicios]
+La solución se aborda con una arquitectura basada en microservicios y microfrontends debido a que el dominio del problema
+presenta responsabilidades diferenciadas, como la gestión de usuarios, reservas, canchas y reportes. Separar estos componentes
+facilita su desarrollo, mantenimiento y evolución, evitando concentrar toda la lógica en una sola aplicación de gran tamaño.
+
+Desde el punto de vista del frontend, el uso de microfrontends permite organizar la interfaz por módulos funcionales y mantener
+cierto nivel de independencia entre ellos, lo que resulta conveniente para incorporar nuevas funcionalidades sin afectar por
+completo la aplicación principal. En el backend, los microservicios favorecen el aislamiento de reglas de negocio, la autonomía
+y una mejor alineación entre cada servicio y su responsabilidad dentro del sistema.
+
+En conjunto, esta aproximación responde no solo a una decisión tecnológica, sino también a la necesidad de construir una
+solución más ordenada, extensible y adecuada para un escenario empresarial donde distintos procesos deben integrarse sin perder
+claridad ni control.
 
 \subsection{Estructura del documento}
 \label{sec:estructura}
