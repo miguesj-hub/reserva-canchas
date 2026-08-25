@@ -1,6 +1,7 @@
 package com.ups.reservacanchas.usuarios.application.port.out;
 
 import com.ups.reservacanchas.usuarios.domain.User;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -17,4 +18,7 @@ public interface UserRepositoryPort {
     Optional<User> findByUsername(String username);
 
     boolean existsByUsername(String username);
+
+    /** Todos los usuarios, para la pantalla de gestión (FR-045). Sin paginación. */
+    List<User> findAll();
 }

@@ -2,6 +2,7 @@ package com.ups.reservacanchas.usuarios.adapter.out.persistence;
 
 import com.ups.reservacanchas.usuarios.application.port.out.UserRepositoryPort;
 import com.ups.reservacanchas.usuarios.domain.User;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
@@ -44,6 +45,13 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     @Override
     public boolean existsByUsername(String username) {
         return jpaRepository.existsByUsername(username);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return jpaRepository.findAll(org.springframework.data.domain.Sort.by("id")).stream()
+                .map(this::toDomain)
+                .toList();
     }
 
     private User toDomain(UserEntity e) {

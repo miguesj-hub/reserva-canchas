@@ -1,5 +1,6 @@
 package com.ups.reservacanchas.usuarios.adapter.in.web;
 
+import com.ups.reservacanchas.usuarios.domain.exception.ForbiddenOperationException;
 import com.ups.reservacanchas.usuarios.domain.exception.InvalidCredentialsException;
 import com.ups.reservacanchas.usuarios.domain.exception.UserAlreadyExistsException;
 import com.ups.reservacanchas.usuarios.domain.exception.UserNotFoundException;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -34,6 +36,24 @@ public class ErrorHandler {
     public ResponseEntity<ErrorResponse> usuarioDuplicado(
             UserAlreadyExistsException ex, HttpServletRequest request) {
         return build(HttpStatus.CONFLICT, ex.getMessage(), request);
+    }
+
+    /** 403 — FR-048: la gestión de usuarios es solo del administrador. */
+    @ExceptionHandler(ForbiddenOperationException.class)
+    public ResponseEntity<ErrorResponse> prohibido(
+            ForbiddenOperationException ex, HttpServletRequest request) {
+        return build(HttpStatus.FORBIDDEN, ex.getMessage(), request);
+    }
+
+    /** 401 — falta la cabecera de identidad; alguien llamó al :8081 directo. */
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<ErrorResponse> sinIdentidad(
+            MissingRequestHeaderException ex, HttpServletRequest request) {
+        return build(
+                HttpStatus.UNAUTHORIZED,
+                "Falta la cabecera de identidad " + ex.getHeaderName()
+                        + "; esta API se consume a través del gateway.",
+                request);
     }
 
     /** 404 — el recurso no existe. */

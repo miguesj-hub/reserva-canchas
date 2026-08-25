@@ -255,12 +255,12 @@ entra. Cubre la fila de gestión de usuarios de §3.1.
 **Independent Test**: Listar usuarios, inactivar a `cliente2`, fallar al entrar con él, reactivarlo
 y entrar con éxito, comprobando que sus reservas siguen ahí. Es el escenario V5 del quickstart.
 
-- [ ] T120 [US4] Ampliar `application/port/in/UserUseCase.java` y `application/port/out/UserRepositoryPort.java` de `ms-usuarios` con listar usuarios y cambiar su estado
-- [ ] T121 [US4] Implementar en `application/service/UserService.java` el listado (FR-045) y el cambio de estado (FR-046), restringidos a `ADMINISTRADOR` (FR-048)
-- [ ] T122 [P] [US4] Ampliar `UserServiceTest.java`: listado con rol administrador, rechazo con rol usuario final, e inactivación que no toca nada fuera de `usuarios_db` (FR-047)
-- [ ] T123 [US4] Ampliar `adapter/in/web/UserController.java` con `GET /api/usuarios`, `GET /api/usuarios/{id}` y `PATCH /api/usuarios/{id}/estado`, según `contracts/auth-usuarios.yaml`
-- [ ] T124 [US4] Conectar `frontend/mf-administracion/src/pages/GestionUsuarios.tsx`: eliminar el arreglo fijo `usuarios`, cargar de `GET /api/usuarios` y activar o inactivar con `PATCH /api/usuarios/{id}/estado`
-- [ ] T125 [US4] Verificar que `backend/api-gateway/src/main/java/com/ups/reservacanchas/gateway/AuthenticationFilter.java` rechaza con 401 a un usuario inactivado mientras tenía la sesión abierta, y que el shell lo devuelve a la pantalla de inicio de sesión
+- [X] T120 [US4] Ampliar `application/port/in/UserUseCase.java` y `application/port/out/UserRepositoryPort.java` de `ms-usuarios` con listar usuarios y cambiar su estado
+- [X] T121 [US4] Implementar en `application/service/UserService.java` el listado (FR-045) y el cambio de estado (FR-046), restringidos a `ADMINISTRADOR` (FR-048)
+- [X] T122 [P] [US4] Ampliar `UserServiceTest.java`: listado con rol administrador, rechazo con rol usuario final, e inactivación que no toca nada fuera de `usuarios_db` (FR-047)
+- [X] T123 [US4] Ampliar `adapter/in/web/UserController.java` con `GET /api/usuarios`, `GET /api/usuarios/{id}` y `PATCH /api/usuarios/{id}/estado`, según `contracts/auth-usuarios.yaml`
+- [X] T124 [US4] Conectar `frontend/mf-administracion/src/pages/GestionUsuarios.tsx`: eliminar el arreglo fijo `usuarios`, cargar de `GET /api/usuarios` y activar o inactivar con `PATCH /api/usuarios/{id}/estado`
+- [X] T125 [US4] Verificar que `backend/api-gateway/src/main/java/com/ups/reservacanchas/gateway/AuthenticationFilter.java` rechaza con 401 a un usuario inactivado mientras tenía la sesión abierta, y que el shell lo devuelve a la pantalla de inicio de sesión
 
 **Checkpoint**: las cuatro historias funcionan de forma independiente. Escenario V5 en verde.
 

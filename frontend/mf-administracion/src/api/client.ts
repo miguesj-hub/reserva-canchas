@@ -53,9 +53,34 @@ async function api<T>(ruta: string, opciones: Opciones = {}): Promise<T> {
 
   if (!respuesta.ok) {
     const detalle = (cuerpo as { message?: string } | null)?.message;
+    if (respuesta.status === 401) {
+      cerrarSesionPorCredencialInvalida(detalle ?? 'Tu sesión ya no es válida.');
+    }
     throw new ApiError(respuesta.status, detalle ?? mensajePorDefecto(respuesta.status));
   }
   return cuerpo as T;
+}
+
+
+/**
+ * Un 401 en cualquier petición significa que la credencial guardada ya no vale:
+ * el administrador inactivó la cuenta, o la cambió. El gateway la verifica en
+ * CADA petición, así que se entera al instante, no al caducar un token.
+ *
+ * Quedarse en la pantalla sería peor que salir: todo lo que el usuario intente
+ * fallará igual, sin explicar por qué. Se limpia la sesión y se vuelve al
+ * inicio de sesión con el motivo.
+ *
+ * Se usa window.location y no el router porque este archivo no es un
+ * componente, y porque una recarga completa garantiza que ningún remote ya
+ * cargado conserve estado de la sesión anterior.
+ */
+function cerrarSesionPorCredencialInvalida(motivo: string): void {
+  localStorage.removeItem(CREDENCIAL_KEY);
+  localStorage.removeItem('reservasport_sesion');
+  if (!window.location.pathname.startsWith('/login')) {
+    window.location.assign(`/login?motivo=${encodeURIComponent(motivo)}`);
+  }
 }
 
 function mensajePorDefecto(status: number): string {
@@ -191,4 +216,25 @@ export type ResumenReportes = {
 /** Los cuatro indicadores del día en curso, para el panel (R-005). */
 export function resumenDelDia(dia: string): Promise<ResumenReportes> {
   return api<ResumenReportes>(`/reportes/resumen?desde=${dia}&hasta=${dia}`);
+}
+
+// --- Usuarios ---------------------------------------------------------------
+
+export type Rol = 'USUARIO_FINAL' | 'ADMINISTRADOR';
+
+export type Usuario = {
+  id: number;
+  username: string;
+  nombre: string;
+  rol: Rol;
+  activo: boolean;
+};
+
+export function listarUsuarios(): Promise<Usuario[]> {
+  return api<Usuario[]>('/usuarios');
+}
+
+/** FR-046. Inactivar no toca las reservas del usuario: son de otro dominio. */
+export function cambiarEstadoUsuario(id: number, activo: boolean): Promise<Usuario> {
+  return api<Usuario>(`/usuarios/${id}/estado`, { method: 'PATCH', body: { activo } });
 }
