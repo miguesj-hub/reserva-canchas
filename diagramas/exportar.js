@@ -88,8 +88,15 @@ async function rutaDelVisor() {
     const vistas = await page.evaluate(() => structurizr.scripting.getViews());
     console.log(vistas.length + ' vistas: ' + vistas.map(v => v.key).join(', '));
 
-    for (const vista of vistas) {
-      await page.goto(url + rutaVisor + '#' + vista.key, { waitUntil: 'networkidle0', timeout: 60000 });
+    for (const [i, vista] of vistas.entries()) {
+      // El parámetro de consulta fuerza una carga completa del documento. Sin
+      // él, cambiar solo el #hash es una navegación dentro de la misma página:
+      // page.goto vuelve enseguida, isDiagramRendered() sigue siendo cierto
+      // PARA EL DIAGRAMA ANTERIOR, y se guarda ese bajo el nombre del nuevo.
+      // El fallo es silencioso —el archivo se escribe igual— y solo se nota al
+      // mirar el SVG.
+      await page.goto(url + rutaVisor + '?v=' + i + '#' + vista.key,
+                      { waitUntil: 'networkidle0', timeout: 60000 });
       await page.waitForFunction(listo, { timeout: 60000 });
 
       const svg = await page.evaluate(() => structurizr.scripting.exportCurrentDiagramToSVG({ includeMetadata: true }));

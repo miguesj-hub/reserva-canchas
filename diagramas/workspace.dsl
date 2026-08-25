@@ -130,7 +130,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 courtController = component "CourtController" "Exposes the endpoints for the court catalog, opening hours, and maintenance blocks; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
                     tags "Adapter-In"
                 }
-                errorHandlerCourt = component "ErrorHandler" "Translates non-existent or inactive courts into HTTP status codes." "@RestControllerAdvice" {
+                errorHandlerCourt = component "ErrorHandler" "Translates domain exceptions into HTTP status codes: 403 for an insufficient role (RN-07), 404 for a missing court or block, 409 for an overlapping maintenance block, 400 for a closing time that is not after the opening one." "@RestControllerAdvice" {
                     tags "Adapter-In"
                 }
 
@@ -138,7 +138,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 courtUseCase = component "CourtUseCase" "Input port: catalog, schedule, and maintenance-block operations, with no dependency on Spring MVC or JPA." "Java interface" {
                     tags "Port"
                 }
-                courtService = component "CourtService" "Implements the input port: applies the catalog rules (court activation, schedule and block validation)." "Spring @Service" {
+                courtService = component "CourtService" "Implements the input port. Applies RN-07: only an ADMINISTRADOR may create, edit, deactivate a court or register maintenance blocks. Reads the role from X-User-Role; it never authenticates." "Spring @Service" {
                     tags "Application"
                 }
 
@@ -302,7 +302,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
         bookingRepositoryAdapter -> bookingRepositoryPort "Implements"
         configurationRepositoryAdapter -> configurationRepositoryPort "Implements"
 
-        courtClientAdapter -> msCanchas "Queries the catalog" "JSON/HTTP"
+        courtClientAdapter -> msCanchas "Queries the court (schedule, active state) and its maintenance blocks, to mark blocked slots as unbookable (FR-010)" "JSON/HTTP"
         bookingRepositoryAdapter -> reservasDb "Reads and writes" "JDBC"
         configurationRepositoryAdapter -> reservasDb "Reads" "JDBC"
 
@@ -325,7 +325,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
         // ===================================================================
         gateway -> courtController "Routes /api/canchas" "JSON/HTTP"
 
-        courtController -> courtUseCase "Invokes"
+        courtController -> courtUseCase "Invokes. Passes X-User-Role through; it decides nothing itself"
         courtController -> errorHandlerCourt "Unhandled exceptions"
         courtService -> courtUseCase "Implements"
 
