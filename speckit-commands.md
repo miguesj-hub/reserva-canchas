@@ -54,3 +54,40 @@ Suma tres secciones: restricciones técnicas (versiones y puertos, y que una dep
 contra la rúbrica), cómo integramos aportes del equipo ahora que el código llega de varias manos, y las
 compuertas de calidad antes de dar una feature por terminada. En las compuertas incluy
 `workspace.dsl` y el informe se actualicen junto al código que describen.
+
+
+
+/speckit-specify
+
+Especifica el sistema completo de reserva de canchas deportivas: pádel, tenis y básquet, con usuario final y
+administrador. Saca los requisitos de `Alcance_Funcional_Reserva_Canchas_v2.md`, que es la fuente de la
+verdad: los permisos por rol del §3.1, las pantallas del §3.2, el detalle del §3.3, las reglas RN-01 a RN-08
+del §3.4 y los criterios de aceptación del §7. La constitución del proyecto ya está escrita, respétala.
+
+Una cosa importante sobre cómo quiero las historias. El sistema tiene varias capas (microfrontends sobre un
+shell, un gateway y cuatro microservicios detrás), pero ninguna capa es una historia. Nadie puede demostrar
+"el gateway" en la presentación final. Cada historia tiene que ser una rebanada vertical que atraviese todas
+las capas y se pueda demostrar sola, de la pantalla hasta la base. Y no metas arquitectura en la
+especificación: hexagonal, Module Federation, Postgres y el resto ya están decididos y les toca al plan.
+
+Priorízalas por lo que exige el §7, que es lo que se califica. Lo primero es que el usuario final consulte
+disponibilidad, reserve y cancele, porque sin eso no hay proyecto. Después la gestión del catálogo de canchas
+y la cancelación administrativa de cualquier reserva. Luego los reportes, y al final la gestión de usuarios.
+Cada una tiene que quedar utilizable por sí sola: si solo implementamos la primera, ya hay algo que mostrar.
+
+Cuidado con las reglas de negocio, que valen su propio criterio de la rúbrica. La RN-02, no reservar sobre un
+bloque ocupado, es la que más pesa y necesita escenarios explícitos, incluido qué pasa cuando dos personas
+piden el mismo bloque a la vez. Las otras también quiero verlas como criterios verificables, no como una nota
+al pie: cancelar solo lo propio salvo el administrador, no cancelar reservas que ya pasaron, que cancelar
+libere el bloque, el tope configurable de reservas activas y los tres estados de la reserva.
+
+Dos cosas que ya decidimos y van dentro del alcance: la pantalla de gestión de usuarios para activar e
+inactivar, que el §3.1 le da al administrador aunque el §3.2 no la liste; y los reportes son los cuatro
+indicadores del §3.3.5, así que no te olvides del ranking de canchas con mayor y menor demanda, que es el que
+suele quedarse fuera.
+
+Respeta el §3.5 tal cual: nada de pagos, notificaciones, reservas recurrentes, torneos, app nativa ni
+reportes analíticos. Si algo no traza a una funcionalidad del §3.2 o a una RN, déjalo fuera.
+
+Los criterios de éxito que sean medibles y sin nombrar tecnología, y que se puedan comprobar en una demo en
+vivo, porque así es como se evalúa esto.
