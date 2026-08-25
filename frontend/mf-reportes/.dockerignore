@@ -1,0 +1,15 @@
+# El build de la imagen hace su propio `npm ci`: copiar el node_modules del
+# host lo pisaría con uno construido para otra plataforma (y, si vino de un
+# contenedor, con otro dueño).
+node_modules/
+dist/
+.rspack-profile-*/
+Dockerfile
+.dockerignore
+.git/
+.gitignore
+.vscode/
+.idea/
+*.log
+.env*
+.DS_Store

@@ -1,20 +1,187 @@
 name: reserva-canchas
 
 services:
+  # --- Infraestructura -------------------------------------------------------
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: rc-postgres
+    restart: unless-stopped
+    networks: [backend]
+    environment:
+      # Superusuario: solo lo usan los scripts de init y el healthcheck.
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      # Contraseñas de los tres roles de aplicación. Las lee
+      # infra/postgres/init/01-bases-y-roles.sql con \getenv, así que ninguna
+      # credencial vive dentro del SQL versionado.
+      USUARIOS_DB_PASSWORD: ${USUARIOS_DB_PASSWORD:-usuarios_app}
+      CANCHAS_DB_PASSWORD: ${CANCHAS_DB_PASSWORD:-canchas_app}
+      RESERVAS_DB_PASSWORD: ${RESERVAS_DB_PASSWORD:-reservas_app}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Los scripts corren una sola vez, cuando pgdata está vacío. Por eso
+      # `docker compose down -v` es lo que fuerza un arranque limpio.
+      - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      # Expuesto solo para inspeccionar la base desde el host; los servicios se
+      # conectan por la red `backend`.
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      # Sin esto el arranque es una carrera: Flyway intenta migrar contra una
+      # base que todavía no acepta conexiones.
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  edge:
+    image: nginx:1.27-alpine
+    container_name: rc-edge
+    restart: unless-stopped
+    # El ÚNICO servicio conectado a las dos redes. Es lo que impide que el
+    # navegador llegue a un microservicio y lo que obliga a que todo pase por el
+    # gateway.
+    networks: [frontend, backend]
+    ports:
+      - "${EDGE_PORT:-80}:80"
+    volumes:
+      - ./infra/edge/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      gateway:
+        condition: service_healthy
+      shell:
+        condition: service_healthy
+      mf-reservas:
+        condition: service_healthy
+      mf-administracion:
+        condition: service_healthy
+      mf-reportes:
+        condition: service_healthy
+
+  # --- Backend ---------------------------------------------------------------
+
+  ms-usuarios:
+    container_name: rc-ms-usuarios
+    build: ./backend/ms-usuarios
+    restart: unless-stopped
+    networks: [backend]
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/usuarios_db
+      # Credencial SOLO de usuarios_db. Este servicio nunca recibe la de
+      # canchas_db ni la de reservas_db (Principio IV): aunque alguien
+      # escribiera la consulta, la base rechazaría la conexión.
+      DB_USERNAME: usuarios_app
+      DB_PASSWORD: ${USUARIOS_DB_PASSWORD:-usuarios_app}
+    ports:
+      # Directo, solo para Swagger UI y pruebas. El navegador entra por el edge.
+      - "${MS_USUARIOS_PORT:-8081}:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8081/actuator/health | grep -q UP"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 45s
+
+  ms-canchas:
+    container_name: rc-ms-canchas
+    build: ./backend/ms-canchas
+    restart: unless-stopped
+    networks: [backend]
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/canchas_db
+      DB_USERNAME: canchas_app
+      DB_PASSWORD: ${CANCHAS_DB_PASSWORD:-canchas_app}
+    ports:
+      - "${MS_CANCHAS_PORT:-8082}:8082"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8082/actuator/health | grep -q UP"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 45s
+
+  ms-reservas:
+    container_name: rc-ms-reservas
+    build: ./backend/ms-reservas
+    restart: unless-stopped
+    networks: [backend]
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/reservas_db
+      DB_USERNAME: reservas_app
+      DB_PASSWORD: ${RESERVAS_DB_PASSWORD:-reservas_app}
+      # No recibe ninguna credencial de canchas_db: el horario de la cancha se
+      # lo pregunta a ms-canchas por HTTP (Principio IV).
+      MS_CANCHAS_URL: http://ms-canchas:8082
+    ports:
+      - "${MS_RESERVAS_PORT:-8083}:8083"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      # Sin ms-canchas sano no puede validar ninguna cancha, así que arrancar
+      # antes solo adelantaría el momento de devolver 503.
+      ms-canchas:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8083/actuator/health | grep -q UP"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 45s
+
+  gateway:
+    container_name: rc-gateway
+    build: ./backend/api-gateway
+    restart: unless-stopped
+    networks: [backend]
+    environment:
+      MS_USUARIOS_URL: http://ms-usuarios:8081
+      MS_CANCHAS_URL: http://ms-canchas:8082
+      MS_RESERVAS_URL: http://ms-reservas:8083
+      MS_REPORTES_URL: http://ms-reportes:8084
+    ports:
+      - "${GATEWAY_PORT:-8080}:8080"
+    depends_on:
+      ms-usuarios:
+        condition: service_healthy
+      ms-canchas:
+        condition: service_healthy
+      ms-reservas:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/actuator/health | grep -q UP"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 45s
+
+  # --- Microfrontends --------------------------------------------------------
+  # Sin `profiles`: el Principio VII exige que `docker compose up`, a secas, deje
+  # el sistema completo arriba, y Compose omite todo servicio con perfil salvo
+  # que se active explícitamente —tampoco lo activa por `depends_on` (v2.31).
+  # Para trabajar solo en microfrontends, sin backend:
+  #   docker compose up shell mf-reservas mf-administracion mf-reportes
+
   shell:
-    profiles: [frontend, full]
     container_name: rc-shell
-    build: 
+    build:
       context: ./frontend/shell
       args:
         API_BASE_URL: /api
     networks: [frontend]
-    restart: unless-stoped
+    restart: unless-stopped
     ports:
       - "${SHELL_PORT:-3000}:80"
-  
+
   mf-reservas:
-    profiles: [frontend, full]
     container_name: rc-mf-reservas
     build:
       context: ./frontend/mf-reservas
@@ -28,7 +195,6 @@ services:
     networks: [frontend]
 
   mf-administracion:
-    profiles: [frontend, full]
     build:
       context: ./frontend/mf-administracion
       args:
@@ -40,7 +206,6 @@ services:
     networks: [frontend]
 
   mf-reportes:
-    profiles: [frontend, full]
     build:
       context: ./frontend/mf-reportes
       args:
@@ -57,3 +222,6 @@ networks:
     driver: bridge
   frontend:
     driver: bridge
+
+volumes:
+  pgdata:

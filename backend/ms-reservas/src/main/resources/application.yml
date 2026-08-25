@@ -3,8 +3,8 @@ spring:
     name: ms-reservas
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/reservas_db}
-    username: ${DB_USERNAME:reservas_db_user}
-    password: ${DB_PASSWORD:reservas_db_pass}
+    username: ${DB_USERNAME:reservas_app}
+    password: ${DB_PASSWORD:reservas_app}
   jpa:
     hibernate:
       # validate (no update): el esquema lo versiona Flyway. Ver taller, §4.1
@@ -18,6 +18,11 @@ spring:
 
 server:
   port: ${SERVER_PORT:8083}
+
+# ms-reservas no lee canchas_db: le pregunta a su dueño por HTTP (Principio IV).
+# Lo consume RestClientConfig para construir el cliente de CourtClientAdapter.
+servicios:
+  canchas-url: ${MS_CANCHAS_URL:http://localhost:8082}
 
 management:
   endpoints:

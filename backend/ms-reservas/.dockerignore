@@ -1,0 +1,17 @@
+# El contexto de build solo necesita el wrapper, el pom y src/.
+target/
+.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+HELP.md
+README.md
+Dockerfile
+.dockerignore
+.git/
+.gitignore
+.gitattributes
+.idea/
+.vscode/
+*.iml
+*.log
+.env*
+.DS_Store
