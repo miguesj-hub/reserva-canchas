@@ -8,7 +8,7 @@ muestran los diagramas de componentes en `diagramas/workspace.dsl` (vistas
 de entrada, una aplicación, un puerto de salida y un adaptador como cajas
 separadas, el código tiene que tener esa misma separación en paquetes.
 
-El ejemplo vivo de esto es `backend/microservice-template/`: compila, tiene
+El ejemplo vivo de esto es `template-backend/microservice-template/`: compila, tiene
 tests que pasan, y sigue exactamente lo que describe este documento. Su
 propio `README.md` explica paso a paso cómo implementar un microservicio
 nuevo a partir de él — este documento es la referencia de **por qué** está
