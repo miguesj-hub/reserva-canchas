@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { HOME_BY_ROLE } from '../auth/RoleRoute';
 import { useAuth } from '../auth/AuthContext';
 import { ApiError } from '../api/client';
@@ -9,11 +9,15 @@ type Modo = 'login' | 'registro';
 export default function Login() {
   const { login, registrar } = useAuth();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
   const [modo, setModo] = useState<Modo>('login');
   const [username, setUsername] = useState('');
   const [nombre, setNombre] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  // Si el cliente HTTP cerró la sesión por un 401 —cuenta inactivada mientras
+  // el usuario la tenía abierta— llega aquí el motivo, para no devolverlo a una
+  // pantalla de login sin explicación.
+  const [error, setError] = useState<string | null>(params.get('motivo'));
   const [enviando, setEnviando] = useState(false);
 
   const esRegistro = modo === 'registro';

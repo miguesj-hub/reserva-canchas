@@ -34,9 +34,34 @@ async function api<T>(ruta: string): Promise<T> {
 
   if (!respuesta.ok) {
     const detalle = (cuerpo as { message?: string } | null)?.message;
+    if (respuesta.status === 401) {
+      cerrarSesionPorCredencialInvalida(detalle ?? 'Tu sesión ya no es válida.');
+    }
     throw new ApiError(respuesta.status, detalle ?? mensajePorDefecto(respuesta.status));
   }
   return cuerpo as T;
+}
+
+
+/**
+ * Un 401 en cualquier petición significa que la credencial guardada ya no vale:
+ * el administrador inactivó la cuenta, o la cambió. El gateway la verifica en
+ * CADA petición, así que se entera al instante, no al caducar un token.
+ *
+ * Quedarse en la pantalla sería peor que salir: todo lo que el usuario intente
+ * fallará igual, sin explicar por qué. Se limpia la sesión y se vuelve al
+ * inicio de sesión con el motivo.
+ *
+ * Se usa window.location y no el router porque este archivo no es un
+ * componente, y porque una recarga completa garantiza que ningún remote ya
+ * cargado conserve estado de la sesión anterior.
+ */
+function cerrarSesionPorCredencialInvalida(motivo: string): void {
+  localStorage.removeItem(CREDENCIAL_KEY);
+  localStorage.removeItem('reservasport_sesion');
+  if (!window.location.pathname.startsWith('/login')) {
+    window.location.assign(`/login?motivo=${encodeURIComponent(motivo)}`);
+  }
 }
 
 function mensajePorDefecto(status: number): string {

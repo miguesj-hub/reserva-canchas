@@ -18,6 +18,7 @@
  */
 
 const CREDENCIAL_KEY = 'reservasport_credencial';
+const SESION_KEY = 'reservasport_sesion';
 
 /** Error con el código HTTP y el motivo que devolvió el servidor. */
 export class ApiError extends Error {
@@ -82,10 +83,38 @@ export async function api<T>(ruta: string, opciones: Opciones = {}): Promise<T> 
 
   if (!respuesta.ok) {
     const detalle = (cuerpo as CuerpoDeError | null)?.message;
+    // Las rutas públicas se excluyen: el 401 de un login con credencial
+    // equivocada no es una sesión caducada, y borrar la pantalla se llevaría
+    // por delante el mensaje que explica el fallo.
+    if (respuesta.status === 401 && !publica) {
+      cerrarSesionPorCredencialInvalida(detalle ?? 'Tu sesión ya no es válida.');
+    }
     throw new ApiError(respuesta.status, detalle ?? mensajePorDefecto(respuesta.status));
   }
 
   return cuerpo as T;
+}
+
+
+/**
+ * Un 401 en cualquier petición significa que la credencial guardada ya no vale:
+ * el administrador inactivó la cuenta, o la cambió. El gateway la verifica en
+ * CADA petición, así que se entera al instante, no al caducar un token.
+ *
+ * Quedarse en la pantalla sería peor que salir: todo lo que el usuario intente
+ * fallará igual, sin explicar por qué. Se limpia la sesión y se vuelve al
+ * inicio de sesión con el motivo.
+ *
+ * Se usa window.location y no el router porque este archivo no es un
+ * componente, y porque una recarga completa garantiza que ningún remote ya
+ * cargado conserve estado de la sesión anterior.
+ */
+function cerrarSesionPorCredencialInvalida(motivo: string): void {
+  localStorage.removeItem(CREDENCIAL_KEY);
+  localStorage.removeItem(SESION_KEY);
+  if (!window.location.pathname.startsWith('/login')) {
+    window.location.assign(`/login?motivo=${encodeURIComponent(motivo)}`);
+  }
 }
 
 function safeParse(texto: string): unknown {
