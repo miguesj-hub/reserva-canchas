@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: ms-reportes
+
+server:
+  port: ${SERVER_PORT:8084}
+
+# ms-reportes no tiene BD propia: agrega via REST para respetar la
+# independencia de datos entre microservicios (alcance §4.2).
+reportes:
+  clientes:
+    reservas-url: ${MS_RESERVAS_URL:http://localhost:8083}
+    canchas-url: ${MS_CANCHAS_URL:http://localhost:8082}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

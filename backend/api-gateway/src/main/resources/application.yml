@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes: []   # RouteConfig se define en codigo (RouteLocator)
+
+server:
+  port: ${SERVER_PORT:8080}
+
+servicios:
+  usuarios-url: ${MS_USUARIOS_URL:http://localhost:8081}
+  canchas-url: ${MS_CANCHAS_URL:http://localhost:8082}
+  reservas-url: ${MS_RESERVAS_URL:http://localhost:8083}
+  reportes-url: ${MS_REPORTES_URL:http://localhost:8084}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
