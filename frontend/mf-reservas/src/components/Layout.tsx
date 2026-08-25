@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
+import type { Sesion } from '../tipos';
 
 // Rutas absolutas a propósito: este remote siempre se monta bajo /reservas
 // (lo fija el shell). Con rutas relativas como "disponibilidad", al hacer
@@ -16,7 +17,13 @@ const linkClasses = ({ isActive }: { isActive: boolean }) =>
       : 'text-on-primary-container/70 hover:text-on-primary-container hover:bg-secondary-container/20'
   }`;
 
-export function Layout({ onLogout }: { onLogout?: () => void }) {
+export function Layout({
+  sesion,
+  onLogout,
+}: {
+  sesion?: Sesion | null;
+  onLogout?: () => void;
+}) {
   return (
     <div className="bg-background text-text-primary min-h-screen flex">
       {/* TopNavBar (solo mobile) */}
@@ -33,7 +40,9 @@ export function Layout({ onLogout }: { onLogout?: () => void }) {
           <span className="material-symbols-outlined text-3xl text-secondary-container">sports_tennis</span>
           <div>
             <h1 className="font-headline-md text-headline-md font-bold text-on-primary">ReservaSport</h1>
-            <p className="font-label-sm text-label-sm text-on-primary-container/70">Usuario</p>
+            <p className="font-label-sm text-label-sm text-on-primary-container/70">
+              {sesion?.nombre ?? 'Usuario'}
+            </p>
           </div>
         </div>
 

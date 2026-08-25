@@ -1,15 +1,105 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ApiError, crearReserva, listarCanchas, type Cancha } from '../api/client';
+import type { PropsDeRemote } from '../tipos';
 
-export default function NuevaReserva() {
+const ICONO_DEPORTE: Record<string, string> = {
+  PADEL: 'sports_tennis',
+  TENIS: 'sports_tennis',
+  BASQUET: 'sports_basketball',
+};
+
+const ETIQUETA_DEPORTE: Record<string, string> = {
+  PADEL: 'Pádel',
+  TENIS: 'Tenis',
+  BASQUET: 'Básquet',
+};
+
+function fechaLarga(iso: string): string {
+  const [anio, mes, dia] = iso.split('-').map(Number);
+  return new Date(anio, mes - 1, dia).toLocaleDateString('es-EC', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
+/** El fin del bloque: dura una hora, igual que en el backend. */
+function unaHoraDespues(hora: string): string {
+  const [h, m] = hora.split(':').map(Number);
+  return `${String((h + 1) % 24).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+}
+
+export default function NuevaReserva({ sesion }: PropsDeRemote) {
   const navigate = useNavigate();
-  const [notas, setNotas] = useState('');
-  const [mostrarToast, setMostrarToast] = useState(false);
+  const [params] = useSearchParams();
 
-  const confirmar = () => {
-    setMostrarToast(true);
-    setTimeout(() => setMostrarToast(false), 5000);
-  };
+  // La selección llega por la URL, no por el estado del router: así recargar
+  // esta pantalla no deja al usuario confirmando una reserva en blanco.
+  const canchaId = Number(params.get('canchaId'));
+  const fecha = params.get('fecha') ?? '';
+  const horaInicio = params.get('horaInicio') ?? '';
+  const seleccionCompleta = Boolean(canchaId) && Boolean(fecha) && Boolean(horaInicio);
+
+  const [cancha, setCancha] = useState<Cancha | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [enviando, setEnviando] = useState(false);
+  const [confirmada, setConfirmada] = useState(false);
+
+  useEffect(() => {
+    if (!seleccionCompleta) return;
+    let vigente = true;
+    // El catálogo activo basta para el nombre y el deporte; no hace falta un
+    // endpoint aparte solo para pintar la tarjeta.
+    listarCanchas()
+      .then((lista) => {
+        if (vigente) setCancha(lista.find((c) => c.id === canchaId) ?? null);
+      })
+      .catch(() => {
+        /* Sin el nombre la reserva se puede hacer igual: no vale interrumpir por esto. */
+      });
+    return () => {
+      vigente = false;
+    };
+  }, [canchaId, seleccionCompleta]);
+
+  async function confirmar() {
+    setEnviando(true);
+    setError(null);
+    try {
+      await crearReserva(canchaId, fecha, horaInicio);
+      setConfirmada(true);
+      // Un respiro para que se vea el aviso antes de saltar a Mis reservas.
+      setTimeout(() => navigate('/reservas'), 1500);
+    } catch (e) {
+      // El motivo lo dice el servidor y se muestra tal cual: el 409 de bloque
+      // ocupado (RN-02) y el del tope de reservas activas (RN-06) llegan por
+      // aquí, y son justamente los que el usuario necesita entender.
+      setError(
+        e instanceof ApiError ? e.message : 'No se pudo contactar con el servidor.',
+      );
+    } finally {
+      setEnviando(false);
+    }
+  }
+
+  if (!seleccionCompleta) {
+    return (
+      <div className="bg-background min-h-screen flex flex-col items-center justify-center gap-6 p-container-margin">
+        <span className="material-symbols-outlined text-[64px] text-text-muted">event_busy</span>
+        <p className="font-body-lg text-body-lg text-text-muted text-center max-w-md">
+          No hay ningún bloque seleccionado. Elige una cancha y una hora en Disponibilidad.
+        </p>
+        <button
+          type="button"
+          onClick={() => navigate('/reservas/disponibilidad')}
+          className="px-6 py-3 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md font-bold"
+        >
+          Ver disponibilidad
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-background text-text-primary min-h-screen flex">
@@ -17,7 +107,7 @@ export default function NuevaReserva() {
         <div className="w-full max-w-3xl mb-8 flex items-center">
           <button
             type="button"
-            onClick={() => navigate('..')}
+            onClick={() => navigate('/reservas/disponibilidad')}
             className="flex items-center text-secondary hover:text-secondary-container transition-colors duration-200"
           >
             <span className="material-symbols-outlined mr-2">arrow_back</span>
@@ -32,89 +122,61 @@ export default function NuevaReserva() {
               Confirmar Reserva
             </h1>
             <p className="font-body-md text-body-md text-text-muted">
-              Por favor, revisa los detalles antes de confirmar tu reserva.
+              Revisa los detalles antes de confirmar.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className="bg-surface-container-low rounded-lg p-6 border border-border-subtle hover:shadow-md transition-shadow duration-200">
-              <div className="flex items-start mb-4">
-                <div className="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed mr-4 shrink-0">
-                  <span className="material-symbols-outlined">sports_tennis</span>
-                </div>
-                <div>
-                  <h3 className="font-headline-sm text-headline-sm text-primary mb-1">Cancha de Padel 1</h3>
-                  <span className="inline-block px-3 py-1 bg-surface rounded-full text-text-muted font-label-sm text-label-sm border border-border-subtle">
-                    Padel Pro
-                  </span>
-                </div>
+          <div className="bg-surface-container-low rounded-lg p-6 border border-border-subtle mb-8">
+            <div className="flex items-start mb-4">
+              <div className="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed mr-4 shrink-0">
+                <span className="material-symbols-outlined">
+                  {ICONO_DEPORTE[cancha?.deporte ?? ''] ?? 'sports_tennis'}
+                </span>
               </div>
-              <div className="space-y-3 pt-4 border-t border-border-subtle">
-                <div className="flex items-center text-text-muted">
-                  <span className="material-symbols-outlined mr-3 text-secondary">calendar_today</span>
-                  <span className="font-body-md text-body-md">14 de Octubre, 2023</span>
-                </div>
-                <div className="flex items-center text-text-muted">
-                  <span className="material-symbols-outlined mr-3 text-secondary">schedule</span>
-                  <span className="font-body-md text-body-md">18:00 - 19:00 (1 hora)</span>
-                </div>
-                <div className="flex items-center text-text-muted">
-                  <span className="material-symbols-outlined mr-3 text-secondary">location_on</span>
-                  <span className="font-body-md text-body-md">Sede Norte</span>
-                </div>
+              <div>
+                <h3 className="font-headline-sm text-headline-sm text-primary mb-1">
+                  {cancha?.nombre ?? `Cancha ${canchaId}`}
+                </h3>
+                {cancha && (
+                  <span className="inline-block px-3 py-1 bg-surface rounded-full text-text-muted font-label-sm text-label-sm border border-border-subtle">
+                    {ETIQUETA_DEPORTE[cancha.deporte]}
+                  </span>
+                )}
               </div>
             </div>
-
-            <div className="flex flex-col justify-between">
-              <form
-                className="space-y-5"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  confirmar();
-                }}
-              >
-                <div>
-                  <label className="block font-label-md text-label-md text-primary mb-1" htmlFor="player-name">
-                    Nombre del Jugador
-                  </label>
-                  <div className="relative">
-                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted">
-                      person
-                    </span>
-                    <input
-                      className="w-full pl-10 pr-4 py-3 bg-surface border border-border-subtle rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all text-primary font-body-md"
-                      id="player-name"
-                      readOnly
-                      type="text"
-                      value="Juan Pérez"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block font-label-md text-label-md text-primary mb-1" htmlFor="notes">
-                    Notas Adicionales (Opcional)
-                  </label>
-                  <textarea
-                    className="w-full px-4 py-3 bg-surface border border-border-subtle rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary outline-none transition-all text-primary font-body-md resize-none"
-                    id="notes"
-                    placeholder="Ej: Necesito alquilar raquetas..."
-                    rows={3}
-                    value={notas}
-                    onChange={(e) => setNotas(e.target.value)}
-                  />
-                </div>
-                <div className="bg-surface-bright rounded-lg p-4 border border-border-subtle flex justify-between items-center mt-auto">
-                  <span className="font-body-md text-body-md text-text-muted">Total a pagar en club</span>
-                  <span className="font-headline-md text-headline-md text-primary font-bold">$25.00</span>
-                </div>
-              </form>
+            <div className="space-y-3 pt-4 border-t border-border-subtle">
+              <div className="flex items-center text-text-muted">
+                <span className="material-symbols-outlined mr-3 text-secondary">calendar_today</span>
+                <span className="font-body-md text-body-md">{fechaLarga(fecha)}</span>
+              </div>
+              <div className="flex items-center text-text-muted">
+                <span className="material-symbols-outlined mr-3 text-secondary">schedule</span>
+                <span className="font-body-md text-body-md">
+                  {horaInicio} – {unaHoraDespues(horaInicio)} (1 hora)
+                </span>
+              </div>
+              <div className="flex items-center text-text-muted">
+                <span className="material-symbols-outlined mr-3 text-secondary">person</span>
+                <span className="font-body-md text-body-md">
+                  A nombre de {sesion?.nombre ?? 'tu cuenta'}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="flex flex-col-reverse md:flex-row justify-end gap-4 border-t border-border-subtle pt-6 mt-6">
+          {error && (
+            <p
+              role="alert"
+              className="mb-6 font-label-md text-label-md text-error bg-error/10 border border-error rounded-lg px-4 py-3"
+            >
+              {error}
+            </p>
+          )}
+
+          <div className="flex flex-col-reverse md:flex-row justify-end gap-4 border-t border-border-subtle pt-6">
             <button
               type="button"
-              onClick={() => navigate('..')}
+              onClick={() => navigate('/reservas/disponibilidad')}
               className="px-6 py-3 rounded-lg border border-secondary text-secondary font-label-md text-label-md hover:bg-surface-container-low transition-colors duration-200"
             >
               Cancelar
@@ -122,10 +184,11 @@ export default function NuevaReserva() {
             <button
               type="button"
               onClick={confirmar}
-              className="px-8 py-3 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container/90 active:scale-95 transition-all duration-200 shadow-sm flex items-center justify-center"
+              disabled={enviando || confirmada}
+              className="px-8 py-3 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container/90 active:scale-95 transition-all duration-200 shadow-sm flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <span className="material-symbols-outlined mr-2">check_circle</span>
-              Confirmar Reserva
+              {enviando ? 'Confirmando…' : confirmada ? 'Reservada' : 'Confirmar Reserva'}
             </button>
           </div>
         </div>
@@ -133,21 +196,16 @@ export default function NuevaReserva() {
 
       <div
         className={`fixed bottom-6 right-6 left-6 md:left-auto transition-all duration-300 ease-out z-50 flex items-center bg-surface p-4 rounded-lg shadow-lg border-l-4 border-success md:min-w-[300px] ${
-          mostrarToast ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'
+          confirmada ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'
         }`}
       >
         <span className="material-symbols-outlined text-success mr-3">check_circle</span>
         <div>
           <h4 className="font-label-md text-label-md text-primary">Reserva Confirmada</h4>
-          <p className="font-label-sm text-label-sm text-text-muted">Tu cancha de padel ha sido reservada con éxito.</p>
+          <p className="font-label-sm text-label-sm text-text-muted">
+            {cancha?.nombre ?? 'Tu cancha'}, {horaInicio} – {unaHoraDespues(horaInicio)}.
+          </p>
         </div>
-        <button
-          type="button"
-          className="ml-auto text-text-muted hover:text-primary transition-colors"
-          onClick={() => setMostrarToast(false)}
-        >
-          <span className="material-symbols-outlined">close</span>
-        </button>
       </div>
     </div>
   );
