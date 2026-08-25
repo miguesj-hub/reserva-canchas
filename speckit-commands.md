@@ -48,11 +48,11 @@ Los siete principios que quiero:
 4. Independencia de datos: nadie toca la base de otro, solo REST síncrono vía puerto de salida.
 5. Microfrontends autónomos: cada remote compila y despliega solo; el shell consume contrato, no código.
 6. Contrato antes que implementación: OpenAPI primero, errores como códigos HTTP semánticos.
-7. Que levante con un comando: `docker compose up` deja el sistema completo arriba, co
+7. Que levante con un comando: `docker compose up` deja el sistema completo arriba, con Flyway y seed.
 
-Suma tres secciones: restricciones técnicas (versiones y puertos, y que una dependenci
+Suma tres secciones: restricciones técnicas (versiones y puertos, y que una dependencia nueva se justifique
 contra la rúbrica), cómo integramos aportes del equipo ahora que el código llega de varias manos, y las
-compuertas de calidad antes de dar una feature por terminada. En las compuertas incluy
+compuertas de calidad antes de dar una feature por terminada. En las compuertas incluye que el
 `workspace.dsl` y el informe se actualicen junto al código que describen.
 
 
@@ -91,3 +91,55 @@ reportes analíticos. Si algo no traza a una funcionalidad del §3.2 o a una RN,
 
 Los criterios de éxito que sean medibles y sin nombrar tecnología, y que se puedan comprobar en una demo en
 vivo, porque así es como se evalúa esto.
+
+
+/speckit-constitution   (enmienda → v1.2.0)
+
+Enmienda al Principio VI. Al escribirse la constitución no se registró que el frontend ya estaba
+construido por delante de los contratos: las cuatro aplicaciones tienen todas sus pantallas, pero sin
+una sola llamada HTTP, con los datos como arrays fijos en cada módulo y una sesión simulada contra un
+MOCK_USERS en AuthContext. Eso invierte el principio de contrato primero en la mitad del sistema, así
+que quiero fijado hacia dónde se resuelve el conflicto: la maqueta es un borrador de UI, no una fuente
+de requisitos ni de contrato. Donde la pantalla y el contrato no coincidan, se ajusta la pantalla.
+Donde la pantalla muestre algo que el alcance no pide, se quita. Y una funcionalidad no cuenta como
+terminada mientras su pantalla siga leyendo datos fijos en vez del endpoint real.
+
+
+
+/speckit-plan
+
+Planifica la implementación a partir del spec. Casi todo el contexto técnico ya está decidido, así que no
+investigues de cero: la constitución fija las reglas, `backend/STACK.md` las versiones (Spring Boot 4.0.8,
+Java 21, PostgreSQL 16, springdoc 3.0.2), `template-backend/ARQUITECTURA.md` la estructura hexagonal de cada
+microservicio, y `diagramas/workspace.dsl` la arquitectura completa. Que la investigación se limite a lo que
+de verdad esté abierto, y si no hay nada abierto, dilo y sigue.
+
+El árbol de proyecto ponlo con las rutas reales del repo, no con el esqueleto genérico de la plantilla: los
+cinco proyectos Maven bajo `backend/`, el shell y los tres remotes bajo `frontend/`, y el template como
+referencia de la que sale cada servicio. Paquete base `com.ups.reservacanchas.<dominio>`, subpaquetes y
+clases en inglés, con los nombres que ya usan las cajas del DSL.
+
+Lo que más me importa que salga bien son los contratos, porque son la mitad del trabajo. El frontend ya tiene
+todas las pantallas construidas pero sin una sola llamada HTTP: los datos son arrays fijos en cada módulo y la
+sesión se valida contra un MOCK_USERS. O sea que el trabajo de frontend no es maquetar, es conectar cada
+pantalla al contrato y sustituir esa autenticación de mentira por /api/auth. Planifícalo con ese peso, y define
+los contratos con sus códigos de error incluidos: 409 por bloque ocupado, 403 por rol insuficiente, 404 por
+recurso inexistente. Resuelve de paso dos cosas sueltas: los roles en código son `cliente` y `admin` mientras
+el alcance habla de Usuario Final y Administrador, y el shell le pasa un `token` como prop a cada remote, que
+hay que reconciliar con que la identidad la propaga el gateway por cabeceras.
+
+En el modelo de datos, tres esquemas independientes con credenciales que solo abren el suyo, `ms-reportes` sin
+base propia agregando vía REST, y la RN-02 sostenida por una restricción EXCLUDE de PostgreSQL desde la
+primera migración de Flyway, no por un if en el servicio.
+
+En el quickstart entra el `docker-compose.yml`, que hoy solo levanta el perfil de frontend: súmale Postgres con
+sus tres bases, los cuatro microservicios, el gateway y el edge de nginx que unifica el origen, más los
+ficheros de infraestructura que hagan falta.
+
+Y una advertencia sobre las capas: son varias, pero no las conviertas en fases. Nada de "primero todo el
+backend, luego todo el frontend". El orden lo manda la prioridad de las historias del spec, y cada una se
+implementa completa, del remote al gateway al microservicio a la base. Si al terminar una historia no hay algo
+que se pueda demostrar en pantalla, está mal cortada.
+
+Ah, y el gateway no lleva arquitectura hexagonal: es enrutamiento e identificación del usuario, sin dominio
+propio que proteger.
