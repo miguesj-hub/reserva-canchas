@@ -12,3 +12,10 @@ structurizr-cli/
 # Credenciales locales — nunca versionar (taller §6.2)
 */.env
 material-curso/
+# macOS
+.DS_Store
+
+
+# Credenciales locales — nunca versionar (taller §6.2)
+*/.env
+material-curso/

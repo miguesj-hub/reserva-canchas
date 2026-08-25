@@ -1,11 +1,23 @@
+import { Routes, Route } from 'react-router-dom';
+import { Layout } from './components/Layout';
+import Panel from './pages/Panel';
+import GestionReservas from './pages/GestionReservas';
+import GestionUsuarios from './pages/GestionUsuarios';
+import GestionCanchas from './pages/GestionCanchas';
 import './App.css';
 
-const App = () => {
+const App = ({ token, onLogout }: { token?: string; onLogout?: () => void }) => {
+  void token;
+
   return (
-    <div className="content">
-      <h1>Rsbuild with React</h1>
-      <p>Start building amazing things with Rsbuild.</p>
-    </div>
+    <Routes>
+      <Route element={<Layout onLogout={onLogout} />}>
+        <Route index element={<Panel />} />
+        <Route path="reservas" element={<GestionReservas />} />
+        <Route path="usuarios" element={<GestionUsuarios />} />
+        <Route path="canchas" element={<GestionCanchas />} />
+      </Route>
+    </Routes>
   );
 };
 

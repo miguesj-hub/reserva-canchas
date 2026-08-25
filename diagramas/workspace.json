@@ -1,2671 +1,636 @@
-{
-  "configuration" : { },
-  "description" : "Arquitectura de microfrontends y microservicios para la reserva de canchas de pádel, tenis y básquet.",
-  "documentation" : { },
-  "id" : 1,
-  "lastModifiedDate" : "2026-08-24T03:04:53Z",
-  "model" : {
-    "deploymentNodes" : [ {
-      "children" : [ {
-        "children" : [ {
-          "children" : [ {
-            "containerInstances" : [ {
-              "containerId" : "4",
-              "deploymentGroups" : [ "Default" ],
-              "environment" : "Local (Docker Compose)",
-              "id" : "138",
-              "instanceId" : 1,
-              "properties" : {
-                "structurizr.dsl.identifier" : "e8310498-5b89-45f7-b751-8dd0276a4edb"
-              },
-              "relationships" : [ {
-                "description" : "Sirve la aplicación contenedora",
-                "destinationId" : "140",
-                "id" : "142",
-                "linkedRelationshipId" : "59",
-                "sourceId" : "138",
-                "technology" : "HTTP"
-              }, {
-                "description" : "Sirve /mf-reservas/",
-                "destinationId" : "144",
-                "id" : "146",
-                "linkedRelationshipId" : "60",
-                "sourceId" : "138",
-                "technology" : "HTTP"
-              }, {
-                "description" : "Sirve /mf-administracion/",
-                "destinationId" : "149",
-                "id" : "151",
-                "linkedRelationshipId" : "61",
-                "sourceId" : "138",
-                "technology" : "HTTP"
-              }, {
-                "description" : "Sirve /mf-reportes/",
-                "destinationId" : "154",
-                "id" : "156",
-                "linkedRelationshipId" : "62",
-                "sourceId" : "138",
-                "technology" : "HTTP"
-              }, {
-                "description" : "Enruta /api/*",
-                "destinationId" : "160",
-                "id" : "161",
-                "linkedRelationshipId" : "63",
-                "sourceId" : "138",
-                "technology" : "HTTP"
-              } ],
-              "tags" : "Container Instance"
-            } ],
-            "description" : "Único contenedor conectado a ambas redes.",
-            "environment" : "Local (Docker Compose)",
-            "id" : "137",
-            "instances" : "1",
-            "name" : "rc-edge",
-            "properties" : {
-              "structurizr.dsl.identifier" : "nodoEdge"
-            },
-            "tags" : "Element,Deployment Node",
-            "technology" : "nginx:1.27-alpine · puerto 80"
-          }, {
-            "containerInstances" : [ {
-              "containerId" : "5",
-              "deploymentGroups" : [ "Default" ],
-              "environment" : "Local (Docker Compose)",
-              "id" : "140",
-              "instanceId" : 1,
-              "properties" : {
-                "structurizr.dsl.identifier" : "ac7ce055-3546-4eda-bed7-7dee7039377d"
-              },
-              "relationships" : [ {
-                "description" : "Autentica al usuario",
-                "destinationId" : "138",
-                "id" : "141",
-                "linkedRelationshipId" : "67",
-                "sourceId" : "140",
-                "technology" : "JSON/HTTPS · /api/auth"
-              }, {
-                "description" : "Carga el remote en tiempo de ejecución",
-                "destinationId" : "144",
-                "id" : "147",
-                "linkedRelationshipId" : "64",
-                "sourceId" : "140",
-                "technology" : "Module Federation (remoteEntry.js)"
-              }, {
-                "description" : "Carga el remote en tiempo de ejecución",
-                "destinationId" : "149",
-                "id" : "152",
-                "linkedRelationshipId" : "65",
-                "sourceId" : "140",
-                "technology" : "Module Federation (remoteEntry.js)"
-              }, {
-                "description" : "Carga el remote en tiempo de ejecución",
-                "destinationId" : "154",
-                "id" : "157",
-                "linkedRelationshipId" : "66",
-                "sourceId" : "140",
-                "technology" : "Module Federation (remoteEntry.js)"
-              } ],
-              "tags" : "Container Instance"
-            } ],
-            "environment" : "Local (Docker Compose)",
-            "id" : "139",
-            "instances" : "1",
-            "name" : "rc-shell",
-            "properties" : {
-              "structurizr.dsl.identifier" : "f17201e4-77bd-40fa-8543-756065c40864"
-            },
-            "tags" : "Element,Deployment Node",
-            "technology" : "nginx:1.27-alpine · puerto 3000"
-          }, {
-            "containerInstances" : [ {
-              "containerId" : "10",
-              "deploymentGroups" : [ "Default" ],
-              "environment" : "Local (Docker Compose)",
-              "id" : "144",
-              "instanceId" : 1,
-              "properties" : {
-                "structurizr.dsl.identifier" : "aa0e4ec7-8190-43bf-8bb6-da3cae43ae48"
-              },
-              "relationships" : [ {
-                "description" : "Consulta disponibilidad y gestiona reservas",
-                "destinationId" : "138",
-                "id" : "145",
-                "linkedRelationshipId" : "68",
-                "sourceId" : "144",
-                "technology" : "JSON/HTTPS · /api"
-              } ],
-              "tags" : "Container Instance"
-            } ],
-            "environment" : "Local (Docker Compose)",
-            "id" : "143",
-            "instances" : "1",
-            "name" : "rc-mf-reservas",
-            "properties" : {
-              "structurizr.dsl.identifier" : "e2bba4ca-1c4b-40d6-a054-07b000039db0"
-            },
-            "tags" : "Element,Deployment Node",
-            "technology" : "nginx:1.27-alpine · puerto 3001"
-          }, {
-            "containerInstances" : [ {
-              "containerId" : "15",
-              "deploymentGroups" : [ "Default" ],
-              "environment" : "Local (Docker Compose)",
-              "id" : "149",
-              "instanceId" : 1,
-              "properties" : {
-                "structurizr.dsl.identifier" : "d707c165-453e-4927-a828-b582e3f339c7"
-              },
-              "relationships" : [ {
-                "description" : "Gestiona canchas y reservas",
-                "destinationId" : "138",
-                "id" : "150",
-                "linkedRelationshipId" : "69",
-                "sourceId" : "149",
-                "technology" : "JSON/HTTPS · /api"
-              } ],
-              "tags" : "Container Instance"
-            } ],
-            "environment" : "Local (Docker Compose)",
-            "id" : "148",
-            "instances" : "1",
-            "name" : "rc-mf-administracion",
-            "properties" : {
-              "structurizr.dsl.identifier" : "d91ac46e-0c6f-4df6-b5e5-50e3c0ae2467"
-            },
-            "tags" : "Element,Deployment Node",
-            "technology" : "nginx:1.27-alpine · puerto 3002"
-          }, {
-            "containerInstances" : [ {
-              "containerId" : "20",
-              "deploymentGroups" : [ "Default" ],
-              "environment" : "Local (Docker Compose)",
-              "id" : "154",
-              "instanceId" : 1,
-              "properties" : {
-                "structurizr.dsl.identifier" : "1539ce89-50c1-44a1-baa9-21875e095709"
-              },
-              "relationships" : [ {
-                "description" : "Solicita los reportes",
-                "destinationId" : "138",
-                "id" : "155",
-                "linkedRelationshipId" : "70",
-                "sourceId" : "154",
-                "technology" : "JSON/HTTPS · /api"
-              } ],
-              "tags" : "Container Instance"
-            } ],
-            "environment" : "Local (Docker Compose)",
-            "id" : "153",
-            "instances" : "1",
-            "name" : "rc-mf-reportes",
-            "properties" : {
-              "structurizr.dsl.identifier" : "911610e7-da29-4d84-8738-f4971f814ca9"
-            },
-            "tags" : "Element,Deployment Node",
-            "technology" : "nginx:1.27-alpine · puerto 3003"
-          } ],
-          "description" : "Red bridge que aísla los contenedores de presentación.",
-          "environment" : "Local (Docker Compose)",
-          "id" : "136",
-          "instances" : "1",
-          "name" : "Red: frontend",
-          "properties" : {
-            "structurizr.dsl.identifier" : "redFrontend"
-          },
-          "tags" : "Element,Deployment Node",
-          "technology" : "docker network (bridge)"
-        }, {
-          "children" : [ {
-            "containerInstances" : [ {
-              "containerId" : "25",
-              "deploymentGroups" : [ "Default" ],
-              "environment" : "Local (Docker Compose)",
-              "id" : "160",
-              "instanceId" : 1,
-              "properties" : {
-                "structurizr.dsl.identifier" : "d7f3605e-d7e1-475c-91f5-cf66ab273905"
-              },
-              "relationships" : [ {
-                "description" : "Enruta /api/auth y /api/usuarios",
-                "destinationId" : "163",
-                "id" : "164",
-                "linkedRelationshipId" : "71",
-                "sourceId" : "160",
-                "technology" : "JSON/HTTP"
-              }, {
-                "description" : "Enruta /api/canchas",
-                "destinationId" : "166",
-                "id" : "167",
-                "linkedRelationshipId" : "72",
-                "sourceId" : "160",
-                "technology" : "JSON/HTTP"
-              }, {
-                "description" : "Enruta /api/reservas y /api/disponibilidad",
-                "destinationId" : "169",
-                "id" : "170",
-                "linkedRelationshipId" : "73",
-                "sourceId" : "160",
-                "technology" : "JSON/HTTP"
-              }, {
-                "description" : "Enruta /api/reportes",
-                "destinationId" : "173",
-                "id" : "174",
-                "linkedRelationshipId" : "74",
-                "sourceId" : "160",
-                "technology" : "JSON/HTTP"
-              } ],
-              "tags" : "Container Instance"
-            } ],
-            "environment" : "Local (Docker Compose)",
-            "id" : "159",
-            "instances" : "1",
-            "name" : "rc-gateway",
-            "properties" : {
-              "structurizr.dsl.identifier" : "7fe77a8c-6fe1-47d3-b646-6a40918fb11a"
-            },
-            "tags" : "Element,Deployment Node",
-            "technology" : "eclipse-temurin:21-jre · puerto 8080"
-          }, {
-            "containerInstances" : [ {
-              "containerId" : "29",
-              "deploymentGroups" : [ "Default" ],
-              "environment" : "Local (Docker Compose)",
-              "id" : "163",
-              "instanceId" : 1,
-              "properties" : {
-                "structurizr.dsl.identifier" : "2238fac6-e6ac-4000-9b24-0c6a54283601"
-              },
-              "relationships" : [ {
-                "description" : "Lee y escribe",
-                "destinationId" : "179",
-                "id" : "180",
-                "linkedRelationshipId" : "78",
-                "sourceId" : "163",
-                "technology" : "JDBC"
-              } ],
-              "tags" : "Container Instance"
-            } ],
-            "environment" : "Local (Docker Compose)",
-            "id" : "162",
-            "instances" : "1",
-            "name" : "rc-ms-usuarios",
-            "properties" : {
-              "structurizr.dsl.identifier" : "2e94e6d7-10e2-43ea-a1a0-d7b0eac5bf21"
-            },
-            "tags" : "Element,Deployment Node",
-            "technology" : "eclipse-temurin:21-jre · puerto 8081"
-          }, {
-            "containerInstances" : [ {
-              "containerId" : "34",
-              "deploymentGroups" : [ "Default" ],
-              "environment" : "Local (Docker Compose)",
-              "id" : "166",
-              "instanceId" : 1,
-              "properties" : {
-                "structurizr.dsl.identifier" : "39edde4d-c4d4-423c-909a-55c3b798a038"
-              },
-              "relationships" : [ {
-                "description" : "Lee y escribe",
-                "destinationId" : "182",
-                "id" : "183",
-                "linkedRelationshipId" : "79",
-                "sourceId" : "166",
-                "technology" : "JDBC"
-              } ],
-              "tags" : "Container Instance"
-            } ],
-            "environment" : "Local (Docker Compose)",
-            "id" : "165",
-            "instances" : "1",
-            "name" : "rc-ms-canchas",
-            "properties" : {
-              "structurizr.dsl.identifier" : "a33619ee-0116-4795-9089-f25bf22bf2ae"
-            },
-            "tags" : "Element,Deployment Node",
-            "technology" : "eclipse-temurin:21-jre · puerto 8082"
-          }, {
-            "containerInstances" : [ {
-              "containerId" : "39",
-              "deploymentGroups" : [ "Default" ],
-              "environment" : "Local (Docker Compose)",
-              "id" : "169",
-              "instanceId" : 1,
-              "properties" : {
-                "structurizr.dsl.identifier" : "f06bd145-6868-4af3-b090-9f27076efadc"
-              },
-              "relationships" : [ {
-                "description" : "Valida que la cancha exista, esté activa y el bloque esté dentro de su horario",
-                "destinationId" : "166",
-                "id" : "171",
-                "linkedRelationshipId" : "75",
-                "sourceId" : "169",
-                "technology" : "JSON/HTTP (síncrono)"
-              }, {
-                "description" : "Lee y escribe",
-                "destinationId" : "185",
-                "id" : "186",
-                "linkedRelationshipId" : "80",
-                "sourceId" : "169",
-                "technology" : "JDBC"
-              } ],
-              "tags" : "Container Instance"
-            } ],
-            "environment" : "Local (Docker Compose)",
-            "id" : "168",
-            "instances" : "1",
-            "name" : "rc-ms-reservas",
-            "properties" : {
-              "structurizr.dsl.identifier" : "f8e0f4d2-e368-41f7-8cce-1b881920a538"
-            },
-            "tags" : "Element,Deployment Node",
-            "technology" : "eclipse-temurin:21-jre · puerto 8083"
-          }, {
-            "containerInstances" : [ {
-              "containerId" : "46",
-              "deploymentGroups" : [ "Default" ],
-              "environment" : "Local (Docker Compose)",
-              "id" : "173",
-              "instanceId" : 1,
-              "properties" : {
-                "structurizr.dsl.identifier" : "2887dcae-ff48-4ece-b95e-bbeb5d91a206"
-              },
-              "relationships" : [ {
-                "description" : "Obtiene el catálogo de canchas y sus horarios",
-                "destinationId" : "166",
-                "id" : "175",
-                "linkedRelationshipId" : "77",
-                "sourceId" : "173",
-                "technology" : "JSON/HTTP (síncrono)"
-              }, {
-                "description" : "Obtiene las reservas del período",
-                "destinationId" : "169",
-                "id" : "176",
-                "linkedRelationshipId" : "76",
-                "sourceId" : "173",
-                "technology" : "JSON/HTTP (síncrono)"
-              } ],
-              "tags" : "Container Instance"
-            } ],
-            "environment" : "Local (Docker Compose)",
-            "id" : "172",
-            "instances" : "1",
-            "name" : "rc-ms-reportes",
-            "properties" : {
-              "structurizr.dsl.identifier" : "cabc66bd-b797-4ae9-ade8-765235f5952c"
-            },
-            "tags" : "Element,Deployment Node",
-            "technology" : "eclipse-temurin:21-jre · puerto 8084"
-          }, {
-            "children" : [ {
-              "containerInstances" : [ {
-                "containerId" : "52",
-                "deploymentGroups" : [ "Default" ],
-                "environment" : "Local (Docker Compose)",
-                "id" : "179",
-                "instanceId" : 1,
-                "properties" : {
-                  "structurizr.dsl.identifier" : "6541b713-9d6b-4027-978d-7c7d98e3b0b3"
-                },
-                "tags" : "Container Instance"
-              } ],
-              "environment" : "Local (Docker Compose)",
-              "id" : "178",
-              "instances" : "1",
-              "name" : "usuarios_db",
-              "properties" : {
-                "structurizr.dsl.identifier" : "b7579350-c3ce-4e6e-8951-81cda8e8e374"
-              },
-              "tags" : "Element,Deployment Node",
-              "technology" : "PostgreSQL database"
-            }, {
-              "containerInstances" : [ {
-                "containerId" : "53",
-                "deploymentGroups" : [ "Default" ],
-                "environment" : "Local (Docker Compose)",
-                "id" : "182",
-                "instanceId" : 1,
-                "properties" : {
-                  "structurizr.dsl.identifier" : "2cbcf1f6-ce7a-4046-a535-4eea0e3335d4"
-                },
-                "tags" : "Container Instance"
-              } ],
-              "environment" : "Local (Docker Compose)",
-              "id" : "181",
-              "instances" : "1",
-              "name" : "canchas_db",
-              "properties" : {
-                "structurizr.dsl.identifier" : "99567d8a-1933-49e3-9671-0cf976a19e13"
-              },
-              "tags" : "Element,Deployment Node",
-              "technology" : "PostgreSQL database"
-            }, {
-              "containerInstances" : [ {
-                "containerId" : "54",
-                "deploymentGroups" : [ "Default" ],
-                "environment" : "Local (Docker Compose)",
-                "id" : "185",
-                "instanceId" : 1,
-                "properties" : {
-                  "structurizr.dsl.identifier" : "60eedbbb-4c1c-4f8a-93ae-276ce137b4d6"
-                },
-                "tags" : "Container Instance"
-              } ],
-              "environment" : "Local (Docker Compose)",
-              "id" : "184",
-              "instances" : "1",
-              "name" : "reservas_db",
-              "properties" : {
-                "structurizr.dsl.identifier" : "2fe3bcc3-1b57-4cd5-9523-fb4c9d504204"
-              },
-              "tags" : "Element,Deployment Node",
-              "technology" : "PostgreSQL database"
-            } ],
-            "description" : "Una sola instancia con tres bases independientes. Cada microservicio recibe credenciales que solo le permiten conectarse a la suya: el aislamiento lo impone el motor, no una convención.",
-            "environment" : "Local (Docker Compose)",
-            "id" : "177",
-            "instances" : "1",
-            "name" : "rc-postgres",
-            "properties" : {
-              "structurizr.dsl.identifier" : "nodoPostgres"
-            },
-            "relationships" : [ {
-              "description" : "Persiste los datos en",
-              "destinationId" : "187",
-              "id" : "188",
-              "sourceId" : "177",
-              "tags" : "Relationship",
-              "technology" : "sistema de archivos"
-            } ],
-            "tags" : "Element,Deployment Node",
-            "technology" : "postgres:16-alpine · puerto 5432"
-          } ],
-          "description" : "Red bridge que aísla la API y la persistencia.",
-          "environment" : "Local (Docker Compose)",
-          "id" : "158",
-          "infrastructureNodes" : [ {
-            "description" : "Volumen Docker con los datos de PostgreSQL. Los scripts de infra/postgres/init se ejecutan solo cuando está vacío.",
-            "environment" : "Local (Docker Compose)",
-            "id" : "187",
-            "name" : "Volumen pgdata",
-            "properties" : {
-              "structurizr.dsl.identifier" : "volumen"
-            },
-            "tags" : "Element,Infrastructure Node,Infraestructura",
-            "technology" : "docker volume"
-          } ],
-          "instances" : "1",
-          "name" : "Red: backend",
-          "properties" : {
-            "structurizr.dsl.identifier" : "redBackend"
-          },
-          "tags" : "Element,Deployment Node",
-          "technology" : "docker network (bridge)"
-        } ],
-        "description" : "Orquestado con Docker Compose v2.",
-        "environment" : "Local (Docker Compose)",
-        "id" : "135",
-        "instances" : "1",
-        "name" : "Docker Engine",
-        "properties" : {
-          "structurizr.dsl.identifier" : "docker"
-        },
-        "tags" : "Element,Deployment Node",
-        "technology" : "Docker 24+"
-      } ],
-      "description" : "Entorno de evaluación del proyecto.",
-      "environment" : "Local (Docker Compose)",
-      "id" : "134",
-      "instances" : "1",
-      "name" : "Equipo del desarrollador",
-      "properties" : {
-        "structurizr.dsl.identifier" : "equipo"
-      },
-      "tags" : "Element,Deployment Node",
-      "technology" : "macOS / Linux / Windows"
-    } ],
-    "people" : [ {
-      "description" : "Consulta disponibilidad, crea y cancela sus propias reservas.",
-      "id" : "1",
-      "name" : "Usuario Final",
-      "properties" : {
-        "structurizr.dsl.identifier" : "usuarioFinal"
-      },
-      "relationships" : [ {
-        "description" : "Consulta disponibilidad, reserva y cancela sus reservas",
-        "destinationId" : "3",
-        "id" : "55",
-        "sourceId" : "1",
-        "tags" : "Relationship"
-      }, {
-        "description" : "Accede a la aplicación",
-        "destinationId" : "4",
-        "id" : "57",
-        "sourceId" : "1",
-        "tags" : "Relationship",
-        "technology" : "HTTP :80"
-      } ],
-      "tags" : "Element,Person"
-    }, {
-      "description" : "Gestiona el catálogo de canchas, cancela cualquier reserva y consulta los reportes de ocupación.",
-      "id" : "2",
-      "name" : "Administrador",
-      "properties" : {
-        "structurizr.dsl.identifier" : "administrador"
-      },
-      "relationships" : [ {
-        "description" : "Gestiona canchas y reservas, y consulta reportes",
-        "destinationId" : "3",
-        "id" : "56",
-        "sourceId" : "2",
-        "tags" : "Relationship"
-      }, {
-        "description" : "Accede a la aplicación",
-        "destinationId" : "4",
-        "id" : "58",
-        "sourceId" : "2",
-        "tags" : "Relationship",
-        "technology" : "HTTP :80"
-      } ],
-      "tags" : "Element,Person"
-    } ],
-    "softwareSystems" : [ {
-      "containers" : [ {
-        "description" : "Publica el shell, los microfrontends remotos y la API bajo un mismo origen (http://localhost). Al unificar el origen desaparece el CORS de los chunks federados y los remotes dejan de depender de hostnames internos de Docker.",
-        "documentation" : { },
-        "id" : "4",
-        "name" : "Edge",
-        "properties" : {
-          "structurizr.dsl.identifier" : "edge"
-        },
-        "relationships" : [ {
-          "description" : "Sirve la aplicación contenedora",
-          "destinationId" : "5",
-          "id" : "59",
-          "sourceId" : "4",
-          "tags" : "Relationship",
-          "technology" : "HTTP"
-        }, {
-          "description" : "Sirve /mf-reservas/",
-          "destinationId" : "10",
-          "id" : "60",
-          "sourceId" : "4",
-          "tags" : "Relationship",
-          "technology" : "HTTP"
-        }, {
-          "description" : "Sirve /mf-administracion/",
-          "destinationId" : "15",
-          "id" : "61",
-          "sourceId" : "4",
-          "tags" : "Relationship",
-          "technology" : "HTTP"
-        }, {
-          "description" : "Sirve /mf-reportes/",
-          "destinationId" : "20",
-          "id" : "62",
-          "sourceId" : "4",
-          "tags" : "Relationship",
-          "technology" : "HTTP"
-        }, {
-          "description" : "Enruta /api/*",
-          "destinationId" : "25",
-          "id" : "63",
-          "sourceId" : "4",
-          "tags" : "Relationship",
-          "technology" : "HTTP"
-        }, {
-          "description" : "Enruta /api/*",
-          "destinationId" : "26",
-          "id" : "107",
-          "sourceId" : "4",
-          "tags" : "Relationship",
-          "technology" : "HTTP"
-        } ],
-        "tags" : "Element,Container,Infraestructura",
-        "technology" : "nginx 1.27"
-      }, {
-        "components" : [ {
-          "description" : "Define las rutas de nivel superior y resuelve a qué remote delegar cada una.",
-          "documentation" : { },
-          "id" : "6",
-          "name" : "Router",
-          "properties" : {
-            "structurizr.dsl.identifier" : "routerShell"
-          },
-          "relationships" : [ {
-            "description" : "Consulta si hay sesión activa antes de resolver la ruta",
-            "destinationId" : "8",
-            "id" : "115",
-            "sourceId" : "6",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Renderiza dentro de",
-            "destinationId" : "7",
-            "id" : "116",
-            "sourceId" : "6",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "React Router"
-        }, {
-          "description" : "Estructura visual común (header, navegación) que envuelve al remote activo.",
-          "documentation" : { },
-          "id" : "7",
-          "name" : "Layout",
-          "properties" : {
-            "structurizr.dsl.identifier" : "layoutShell"
-          },
-          "relationships" : [ {
-            "description" : "Monta el remote correspondiente a la ruta activa",
-            "destinationId" : "9",
-            "id" : "117",
-            "sourceId" : "7",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "React"
-        }, {
-          "description" : "Mantiene la identidad y el rol del usuario autenticado, y expone el estado de sesión al shell y a los remotes.",
-          "documentation" : { },
-          "id" : "8",
-          "name" : "SesionContext",
-          "properties" : {
-            "structurizr.dsl.identifier" : "sesionContext"
-          },
-          "relationships" : [ {
-            "description" : "Autentica al usuario",
-            "destinationId" : "4",
-            "id" : "118",
-            "sourceId" : "8",
-            "tags" : "Relationship",
-            "technology" : "JSON/HTTPS · /api/auth"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "React Context"
-        }, {
-          "description" : "Carga en tiempo de ejecución el remoteEntry.js de cada microfrontend.",
-          "documentation" : { },
-          "id" : "9",
-          "name" : "RemoteLoader",
-          "properties" : {
-            "structurizr.dsl.identifier" : "remoteLoader"
-          },
-          "relationships" : [ {
-            "description" : "Carga el remote en tiempo de ejecución",
-            "destinationId" : "10",
-            "id" : "119",
-            "sourceId" : "9",
-            "tags" : "Relationship",
-            "technology" : "Module Federation (remoteEntry.js)"
-          }, {
-            "description" : "Carga el remote en tiempo de ejecución",
-            "destinationId" : "15",
-            "id" : "120",
-            "sourceId" : "9",
-            "tags" : "Relationship",
-            "technology" : "Module Federation (remoteEntry.js)"
-          }, {
-            "description" : "Carga el remote en tiempo de ejecución",
-            "destinationId" : "20",
-            "id" : "121",
-            "sourceId" : "9",
-            "tags" : "Relationship",
-            "technology" : "Module Federation (remoteEntry.js)"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Module Federation"
-        } ],
-        "description" : "Contenedor principal: layout, navegación, sesión del usuario y orquestación de los remotes en tiempo de ejecución.",
-        "documentation" : { },
-        "id" : "5",
-        "name" : "Shell (host)",
-        "properties" : {
-          "structurizr.dsl.identifier" : "shell"
-        },
-        "relationships" : [ {
-          "description" : "Carga el remote en tiempo de ejecución",
-          "destinationId" : "10",
-          "id" : "64",
-          "sourceId" : "5",
-          "tags" : "Relationship",
-          "technology" : "Module Federation (remoteEntry.js)"
-        }, {
-          "description" : "Carga el remote en tiempo de ejecución",
-          "destinationId" : "15",
-          "id" : "65",
-          "sourceId" : "5",
-          "tags" : "Relationship",
-          "technology" : "Module Federation (remoteEntry.js)"
-        }, {
-          "description" : "Carga el remote en tiempo de ejecución",
-          "destinationId" : "20",
-          "id" : "66",
-          "sourceId" : "5",
-          "tags" : "Relationship",
-          "technology" : "Module Federation (remoteEntry.js)"
-        }, {
-          "description" : "Autentica al usuario",
-          "destinationId" : "4",
-          "id" : "67",
-          "sourceId" : "5",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTPS · /api/auth"
-        } ],
-        "tags" : "Element,Container,Microfrontend,Host",
-        "technology" : "React + Module Federation"
-      }, {
-        "components" : [ {
-          "description" : "Pantallas de disponibilidad, creación y cancelación de reservas, y el historial \"Mis reservas\".",
-          "documentation" : { },
-          "id" : "11",
-          "name" : "Vistas",
-          "properties" : {
-            "structurizr.dsl.identifier" : "vistasReservas"
-          },
-          "relationships" : [ {
-            "description" : "Compone la pantalla con",
-            "destinationId" : "12",
-            "id" : "122",
-            "sourceId" : "11",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Lee y actualiza",
-            "destinationId" : "13",
-            "id" : "123",
-            "sourceId" : "11",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Solicita datos",
-            "destinationId" : "14",
-            "id" : "124",
-            "sourceId" : "11",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "React Router (rutas del remote)"
-        }, {
-          "description" : "Piezas reutilizables: calendario de bloques, tarjeta de reserva, selector de cancha.",
-          "documentation" : { },
-          "id" : "12",
-          "name" : "Componentes UI",
-          "properties" : {
-            "structurizr.dsl.identifier" : "componentesReservas"
-          },
-          "tags" : "Element,Component",
-          "technology" : "React"
-        }, {
-          "description" : "Mantiene en memoria la cancha/fecha seleccionada y el resultado de disponibilidad mientras el usuario arma la reserva.",
-          "documentation" : { },
-          "id" : "13",
-          "name" : "Estado",
-          "properties" : {
-            "structurizr.dsl.identifier" : "estadoReservas"
-          },
-          "tags" : "Element,Component",
-          "technology" : "React Context / hooks"
-        }, {
-          "description" : "Encapsula las llamadas HTTP a /api/reservas y /api/disponibilidad.",
-          "documentation" : { },
-          "id" : "14",
-          "name" : "ApiClient",
-          "properties" : {
-            "structurizr.dsl.identifier" : "apiClientReservas"
-          },
-          "relationships" : [ {
-            "description" : "Consulta disponibilidad y gestiona reservas",
-            "destinationId" : "4",
-            "id" : "125",
-            "sourceId" : "14",
-            "tags" : "Relationship",
-            "technology" : "JSON/HTTPS · /api"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Fetch API"
-        } ],
-        "description" : "Consulta de disponibilidad, creación y cancelación de reservas del usuario final.",
-        "documentation" : { },
-        "id" : "10",
-        "name" : "mf-reservas",
-        "properties" : {
-          "structurizr.dsl.identifier" : "mfReservas"
-        },
-        "relationships" : [ {
-          "description" : "Consulta disponibilidad y gestiona reservas",
-          "destinationId" : "4",
-          "id" : "68",
-          "sourceId" : "10",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTPS · /api"
-        } ],
-        "tags" : "Element,Container,Microfrontend",
-        "technology" : "React + Module Federation (remote)"
-      }, {
-        "components" : [ {
-          "description" : "Pantallas de catálogo de canchas, horarios, bloqueos por mantenimiento y cancelación administrativa de reservas.",
-          "documentation" : { },
-          "id" : "16",
-          "name" : "Vistas",
-          "properties" : {
-            "structurizr.dsl.identifier" : "vistasAdministracion"
-          },
-          "relationships" : [ {
-            "description" : "Compone la pantalla con",
-            "destinationId" : "17",
-            "id" : "126",
-            "sourceId" : "16",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Lee y actualiza",
-            "destinationId" : "18",
-            "id" : "127",
-            "sourceId" : "16",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Solicita datos",
-            "destinationId" : "19",
-            "id" : "128",
-            "sourceId" : "16",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "React Router (rutas del remote)"
-        }, {
-          "description" : "Piezas reutilizables: formulario de cancha, tabla de reservas, editor de horarios.",
-          "documentation" : { },
-          "id" : "17",
-          "name" : "Componentes UI",
-          "properties" : {
-            "structurizr.dsl.identifier" : "componentesAdministracion"
-          },
-          "tags" : "Element,Component",
-          "technology" : "React"
-        }, {
-          "description" : "Mantiene el formulario y los filtros activos mientras el administrador edita el catálogo.",
-          "documentation" : { },
-          "id" : "18",
-          "name" : "Estado",
-          "properties" : {
-            "structurizr.dsl.identifier" : "estadoAdministracion"
-          },
-          "tags" : "Element,Component",
-          "technology" : "React Context / hooks"
-        }, {
-          "description" : "Encapsula las llamadas HTTP a /api/canchas y /api/reservas.",
-          "documentation" : { },
-          "id" : "19",
-          "name" : "ApiClient",
-          "properties" : {
-            "structurizr.dsl.identifier" : "apiClientAdministracion"
-          },
-          "relationships" : [ {
-            "description" : "Gestiona canchas y reservas",
-            "destinationId" : "4",
-            "id" : "129",
-            "sourceId" : "19",
-            "tags" : "Relationship",
-            "technology" : "JSON/HTTPS · /api"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Fetch API"
-        } ],
-        "description" : "Gestión del catálogo de canchas, horarios, bloqueos y cancelación de cualquier reserva.",
-        "documentation" : { },
-        "id" : "15",
-        "name" : "mf-administracion",
-        "properties" : {
-          "structurizr.dsl.identifier" : "mfAdministracion"
-        },
-        "relationships" : [ {
-          "description" : "Gestiona canchas y reservas",
-          "destinationId" : "4",
-          "id" : "69",
-          "sourceId" : "15",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTPS · /api"
-        } ],
-        "tags" : "Element,Container,Microfrontend",
-        "technology" : "React + Module Federation (remote)"
-      }, {
-        "components" : [ {
-          "description" : "Pantallas de ocupación, reservas por período y cancelaciones.",
-          "documentation" : { },
-          "id" : "21",
-          "name" : "Vistas",
-          "properties" : {
-            "structurizr.dsl.identifier" : "vistasReportes"
-          },
-          "relationships" : [ {
-            "description" : "Compone la pantalla con",
-            "destinationId" : "22",
-            "id" : "130",
-            "sourceId" : "21",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Lee y actualiza",
-            "destinationId" : "23",
-            "id" : "131",
-            "sourceId" : "21",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Solicita datos",
-            "destinationId" : "24",
-            "id" : "132",
-            "sourceId" : "21",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "React Router (rutas del remote)"
-        }, {
-          "description" : "Piezas reutilizables: gráficos y tablas de reporte, selector de rango de fechas.",
-          "documentation" : { },
-          "id" : "22",
-          "name" : "Componentes UI",
-          "properties" : {
-            "structurizr.dsl.identifier" : "componentesReportes"
-          },
-          "tags" : "Element,Component",
-          "technology" : "React"
-        }, {
-          "description" : "Mantiene el rango de fechas y los filtros seleccionados por el administrador.",
-          "documentation" : { },
-          "id" : "23",
-          "name" : "Estado",
-          "properties" : {
-            "structurizr.dsl.identifier" : "estadoReportes"
-          },
-          "tags" : "Element,Component",
-          "technology" : "React Context / hooks"
-        }, {
-          "description" : "Encapsula las llamadas HTTP a /api/reportes.",
-          "documentation" : { },
-          "id" : "24",
-          "name" : "ApiClient",
-          "properties" : {
-            "structurizr.dsl.identifier" : "apiClientReportes"
-          },
-          "relationships" : [ {
-            "description" : "Solicita los reportes",
-            "destinationId" : "4",
-            "id" : "133",
-            "sourceId" : "24",
-            "tags" : "Relationship",
-            "technology" : "JSON/HTTPS · /api"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Fetch API"
-        } ],
-        "description" : "Visualización de los reportes de ocupación, reservas por período y cancelaciones.",
-        "documentation" : { },
-        "id" : "20",
-        "name" : "mf-reportes",
-        "properties" : {
-          "structurizr.dsl.identifier" : "mfReportes"
-        },
-        "relationships" : [ {
-          "description" : "Solicita los reportes",
-          "destinationId" : "4",
-          "id" : "70",
-          "sourceId" : "20",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTPS · /api"
-        } ],
-        "tags" : "Element,Container,Microfrontend",
-        "technology" : "React + Module Federation (remote)"
-      }, {
-        "components" : [ {
-          "description" : "Identifica al usuario de la petición entrante y propaga su identidad y rol como cabeceras X-Usuario-Id / X-Usuario-Rol.",
-          "documentation" : { },
-          "id" : "26",
-          "name" : "AutenticacionFilter",
-          "properties" : {
-            "structurizr.dsl.identifier" : "autenticacionFilter"
-          },
-          "relationships" : [ {
-            "description" : "Identidad propagada, continúa el enrutamiento",
-            "destinationId" : "27",
-            "id" : "108",
-            "sourceId" : "26",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Identidad ausente o inválida",
-            "destinationId" : "28",
-            "id" : "109",
-            "sourceId" : "26",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "GlobalFilter"
-        }, {
-          "description" : "Define las rutas hacia cada microservicio (predicates y filtros).",
-          "documentation" : { },
-          "id" : "27",
-          "name" : "RouteConfig",
-          "properties" : {
-            "structurizr.dsl.identifier" : "routeConfig"
-          },
-          "relationships" : [ {
-            "description" : "Enruta /api/auth y /api/usuarios",
-            "destinationId" : "29",
-            "id" : "110",
-            "sourceId" : "27",
-            "tags" : "Relationship",
-            "technology" : "JSON/HTTP"
-          }, {
-            "description" : "Enruta /api/canchas",
-            "destinationId" : "34",
-            "id" : "111",
-            "sourceId" : "27",
-            "tags" : "Relationship",
-            "technology" : "JSON/HTTP"
-          }, {
-            "description" : "Enruta /api/reservas y /api/disponibilidad",
-            "destinationId" : "39",
-            "id" : "112",
-            "sourceId" : "27",
-            "tags" : "Relationship",
-            "technology" : "JSON/HTTP"
-          }, {
-            "description" : "Enruta /api/reportes",
-            "destinationId" : "46",
-            "id" : "113",
-            "sourceId" : "27",
-            "tags" : "Relationship",
-            "technology" : "JSON/HTTP"
-          }, {
-            "description" : "Servicio destino no disponible",
-            "destinationId" : "28",
-            "id" : "114",
-            "sourceId" : "27",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring Cloud Gateway (RouteLocator)"
-        }, {
-          "description" : "Traduce fallos de los microservicios destino (timeout, no disponible) o identidad ausente/inválida a códigos HTTP.",
-          "documentation" : { },
-          "id" : "28",
-          "name" : "ManejadorDeErrores",
-          "properties" : {
-            "structurizr.dsl.identifier" : "manejadorErroresGateway"
-          },
-          "tags" : "Element,Component",
-          "technology" : "ErrorWebExceptionHandler"
-        } ],
-        "description" : "Punto de entrada único a la API. Identifica al usuario autenticado (RN-03) y enruta cada petición al microservicio correspondiente.",
-        "documentation" : { },
-        "id" : "25",
-        "name" : "API Gateway",
-        "properties" : {
-          "structurizr.dsl.identifier" : "gateway"
-        },
-        "relationships" : [ {
-          "description" : "Enruta /api/auth y /api/usuarios",
-          "destinationId" : "29",
-          "id" : "71",
-          "sourceId" : "25",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP"
-        }, {
-          "description" : "Enruta /api/canchas",
-          "destinationId" : "34",
-          "id" : "72",
-          "sourceId" : "25",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP"
-        }, {
-          "description" : "Enruta /api/reservas y /api/disponibilidad",
-          "destinationId" : "39",
-          "id" : "73",
-          "sourceId" : "25",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP"
-        }, {
-          "description" : "Enruta /api/reportes",
-          "destinationId" : "46",
-          "id" : "74",
-          "sourceId" : "25",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP"
-        }, {
-          "description" : "Enruta /api/reservas y /api/disponibilidad",
-          "destinationId" : "40",
-          "id" : "81",
-          "sourceId" : "25",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP"
-        }, {
-          "description" : "Enruta /api/auth y /api/usuarios",
-          "destinationId" : "30",
-          "id" : "90",
-          "sourceId" : "25",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP"
-        }, {
-          "description" : "Enruta /api/canchas",
-          "destinationId" : "35",
-          "id" : "95",
-          "sourceId" : "25",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP"
-        }, {
-          "description" : "Enruta /api/reportes",
-          "destinationId" : "47",
-          "id" : "100",
-          "sourceId" : "25",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP"
-        } ],
-        "tags" : "Element,Container,Gateway",
-        "technology" : "Spring Cloud Gateway (:8080)"
-      }, {
-        "components" : [ {
-          "description" : "Expone los endpoints de registro, login y gestión de usuarios y roles.",
-          "documentation" : { },
-          "id" : "30",
-          "name" : "UsuarioController",
-          "properties" : {
-            "structurizr.dsl.identifier" : "usuarioController"
-          },
-          "relationships" : [ {
-            "description" : "Invoca",
-            "destinationId" : "31",
-            "id" : "91",
-            "sourceId" : "30",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Excepciones no controladas",
-            "destinationId" : "33",
-            "id" : "92",
-            "sourceId" : "30",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring MVC @RestController"
-        }, {
-          "description" : "Valida las credenciales (usuario/contraseña) y gestiona el ciclo de vida de usuarios y roles.",
-          "documentation" : { },
-          "id" : "31",
-          "name" : "UsuarioService",
-          "properties" : {
-            "structurizr.dsl.identifier" : "usuarioService"
-          },
-          "relationships" : [ {
-            "description" : "Persiste y consulta usuarios y roles",
-            "destinationId" : "32",
-            "id" : "93",
-            "sourceId" : "31",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring @Service"
-        }, {
-          "description" : "Acceso a la tabla de usuarios y roles.",
-          "documentation" : { },
-          "id" : "32",
-          "name" : "UsuarioRepository",
-          "properties" : {
-            "structurizr.dsl.identifier" : "usuarioRepository"
-          },
-          "relationships" : [ {
-            "description" : "Lee y escribe",
-            "destinationId" : "52",
-            "id" : "94",
-            "sourceId" : "32",
-            "tags" : "Relationship",
-            "technology" : "JDBC"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring Data JPA"
-        }, {
-          "description" : "Traduce credenciales inválidas y conflictos (usuario ya registrado) a códigos HTTP.",
-          "documentation" : { },
-          "id" : "33",
-          "name" : "ManejadorDeErrores",
-          "properties" : {
-            "structurizr.dsl.identifier" : "manejadorErroresUsuarios"
-          },
-          "tags" : "Element,Component",
-          "technology" : "@RestControllerAdvice"
-        } ],
-        "description" : "Registro, autenticación y gestión de usuarios y roles. Valida las credenciales del usuario final o administrador y confirma su rol.",
-        "documentation" : { },
-        "id" : "29",
-        "name" : "ms-usuarios",
-        "properties" : {
-          "structurizr.dsl.identifier" : "msUsuarios"
-        },
-        "relationships" : [ {
-          "description" : "Lee y escribe",
-          "destinationId" : "52",
-          "id" : "78",
-          "sourceId" : "29",
-          "tags" : "Relationship",
-          "technology" : "JDBC"
-        } ],
-        "tags" : "Element,Container,Microservicio",
-        "technology" : "Spring Boot 4 (:8081)"
-      }, {
-        "components" : [ {
-          "description" : "Expone los endpoints del catálogo de canchas, horarios de atención y bloqueos por mantenimiento.",
-          "documentation" : { },
-          "id" : "35",
-          "name" : "CanchaController",
-          "properties" : {
-            "structurizr.dsl.identifier" : "canchaController"
-          },
-          "relationships" : [ {
-            "description" : "Invoca",
-            "destinationId" : "36",
-            "id" : "96",
-            "sourceId" : "35",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Excepciones no controladas",
-            "destinationId" : "38",
-            "id" : "97",
-            "sourceId" : "35",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring MVC @RestController"
-        }, {
-          "description" : "Aplica las reglas del catálogo: activación de canchas, validación de horarios y bloqueos.",
-          "documentation" : { },
-          "id" : "36",
-          "name" : "CanchaService",
-          "properties" : {
-            "structurizr.dsl.identifier" : "canchaService"
-          },
-          "relationships" : [ {
-            "description" : "Persiste y consulta el catálogo",
-            "destinationId" : "37",
-            "id" : "98",
-            "sourceId" : "36",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring @Service"
-        }, {
-          "description" : "Acceso a canchas, horarios y bloqueos.",
-          "documentation" : { },
-          "id" : "37",
-          "name" : "CanchaRepository",
-          "properties" : {
-            "structurizr.dsl.identifier" : "canchaRepository"
-          },
-          "relationships" : [ {
-            "description" : "Lee y escribe",
-            "destinationId" : "53",
-            "id" : "99",
-            "sourceId" : "37",
-            "tags" : "Relationship",
-            "technology" : "JDBC"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring Data JPA"
-        }, {
-          "description" : "Traduce canchas inexistentes o inactivas a códigos HTTP.",
-          "documentation" : { },
-          "id" : "38",
-          "name" : "ManejadorDeErrores",
-          "properties" : {
-            "structurizr.dsl.identifier" : "manejadorErroresCanchas"
-          },
-          "tags" : "Element,Component",
-          "technology" : "@RestControllerAdvice"
-        } ],
-        "description" : "Catálogo de canchas y deportes, horarios de atención y bloqueos por mantenimiento.",
-        "documentation" : { },
-        "id" : "34",
-        "name" : "ms-canchas",
-        "properties" : {
-          "structurizr.dsl.identifier" : "msCanchas"
-        },
-        "relationships" : [ {
-          "description" : "Lee y escribe",
-          "destinationId" : "53",
-          "id" : "79",
-          "sourceId" : "34",
-          "tags" : "Relationship",
-          "technology" : "JDBC"
-        } ],
-        "tags" : "Element,Container,Microservicio",
-        "technology" : "Spring Boot 4 (:8082)"
-      }, {
-        "components" : [ {
-          "description" : "Expone los endpoints REST de reservas y disponibilidad, y traduce las violaciones de reglas de negocio a códigos HTTP (409 ante solapamiento).",
-          "documentation" : { },
-          "id" : "40",
-          "name" : "ReservaController",
-          "properties" : {
-            "structurizr.dsl.identifier" : "reservaController"
-          },
-          "relationships" : [ {
-            "description" : "Invoca",
-            "destinationId" : "41",
-            "id" : "82",
-            "sourceId" : "40",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Excepciones no controladas",
-            "destinationId" : "45",
-            "id" : "83",
-            "sourceId" : "40",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring MVC @RestController"
-        }, {
-          "description" : "Aplica las reglas de negocio: calcula la disponibilidad, límite de reservas activas (RN-06), cancelación solo de reservas futuras (RN-04) y permisos por rol (RN-03).",
-          "documentation" : { },
-          "id" : "41",
-          "name" : "ReservaService",
-          "properties" : {
-            "structurizr.dsl.identifier" : "reservaService"
-          },
-          "relationships" : [ {
-            "description" : "Valida la cancha y obtiene su horario de atención",
-            "destinationId" : "42",
-            "id" : "84",
-            "sourceId" : "41",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Persiste, consulta y calcula disponibilidad sobre las reservas",
-            "destinationId" : "43",
-            "id" : "85",
-            "sourceId" : "41",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Lee el máximo de reservas activas (RN-06)",
-            "destinationId" : "44",
-            "id" : "86",
-            "sourceId" : "41",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring @Service"
-        }, {
-          "description" : "Consulta a ms-canchas que la cancha exista, esté activa y que el bloque caiga dentro de su horario de atención.",
-          "documentation" : { },
-          "id" : "42",
-          "name" : "CanchaClient",
-          "properties" : {
-            "structurizr.dsl.identifier" : "canchaClient"
-          },
-          "relationships" : [ {
-            "description" : "Consulta el catálogo",
-            "destinationId" : "34",
-            "id" : "87",
-            "sourceId" : "42",
-            "tags" : "Relationship",
-            "technology" : "JSON/HTTP"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring RestClient"
-        }, {
-          "description" : "Acceso a la tabla reservas. La restricción EXCLUDE de PostgreSQL garantiza el no solapamiento (RN-02) incluso ante peticiones concurrentes.",
-          "documentation" : { },
-          "id" : "43",
-          "name" : "ReservaRepository",
-          "properties" : {
-            "structurizr.dsl.identifier" : "reservaRepository"
-          },
-          "relationships" : [ {
-            "description" : "Lee y escribe",
-            "destinationId" : "54",
-            "id" : "88",
-            "sourceId" : "43",
-            "tags" : "Relationship",
-            "technology" : "JDBC"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring Data JPA"
-        }, {
-          "description" : "Lee los parámetros configurables, como el máximo de reservas activas simultáneas.",
-          "documentation" : { },
-          "id" : "44",
-          "name" : "ConfiguracionRepository",
-          "properties" : {
-            "structurizr.dsl.identifier" : "configuracionRepository"
-          },
-          "relationships" : [ {
-            "description" : "Lee",
-            "destinationId" : "54",
-            "id" : "89",
-            "sourceId" : "44",
-            "tags" : "Relationship",
-            "technology" : "JDBC"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring Data JPA"
-        }, {
-          "description" : "Traduce las excepciones de negocio (solapamiento, permisos, reserva no encontrada) a códigos HTTP.",
-          "documentation" : { },
-          "id" : "45",
-          "name" : "ManejadorDeErrores",
-          "properties" : {
-            "structurizr.dsl.identifier" : "manejadorErroresReservas"
-          },
-          "tags" : "Element,Component",
-          "technology" : "@RestControllerAdvice"
-        } ],
-        "description" : "Creación, consulta y cancelación de reservas. Concentra las reglas de negocio RN-01 a RN-08.",
-        "documentation" : { },
-        "id" : "39",
-        "name" : "ms-reservas",
-        "properties" : {
-          "structurizr.dsl.identifier" : "msReservas"
-        },
-        "relationships" : [ {
-          "description" : "Valida que la cancha exista, esté activa y el bloque esté dentro de su horario",
-          "destinationId" : "34",
-          "id" : "75",
-          "sourceId" : "39",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP (síncrono)"
-        }, {
-          "description" : "Lee y escribe",
-          "destinationId" : "54",
-          "id" : "80",
-          "sourceId" : "39",
-          "tags" : "Relationship",
-          "technology" : "JDBC"
-        } ],
-        "tags" : "Element,Container,Microservicio",
-        "technology" : "Spring Boot 4 (:8083)"
-      }, {
-        "components" : [ {
-          "description" : "Expone los endpoints de ocupación, reservas por período y cancelaciones.",
-          "documentation" : { },
-          "id" : "47",
-          "name" : "ReporteController",
-          "properties" : {
-            "structurizr.dsl.identifier" : "reporteController"
-          },
-          "relationships" : [ {
-            "description" : "Invoca",
-            "destinationId" : "48",
-            "id" : "101",
-            "sourceId" : "47",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Excepciones no controladas",
-            "destinationId" : "51",
-            "id" : "102",
-            "sourceId" : "47",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring MVC @RestController"
-        }, {
-          "description" : "Agrega y calcula las métricas de ocupación combinando reservas y catálogo.",
-          "documentation" : { },
-          "id" : "48",
-          "name" : "ReporteService",
-          "properties" : {
-            "structurizr.dsl.identifier" : "reporteService"
-          },
-          "relationships" : [ {
-            "description" : "Obtiene las reservas del período",
-            "destinationId" : "49",
-            "id" : "103",
-            "sourceId" : "48",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Obtiene el catálogo de canchas y sus horarios",
-            "destinationId" : "50",
-            "id" : "104",
-            "sourceId" : "48",
-            "tags" : "Relationship"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring @Service"
-        }, {
-          "description" : "Consulta a ms-reservas las reservas del período.",
-          "documentation" : { },
-          "id" : "49",
-          "name" : "ReservasClient",
-          "properties" : {
-            "structurizr.dsl.identifier" : "clienteReservas"
-          },
-          "relationships" : [ {
-            "description" : "Obtiene las reservas del período",
-            "destinationId" : "39",
-            "id" : "105",
-            "sourceId" : "49",
-            "tags" : "Relationship",
-            "technology" : "JSON/HTTP (síncrono)"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring RestClient"
-        }, {
-          "description" : "Consulta a ms-canchas el catálogo de canchas y sus horarios.",
-          "documentation" : { },
-          "id" : "50",
-          "name" : "CanchasClient",
-          "properties" : {
-            "structurizr.dsl.identifier" : "clienteCanchas"
-          },
-          "relationships" : [ {
-            "description" : "Obtiene el catálogo de canchas y sus horarios",
-            "destinationId" : "34",
-            "id" : "106",
-            "sourceId" : "50",
-            "tags" : "Relationship",
-            "technology" : "JSON/HTTP (síncrono)"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring RestClient"
-        }, {
-          "description" : "Traduce los fallos de los servicios origen (no disponible) a códigos HTTP.",
-          "documentation" : { },
-          "id" : "51",
-          "name" : "ManejadorDeErrores",
-          "properties" : {
-            "structurizr.dsl.identifier" : "manejadorErroresReportes"
-          },
-          "tags" : "Element,Component",
-          "technology" : "@RestControllerAdvice"
-        } ],
-        "description" : "Genera los reportes de ocupación, reservas por período y cancelaciones. No tiene base de datos propia: agrega vía REST para respetar la independencia de datos entre microservicios.",
-        "documentation" : { },
-        "id" : "46",
-        "name" : "ms-reportes",
-        "properties" : {
-          "structurizr.dsl.identifier" : "msReportes"
-        },
-        "relationships" : [ {
-          "description" : "Obtiene las reservas del período",
-          "destinationId" : "39",
-          "id" : "76",
-          "sourceId" : "46",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP (síncrono)"
-        }, {
-          "description" : "Obtiene el catálogo de canchas y sus horarios",
-          "destinationId" : "34",
-          "id" : "77",
-          "sourceId" : "46",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP (síncrono)"
-        } ],
-        "tags" : "Element,Container,Microservicio",
-        "technology" : "Spring Boot 4 (:8084)"
-      }, {
-        "description" : "Usuarios, roles y credenciales.",
-        "documentation" : { },
-        "id" : "52",
-        "name" : "usuarios_db",
-        "properties" : {
-          "structurizr.dsl.identifier" : "usuariosDb"
-        },
-        "tags" : "Element,Container,Base de Datos",
-        "technology" : "PostgreSQL 16"
-      }, {
-        "description" : "Canchas, deportes, horarios de atención y bloqueos de mantenimiento.",
-        "documentation" : { },
-        "id" : "53",
-        "name" : "canchas_db",
-        "properties" : {
-          "structurizr.dsl.identifier" : "canchasDb"
-        },
-        "tags" : "Element,Container,Base de Datos",
-        "technology" : "PostgreSQL 16"
-      }, {
-        "description" : "Reservas con su estado, más los parámetros configurables. Aloja la restricción de exclusión que implementa RN-02.",
-        "documentation" : { },
-        "id" : "54",
-        "name" : "reservas_db",
-        "properties" : {
-          "structurizr.dsl.identifier" : "reservasDb"
-        },
-        "tags" : "Element,Container,Base de Datos",
-        "technology" : "PostgreSQL 16"
-      } ],
-      "description" : "Permite reservar canchas deportivas por bloques horarios, con gestión administrativa y reportes de ocupación.",
-      "documentation" : { },
-      "id" : "3",
-      "name" : "Sistema de Reserva de Canchas",
-      "properties" : {
-        "structurizr.dsl.identifier" : "sistema"
-      },
-      "tags" : "Element,Software System"
-    } ]
-  },
-  "name" : "Sistema de Reserva de Canchas Deportivas",
-  "properties" : {
-    "structurizr.inspection.error" : "47",
-    "structurizr.dsl" : "LyoqCiAqIFNpc3RlbWEgZGUgUmVzZXJ2YSBkZSBDYW5jaGFzIERlcG9ydGl2YXMKICogTW9kZWxvIEM0IGVuIFN0cnVjdHVyaXpyIERTTAogKgogKiBEZXNhcnJvbGxvIGRlIEFwbGljYWNpb25lcyBFbXByZXNhcmlhbGVzIOKAlCBNYWVzdHLDrWEgZW4gSW5nZW5pZXLDrWEgZGUgU29mdHdhcmUKICoKICogVmlzdGFzIGluY2x1aWRhczoKICogICAxLiBDb250ZXh0byAgICAgIOKAlCBlbCBzaXN0ZW1hIHkgc3VzIHVzdWFyaW9zCiAqICAgMi4gQ29udGVuZWRvcmVzICDigJQgbWljcm9mcm9udGVuZHMsIGdhdGV3YXksIG1pY3Jvc2VydmljaW9zIHkgYmFzZXMgZGUgZGF0b3MKICogICAzLiBDb21wb25lbnRlcyAgIOKAlCBpbnRlcmlvciBkZSBtcy1yZXNlcnZhcyAoZG9uZGUgdml2ZW4gbGFzIHJlZ2xhcyBSTi0wMS4uUk4tMDgpCiAqICAgNC4gRGVzcGxpZWd1ZSAgICDigJQgY8OzbW8gc2UgbWF0ZXJpYWxpemEgdG9kbyBlbiBEb2NrZXIgQ29tcG9zZQogKgogKiBMZXZhbnRhciBlbCB2aXNvcjogIGRvY2tlciBjb21wb3NlIHVwIC1kICAgKGVuIGVzdGEgbWlzbWEgY2FycGV0YSkKICovCndvcmtzcGFjZSAiU2lzdGVtYSBkZSBSZXNlcnZhIGRlIENhbmNoYXMgRGVwb3J0aXZhcyIgIkFycXVpdGVjdHVyYSBkZSBtaWNyb2Zyb250ZW5kcyB5IG1pY3Jvc2VydmljaW9zIHBhcmEgbGEgcmVzZXJ2YSBkZSBjYW5jaGFzIGRlIHDDoWRlbCwgdGVuaXMgeSBiw6FzcXVldC4iIHsKCiAgICBtb2RlbCB7CgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgQWN0b3JlcwogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICB1c3VhcmlvRmluYWwgPSBwZXJzb24gIlVzdWFyaW8gRmluYWwiICJDb25zdWx0YSBkaXNwb25pYmlsaWRhZCwgY3JlYSB5IGNhbmNlbGEgc3VzIHByb3BpYXMgcmVzZXJ2YXMuIgogICAgICAgIGFkbWluaXN0cmFkb3IgPSBwZXJzb24gIkFkbWluaXN0cmFkb3IiICJHZXN0aW9uYSBlbCBjYXTDoWxvZ28gZGUgY2FuY2hhcywgY2FuY2VsYSBjdWFscXVpZXIgcmVzZXJ2YSB5IGNvbnN1bHRhIGxvcyByZXBvcnRlcyBkZSBvY3VwYWNpw7NuLiIKCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIC8vICBTaXN0ZW1hCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIHNpc3RlbWEgPSBzb2Z0d2FyZVN5c3RlbSAiU2lzdGVtYSBkZSBSZXNlcnZhIGRlIENhbmNoYXMiICJQZXJtaXRlIHJlc2VydmFyIGNhbmNoYXMgZGVwb3J0aXZhcyBwb3IgYmxvcXVlcyBob3JhcmlvcywgY29uIGdlc3Rpw7NuIGFkbWluaXN0cmF0aXZhIHkgcmVwb3J0ZXMgZGUgb2N1cGFjacOzbi4iIHsKCiAgICAgICAgICAgIC8vIC0tLSBDYXBhIGRlIGVudHJhZGEgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICBlZGdlID0gY29udGFpbmVyICJFZGdlIiAiUHVibGljYSBlbCBzaGVsbCwgbG9zIG1pY3JvZnJvbnRlbmRzIHJlbW90b3MgeSBsYSBBUEkgYmFqbyB1biBtaXNtbyBvcmlnZW4gKGh0dHA6Ly9sb2NhbGhvc3QpLiBBbCB1bmlmaWNhciBlbCBvcmlnZW4gZGVzYXBhcmVjZSBlbCBDT1JTIGRlIGxvcyBjaHVua3MgZmVkZXJhZG9zIHkgbG9zIHJlbW90ZXMgZGVqYW4gZGUgZGVwZW5kZXIgZGUgaG9zdG5hbWVzIGludGVybm9zIGRlIERvY2tlci4iICJuZ2lueCAxLjI3IiB7CiAgICAgICAgICAgICAgICB0YWdzICJJbmZyYWVzdHJ1Y3R1cmEiCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIC8vIC0tLSBNaWNyb2Zyb250ZW5kcyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICBzaGVsbCA9IGNvbnRhaW5lciAiU2hlbGwgKGhvc3QpIiAiQ29udGVuZWRvciBwcmluY2lwYWw6IGxheW91dCwgbmF2ZWdhY2nDs24sIHNlc2nDs24gZGVsIHVzdWFyaW8geSBvcnF1ZXN0YWNpw7NuIGRlIGxvcyByZW1vdGVzIGVuIHRpZW1wbyBkZSBlamVjdWNpw7NuLiIgIlJlYWN0ICsgTW9kdWxlIEZlZGVyYXRpb24iIHsKICAgICAgICAgICAgICAgIHRhZ3MgIk1pY3JvZnJvbnRlbmQiICJIb3N0IgoKICAgICAgICAgICAgICAgIC8vIC0tLSBDb21wb25lbnRlcyBpbnRlcm5vcyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgICAgIHJvdXRlclNoZWxsID0gY29tcG9uZW50ICJSb3V0ZXIiICJEZWZpbmUgbGFzIHJ1dGFzIGRlIG5pdmVsIHN1cGVyaW9yIHkgcmVzdWVsdmUgYSBxdcOpIHJlbW90ZSBkZWxlZ2FyIGNhZGEgdW5hLiIgIlJlYWN0IFJvdXRlciIKICAgICAgICAgICAgICAgIGxheW91dFNoZWxsID0gY29tcG9uZW50ICJMYXlvdXQiICJFc3RydWN0dXJhIHZpc3VhbCBjb23Dum4gKGhlYWRlciwgbmF2ZWdhY2nDs24pIHF1ZSBlbnZ1ZWx2ZSBhbCByZW1vdGUgYWN0aXZvLiIgIlJlYWN0IgogICAgICAgICAgICAgICAgc2VzaW9uQ29udGV4dCA9IGNvbXBvbmVudCAiU2VzaW9uQ29udGV4dCIgIk1hbnRpZW5lIGxhIGlkZW50aWRhZCB5IGVsIHJvbCBkZWwgdXN1YXJpbyBhdXRlbnRpY2FkbywgeSBleHBvbmUgZWwgZXN0YWRvIGRlIHNlc2nDs24gYWwgc2hlbGwgeSBhIGxvcyByZW1vdGVzLiIgIlJlYWN0IENvbnRleHQiCiAgICAgICAgICAgICAgICByZW1vdGVMb2FkZXIgPSBjb21wb25lbnQgIlJlbW90ZUxvYWRlciIgIkNhcmdhIGVuIHRpZW1wbyBkZSBlamVjdWNpw7NuIGVsIHJlbW90ZUVudHJ5LmpzIGRlIGNhZGEgbWljcm9mcm9udGVuZC4iICJNb2R1bGUgRmVkZXJhdGlvbiIKICAgICAgICAgICAgfQoKICAgICAgICAgICAgbWZSZXNlcnZhcyA9IGNvbnRhaW5lciAibWYtcmVzZXJ2YXMiICJDb25zdWx0YSBkZSBkaXNwb25pYmlsaWRhZCwgY3JlYWNpw7NuIHkgY2FuY2VsYWNpw7NuIGRlIHJlc2VydmFzIGRlbCB1c3VhcmlvIGZpbmFsLiIgIlJlYWN0ICsgTW9kdWxlIEZlZGVyYXRpb24gKHJlbW90ZSkiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIk1pY3JvZnJvbnRlbmQiCgogICAgICAgICAgICAgICAgLy8gLS0tIENvbXBvbmVudGVzIGludGVybm9zIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgdmlzdGFzUmVzZXJ2YXMgPSBjb21wb25lbnQgIlZpc3RhcyIgIlBhbnRhbGxhcyBkZSBkaXNwb25pYmlsaWRhZCwgY3JlYWNpw7NuIHkgY2FuY2VsYWNpw7NuIGRlIHJlc2VydmFzLCB5IGVsIGhpc3RvcmlhbCBcIk1pcyByZXNlcnZhc1wiLiIgIlJlYWN0IFJvdXRlciAocnV0YXMgZGVsIHJlbW90ZSkiCiAgICAgICAgICAgICAgICBjb21wb25lbnRlc1Jlc2VydmFzID0gY29tcG9uZW50ICJDb21wb25lbnRlcyBVSSIgIlBpZXphcyByZXV0aWxpemFibGVzOiBjYWxlbmRhcmlvIGRlIGJsb3F1ZXMsIHRhcmpldGEgZGUgcmVzZXJ2YSwgc2VsZWN0b3IgZGUgY2FuY2hhLiIgIlJlYWN0IgogICAgICAgICAgICAgICAgZXN0YWRvUmVzZXJ2YXMgPSBjb21wb25lbnQgIkVzdGFkbyIgIk1hbnRpZW5lIGVuIG1lbW9yaWEgbGEgY2FuY2hhL2ZlY2hhIHNlbGVjY2lvbmFkYSB5IGVsIHJlc3VsdGFkbyBkZSBkaXNwb25pYmlsaWRhZCBtaWVudHJhcyBlbCB1c3VhcmlvIGFybWEgbGEgcmVzZXJ2YS4iICJSZWFjdCBDb250ZXh0IC8gaG9va3MiCiAgICAgICAgICAgICAgICBhcGlDbGllbnRSZXNlcnZhcyA9IGNvbXBvbmVudCAiQXBpQ2xpZW50IiAiRW5jYXBzdWxhIGxhcyBsbGFtYWRhcyBIVFRQIGEgL2FwaS9yZXNlcnZhcyB5IC9hcGkvZGlzcG9uaWJpbGlkYWQuIiAiRmV0Y2ggQVBJIgogICAgICAgICAgICB9CgogICAgICAgICAgICBtZkFkbWluaXN0cmFjaW9uID0gY29udGFpbmVyICJtZi1hZG1pbmlzdHJhY2lvbiIgIkdlc3Rpw7NuIGRlbCBjYXTDoWxvZ28gZGUgY2FuY2hhcywgaG9yYXJpb3MsIGJsb3F1ZW9zIHkgY2FuY2VsYWNpw7NuIGRlIGN1YWxxdWllciByZXNlcnZhLiIgIlJlYWN0ICsgTW9kdWxlIEZlZGVyYXRpb24gKHJlbW90ZSkiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIk1pY3JvZnJvbnRlbmQiCgogICAgICAgICAgICAgICAgLy8gLS0tIENvbXBvbmVudGVzIGludGVybm9zIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgdmlzdGFzQWRtaW5pc3RyYWNpb24gPSBjb21wb25lbnQgIlZpc3RhcyIgIlBhbnRhbGxhcyBkZSBjYXTDoWxvZ28gZGUgY2FuY2hhcywgaG9yYXJpb3MsIGJsb3F1ZW9zIHBvciBtYW50ZW5pbWllbnRvIHkgY2FuY2VsYWNpw7NuIGFkbWluaXN0cmF0aXZhIGRlIHJlc2VydmFzLiIgIlJlYWN0IFJvdXRlciAocnV0YXMgZGVsIHJlbW90ZSkiCiAgICAgICAgICAgICAgICBjb21wb25lbnRlc0FkbWluaXN0cmFjaW9uID0gY29tcG9uZW50ICJDb21wb25lbnRlcyBVSSIgIlBpZXphcyByZXV0aWxpemFibGVzOiBmb3JtdWxhcmlvIGRlIGNhbmNoYSwgdGFibGEgZGUgcmVzZXJ2YXMsIGVkaXRvciBkZSBob3Jhcmlvcy4iICJSZWFjdCIKICAgICAgICAgICAgICAgIGVzdGFkb0FkbWluaXN0cmFjaW9uID0gY29tcG9uZW50ICJFc3RhZG8iICJNYW50aWVuZSBlbCBmb3JtdWxhcmlvIHkgbG9zIGZpbHRyb3MgYWN0aXZvcyBtaWVudHJhcyBlbCBhZG1pbmlzdHJhZG9yIGVkaXRhIGVsIGNhdMOhbG9nby4iICJSZWFjdCBDb250ZXh0IC8gaG9va3MiCiAgICAgICAgICAgICAgICBhcGlDbGllbnRBZG1pbmlzdHJhY2lvbiA9IGNvbXBvbmVudCAiQXBpQ2xpZW50IiAiRW5jYXBzdWxhIGxhcyBsbGFtYWRhcyBIVFRQIGEgL2FwaS9jYW5jaGFzIHkgL2FwaS9yZXNlcnZhcy4iICJGZXRjaCBBUEkiCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIG1mUmVwb3J0ZXMgPSBjb250YWluZXIgIm1mLXJlcG9ydGVzIiAiVmlzdWFsaXphY2nDs24gZGUgbG9zIHJlcG9ydGVzIGRlIG9jdXBhY2nDs24sIHJlc2VydmFzIHBvciBwZXLDrW9kbyB5IGNhbmNlbGFjaW9uZXMuIiAiUmVhY3QgKyBNb2R1bGUgRmVkZXJhdGlvbiAocmVtb3RlKSIgewogICAgICAgICAgICAgICAgdGFncyAiTWljcm9mcm9udGVuZCIKCiAgICAgICAgICAgICAgICAvLyAtLS0gQ29tcG9uZW50ZXMgaW50ZXJub3MgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICB2aXN0YXNSZXBvcnRlcyA9IGNvbXBvbmVudCAiVmlzdGFzIiAiUGFudGFsbGFzIGRlIG9jdXBhY2nDs24sIHJlc2VydmFzIHBvciBwZXLDrW9kbyB5IGNhbmNlbGFjaW9uZXMuIiAiUmVhY3QgUm91dGVyIChydXRhcyBkZWwgcmVtb3RlKSIKICAgICAgICAgICAgICAgIGNvbXBvbmVudGVzUmVwb3J0ZXMgPSBjb21wb25lbnQgIkNvbXBvbmVudGVzIFVJIiAiUGllemFzIHJldXRpbGl6YWJsZXM6IGdyw6FmaWNvcyB5IHRhYmxhcyBkZSByZXBvcnRlLCBzZWxlY3RvciBkZSByYW5nbyBkZSBmZWNoYXMuIiAiUmVhY3QiCiAgICAgICAgICAgICAgICBlc3RhZG9SZXBvcnRlcyA9IGNvbXBvbmVudCAiRXN0YWRvIiAiTWFudGllbmUgZWwgcmFuZ28gZGUgZmVjaGFzIHkgbG9zIGZpbHRyb3Mgc2VsZWNjaW9uYWRvcyBwb3IgZWwgYWRtaW5pc3RyYWRvci4iICJSZWFjdCBDb250ZXh0IC8gaG9va3MiCiAgICAgICAgICAgICAgICBhcGlDbGllbnRSZXBvcnRlcyA9IGNvbXBvbmVudCAiQXBpQ2xpZW50IiAiRW5jYXBzdWxhIGxhcyBsbGFtYWRhcyBIVFRQIGEgL2FwaS9yZXBvcnRlcy4iICJGZXRjaCBBUEkiCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIC8vIC0tLSBBUEkgR2F0ZXdheSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICBnYXRld2F5ID0gY29udGFpbmVyICJBUEkgR2F0ZXdheSIgIlB1bnRvIGRlIGVudHJhZGEgw7puaWNvIGEgbGEgQVBJLiBJZGVudGlmaWNhIGFsIHVzdWFyaW8gYXV0ZW50aWNhZG8gKFJOLTAzKSB5IGVucnV0YSBjYWRhIHBldGljacOzbiBhbCBtaWNyb3NlcnZpY2lvIGNvcnJlc3BvbmRpZW50ZS4iICJTcHJpbmcgQ2xvdWQgR2F0ZXdheSAoOjgwODApIiB7CiAgICAgICAgICAgICAgICB0YWdzICJHYXRld2F5IgoKICAgICAgICAgICAgICAgIC8vIC0tLSBDb21wb25lbnRlcyBpbnRlcm5vcyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgICAgIC8vIEF1dGVudGljYWNpw7NuIGLDoXNpY2EgY29uIHJvbGVzICjCpzQuNCBkZWwgYWxjYW5jZSk6IG5vIHNlCiAgICAgICAgICAgICAgICAvLyBleGlnZSB1biBtZWNhbmlzbW8gYXZhbnphZG8gdGlwbyBPQXV0aDIvSldULgogICAgICAgICAgICAgICAgYXV0ZW50aWNhY2lvbkZpbHRlciA9IGNvbXBvbmVudCAiQXV0ZW50aWNhY2lvbkZpbHRlciIgIklkZW50aWZpY2EgYWwgdXN1YXJpbyBkZSBsYSBwZXRpY2nDs24gZW50cmFudGUgeSBwcm9wYWdhIHN1IGlkZW50aWRhZCB5IHJvbCBjb21vIGNhYmVjZXJhcyBYLVVzdWFyaW8tSWQgLyBYLVVzdWFyaW8tUm9sLiIgIkdsb2JhbEZpbHRlciIKICAgICAgICAgICAgICAgIHJvdXRlQ29uZmlnID0gY29tcG9uZW50ICJSb3V0ZUNvbmZpZyIgIkRlZmluZSBsYXMgcnV0YXMgaGFjaWEgY2FkYSBtaWNyb3NlcnZpY2lvIChwcmVkaWNhdGVzIHkgZmlsdHJvcykuIiAiU3ByaW5nIENsb3VkIEdhdGV3YXkgKFJvdXRlTG9jYXRvcikiCiAgICAgICAgICAgICAgICBtYW5lamFkb3JFcnJvcmVzR2F0ZXdheSA9IGNvbXBvbmVudCAiTWFuZWphZG9yRGVFcnJvcmVzIiAiVHJhZHVjZSBmYWxsb3MgZGUgbG9zIG1pY3Jvc2VydmljaW9zIGRlc3Rpbm8gKHRpbWVvdXQsIG5vIGRpc3BvbmlibGUpIG8gaWRlbnRpZGFkIGF1c2VudGUvaW52w6FsaWRhIGEgY8OzZGlnb3MgSFRUUC4iICJFcnJvcldlYkV4Y2VwdGlvbkhhbmRsZXIiCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIC8vIC0tLSBNaWNyb3NlcnZpY2lvcyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgbXNVc3VhcmlvcyA9IGNvbnRhaW5lciAibXMtdXN1YXJpb3MiICJSZWdpc3RybywgYXV0ZW50aWNhY2nDs24geSBnZXN0acOzbiBkZSB1c3VhcmlvcyB5IHJvbGVzLiBWYWxpZGEgbGFzIGNyZWRlbmNpYWxlcyBkZWwgdXN1YXJpbyBmaW5hbCBvIGFkbWluaXN0cmFkb3IgeSBjb25maXJtYSBzdSByb2wuIiAiU3ByaW5nIEJvb3QgNCAoOjgwODEpIiB7CiAgICAgICAgICAgICAgICB0YWdzICJNaWNyb3NlcnZpY2lvIgoKICAgICAgICAgICAgICAgIC8vIC0tLSBDb21wb25lbnRlcyBpbnRlcm5vcyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgICAgIHVzdWFyaW9Db250cm9sbGVyID0gY29tcG9uZW50ICJVc3VhcmlvQ29udHJvbGxlciIgIkV4cG9uZSBsb3MgZW5kcG9pbnRzIGRlIHJlZ2lzdHJvLCBsb2dpbiB5IGdlc3Rpw7NuIGRlIHVzdWFyaW9zIHkgcm9sZXMuIiAiU3ByaW5nIE1WQyBAUmVzdENvbnRyb2xsZXIiCiAgICAgICAgICAgICAgICB1c3VhcmlvU2VydmljZSA9IGNvbXBvbmVudCAiVXN1YXJpb1NlcnZpY2UiICJWYWxpZGEgbGFzIGNyZWRlbmNpYWxlcyAodXN1YXJpby9jb250cmFzZcOxYSkgeSBnZXN0aW9uYSBlbCBjaWNsbyBkZSB2aWRhIGRlIHVzdWFyaW9zIHkgcm9sZXMuIiAiU3ByaW5nIEBTZXJ2aWNlIgogICAgICAgICAgICAgICAgdXN1YXJpb1JlcG9zaXRvcnkgPSBjb21wb25lbnQgIlVzdWFyaW9SZXBvc2l0b3J5IiAiQWNjZXNvIGEgbGEgdGFibGEgZGUgdXN1YXJpb3MgeSByb2xlcy4iICJTcHJpbmcgRGF0YSBKUEEiCiAgICAgICAgICAgICAgICBtYW5lamFkb3JFcnJvcmVzVXN1YXJpb3MgPSBjb21wb25lbnQgIk1hbmVqYWRvckRlRXJyb3JlcyIgIlRyYWR1Y2UgY3JlZGVuY2lhbGVzIGludsOhbGlkYXMgeSBjb25mbGljdG9zICh1c3VhcmlvIHlhIHJlZ2lzdHJhZG8pIGEgY8OzZGlnb3MgSFRUUC4iICJAUmVzdENvbnRyb2xsZXJBZHZpY2UiCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIG1zQ2FuY2hhcyA9IGNvbnRhaW5lciAibXMtY2FuY2hhcyIgIkNhdMOhbG9nbyBkZSBjYW5jaGFzIHkgZGVwb3J0ZXMsIGhvcmFyaW9zIGRlIGF0ZW5jacOzbiB5IGJsb3F1ZW9zIHBvciBtYW50ZW5pbWllbnRvLiIgIlNwcmluZyBCb290IDQgKDo4MDgyKSIgewogICAgICAgICAgICAgICAgdGFncyAiTWljcm9zZXJ2aWNpbyIKCiAgICAgICAgICAgICAgICAvLyAtLS0gQ29tcG9uZW50ZXMgaW50ZXJub3MgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICBjYW5jaGFDb250cm9sbGVyID0gY29tcG9uZW50ICJDYW5jaGFDb250cm9sbGVyIiAiRXhwb25lIGxvcyBlbmRwb2ludHMgZGVsIGNhdMOhbG9nbyBkZSBjYW5jaGFzLCBob3JhcmlvcyBkZSBhdGVuY2nDs24geSBibG9xdWVvcyBwb3IgbWFudGVuaW1pZW50by4iICJTcHJpbmcgTVZDIEBSZXN0Q29udHJvbGxlciIKICAgICAgICAgICAgICAgIGNhbmNoYVNlcnZpY2UgPSBjb21wb25lbnQgIkNhbmNoYVNlcnZpY2UiICJBcGxpY2EgbGFzIHJlZ2xhcyBkZWwgY2F0w6Fsb2dvOiBhY3RpdmFjacOzbiBkZSBjYW5jaGFzLCB2YWxpZGFjacOzbiBkZSBob3JhcmlvcyB5IGJsb3F1ZW9zLiIgIlNwcmluZyBAU2VydmljZSIKICAgICAgICAgICAgICAgIGNhbmNoYVJlcG9zaXRvcnkgPSBjb21wb25lbnQgIkNhbmNoYVJlcG9zaXRvcnkiICJBY2Nlc28gYSBjYW5jaGFzLCBob3JhcmlvcyB5IGJsb3F1ZW9zLiIgIlNwcmluZyBEYXRhIEpQQSIKICAgICAgICAgICAgICAgIG1hbmVqYWRvckVycm9yZXNDYW5jaGFzID0gY29tcG9uZW50ICJNYW5lamFkb3JEZUVycm9yZXMiICJUcmFkdWNlIGNhbmNoYXMgaW5leGlzdGVudGVzIG8gaW5hY3RpdmFzIGEgY8OzZGlnb3MgSFRUUC4iICJAUmVzdENvbnRyb2xsZXJBZHZpY2UiCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIG1zUmVzZXJ2YXMgPSBjb250YWluZXIgIm1zLXJlc2VydmFzIiAiQ3JlYWNpw7NuLCBjb25zdWx0YSB5IGNhbmNlbGFjacOzbiBkZSByZXNlcnZhcy4gQ29uY2VudHJhIGxhcyByZWdsYXMgZGUgbmVnb2NpbyBSTi0wMSBhIFJOLTA4LiIgIlNwcmluZyBCb290IDQgKDo4MDgzKSIgewogICAgICAgICAgICAgICAgdGFncyAiTWljcm9zZXJ2aWNpbyIKCiAgICAgICAgICAgICAgICAvLyAtLS0gQ29tcG9uZW50ZXMgaW50ZXJub3MgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICAvLyBOb3RhOiByZXNlcnZhcyB5IGRpc3BvbmliaWxpZGFkIHZpdmVuIGVuIHVuIMO6bmljbyBjb250cm9sbGVyCiAgICAgICAgICAgICAgICAvLyB5IHVuIMO6bmljbyBzZXJ2aWNlIGVuIGVsIGPDs2RpZ28gKFJlc2VydmFDb250cm9sbGVyIC8KICAgICAgICAgICAgICAgIC8vIFJlc2VydmFTZXJ2aWNlKTsgbm8gZXhpc3RlbiBjbGFzZXMgRGlzcG9uaWJpbGlkYWQqIHNlcGFyYWRhcy4KICAgICAgICAgICAgICAgIHJlc2VydmFDb250cm9sbGVyID0gY29tcG9uZW50ICJSZXNlcnZhQ29udHJvbGxlciIgIkV4cG9uZSBsb3MgZW5kcG9pbnRzIFJFU1QgZGUgcmVzZXJ2YXMgeSBkaXNwb25pYmlsaWRhZCwgeSB0cmFkdWNlIGxhcyB2aW9sYWNpb25lcyBkZSByZWdsYXMgZGUgbmVnb2NpbyBhIGPDs2RpZ29zIEhUVFAgKDQwOSBhbnRlIHNvbGFwYW1pZW50bykuIiAiU3ByaW5nIE1WQyBAUmVzdENvbnRyb2xsZXIiCiAgICAgICAgICAgICAgICByZXNlcnZhU2VydmljZSA9IGNvbXBvbmVudCAiUmVzZXJ2YVNlcnZpY2UiICJBcGxpY2EgbGFzIHJlZ2xhcyBkZSBuZWdvY2lvOiBjYWxjdWxhIGxhIGRpc3BvbmliaWxpZGFkLCBsw61taXRlIGRlIHJlc2VydmFzIGFjdGl2YXMgKFJOLTA2KSwgY2FuY2VsYWNpw7NuIHNvbG8gZGUgcmVzZXJ2YXMgZnV0dXJhcyAoUk4tMDQpIHkgcGVybWlzb3MgcG9yIHJvbCAoUk4tMDMpLiIgIlNwcmluZyBAU2VydmljZSIKICAgICAgICAgICAgICAgIGNhbmNoYUNsaWVudCA9IGNvbXBvbmVudCAiQ2FuY2hhQ2xpZW50IiAiQ29uc3VsdGEgYSBtcy1jYW5jaGFzIHF1ZSBsYSBjYW5jaGEgZXhpc3RhLCBlc3TDqSBhY3RpdmEgeSBxdWUgZWwgYmxvcXVlIGNhaWdhIGRlbnRybyBkZSBzdSBob3JhcmlvIGRlIGF0ZW5jacOzbi4iICJTcHJpbmcgUmVzdENsaWVudCIKICAgICAgICAgICAgICAgIHJlc2VydmFSZXBvc2l0b3J5ID0gY29tcG9uZW50ICJSZXNlcnZhUmVwb3NpdG9yeSIgIkFjY2VzbyBhIGxhIHRhYmxhIHJlc2VydmFzLiBMYSByZXN0cmljY2nDs24gRVhDTFVERSBkZSBQb3N0Z3JlU1FMIGdhcmFudGl6YSBlbCBubyBzb2xhcGFtaWVudG8gKFJOLTAyKSBpbmNsdXNvIGFudGUgcGV0aWNpb25lcyBjb25jdXJyZW50ZXMuIiAiU3ByaW5nIERhdGEgSlBBIgogICAgICAgICAgICAgICAgY29uZmlndXJhY2lvblJlcG9zaXRvcnkgPSBjb21wb25lbnQgIkNvbmZpZ3VyYWNpb25SZXBvc2l0b3J5IiAiTGVlIGxvcyBwYXLDoW1ldHJvcyBjb25maWd1cmFibGVzLCBjb21vIGVsIG3DoXhpbW8gZGUgcmVzZXJ2YXMgYWN0aXZhcyBzaW11bHTDoW5lYXMuIiAiU3ByaW5nIERhdGEgSlBBIgogICAgICAgICAgICAgICAgbWFuZWphZG9yRXJyb3Jlc1Jlc2VydmFzID0gY29tcG9uZW50ICJNYW5lamFkb3JEZUVycm9yZXMiICJUcmFkdWNlIGxhcyBleGNlcGNpb25lcyBkZSBuZWdvY2lvIChzb2xhcGFtaWVudG8sIHBlcm1pc29zLCByZXNlcnZhIG5vIGVuY29udHJhZGEpIGEgY8OzZGlnb3MgSFRUUC4iICJAUmVzdENvbnRyb2xsZXJBZHZpY2UiCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIG1zUmVwb3J0ZXMgPSBjb250YWluZXIgIm1zLXJlcG9ydGVzIiAiR2VuZXJhIGxvcyByZXBvcnRlcyBkZSBvY3VwYWNpw7NuLCByZXNlcnZhcyBwb3IgcGVyw61vZG8geSBjYW5jZWxhY2lvbmVzLiBObyB0aWVuZSBiYXNlIGRlIGRhdG9zIHByb3BpYTogYWdyZWdhIHbDrWEgUkVTVCBwYXJhIHJlc3BldGFyIGxhIGluZGVwZW5kZW5jaWEgZGUgZGF0b3MgZW50cmUgbWljcm9zZXJ2aWNpb3MuIiAiU3ByaW5nIEJvb3QgNCAoOjgwODQpIiB7CiAgICAgICAgICAgICAgICB0YWdzICJNaWNyb3NlcnZpY2lvIgoKICAgICAgICAgICAgICAgIC8vIC0tLSBDb21wb25lbnRlcyBpbnRlcm5vcyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgICAgIHJlcG9ydGVDb250cm9sbGVyID0gY29tcG9uZW50ICJSZXBvcnRlQ29udHJvbGxlciIgIkV4cG9uZSBsb3MgZW5kcG9pbnRzIGRlIG9jdXBhY2nDs24sIHJlc2VydmFzIHBvciBwZXLDrW9kbyB5IGNhbmNlbGFjaW9uZXMuIiAiU3ByaW5nIE1WQyBAUmVzdENvbnRyb2xsZXIiCiAgICAgICAgICAgICAgICByZXBvcnRlU2VydmljZSA9IGNvbXBvbmVudCAiUmVwb3J0ZVNlcnZpY2UiICJBZ3JlZ2EgeSBjYWxjdWxhIGxhcyBtw6l0cmljYXMgZGUgb2N1cGFjacOzbiBjb21iaW5hbmRvIHJlc2VydmFzIHkgY2F0w6Fsb2dvLiIgIlNwcmluZyBAU2VydmljZSIKICAgICAgICAgICAgICAgIGNsaWVudGVSZXNlcnZhcyA9IGNvbXBvbmVudCAiUmVzZXJ2YXNDbGllbnQiICJDb25zdWx0YSBhIG1zLXJlc2VydmFzIGxhcyByZXNlcnZhcyBkZWwgcGVyw61vZG8uIiAiU3ByaW5nIFJlc3RDbGllbnQiCiAgICAgICAgICAgICAgICBjbGllbnRlQ2FuY2hhcyA9IGNvbXBvbmVudCAiQ2FuY2hhc0NsaWVudCIgIkNvbnN1bHRhIGEgbXMtY2FuY2hhcyBlbCBjYXTDoWxvZ28gZGUgY2FuY2hhcyB5IHN1cyBob3Jhcmlvcy4iICJTcHJpbmcgUmVzdENsaWVudCIKICAgICAgICAgICAgICAgIG1hbmVqYWRvckVycm9yZXNSZXBvcnRlcyA9IGNvbXBvbmVudCAiTWFuZWphZG9yRGVFcnJvcmVzIiAiVHJhZHVjZSBsb3MgZmFsbG9zIGRlIGxvcyBzZXJ2aWNpb3Mgb3JpZ2VuIChubyBkaXNwb25pYmxlKSBhIGPDs2RpZ29zIEhUVFAuIiAiQFJlc3RDb250cm9sbGVyQWR2aWNlIgogICAgICAgICAgICB9CgogICAgICAgICAgICAvLyAtLS0gUGVyc2lzdGVuY2lhIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICB1c3Vhcmlvc0RiID0gY29udGFpbmVyICJ1c3Vhcmlvc19kYiIgIlVzdWFyaW9zLCByb2xlcyB5IGNyZWRlbmNpYWxlcy4iICJQb3N0Z3JlU1FMIDE2IiB7CiAgICAgICAgICAgICAgICB0YWdzICJCYXNlIGRlIERhdG9zIgogICAgICAgICAgICB9CgogICAgICAgICAgICBjYW5jaGFzRGIgPSBjb250YWluZXIgImNhbmNoYXNfZGIiICJDYW5jaGFzLCBkZXBvcnRlcywgaG9yYXJpb3MgZGUgYXRlbmNpw7NuIHkgYmxvcXVlb3MgZGUgbWFudGVuaW1pZW50by4iICJQb3N0Z3JlU1FMIDE2IiB7CiAgICAgICAgICAgICAgICB0YWdzICJCYXNlIGRlIERhdG9zIgogICAgICAgICAgICB9CgogICAgICAgICAgICByZXNlcnZhc0RiID0gY29udGFpbmVyICJyZXNlcnZhc19kYiIgIlJlc2VydmFzIGNvbiBzdSBlc3RhZG8sIG3DoXMgbG9zIHBhcsOhbWV0cm9zIGNvbmZpZ3VyYWJsZXMuIEFsb2phIGxhIHJlc3RyaWNjacOzbiBkZSBleGNsdXNpw7NuIHF1ZSBpbXBsZW1lbnRhIFJOLTAyLiIgIlBvc3RncmVTUUwgMTYiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkJhc2UgZGUgRGF0b3MiCiAgICAgICAgICAgIH0KICAgICAgICB9CgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgUmVsYWNpb25lcyDigJQgbml2ZWwgZGUgY29udGV4dG8KICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgdXN1YXJpb0ZpbmFsIC0+IHNpc3RlbWEgIkNvbnN1bHRhIGRpc3BvbmliaWxpZGFkLCByZXNlcnZhIHkgY2FuY2VsYSBzdXMgcmVzZXJ2YXMiCiAgICAgICAgYWRtaW5pc3RyYWRvciAtPiBzaXN0ZW1hICJHZXN0aW9uYSBjYW5jaGFzIHkgcmVzZXJ2YXMsIHkgY29uc3VsdGEgcmVwb3J0ZXMiCgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgUmVsYWNpb25lcyDigJQgbml2ZWwgZGUgY29udGVuZWRvcmVzCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIHVzdWFyaW9GaW5hbCAtPiBlZGdlICJBY2NlZGUgYSBsYSBhcGxpY2FjacOzbiIgIkhUVFAgOjgwIgogICAgICAgIGFkbWluaXN0cmFkb3IgLT4gZWRnZSAiQWNjZWRlIGEgbGEgYXBsaWNhY2nDs24iICJIVFRQIDo4MCIKCiAgICAgICAgZWRnZSAtPiBzaGVsbCAiU2lydmUgbGEgYXBsaWNhY2nDs24gY29udGVuZWRvcmEiICJIVFRQIgogICAgICAgIGVkZ2UgLT4gbWZSZXNlcnZhcyAiU2lydmUgL21mLXJlc2VydmFzLyIgIkhUVFAiCiAgICAgICAgZWRnZSAtPiBtZkFkbWluaXN0cmFjaW9uICJTaXJ2ZSAvbWYtYWRtaW5pc3RyYWNpb24vIiAiSFRUUCIKICAgICAgICBlZGdlIC0+IG1mUmVwb3J0ZXMgIlNpcnZlIC9tZi1yZXBvcnRlcy8iICJIVFRQIgogICAgICAgIGVkZ2UgLT4gZ2F0ZXdheSAiRW5ydXRhIC9hcGkvKiIgIkhUVFAiCgogICAgICAgIHNoZWxsIC0+IG1mUmVzZXJ2YXMgIkNhcmdhIGVsIHJlbW90ZSBlbiB0aWVtcG8gZGUgZWplY3VjacOzbiIgIk1vZHVsZSBGZWRlcmF0aW9uIChyZW1vdGVFbnRyeS5qcykiCiAgICAgICAgc2hlbGwgLT4gbWZBZG1pbmlzdHJhY2lvbiAiQ2FyZ2EgZWwgcmVtb3RlIGVuIHRpZW1wbyBkZSBlamVjdWNpw7NuIiAiTW9kdWxlIEZlZGVyYXRpb24gKHJlbW90ZUVudHJ5LmpzKSIKICAgICAgICBzaGVsbCAtPiBtZlJlcG9ydGVzICJDYXJnYSBlbCByZW1vdGUgZW4gdGllbXBvIGRlIGVqZWN1Y2nDs24iICJNb2R1bGUgRmVkZXJhdGlvbiAocmVtb3RlRW50cnkuanMpIgoKICAgICAgICBzaGVsbCAtPiBlZGdlICJBdXRlbnRpY2EgYWwgdXN1YXJpbyIgIkpTT04vSFRUUFMgwrcgL2FwaS9hdXRoIgogICAgICAgIG1mUmVzZXJ2YXMgLT4gZWRnZSAiQ29uc3VsdGEgZGlzcG9uaWJpbGlkYWQgeSBnZXN0aW9uYSByZXNlcnZhcyIgIkpTT04vSFRUUFMgwrcgL2FwaSIKICAgICAgICBtZkFkbWluaXN0cmFjaW9uIC0+IGVkZ2UgIkdlc3Rpb25hIGNhbmNoYXMgeSByZXNlcnZhcyIgIkpTT04vSFRUUFMgwrcgL2FwaSIKICAgICAgICBtZlJlcG9ydGVzIC0+IGVkZ2UgIlNvbGljaXRhIGxvcyByZXBvcnRlcyIgIkpTT04vSFRUUFMgwrcgL2FwaSIKCiAgICAgICAgZ2F0ZXdheSAtPiBtc1VzdWFyaW9zICJFbnJ1dGEgL2FwaS9hdXRoIHkgL2FwaS91c3VhcmlvcyIgIkpTT04vSFRUUCIKICAgICAgICBnYXRld2F5IC0+IG1zQ2FuY2hhcyAiRW5ydXRhIC9hcGkvY2FuY2hhcyIgIkpTT04vSFRUUCIKICAgICAgICBnYXRld2F5IC0+IG1zUmVzZXJ2YXMgIkVucnV0YSAvYXBpL3Jlc2VydmFzIHkgL2FwaS9kaXNwb25pYmlsaWRhZCIgIkpTT04vSFRUUCIKICAgICAgICBnYXRld2F5IC0+IG1zUmVwb3J0ZXMgIkVucnV0YSAvYXBpL3JlcG9ydGVzIiAiSlNPTi9IVFRQIgoKICAgICAgICBtc1Jlc2VydmFzIC0+IG1zQ2FuY2hhcyAiVmFsaWRhIHF1ZSBsYSBjYW5jaGEgZXhpc3RhLCBlc3TDqSBhY3RpdmEgeSBlbCBibG9xdWUgZXN0w6kgZGVudHJvIGRlIHN1IGhvcmFyaW8iICJKU09OL0hUVFAgKHPDrW5jcm9ubykiCiAgICAgICAgbXNSZXBvcnRlcyAtPiBtc1Jlc2VydmFzICJPYnRpZW5lIGxhcyByZXNlcnZhcyBkZWwgcGVyw61vZG8iICJKU09OL0hUVFAgKHPDrW5jcm9ubykiCiAgICAgICAgbXNSZXBvcnRlcyAtPiBtc0NhbmNoYXMgIk9idGllbmUgZWwgY2F0w6Fsb2dvIGRlIGNhbmNoYXMgeSBzdXMgaG9yYXJpb3MiICJKU09OL0hUVFAgKHPDrW5jcm9ubykiCgogICAgICAgIG1zVXN1YXJpb3MgLT4gdXN1YXJpb3NEYiAiTGVlIHkgZXNjcmliZSIgIkpEQkMiCiAgICAgICAgbXNDYW5jaGFzIC0+IGNhbmNoYXNEYiAiTGVlIHkgZXNjcmliZSIgIkpEQkMiCiAgICAgICAgbXNSZXNlcnZhcyAtPiByZXNlcnZhc0RiICJMZWUgeSBlc2NyaWJlIiAiSkRCQyIKCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIC8vICBSZWxhY2lvbmVzIOKAlCBuaXZlbCBkZSBjb21wb25lbnRlcyAobXMtcmVzZXJ2YXMpCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIGdhdGV3YXkgLT4gcmVzZXJ2YUNvbnRyb2xsZXIgIkVucnV0YSAvYXBpL3Jlc2VydmFzIHkgL2FwaS9kaXNwb25pYmlsaWRhZCIgIkpTT04vSFRUUCIKCiAgICAgICAgcmVzZXJ2YUNvbnRyb2xsZXIgLT4gcmVzZXJ2YVNlcnZpY2UgIkludm9jYSIKICAgICAgICByZXNlcnZhQ29udHJvbGxlciAtPiBtYW5lamFkb3JFcnJvcmVzUmVzZXJ2YXMgIkV4Y2VwY2lvbmVzIG5vIGNvbnRyb2xhZGFzIgoKICAgICAgICByZXNlcnZhU2VydmljZSAtPiBjYW5jaGFDbGllbnQgIlZhbGlkYSBsYSBjYW5jaGEgeSBvYnRpZW5lIHN1IGhvcmFyaW8gZGUgYXRlbmNpw7NuIgogICAgICAgIHJlc2VydmFTZXJ2aWNlIC0+IHJlc2VydmFSZXBvc2l0b3J5ICJQZXJzaXN0ZSwgY29uc3VsdGEgeSBjYWxjdWxhIGRpc3BvbmliaWxpZGFkIHNvYnJlIGxhcyByZXNlcnZhcyIKICAgICAgICByZXNlcnZhU2VydmljZSAtPiBjb25maWd1cmFjaW9uUmVwb3NpdG9yeSAiTGVlIGVsIG3DoXhpbW8gZGUgcmVzZXJ2YXMgYWN0aXZhcyAoUk4tMDYpIgoKICAgICAgICBjYW5jaGFDbGllbnQgLT4gbXNDYW5jaGFzICJDb25zdWx0YSBlbCBjYXTDoWxvZ28iICJKU09OL0hUVFAiCiAgICAgICAgcmVzZXJ2YVJlcG9zaXRvcnkgLT4gcmVzZXJ2YXNEYiAiTGVlIHkgZXNjcmliZSIgIkpEQkMiCiAgICAgICAgY29uZmlndXJhY2lvblJlcG9zaXRvcnkgLT4gcmVzZXJ2YXNEYiAiTGVlIiAiSkRCQyIKCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIC8vICBSZWxhY2lvbmVzIOKAlCBuaXZlbCBkZSBjb21wb25lbnRlcyAobXMtdXN1YXJpb3MpCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIGdhdGV3YXkgLT4gdXN1YXJpb0NvbnRyb2xsZXIgIkVucnV0YSAvYXBpL2F1dGggeSAvYXBpL3VzdWFyaW9zIiAiSlNPTi9IVFRQIgoKICAgICAgICB1c3VhcmlvQ29udHJvbGxlciAtPiB1c3VhcmlvU2VydmljZSAiSW52b2NhIgogICAgICAgIHVzdWFyaW9Db250cm9sbGVyIC0+IG1hbmVqYWRvckVycm9yZXNVc3VhcmlvcyAiRXhjZXBjaW9uZXMgbm8gY29udHJvbGFkYXMiCgogICAgICAgIHVzdWFyaW9TZXJ2aWNlIC0+IHVzdWFyaW9SZXBvc2l0b3J5ICJQZXJzaXN0ZSB5IGNvbnN1bHRhIHVzdWFyaW9zIHkgcm9sZXMiCgogICAgICAgIHVzdWFyaW9SZXBvc2l0b3J5IC0+IHVzdWFyaW9zRGIgIkxlZSB5IGVzY3JpYmUiICJKREJDIgoKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgLy8gIFJlbGFjaW9uZXMg4oCUIG5pdmVsIGRlIGNvbXBvbmVudGVzIChtcy1jYW5jaGFzKQogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICBnYXRld2F5IC0+IGNhbmNoYUNvbnRyb2xsZXIgIkVucnV0YSAvYXBpL2NhbmNoYXMiICJKU09OL0hUVFAiCgogICAgICAgIGNhbmNoYUNvbnRyb2xsZXIgLT4gY2FuY2hhU2VydmljZSAiSW52b2NhIgogICAgICAgIGNhbmNoYUNvbnRyb2xsZXIgLT4gbWFuZWphZG9yRXJyb3Jlc0NhbmNoYXMgIkV4Y2VwY2lvbmVzIG5vIGNvbnRyb2xhZGFzIgoKICAgICAgICBjYW5jaGFTZXJ2aWNlIC0+IGNhbmNoYVJlcG9zaXRvcnkgIlBlcnNpc3RlIHkgY29uc3VsdGEgZWwgY2F0w6Fsb2dvIgoKICAgICAgICBjYW5jaGFSZXBvc2l0b3J5IC0+IGNhbmNoYXNEYiAiTGVlIHkgZXNjcmliZSIgIkpEQkMiCgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgUmVsYWNpb25lcyDigJQgbml2ZWwgZGUgY29tcG9uZW50ZXMgKG1zLXJlcG9ydGVzKQogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICBnYXRld2F5IC0+IHJlcG9ydGVDb250cm9sbGVyICJFbnJ1dGEgL2FwaS9yZXBvcnRlcyIgIkpTT04vSFRUUCIKCiAgICAgICAgcmVwb3J0ZUNvbnRyb2xsZXIgLT4gcmVwb3J0ZVNlcnZpY2UgIkludm9jYSIKICAgICAgICByZXBvcnRlQ29udHJvbGxlciAtPiBtYW5lamFkb3JFcnJvcmVzUmVwb3J0ZXMgIkV4Y2VwY2lvbmVzIG5vIGNvbnRyb2xhZGFzIgoKICAgICAgICByZXBvcnRlU2VydmljZSAtPiBjbGllbnRlUmVzZXJ2YXMgIk9idGllbmUgbGFzIHJlc2VydmFzIGRlbCBwZXLDrW9kbyIKICAgICAgICByZXBvcnRlU2VydmljZSAtPiBjbGllbnRlQ2FuY2hhcyAiT2J0aWVuZSBlbCBjYXTDoWxvZ28gZGUgY2FuY2hhcyB5IHN1cyBob3JhcmlvcyIKCiAgICAgICAgY2xpZW50ZVJlc2VydmFzIC0+IG1zUmVzZXJ2YXMgIk9idGllbmUgbGFzIHJlc2VydmFzIGRlbCBwZXLDrW9kbyIgIkpTT04vSFRUUCAoc8OtbmNyb25vKSIKICAgICAgICBjbGllbnRlQ2FuY2hhcyAtPiBtc0NhbmNoYXMgIk9idGllbmUgZWwgY2F0w6Fsb2dvIGRlIGNhbmNoYXMgeSBzdXMgaG9yYXJpb3MiICJKU09OL0hUVFAgKHPDrW5jcm9ubykiCgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgUmVsYWNpb25lcyDigJQgbml2ZWwgZGUgY29tcG9uZW50ZXMgKEdhdGV3YXkpCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIGVkZ2UgLT4gYXV0ZW50aWNhY2lvbkZpbHRlciAiRW5ydXRhIC9hcGkvKiIgIkhUVFAiCgogICAgICAgIGF1dGVudGljYWNpb25GaWx0ZXIgLT4gcm91dGVDb25maWcgIklkZW50aWRhZCBwcm9wYWdhZGEsIGNvbnRpbsO6YSBlbCBlbnJ1dGFtaWVudG8iCiAgICAgICAgYXV0ZW50aWNhY2lvbkZpbHRlciAtPiBtYW5lamFkb3JFcnJvcmVzR2F0ZXdheSAiSWRlbnRpZGFkIGF1c2VudGUgbyBpbnbDoWxpZGEiCgogICAgICAgIHJvdXRlQ29uZmlnIC0+IG1zVXN1YXJpb3MgIkVucnV0YSAvYXBpL2F1dGggeSAvYXBpL3VzdWFyaW9zIiAiSlNPTi9IVFRQIgogICAgICAgIHJvdXRlQ29uZmlnIC0+IG1zQ2FuY2hhcyAiRW5ydXRhIC9hcGkvY2FuY2hhcyIgIkpTT04vSFRUUCIKICAgICAgICByb3V0ZUNvbmZpZyAtPiBtc1Jlc2VydmFzICJFbnJ1dGEgL2FwaS9yZXNlcnZhcyB5IC9hcGkvZGlzcG9uaWJpbGlkYWQiICJKU09OL0hUVFAiCiAgICAgICAgcm91dGVDb25maWcgLT4gbXNSZXBvcnRlcyAiRW5ydXRhIC9hcGkvcmVwb3J0ZXMiICJKU09OL0hUVFAiCiAgICAgICAgcm91dGVDb25maWcgLT4gbWFuZWphZG9yRXJyb3Jlc0dhdGV3YXkgIlNlcnZpY2lvIGRlc3Rpbm8gbm8gZGlzcG9uaWJsZSIKCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIC8vICBSZWxhY2lvbmVzIOKAlCBuaXZlbCBkZSBjb21wb25lbnRlcyAoU2hlbGwpCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIHJvdXRlclNoZWxsIC0+IHNlc2lvbkNvbnRleHQgIkNvbnN1bHRhIHNpIGhheSBzZXNpw7NuIGFjdGl2YSBhbnRlcyBkZSByZXNvbHZlciBsYSBydXRhIgogICAgICAgIHJvdXRlclNoZWxsIC0+IGxheW91dFNoZWxsICJSZW5kZXJpemEgZGVudHJvIGRlIgogICAgICAgIGxheW91dFNoZWxsIC0+IHJlbW90ZUxvYWRlciAiTW9udGEgZWwgcmVtb3RlIGNvcnJlc3BvbmRpZW50ZSBhIGxhIHJ1dGEgYWN0aXZhIgoKICAgICAgICBzZXNpb25Db250ZXh0IC0+IGVkZ2UgIkF1dGVudGljYSBhbCB1c3VhcmlvIiAiSlNPTi9IVFRQUyDCtyAvYXBpL2F1dGgiCiAgICAgICAgcmVtb3RlTG9hZGVyIC0+IG1mUmVzZXJ2YXMgIkNhcmdhIGVsIHJlbW90ZSBlbiB0aWVtcG8gZGUgZWplY3VjacOzbiIgIk1vZHVsZSBGZWRlcmF0aW9uIChyZW1vdGVFbnRyeS5qcykiCiAgICAgICAgcmVtb3RlTG9hZGVyIC0+IG1mQWRtaW5pc3RyYWNpb24gIkNhcmdhIGVsIHJlbW90ZSBlbiB0aWVtcG8gZGUgZWplY3VjacOzbiIgIk1vZHVsZSBGZWRlcmF0aW9uIChyZW1vdGVFbnRyeS5qcykiCiAgICAgICAgcmVtb3RlTG9hZGVyIC0+IG1mUmVwb3J0ZXMgIkNhcmdhIGVsIHJlbW90ZSBlbiB0aWVtcG8gZGUgZWplY3VjacOzbiIgIk1vZHVsZSBGZWRlcmF0aW9uIChyZW1vdGVFbnRyeS5qcykiCgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgUmVsYWNpb25lcyDigJQgbml2ZWwgZGUgY29tcG9uZW50ZXMgKG1mLXJlc2VydmFzKQogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICB2aXN0YXNSZXNlcnZhcyAtPiBjb21wb25lbnRlc1Jlc2VydmFzICJDb21wb25lIGxhIHBhbnRhbGxhIGNvbiIKICAgICAgICB2aXN0YXNSZXNlcnZhcyAtPiBlc3RhZG9SZXNlcnZhcyAiTGVlIHkgYWN0dWFsaXphIgogICAgICAgIHZpc3Rhc1Jlc2VydmFzIC0+IGFwaUNsaWVudFJlc2VydmFzICJTb2xpY2l0YSBkYXRvcyIKICAgICAgICBhcGlDbGllbnRSZXNlcnZhcyAtPiBlZGdlICJDb25zdWx0YSBkaXNwb25pYmlsaWRhZCB5IGdlc3Rpb25hIHJlc2VydmFzIiAiSlNPTi9IVFRQUyDCtyAvYXBpIgoKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgLy8gIFJlbGFjaW9uZXMg4oCUIG5pdmVsIGRlIGNvbXBvbmVudGVzIChtZi1hZG1pbmlzdHJhY2lvbikKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgdmlzdGFzQWRtaW5pc3RyYWNpb24gLT4gY29tcG9uZW50ZXNBZG1pbmlzdHJhY2lvbiAiQ29tcG9uZSBsYSBwYW50YWxsYSBjb24iCiAgICAgICAgdmlzdGFzQWRtaW5pc3RyYWNpb24gLT4gZXN0YWRvQWRtaW5pc3RyYWNpb24gIkxlZSB5IGFjdHVhbGl6YSIKICAgICAgICB2aXN0YXNBZG1pbmlzdHJhY2lvbiAtPiBhcGlDbGllbnRBZG1pbmlzdHJhY2lvbiAiU29saWNpdGEgZGF0b3MiCiAgICAgICAgYXBpQ2xpZW50QWRtaW5pc3RyYWNpb24gLT4gZWRnZSAiR2VzdGlvbmEgY2FuY2hhcyB5IHJlc2VydmFzIiAiSlNPTi9IVFRQUyDCtyAvYXBpIgoKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgLy8gIFJlbGFjaW9uZXMg4oCUIG5pdmVsIGRlIGNvbXBvbmVudGVzIChtZi1yZXBvcnRlcykKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgdmlzdGFzUmVwb3J0ZXMgLT4gY29tcG9uZW50ZXNSZXBvcnRlcyAiQ29tcG9uZSBsYSBwYW50YWxsYSBjb24iCiAgICAgICAgdmlzdGFzUmVwb3J0ZXMgLT4gZXN0YWRvUmVwb3J0ZXMgIkxlZSB5IGFjdHVhbGl6YSIKICAgICAgICB2aXN0YXNSZXBvcnRlcyAtPiBhcGlDbGllbnRSZXBvcnRlcyAiU29saWNpdGEgZGF0b3MiCiAgICAgICAgYXBpQ2xpZW50UmVwb3J0ZXMgLT4gZWRnZSAiU29saWNpdGEgbG9zIHJlcG9ydGVzIiAiSlNPTi9IVFRQUyDCtyAvYXBpIgoKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgLy8gIERlc3BsaWVndWUg4oCUIERvY2tlciBDb21wb3NlCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIGRlcGxveW1lbnRFbnZpcm9ubWVudCAiTG9jYWwgKERvY2tlciBDb21wb3NlKSIgewoKICAgICAgICAgICAgZXF1aXBvID0gZGVwbG95bWVudE5vZGUgIkVxdWlwbyBkZWwgZGVzYXJyb2xsYWRvciIgIkVudG9ybm8gZGUgZXZhbHVhY2nDs24gZGVsIHByb3llY3RvLiIgIm1hY09TIC8gTGludXggLyBXaW5kb3dzIiB7CgogICAgICAgICAgICAgICAgZG9ja2VyID0gZGVwbG95bWVudE5vZGUgIkRvY2tlciBFbmdpbmUiICJPcnF1ZXN0YWRvIGNvbiBEb2NrZXIgQ29tcG9zZSB2Mi4iICJEb2NrZXIgMjQrIiB7CgogICAgICAgICAgICAgICAgICAgIHJlZEZyb250ZW5kID0gZGVwbG95bWVudE5vZGUgIlJlZDogZnJvbnRlbmQiICJSZWQgYnJpZGdlIHF1ZSBhw61zbGEgbG9zIGNvbnRlbmVkb3JlcyBkZSBwcmVzZW50YWNpw7NuLiIgImRvY2tlciBuZXR3b3JrIChicmlkZ2UpIiB7CgogICAgICAgICAgICAgICAgICAgICAgICBub2RvRWRnZSA9IGRlcGxveW1lbnROb2RlICJyYy1lZGdlIiAiw5puaWNvIGNvbnRlbmVkb3IgY29uZWN0YWRvIGEgYW1iYXMgcmVkZXMuIiAibmdpbng6MS4yNy1hbHBpbmUgwrcgcHVlcnRvIDgwIiB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250YWluZXJJbnN0YW5jZSBlZGdlCiAgICAgICAgICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJyYy1zaGVsbCIgIiIgIm5naW54OjEuMjctYWxwaW5lIMK3IHB1ZXJ0byAzMDAwIiB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250YWluZXJJbnN0YW5jZSBzaGVsbAogICAgICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJyYy1tZi1yZXNlcnZhcyIgIiIgIm5naW54OjEuMjctYWxwaW5lIMK3IHB1ZXJ0byAzMDAxIiB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250YWluZXJJbnN0YW5jZSBtZlJlc2VydmFzCiAgICAgICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICAgICAgZGVwbG95bWVudE5vZGUgInJjLW1mLWFkbWluaXN0cmFjaW9uIiAiIiAibmdpbng6MS4yNy1hbHBpbmUgwrcgcHVlcnRvIDMwMDIiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIG1mQWRtaW5pc3RyYWNpb24KICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgICAgICBkZXBsb3ltZW50Tm9kZSAicmMtbWYtcmVwb3J0ZXMiICIiICJuZ2lueDoxLjI3LWFscGluZSDCtyBwdWVydG8gMzAwMyIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgY29udGFpbmVySW5zdGFuY2UgbWZSZXBvcnRlcwogICAgICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgICAgICByZWRCYWNrZW5kID0gZGVwbG95bWVudE5vZGUgIlJlZDogYmFja2VuZCIgIlJlZCBicmlkZ2UgcXVlIGHDrXNsYSBsYSBBUEkgeSBsYSBwZXJzaXN0ZW5jaWEuIiAiZG9ja2VyIG5ldHdvcmsgKGJyaWRnZSkiIHsKCiAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJyYy1nYXRld2F5IiAiIiAiZWNsaXBzZS10ZW11cmluOjIxLWpyZSDCtyBwdWVydG8gODA4MCIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgY29udGFpbmVySW5zdGFuY2UgZ2F0ZXdheQogICAgICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJyYy1tcy11c3VhcmlvcyIgIiIgImVjbGlwc2UtdGVtdXJpbjoyMS1qcmUgwrcgcHVlcnRvIDgwODEiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIG1zVXN1YXJpb3MKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgICAgICBkZXBsb3ltZW50Tm9kZSAicmMtbXMtY2FuY2hhcyIgIiIgImVjbGlwc2UtdGVtdXJpbjoyMS1qcmUgwrcgcHVlcnRvIDgwODIiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIG1zQ2FuY2hhcwogICAgICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJyYy1tcy1yZXNlcnZhcyIgIiIgImVjbGlwc2UtdGVtdXJpbjoyMS1qcmUgwrcgcHVlcnRvIDgwODMiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIG1zUmVzZXJ2YXMKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgICAgICBkZXBsb3ltZW50Tm9kZSAicmMtbXMtcmVwb3J0ZXMiICIiICJlY2xpcHNlLXRlbXVyaW46MjEtanJlIMK3IHB1ZXJ0byA4MDg0IiB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250YWluZXJJbnN0YW5jZSBtc1JlcG9ydGVzCiAgICAgICAgICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAgICAgICAgIG5vZG9Qb3N0Z3JlcyA9IGRlcGxveW1lbnROb2RlICJyYy1wb3N0Z3JlcyIgIlVuYSBzb2xhIGluc3RhbmNpYSBjb24gdHJlcyBiYXNlcyBpbmRlcGVuZGllbnRlcy4gQ2FkYSBtaWNyb3NlcnZpY2lvIHJlY2liZSBjcmVkZW5jaWFsZXMgcXVlIHNvbG8gbGUgcGVybWl0ZW4gY29uZWN0YXJzZSBhIGxhIHN1eWE6IGVsIGFpc2xhbWllbnRvIGxvIGltcG9uZSBlbCBtb3Rvciwgbm8gdW5hIGNvbnZlbmNpw7NuLiIgInBvc3RncmVzOjE2LWFscGluZSDCtyBwdWVydG8gNTQzMiIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgZGVwbG95bWVudE5vZGUgInVzdWFyaW9zX2RiIiAiIiAiUG9zdGdyZVNRTCBkYXRhYmFzZSIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIHVzdWFyaW9zRGIKICAgICAgICAgICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJjYW5jaGFzX2RiIiAiIiAiUG9zdGdyZVNRTCBkYXRhYmFzZSIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIGNhbmNoYXNEYgogICAgICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgICAgICAgICAgZGVwbG95bWVudE5vZGUgInJlc2VydmFzX2RiIiAiIiAiUG9zdGdyZVNRTCBkYXRhYmFzZSIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIHJlc2VydmFzRGIKICAgICAgICAgICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgICAgICAgICAgdm9sdW1lbiA9IGluZnJhc3RydWN0dXJlTm9kZSAiVm9sdW1lbiBwZ2RhdGEiICJWb2x1bWVuIERvY2tlciBjb24gbG9zIGRhdG9zIGRlIFBvc3RncmVTUUwuIExvcyBzY3JpcHRzIGRlIGluZnJhL3Bvc3RncmVzL2luaXQgc2UgZWplY3V0YW4gc29sbyBjdWFuZG8gZXN0w6EgdmFjw61vLiIgImRvY2tlciB2b2x1bWUiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRhZ3MgIkluZnJhZXN0cnVjdHVyYSIKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAgICAgLy8gTGFzIHJlbGFjaW9uZXMgZW50cmUgY29udGVuZWRvcmVzIHNlIHJlcGxpY2FuIHNvbGFzIGVudHJlCiAgICAgICAgICAgICAgICAgICAgLy8gc3VzIGluc3RhbmNpYXM7IGFxdcOtIHNvbG8gaGFjZSBmYWx0YSBkZWNsYXJhciBsYSBxdWUKICAgICAgICAgICAgICAgICAgICAvLyBpbnZvbHVjcmEgYWwgbm9kbyBkZSBpbmZyYWVzdHJ1Y3R1cmEuCiAgICAgICAgICAgICAgICAgICAgbm9kb1Bvc3RncmVzIC0+IHZvbHVtZW4gIlBlcnNpc3RlIGxvcyBkYXRvcyBlbiIgInNpc3RlbWEgZGUgYXJjaGl2b3MiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICB9CgogICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgIC8vICBWaXN0YXMKICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICB2aWV3cyB7CgogICAgICAgIC8vIE5PVEEgU09CUkUgRUwgTEFZT1VUCiAgICAgICAgLy8gTmluZ3VuYSB2aXN0YSBsbGV2YSBgYXV0b0xheW91dGA6IHVuYSB2aXN0YSBjb24gbGF5b3V0IGF1dG9tw6F0aWNvIHNlCiAgICAgICAgLy8gb3JkZW5hIHNvbGEsIHBlcm8gU3RydWN0dXJpenIgYmxvcXVlYSBlbCBhcnJhc3RyZSBkZSBzdXMgZWxlbWVudG9zLgogICAgICAgIC8vIExhcyBwb3NpY2lvbmVzIGluaWNpYWxlcyBkZSBsYXMgY3VhdHJvIHZpc3RhcyBlc3TDoW4gZ3VhcmRhZGFzIGVuCiAgICAgICAgLy8gd29ya3NwYWNlLmpzb24sIGFzw60gcXVlIGFicmVuIG9yZGVuYWRhcyB5IHNlIHB1ZWRlbiBtb3ZlciBhIG1hbm87IGFsCiAgICAgICAgLy8gYXJyYXN0cmFyIGFwYXJlY2UgZWwgYm90w7NuIGRlIGd1YXJkYXIgeSBsYXMgbnVldmFzIHBvc2ljaW9uZXMgc2UKICAgICAgICAvLyBlc2NyaWJlbiBlbiBlc2UgbWlzbW8gYXJjaGl2by4KICAgICAgICAvLwogICAgICAgIC8vIENvbnZpZW5lIHZlcnNpb25hciB3b3Jrc3BhY2UuanNvbiBqdW50byBhIGVzdGUgLmRzbDogZXMgbG8gcXVlCiAgICAgICAgLy8gY29uc2VydmEgZWwgbGF5b3V0LiBTaSBzZSBhw7FhZGUgYGF1dG9MYXlvdXRgIGEgdW5hIHZpc3RhIHkgbHVlZ28gc2UKICAgICAgICAvLyBxdWl0YSwgaGF5IHF1ZSBib3JyYXIgdGFtYmnDqW4gbGEgY2xhdmUgImF1dG9tYXRpY0xheW91dCIgcXVlIHF1ZWTDswogICAgICAgIC8vIGVzY3JpdGEgZW4gd29ya3NwYWNlLmpzb24sIG8gZWwgdmlzb3IgbGEgc2VndWlyw6EgYXBsaWNhbmRvLgoKICAgICAgICBzeXN0ZW1Db250ZXh0IHNpc3RlbWEgIjAxLUNvbnRleHRvIiAiTml2ZWwgMSDigJQgRWwgc2lzdGVtYSB5IHN1cyB1c3Vhcmlvcy4iIHsKICAgICAgICAgICAgaW5jbHVkZSAqCiAgICAgICAgfQoKICAgICAgICBjb250YWluZXIgc2lzdGVtYSAiMDItQ29udGVuZWRvcmVzIiAiTml2ZWwgMiDigJQgTWljcm9mcm9udGVuZHMsIGdhdGV3YXksIG1pY3Jvc2VydmljaW9zIHkgYmFzZXMgZGUgZGF0b3MuIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IG1zUmVzZXJ2YXMgIjAzLUNvbXBvbmVudGVzLW1zLXJlc2VydmFzIiAiTml2ZWwgMyDigJQgSW50ZXJpb3IgZGUgbXMtcmVzZXJ2YXMsIGRvbmRlIHNlIGFwbGljYW4gbGFzIHJlZ2xhcyBkZSBuZWdvY2lvLiIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIGRlcGxveW1lbnQgc2lzdGVtYSAiTG9jYWwgKERvY2tlciBDb21wb3NlKSIgIjA0LURlc3BsaWVndWUiICJNYXRlcmlhbGl6YWNpw7NuIGRlbCBzaXN0ZW1hIGVuIGNvbnRlbmVkb3JlcyBEb2NrZXIuIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IG1zVXN1YXJpb3MgIjA1LUNvbXBvbmVudGVzLW1zLXVzdWFyaW9zIiAiTml2ZWwgMyDigJQgSW50ZXJpb3IgZGUgbXMtdXN1YXJpb3M6IHJlZ2lzdHJvIHkgYXV0ZW50aWNhY2nDs24gYsOhc2ljYSBjb24gcm9sZXMuIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IG1zQ2FuY2hhcyAiMDYtQ29tcG9uZW50ZXMtbXMtY2FuY2hhcyIgIk5pdmVsIDMg4oCUIEludGVyaW9yIGRlIG1zLWNhbmNoYXM6IGNhdMOhbG9nbywgaG9yYXJpb3MgeSBibG9xdWVvcy4iIHsKICAgICAgICAgICAgaW5jbHVkZSAqCiAgICAgICAgfQoKICAgICAgICBjb21wb25lbnQgbXNSZXBvcnRlcyAiMDctQ29tcG9uZW50ZXMtbXMtcmVwb3J0ZXMiICJOaXZlbCAzIOKAlCBJbnRlcmlvciBkZSBtcy1yZXBvcnRlczogYWdyZWdhY2nDs24gdsOtYSBSRVNUIHNpbiBiYXNlIHByb3BpYS4iIHsKICAgICAgICAgICAgaW5jbHVkZSAqCiAgICAgICAgfQoKICAgICAgICBjb21wb25lbnQgZ2F0ZXdheSAiMDgtQ29tcG9uZW50ZXMtZ2F0ZXdheSIgIk5pdmVsIDMg4oCUIEludGVyaW9yIGRlbCBBUEkgR2F0ZXdheTogaWRlbnRpZmljYWNpw7NuIGRlbCB1c3VhcmlvIHkgZW5ydXRhbWllbnRvLiIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIGNvbXBvbmVudCBzaGVsbCAiMDktQ29tcG9uZW50ZXMtc2hlbGwiICJOaXZlbCAzIOKAlCBJbnRlcmlvciBkZWwgc2hlbGw6IGxheW91dCwgc2VzacOzbiB5IGNhcmdhIGRlIHJlbW90ZXMuIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IG1mUmVzZXJ2YXMgIjEwLUNvbXBvbmVudGVzLW1mLXJlc2VydmFzIiAiTml2ZWwgMyDigJQgSW50ZXJpb3IgZGUgbWYtcmVzZXJ2YXMuIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IG1mQWRtaW5pc3RyYWNpb24gIjExLUNvbXBvbmVudGVzLW1mLWFkbWluaXN0cmFjaW9uIiAiTml2ZWwgMyDigJQgSW50ZXJpb3IgZGUgbWYtYWRtaW5pc3RyYWNpb24uIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IG1mUmVwb3J0ZXMgIjEyLUNvbXBvbmVudGVzLW1mLXJlcG9ydGVzIiAiTml2ZWwgMyDigJQgSW50ZXJpb3IgZGUgbWYtcmVwb3J0ZXMuIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgLy8gLS0tIEVzdGlsb3MgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICBzdHlsZXMgewogICAgICAgICAgICBlbGVtZW50ICJQZXJzb24iIHsKICAgICAgICAgICAgICAgIHNoYXBlIFBlcnNvbgogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjMGI1Mzk0CiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgICAgICBmb250U2l6ZSAyMgogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJTb2Z0d2FyZSBTeXN0ZW0iIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzExNjhiZAogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJDb250YWluZXIiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzQzOGRkNQogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJNaWNyb2Zyb250ZW5kIiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICM2YjRmYmIKICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYKICAgICAgICAgICAgICAgIHNoYXBlIFdlYkJyb3dzZXIKICAgICAgICAgICAgfQoKICAgICAgICAgICAgZWxlbWVudCAiSG9zdCIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjNGIyZTgzCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGVsZW1lbnQgIkdhdGV3YXkiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2I1NjUxZAogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICAgICAgc2hhcGUgSGV4YWdvbgogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJNaWNyb3NlcnZpY2lvIiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICMyZThiNTcKICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYKICAgICAgICAgICAgICAgIHNoYXBlIFJvdW5kZWRCb3gKICAgICAgICAgICAgfQoKICAgICAgICAgICAgZWxlbWVudCAiQmFzZSBkZSBEYXRvcyIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjN2E1MTk1CiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgICAgICBzaGFwZSBDeWxpbmRlcgogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJJbmZyYWVzdHJ1Y3R1cmEiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzZjNzU3ZAogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICAgICAgc2hhcGUgUGlwZQogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJDb21wb25lbnQiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzg1YmJmMAogICAgICAgICAgICAgICAgY29sb3IgIzAwMDAwMAogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJEZXBsb3ltZW50IE5vZGUiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2ZmZmZmZgogICAgICAgICAgICAgICAgY29sb3IgIzQ0NDQ0NAogICAgICAgICAgICAgICAgc3Ryb2tlICM4ODg4ODgKICAgICAgICAgICAgfQoKICAgICAgICAgICAgcmVsYXRpb25zaGlwICJSZWxhdGlvbnNoaXAiIHsKICAgICAgICAgICAgICAgIHRoaWNrbmVzcyAyCiAgICAgICAgICAgICAgICBmb250U2l6ZSAyMAogICAgICAgICAgICB9CiAgICAgICAgfQogICAgfQp9",
-    "structurizr.inspection.info" : "0",
-    "structurizr.inspection.ignore" : "0",
-    "structurizr.inspection.warning" : "0"
-  },
-  "views" : {
-    "componentViews" : [ {
-      "containerId" : "39",
-      "description" : "Nivel 3 — Interior de ms-reservas, donde se aplican las reglas de negocio.",
-      "dimensions" : {
-        "height" : 1558,
-        "width" : 3655
-      },
-      "elements" : [ {
-        "id" : "25",
-        "x" : 224,
-        "y" : 163
-      }, {
-        "id" : "34",
-        "x" : 219,
-        "y" : 823
-      }, {
-        "id" : "40",
-        "x" : 919,
-        "y" : 193
-      }, {
-        "id" : "41",
-        "x" : 1613,
-        "y" : 790
-      }, {
-        "id" : "42",
-        "x" : 919,
-        "y" : 803
-      }, {
-        "id" : "43",
-        "x" : 2339,
-        "y" : 193
-      }, {
-        "id" : "44",
-        "x" : 2363,
-        "y" : 790
-      }, {
-        "id" : "45",
-        "x" : 1613,
-        "y" : 190
-      }, {
-        "id" : "54",
-        "x" : 2984,
-        "y" : 478
-      } ],
-      "externalContainerBoundariesVisible" : false,
-      "key" : "03-Componentes-ms-reservas",
-      "name" : "Component View: Sistema de Reserva de Canchas - ms-reservas",
-      "order" : 3,
-      "relationships" : [ {
-        "id" : "72"
-      }, {
-        "id" : "81"
-      }, {
-        "id" : "82"
-      }, {
-        "id" : "83"
-      }, {
-        "id" : "84"
-      }, {
-        "id" : "85"
-      }, {
-        "id" : "86"
-      }, {
-        "id" : "87"
-      }, {
-        "id" : "88"
-      }, {
-        "id" : "89"
-      } ]
-    }, {
-      "containerId" : "29",
-      "description" : "Nivel 3 — Interior de ms-usuarios: registro y autenticación básica con roles.",
-      "dimensions" : {
-        "height" : 1408,
-        "width" : 3115
-      },
-      "elements" : [ {
-        "id" : "25",
-        "x" : 220,
-        "y" : 168
-      }, {
-        "id" : "30",
-        "x" : 940,
-        "y" : 183
-      }, {
-        "id" : "31",
-        "x" : 945,
-        "y" : 653
-      }, {
-        "id" : "32",
-        "x" : 1695,
-        "y" : 653
-      }, {
-        "id" : "33",
-        "x" : 1679,
-        "y" : 186
-      }, {
-        "id" : "52",
-        "x" : 2445,
-        "y" : 653
-      } ],
-      "externalContainerBoundariesVisible" : false,
-      "key" : "05-Componentes-ms-usuarios",
-      "name" : "Component View: Sistema de Reserva de Canchas - ms-usuarios",
-      "order" : 5,
-      "relationships" : [ {
-        "id" : "90"
-      }, {
-        "id" : "91"
-      }, {
-        "id" : "92"
-      }, {
-        "id" : "93"
-      }, {
-        "id" : "94"
-      } ]
-    }, {
-      "containerId" : "34",
-      "description" : "Nivel 3 — Interior de ms-canchas: catálogo, horarios y bloqueos.",
-      "dimensions" : {
-        "height" : 1413,
-        "width" : 3065
-      },
-      "elements" : [ {
-        "id" : "25",
-        "x" : 219,
-        "y" : 168
-      }, {
-        "id" : "35",
-        "x" : 969,
-        "y" : 183
-      }, {
-        "id" : "36",
-        "x" : 969,
-        "y" : 658
-      }, {
-        "id" : "37",
-        "x" : 1719,
-        "y" : 653
-      }, {
-        "id" : "38",
-        "x" : 1719,
-        "y" : 186
-      }, {
-        "id" : "53",
-        "x" : 2394,
-        "y" : 653
-      } ],
-      "externalContainerBoundariesVisible" : false,
-      "key" : "06-Componentes-ms-canchas",
-      "name" : "Component View: Sistema de Reserva de Canchas - ms-canchas",
-      "order" : 6,
-      "relationships" : [ {
-        "id" : "95"
-      }, {
-        "id" : "96"
-      }, {
-        "id" : "97"
-      }, {
-        "id" : "98"
-      }, {
-        "id" : "99"
-      } ]
-    }, {
-      "containerId" : "46",
-      "description" : "Nivel 3 — Interior de ms-reportes: agregación vía REST sin base propia.",
-      "dimensions" : {
-        "height" : 1603,
-        "width" : 3651
-      },
-      "elements" : [ {
-        "id" : "25",
-        "x" : 219,
-        "y" : 564
-      }, {
-        "id" : "34",
-        "x" : 2980,
-        "y" : 822
-      }, {
-        "id" : "39",
-        "x" : 2975,
-        "y" : 267
-      }, {
-        "id" : "47",
-        "x" : 1020,
-        "y" : 267
-      }, {
-        "id" : "48",
-        "x" : 1025,
-        "y" : 847
-      }, {
-        "id" : "49",
-        "x" : 2245,
-        "y" : 532
-      }, {
-        "id" : "50",
-        "x" : 1725,
-        "y" : 847
-      }, {
-        "id" : "51",
-        "x" : 1719,
-        "y" : 264
-      } ],
-      "externalContainerBoundariesVisible" : false,
-      "key" : "07-Componentes-ms-reportes",
-      "name" : "Component View: Sistema de Reserva de Canchas - ms-reportes",
-      "order" : 7,
-      "relationships" : [ {
-        "id" : "100"
-      }, {
-        "id" : "101"
-      }, {
-        "id" : "102"
-      }, {
-        "id" : "103"
-      }, {
-        "id" : "104"
-      }, {
-        "id" : "105"
-      }, {
-        "id" : "106"
-      }, {
-        "id" : "72",
-        "vertices" : [ {
-          "x" : 900,
-          "y" : 1292
-        }, {
-          "x" : 2775,
-          "y" : 1287
-        } ]
-      }, {
-        "id" : "73",
-        "vertices" : [ {
-          "x" : 865,
-          "y" : 182
-        }, {
-          "x" : 2700,
-          "y" : 177
-        } ]
-      }, {
-        "id" : "75"
-      } ]
-    }, {
-      "containerId" : "25",
-      "description" : "Nivel 3 — Interior del API Gateway: identificación del usuario y enrutamiento.",
-      "dimensions" : {
-        "height" : 1688,
-        "width" : 3085
-      },
-      "elements" : [ {
-        "id" : "4",
-        "x" : 219,
-        "y" : 927
-      }, {
-        "id" : "26",
-        "x" : 904,
-        "y" : 927
-      }, {
-        "id" : "27",
-        "x" : 1659,
-        "y" : 694
-      }, {
-        "id" : "28",
-        "x" : 2394,
-        "y" : 932
-      }, {
-        "id" : "29",
-        "x" : 2369,
-        "y" : 262
-      }, {
-        "id" : "34",
-        "x" : 1804,
-        "y" : 257
-      }, {
-        "id" : "39",
-        "x" : 1064,
-        "y" : 262
-      }, {
-        "id" : "46",
-        "x" : 239,
-        "y" : 262
-      } ],
-      "externalContainerBoundariesVisible" : false,
-      "key" : "08-Componentes-gateway",
-      "name" : "Component View: Sistema de Reserva de Canchas - API Gateway",
-      "order" : 8,
-      "relationships" : [ {
-        "id" : "107"
-      }, {
-        "id" : "108"
-      }, {
-        "id" : "109"
-      }, {
-        "id" : "110"
-      }, {
-        "id" : "111"
-      }, {
-        "id" : "112"
-      }, {
-        "id" : "113"
-      }, {
-        "id" : "114"
-      }, {
-        "id" : "75"
-      }, {
-        "id" : "76"
-      }, {
-        "id" : "77",
-        "vertices" : [ {
-          "x" : 774,
-          "y" : 197
-        }, {
-          "x" : 1699,
-          "y" : 187
-        } ]
-      } ]
-    }, {
-      "containerId" : "5",
-      "description" : "Nivel 3 — Interior del shell: layout, sesión y carga de remotes.",
-      "dimensions" : {
-        "height" : 1891,
-        "width" : 2795
-      },
-      "elements" : [ {
-        "id" : "4",
-        "x" : 225,
-        "y" : 445
-      }, {
-        "id" : "6",
-        "x" : 239,
-        "y" : 995
-      }, {
-        "id" : "7",
-        "x" : 995,
-        "y" : 1135
-      }, {
-        "id" : "8",
-        "x" : 995,
-        "y" : 810
-      }, {
-        "id" : "9",
-        "x" : 1885,
-        "y" : 1130
-      }, {
-        "id" : "10",
-        "x" : 1599,
-        "y" : 320
-      }, {
-        "id" : "15",
-        "x" : 1025,
-        "y" : 440
-      }, {
-        "id" : "20",
-        "x" : 2124,
-        "y" : 320
-      } ],
-      "externalContainerBoundariesVisible" : false,
-      "key" : "09-Componentes-shell",
-      "name" : "Component View: Sistema de Reserva de Canchas - Shell (host)",
-      "order" : 9,
-      "relationships" : [ {
-        "id" : "115"
-      }, {
-        "id" : "116"
-      }, {
-        "id" : "117"
-      }, {
-        "id" : "118"
-      }, {
-        "id" : "119"
-      }, {
-        "id" : "120"
-      }, {
-        "id" : "121"
-      }, {
-        "id" : "60",
-        "vertices" : [ {
-          "x" : 724,
-          "y" : 280
-        }, {
-          "x" : 1469,
-          "y" : 280
-        } ]
-      }, {
-        "id" : "61",
-        "vertices" : [ {
-          "x" : 835,
-          "y" : 650
-        } ]
-      }, {
-        "id" : "62",
-        "vertices" : [ {
-          "x" : 674,
-          "y" : 170
-        }, {
-          "x" : 2114,
-          "y" : 170
-        } ]
-      }, {
-        "id" : "68",
-        "vertices" : [ {
-          "x" : 1439,
-          "y" : 365
-        }, {
-          "x" : 709,
-          "y" : 370
-        } ]
-      }, {
-        "id" : "69",
-        "vertices" : [ {
-          "x" : 840,
-          "y" : 495
-        } ]
-      }, {
-        "id" : "70",
-        "vertices" : [ {
-          "x" : 2069,
-          "y" : 230
-        }, {
-          "x" : 699,
-          "y" : 230
-        } ]
-      } ]
-    }, {
-      "containerId" : "10",
-      "description" : "Nivel 3 — Interior de mf-reservas.",
-      "dimensions" : {
-        "height" : 1433,
-        "width" : 2424
-      },
-      "elements" : [ {
-        "id" : "4",
-        "x" : 1754,
-        "y" : 184
-      }, {
-        "id" : "11",
-        "x" : 240,
-        "y" : 182
-      }, {
-        "id" : "12",
-        "x" : 240,
-        "y" : 677
-      }, {
-        "id" : "13",
-        "x" : 1000,
-        "y" : 652
-      }, {
-        "id" : "14",
-        "x" : 1004,
-        "y" : 184
-      } ],
-      "externalContainerBoundariesVisible" : false,
-      "key" : "10-Componentes-mf-reservas",
-      "name" : "Component View: Sistema de Reserva de Canchas - mf-reservas",
-      "order" : 10,
-      "relationships" : [ {
-        "id" : "122"
-      }, {
-        "id" : "123"
-      }, {
-        "id" : "124"
-      }, {
-        "id" : "125"
-      } ]
-    }, {
-      "containerId" : "15",
-      "description" : "Nivel 3 — Interior de mf-administracion.",
-      "dimensions" : {
-        "height" : 1415,
-        "width" : 2370
-      },
-      "elements" : [ {
-        "id" : "4",
-        "x" : 1699,
-        "y" : 185
-      }, {
-        "id" : "16",
-        "x" : 239,
-        "y" : 182
-      }, {
-        "id" : "17",
-        "x" : 240,
-        "y" : 659
-      }, {
-        "id" : "18",
-        "x" : 950,
-        "y" : 649
-      }, {
-        "id" : "19",
-        "x" : 949,
-        "y" : 185
-      } ],
-      "externalContainerBoundariesVisible" : false,
-      "key" : "11-Componentes-mf-administracion",
-      "name" : "Component View: Sistema de Reserva de Canchas - mf-administracion",
-      "order" : 11,
-      "relationships" : [ {
-        "id" : "126"
-      }, {
-        "id" : "127"
-      }, {
-        "id" : "128"
-      }, {
-        "id" : "129"
-      } ]
-    }, {
-      "containerId" : "20",
-      "description" : "Nivel 3 — Interior de mf-reportes.",
-      "dimensions" : {
-        "height" : 1451,
-        "width" : 2360
-      },
-      "elements" : [ {
-        "id" : "4",
-        "x" : 1689,
-        "y" : 190
-      }, {
-        "id" : "21",
-        "x" : 239,
-        "y" : 182
-      }, {
-        "id" : "22",
-        "x" : 249,
-        "y" : 695
-      }, {
-        "id" : "23",
-        "x" : 939,
-        "y" : 690
-      }, {
-        "id" : "24",
-        "x" : 939,
-        "y" : 190
-      } ],
-      "externalContainerBoundariesVisible" : false,
-      "key" : "12-Componentes-mf-reportes",
-      "name" : "Component View: Sistema de Reserva de Canchas - mf-reportes",
-      "order" : 12,
-      "relationships" : [ {
-        "id" : "130"
-      }, {
-        "id" : "131"
-      }, {
-        "id" : "132"
-      }, {
-        "id" : "133"
-      } ]
-    } ],
-    "configuration" : {
-      "branding" : { },
-      "lastSavedView" : "07-Componentes-ms-reportes",
-      "styles" : {
-        "elements" : [ {
-          "background" : "#7a5195",
-          "color" : "#ffffff",
-          "shape" : "Cylinder",
-          "tag" : "Base de Datos"
-        }, {
-          "background" : "#85bbf0",
-          "color" : "#000000",
-          "tag" : "Component"
-        }, {
-          "background" : "#438dd5",
-          "color" : "#ffffff",
-          "tag" : "Container"
-        }, {
-          "background" : "#ffffff",
-          "color" : "#444444",
-          "stroke" : "#888888",
-          "tag" : "Deployment Node"
-        }, {
-          "background" : "#b5651d",
-          "color" : "#ffffff",
-          "shape" : "Hexagon",
-          "tag" : "Gateway"
-        }, {
-          "background" : "#4b2e83",
-          "tag" : "Host"
-        }, {
-          "background" : "#6c757d",
-          "color" : "#ffffff",
-          "shape" : "Pipe",
-          "tag" : "Infraestructura"
-        }, {
-          "background" : "#6b4fbb",
-          "color" : "#ffffff",
-          "shape" : "WebBrowser",
-          "tag" : "Microfrontend"
-        }, {
-          "background" : "#2e8b57",
-          "color" : "#ffffff",
-          "shape" : "RoundedBox",
-          "tag" : "Microservicio"
-        }, {
-          "background" : "#0b5394",
-          "color" : "#ffffff",
-          "fontSize" : 22,
-          "shape" : "Person",
-          "tag" : "Person"
-        }, {
-          "background" : "#1168bd",
-          "color" : "#ffffff",
-          "tag" : "Software System"
-        } ],
-        "relationships" : [ {
-          "fontSize" : 20,
-          "tag" : "Relationship",
-          "thickness" : 2
-        } ]
-      },
-      "terminology" : { }
-    },
-    "containerViews" : [ {
-      "description" : "Nivel 2 — Microfrontends, gateway, microservicios y bases de datos.",
-      "dimensions" : {
-        "height" : 3437,
-        "width" : 2830
-      },
-      "elements" : [ {
-        "id" : "1",
-        "x" : 460,
-        "y" : 163
-      }, {
-        "id" : "2",
-        "x" : 1950,
-        "y" : 143
-      }, {
-        "id" : "4",
-        "x" : 1230,
-        "y" : 833
-      }, {
-        "id" : "5",
-        "x" : 395,
-        "y" : 1463
-      }, {
-        "id" : "10",
-        "x" : 295,
-        "y" : 798
-      }, {
-        "id" : "15",
-        "x" : 1980,
-        "y" : 1458
-      }, {
-        "id" : "20",
-        "x" : 2150,
-        "y" : 883
-      }, {
-        "id" : "25",
-        "x" : 1205,
-        "y" : 1813
-      }, {
-        "id" : "29",
-        "x" : 225,
-        "y" : 1986
-      }, {
-        "id" : "34",
-        "x" : 820,
-        "y" : 2331
-      }, {
-        "id" : "39",
-        "x" : 2150,
-        "y" : 2336
-      }, {
-        "id" : "46",
-        "x" : 2130,
-        "y" : 1811
-      }, {
-        "id" : "52",
-        "x" : 225,
-        "y" : 2760
-      }, {
-        "id" : "53",
-        "x" : 825,
-        "y" : 2751
-      }, {
-        "id" : "54",
-        "x" : 2160,
-        "y" : 2781
-      } ],
-      "externalSoftwareSystemBoundariesVisible" : false,
-      "key" : "02-Contenedores",
-      "name" : "Container View: Sistema de Reserva de Canchas",
-      "order" : 2,
-      "relationships" : [ {
-        "id" : "57"
-      }, {
-        "id" : "58"
-      }, {
-        "id" : "59",
-        "vertices" : [ {
-          "x" : 1100,
-          "y" : 1343
-        } ]
-      }, {
-        "id" : "60",
-        "vertices" : [ {
-          "x" : 985,
-          "y" : 878
-        } ]
-      }, {
-        "id" : "61",
-        "vertices" : [ {
-          "x" : 1790,
-          "y" : 1353
-        } ]
-      }, {
-        "id" : "62",
-        "vertices" : [ {
-          "x" : 1935,
-          "y" : 1048
-        } ]
-      }, {
-        "id" : "63"
-      }, {
-        "id" : "64"
-      }, {
-        "id" : "65"
-      }, {
-        "id" : "66"
-      }, {
-        "id" : "67",
-        "vertices" : [ {
-          "x" : 950,
-          "y" : 1198
-        } ]
-      }, {
-        "id" : "68",
-        "vertices" : [ {
-          "x" : 985,
-          "y" : 1083
-        } ]
-      }, {
-        "id" : "69",
-        "vertices" : [ {
-          "x" : 2000,
-          "y" : 1258
-        } ]
-      }, {
-        "id" : "70",
-        "vertices" : [ {
-          "x" : 1900,
-          "y" : 868
-        } ]
-      }, {
-        "id" : "71"
-      }, {
-        "id" : "72"
-      }, {
-        "id" : "73"
-      }, {
-        "id" : "74"
-      }, {
-        "id" : "75"
-      }, {
-        "id" : "76"
-      }, {
-        "id" : "77"
-      }, {
-        "id" : "78"
-      }, {
-        "id" : "79"
-      }, {
-        "id" : "80"
-      } ],
-      "softwareSystemId" : "3"
-    } ],
-    "deploymentViews" : [ {
-      "description" : "Materialización del sistema en contenedores Docker.",
-      "dimensions" : {
-        "height" : 4110,
-        "width" : 2670
-      },
-      "elements" : [ {
-        "id" : "134",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "135",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "136",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "137",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "138",
-        "x" : 1215,
-        "y" : 998
-      }, {
-        "id" : "139",
-        "x" : 800,
-        "y" : 0
-      }, {
-        "id" : "140",
-        "x" : 280,
-        "y" : 1008
-      }, {
-        "id" : "143",
-        "x" : 1600,
-        "y" : 0
-      }, {
-        "id" : "144",
-        "x" : 1195,
-        "y" : 223
-      }, {
-        "id" : "148",
-        "x" : 2400,
-        "y" : 0
-      }, {
-        "id" : "149",
-        "x" : 285,
-        "y" : 228
-      }, {
-        "id" : "153",
-        "x" : 3200,
-        "y" : 0
-      }, {
-        "id" : "154",
-        "x" : 1780,
-        "y" : 423
-      }, {
-        "id" : "158",
-        "x" : 0,
-        "y" : 900
-      }, {
-        "id" : "159",
-        "x" : 1600,
-        "y" : 900
-      }, {
-        "id" : "160",
-        "x" : 1590,
-        "y" : 1628
-      }, {
-        "id" : "162",
-        "x" : 0,
-        "y" : 1800
-      }, {
-        "id" : "163",
-        "x" : 315,
-        "y" : 1668
-      }, {
-        "id" : "165",
-        "x" : 800,
-        "y" : 1800
-      }, {
-        "id" : "166",
-        "x" : 845,
-        "y" : 1903
-      }, {
-        "id" : "168",
-        "x" : 1600,
-        "y" : 1800
-      }, {
-        "id" : "169",
-        "x" : 1180,
-        "y" : 2553
-      }, {
-        "id" : "172",
-        "x" : 2400,
-        "y" : 1800
-      }, {
-        "id" : "173",
-        "x" : 1940,
-        "y" : 2243
-      }, {
-        "id" : "177",
-        "x" : 0,
-        "y" : 2700
-      }, {
-        "id" : "178",
-        "x" : 0,
-        "y" : 2700
-      }, {
-        "id" : "179",
-        "x" : 300,
-        "y" : 3058
-      }, {
-        "id" : "181",
-        "x" : 800,
-        "y" : 2700
-      }, {
-        "id" : "182",
-        "x" : 835,
-        "y" : 3058
-      }, {
-        "id" : "184",
-        "x" : 1600,
-        "y" : 2700
-      }, {
-        "id" : "185",
-        "x" : 1365,
-        "y" : 3053
-      }, {
-        "id" : "187",
-        "x" : 1890,
-        "y" : 2688
-      } ],
-      "environment" : "Local (Docker Compose)",
-      "key" : "04-Despliegue",
-      "name" : "Deployment View: Sistema de Reserva de Canchas - Local (Docker Compose)",
-      "order" : 4,
-      "relationships" : [ {
-        "id" : "141",
-        "vertices" : [ {
-          "x" : 960,
-          "y" : 1228
-        } ]
-      }, {
-        "id" : "142",
-        "vertices" : [ {
-          "x" : 955,
-          "y" : 1083
-        } ]
-      }, {
-        "id" : "145",
-        "vertices" : [ {
-          "x" : 1280,
-          "y" : 764
-        } ]
-      }, {
-        "id" : "146",
-        "vertices" : [ {
-          "x" : 1579,
-          "y" : 756
-        } ]
-      }, {
-        "id" : "147",
-        "vertices" : [ {
-          "x" : 1085,
-          "y" : 833
-        } ]
-      }, {
-        "id" : "150",
-        "vertices" : [ {
-          "x" : 810,
-          "y" : 873
-        } ]
-      }, {
-        "id" : "151",
-        "vertices" : [ {
-          "x" : 1115,
-          "y" : 673
-        } ]
-      }, {
-        "id" : "152"
-      }, {
-        "id" : "155",
-        "vertices" : [ {
-          "x" : 1615,
-          "y" : 755
-        } ]
-      }, {
-        "id" : "156",
-        "vertices" : [ {
-          "x" : 1829,
-          "y" : 965
-        } ]
-      }, {
-        "id" : "157",
-        "vertices" : [ {
-          "x" : 1275,
-          "y" : 918
-        } ]
-      }, {
-        "id" : "161"
-      }, {
-        "id" : "164"
-      }, {
-        "id" : "167"
-      }, {
-        "id" : "170",
-        "vertices" : [ {
-          "x" : 1690,
-          "y" : 2358
-        } ]
-      }, {
-        "id" : "171"
-      }, {
-        "id" : "174"
-      }, {
-        "id" : "175"
-      }, {
-        "id" : "176"
-      }, {
-        "id" : "180"
-      }, {
-        "id" : "183"
-      }, {
-        "id" : "186"
-      }, {
-        "id" : "188"
-      } ],
-      "softwareSystemId" : "3"
-    } ],
-    "systemContextViews" : [ {
-      "description" : "Nivel 1 — El sistema y sus usuarios.",
-      "dimensions" : {
-        "height" : 1400,
-        "width" : 1420
-      },
-      "elements" : [ {
-        "id" : "1",
-        "x" : 199,
-        "y" : 143
-      }, {
-        "id" : "2",
-        "x" : 819,
-        "y" : 143
-      }, {
-        "id" : "3",
-        "x" : 529,
-        "y" : 843
-      } ],
-      "enterpriseBoundaryVisible" : true,
-      "key" : "01-Contexto",
-      "name" : "System Context View: Sistema de Reserva de Canchas",
-      "order" : 1,
-      "relationships" : [ {
-        "id" : "55"
-      }, {
-        "id" : "56"
-      } ],
-      "softwareSystemId" : "3"
-    } ]
-  }
+/**
+ * Sports Court Booking System
+ * C4 model in Structurizr DSL
+ *
+ * Desarrollo de Aplicaciones Empresariales — Maestría en Ingeniería de Software
+ *
+ * Views included:
+ *   01. Context               — the system and its users
+ *   02. Containers             — microfrontends, gateway, microservices, and databases
+ *   03. Components (ms-reservas)   — where rules RN-01..RN-08 live
+ *   04. Deployment              — how it all materializes in Docker Compose
+ *   05-08. Components (ms-usuarios, ms-canchas, ms-reportes, gateway)
+ *   09-12. Components (shell, mf-reservas, mf-administracion, mf-reportes)
+ *
+ * Start the viewer:  docker compose up -d   (in this same folder)
+ */
+workspace "Sports Court Booking System" "Microfrontend and microservices architecture for booking padel, tennis, and basketball courts." {
+
+    model {
+
+        // ===================================================================
+        //  Actors
+        // ===================================================================
+        usuarioFinal = person "End User" "Checks availability, creates and cancels their own bookings."
+        administrador = person "Administrator" "Manages the court catalog, cancels any booking, and views occupancy reports."
+
+        // ===================================================================
+        //  System
+        // ===================================================================
+        sistema = softwareSystem "Court Booking System" "Allows booking sports courts by time blocks, with administrative management and occupancy reports." {
+
+            // --- Entry layer -------------------------------------------
+            edge = container "Edge" "Serves the shell, the remote microfrontends, and the API under a single origin (http://localhost)." "nginx 1.27" {
+                tags "Infrastructure"
+            }
+
+            // --- Microfrontends --------------------------------------------
+            shell = container "Shell (host)" "Main container: layout, navigation, user session, and runtime orchestration of the remotes." "React + Module Federation" {
+                tags "Microfrontend" "Host"
+
+                // --- Internal components ---------------------------------
+                routerShell = component "Router" "Defines the top-level routes and resolves which remote to delegate each one to." "React Router"
+                layoutShell = component "Layout" "Shared visual structure (header, navigation) that wraps the active remote." "React"
+                sessionContext = component "SessionContext" "Holds the authenticated user's identity and role, and exposes session state to the shell and the remotes." "React Context"
+                remoteLoader = component "RemoteLoader" "Loads each microfrontend's remoteEntry.js at runtime." "Module Federation"
+            }
+
+            mfReservas = container "mf-reservas" "Availability lookup, booking creation, and cancellation for the end user." "React + Module Federation (remote)" {
+                tags "Microfrontend"
+
+                // --- Internal components ---------------------------------
+                viewsReservas = component "Views" "Availability, booking creation and cancellation screens, and the \"My Bookings\" history." "React Router (remote routes)"
+                uiComponentsReservas = component "UI Components" "Reusable pieces: time-block calendar, booking card, court selector." "React"
+                stateReservas = component "State" "Holds the selected court/date and the availability result while the user builds a booking." "React Context / hooks"
+                apiClientReservas = component "ApiClient" "Wraps the HTTP calls to /api/reservas and /api/disponibilidad." "Fetch API"
+            }
+
+            mfAdministracion = container "mf-administracion" "Management of the court catalog, schedules, blocks, and cancellation of any booking." "React + Module Federation (remote)" {
+                tags "Microfrontend"
+
+                // --- Internal components ---------------------------------
+                viewsAdministracion = component "Views" "Court catalog, schedules, maintenance blocks, and administrative booking-cancellation screens." "React Router (remote routes)"
+                uiComponentsAdministracion = component "UI Components" "Reusable pieces: court form, bookings table, schedule editor." "React"
+                stateAdministracion = component "State" "Holds the active form and filters while the administrator edits the catalog." "React Context / hooks"
+                apiClientAdministracion = component "ApiClient" "Wraps the HTTP calls to /api/canchas and /api/reservas." "Fetch API"
+            }
+
+            mfReportes = container "mf-reportes" "Displays occupancy reports, bookings by period, and cancellations." "React + Module Federation (remote)" {
+                tags "Microfrontend"
+
+                // --- Internal components ---------------------------------
+                viewsReportes = component "Views" "Occupancy, bookings-by-period, and cancellations screens." "React Router (remote routes)"
+                uiComponentsReportes = component "UI Components" "Reusable pieces: report charts and tables, date-range picker." "React"
+                stateReportes = component "State" "Holds the date range and filters selected by the administrator." "React Context / hooks"
+                apiClientReportes = component "ApiClient" "Wraps the HTTP calls to /api/reportes." "Fetch API"
+            }
+
+            // --- API Gateway -----------------------------------------------
+            gateway = container "API Gateway" "Single entry point to the API. Identifies the authenticated user (RN-03) and routes each request to the corresponding microservice." "Spring Cloud Gateway (:8080)" {
+                tags "Gateway"
+
+                // --- Internal components ---------------------------------
+                // Basic role-based authentication (scope document §4.4): no
+                // advanced mechanism such as OAuth2/JWT is required.
+                authenticationFilter = component "AuthenticationFilter" "Identifies the user making the request and propagates their identity and role as X-Usuario-Id / X-Usuario-Rol headers." "GlobalFilter"
+                routeConfig = component "RouteConfig" "Defines the routes to each microservice (predicates and filters)." "Spring Cloud Gateway (RouteLocator)"
+                errorHandlerGateway = component "ErrorHandler" "Translates failures from the target microservices (timeout, unavailable) or missing/invalid identity into HTTP status codes." "ErrorWebExceptionHandler"
+            }
+
+            // --- Microservices (hexagonal: ports & adapters) ---------------
+            // Each microservice's core (use case + port interfaces) has no
+            // dependency on Spring MVC or Spring Data; only the adapters do.
+            // Driving adapters (web) call the input port; the application
+            // service implements it. The application service depends only on
+            // output ports; driven adapters (JPA, RestClient) implement them.
+            msUsuarios = container "ms-usuarios" "Registration, authentication, and management of users and roles. Validates the end user's or administrator's credentials and confirms their role." "Spring Boot 4 (:8081)" {
+                tags "Microservice"
+
+                // --- Driving adapter (web) --------------------------------
+                userController = component "UserController" "Exposes the registration, login, and user/role management endpoints; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                    tags "Adapter-In"
+                }
+                errorHandlerUser = component "ErrorHandler" "Translates invalid credentials and conflicts (user already registered) into HTTP status codes." "@RestControllerAdvice" {
+                    tags "Adapter-In"
+                }
+
+                // --- Domain: input port + application ---------------------
+                userUseCase = component "UserUseCase" "Input port: registration, authentication, and role management operations, with no dependency on Spring MVC or JPA." "Java interface" {
+                    tags "Port"
+                }
+                userService = component "UserService" "Implements the input port: validates credentials and manages the user and role lifecycle." "Spring @Service" {
+                    tags "Application"
+                }
+
+                // --- Domain: output port -----------------------------------
+                userRepositoryPort = component "UserRepositoryPort" "Output port: persistence operations over users and roles that the application core needs." "Java interface" {
+                    tags "Port"
+                }
+
+                // --- Driven adapter (persistence) --------------------------
+                userRepositoryAdapter = component "UserRepositoryAdapter" "Implements the output port against the users and roles table." "Spring Data JPA" {
+                    tags "Adapter-Out"
+                }
+            }
+
+            msCanchas = container "ms-canchas" "Catalog of courts and sports, opening hours, and maintenance blocks." "Spring Boot 4 (:8082)" {
+                tags "Microservice"
+
+                // --- Driving adapter (web) --------------------------------
+                courtController = component "CourtController" "Exposes the endpoints for the court catalog, opening hours, and maintenance blocks; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                    tags "Adapter-In"
+                }
+                errorHandlerCourt = component "ErrorHandler" "Translates non-existent or inactive courts into HTTP status codes." "@RestControllerAdvice" {
+                    tags "Adapter-In"
+                }
+
+                // --- Domain: input port + application ---------------------
+                courtUseCase = component "CourtUseCase" "Input port: catalog, schedule, and maintenance-block operations, with no dependency on Spring MVC or JPA." "Java interface" {
+                    tags "Port"
+                }
+                courtService = component "CourtService" "Implements the input port: applies the catalog rules (court activation, schedule and block validation)." "Spring @Service" {
+                    tags "Application"
+                }
+
+                // --- Domain: output port -----------------------------------
+                courtRepositoryPort = component "CourtRepositoryPort" "Output port: persistence operations over courts, schedules, and blocks that the application core needs." "Java interface" {
+                    tags "Port"
+                }
+
+                // --- Driven adapter (persistence) --------------------------
+                courtRepositoryAdapter = component "CourtRepositoryAdapter" "Implements the output port against the courts, schedules, and blocks tables." "Spring Data JPA" {
+                    tags "Adapter-Out"
+                }
+            }
+
+            msReservas = container "ms-reservas" "Creation, lookup, and cancellation of bookings. Concentrates business rules RN-01 through RN-08." "Spring Boot 4 (:8083)" {
+                tags "Microservice"
+
+                // --- Driving adapter (web) --------------------------------
+                bookingController = component "BookingController" "Exposes the REST endpoints for bookings and availability; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                    tags "Adapter-In"
+                }
+                errorHandlerBooking = component "ErrorHandler" "Translates business exceptions (overlap, permissions, booking not found) into HTTP status codes (409 on overlap)." "@RestControllerAdvice" {
+                    tags "Adapter-In"
+                }
+
+                // --- Domain: input port + application ---------------------
+                bookingUseCase = component "BookingUseCase" "Input port: create, look up, and cancel bookings; calculate availability. No dependency on Spring MVC or JPA." "Java interface" {
+                    tags "Port"
+                }
+                bookingService = component "BookingService" "Implements the input port: applies RN-01..RN-08 (availability, active-bookings limit RN-06, future-only cancellation RN-04, role-based permissions RN-03)." "Spring @Service" {
+                    tags "Application"
+                }
+
+                // --- Domain: output ports ------------------------------------
+                bookingRepositoryPort = component "BookingRepositoryPort" "Output port: persistence operations over bookings that the application core needs." "Java interface" {
+                    tags "Port"
+                }
+                configurationRepositoryPort = component "ConfigurationRepositoryPort" "Output port: reads configurable parameters, such as the maximum number of simultaneous active bookings." "Java interface" {
+                    tags "Port"
+                }
+                courtClientPort = component "CourtClientPort" "Output port: checks whether a court exists, is active, and its opening hours, without depending on how that check travels over the network." "Java interface" {
+                    tags "Port"
+                }
+
+                // --- Driven adapters ------------------------------------------
+                bookingRepositoryAdapter = component "BookingRepositoryAdapter" "Implements the booking-persistence output port. The PostgreSQL EXCLUDE constraint prevents overlap (RN-02)." "Spring Data JPA" {
+                    tags "Adapter-Out"
+                }
+                configurationRepositoryAdapter = component "ConfigurationRepositoryAdapter" "Implements the configuration-reading output port." "Spring Data JPA" {
+                    tags "Adapter-Out"
+                }
+                courtClientAdapter = component "CourtClientAdapter" "Implements the court-check output port by calling ms-canchas over REST." "Spring RestClient" {
+                    tags "Adapter-Out"
+                }
+            }
+
+            msReportes = container "ms-reportes" "Generates occupancy reports, bookings by period, and cancellations. Has no database of its own: aggregates via REST." "Spring Boot 4 (:8084)" {
+                tags "Microservice"
+
+                // --- Driving adapter (web) --------------------------------
+                reportController = component "ReportController" "Exposes the occupancy, bookings-by-period, and cancellations endpoints; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                    tags "Adapter-In"
+                }
+                errorHandlerReport = component "ErrorHandler" "Translates failures from the source services (unavailable) into HTTP status codes." "@RestControllerAdvice" {
+                    tags "Adapter-In"
+                }
+
+                // --- Domain: input port + application ---------------------
+                reportUseCase = component "ReportUseCase" "Input port: occupancy, bookings-by-period, and cancellations operations. No dependency on Spring MVC or the REST clients." "Java interface" {
+                    tags "Port"
+                }
+                reportService = component "ReportService" "Implements the input port: aggregates and computes occupancy metrics by combining bookings and catalog data." "Spring @Service" {
+                    tags "Application"
+                }
+
+                // --- Domain: output ports ------------------------------------
+                bookingsClientPort = component "BookingsClientPort" "Output port: gets the period's bookings, without depending on how that call travels over the network." "Java interface" {
+                    tags "Port"
+                }
+                courtsClientPort = component "CourtsClientPort" "Output port: gets the court catalog and schedules, without depending on how that call travels over the network." "Java interface" {
+                    tags "Port"
+                }
+
+                // --- Driven adapters ------------------------------------------
+                bookingsClientAdapter = component "BookingsClientAdapter" "Implements the bookings output port by calling ms-reservas over REST." "Spring RestClient" {
+                    tags "Adapter-Out"
+                }
+                courtsClientAdapter = component "CourtsClientAdapter" "Implements the catalog output port by calling ms-canchas over REST." "Spring RestClient" {
+                    tags "Adapter-Out"
+                }
+            }
+
+            // --- Persistence ------------------------------------------------
+            usuariosDb = container "usuarios_db" "Users, roles, and credentials." "PostgreSQL 16" {
+                tags "Database"
+            }
+
+            canchasDb = container "canchas_db" "Courts, sports, opening hours, and maintenance blocks." "PostgreSQL 16" {
+                tags "Database"
+            }
+
+            reservasDb = container "reservas_db" "Bookings with their status, plus configurable parameters. Hosts the exclusion constraint that implements RN-02." "PostgreSQL 16" {
+                tags "Database"
+            }
+        }
+
+        // ===================================================================
+        //  Relationships — context level
+        // ===================================================================
+        usuarioFinal -> sistema "Checks availability, books, and cancels their bookings"
+        administrador -> sistema "Manages courts and bookings, and views reports"
+
+        // ===================================================================
+        //  Relationships — container level
+        // ===================================================================
+        usuarioFinal -> edge "Accesses the application" "HTTP :80"
+        administrador -> edge "Accesses the application" "HTTP :80"
+
+        edge -> shell "Serves the container application" "HTTP"
+        edge -> mfReservas "Serves /mf-reservas/" "HTTP"
+        edge -> mfAdministracion "Serves /mf-administracion/" "HTTP"
+        edge -> mfReportes "Serves /mf-reportes/" "HTTP"
+        edge -> gateway "Routes /api/*" "HTTP"
+
+        shell -> mfReservas "Loads the remote at runtime" "Module Federation (remoteEntry.js)"
+        shell -> mfAdministracion "Loads the remote at runtime" "Module Federation (remoteEntry.js)"
+        shell -> mfReportes "Loads the remote at runtime" "Module Federation (remoteEntry.js)"
+
+        shell -> edge "Authenticates the user" "JSON/HTTPS · /api/auth"
+        mfReservas -> edge "Checks availability and manages bookings" "JSON/HTTPS · /api"
+        mfAdministracion -> edge "Manages courts and bookings" "JSON/HTTPS · /api"
+        mfReportes -> edge "Requests the reports" "JSON/HTTPS · /api"
+
+        gateway -> msUsuarios "Routes /api/auth and /api/usuarios" "JSON/HTTP"
+        gateway -> msCanchas "Routes /api/canchas" "JSON/HTTP"
+        gateway -> msReservas "Routes /api/reservas and /api/disponibilidad" "JSON/HTTP"
+        gateway -> msReportes "Routes /api/reportes" "JSON/HTTP"
+
+        msReservas -> msCanchas "Checks that the court exists, is active, and the block is within its schedule" "JSON/HTTP (synchronous)"
+        msReportes -> msReservas "Gets the period's bookings" "JSON/HTTP (synchronous)"
+        msReportes -> msCanchas "Gets the court catalog and schedules" "JSON/HTTP (synchronous)"
+
+        msUsuarios -> usuariosDb "Reads and writes" "JDBC"
+        msCanchas -> canchasDb "Reads and writes" "JDBC"
+        msReservas -> reservasDb "Reads and writes" "JDBC"
+
+        // ===================================================================
+        //  Relationships — component level (ms-reservas, hexagonal)
+        // ===================================================================
+        gateway -> bookingController "Routes /api/reservas and /api/disponibilidad" "JSON/HTTP"
+
+        bookingController -> bookingUseCase "Invokes"
+        bookingController -> errorHandlerBooking "Unhandled exceptions"
+        bookingService -> bookingUseCase "Implements"
+
+        bookingService -> courtClientPort "Checks the court and gets its opening hours"
+        bookingService -> bookingRepositoryPort "Persists, queries, and calculates availability over bookings"
+        bookingService -> configurationRepositoryPort "Reads the maximum active bookings (RN-06)"
+
+        courtClientAdapter -> courtClientPort "Implements"
+        bookingRepositoryAdapter -> bookingRepositoryPort "Implements"
+        configurationRepositoryAdapter -> configurationRepositoryPort "Implements"
+
+        courtClientAdapter -> msCanchas "Queries the catalog" "JSON/HTTP"
+        bookingRepositoryAdapter -> reservasDb "Reads and writes" "JDBC"
+        configurationRepositoryAdapter -> reservasDb "Reads" "JDBC"
+
+        // ===================================================================
+        //  Relationships — component level (ms-usuarios, hexagonal)
+        // ===================================================================
+        gateway -> userController "Routes /api/auth and /api/usuarios" "JSON/HTTP"
+
+        userController -> userUseCase "Invokes"
+        userController -> errorHandlerUser "Unhandled exceptions"
+        userService -> userUseCase "Implements"
+
+        userService -> userRepositoryPort "Persists and queries users and roles"
+        userRepositoryAdapter -> userRepositoryPort "Implements"
+
+        userRepositoryAdapter -> usuariosDb "Reads and writes" "JDBC"
+
+        // ===================================================================
+        //  Relationships — component level (ms-canchas, hexagonal)
+        // ===================================================================
+        gateway -> courtController "Routes /api/canchas" "JSON/HTTP"
+
+        courtController -> courtUseCase "Invokes"
+        courtController -> errorHandlerCourt "Unhandled exceptions"
+        courtService -> courtUseCase "Implements"
+
+        courtService -> courtRepositoryPort "Persists and queries the catalog"
+        courtRepositoryAdapter -> courtRepositoryPort "Implements"
+
+        courtRepositoryAdapter -> canchasDb "Reads and writes" "JDBC"
+
+        // ===================================================================
+        //  Relationships — component level (ms-reportes, hexagonal)
+        // ===================================================================
+        gateway -> reportController "Routes /api/reportes" "JSON/HTTP"
+
+        reportController -> reportUseCase "Invokes"
+        reportController -> errorHandlerReport "Unhandled exceptions"
+        reportService -> reportUseCase "Implements"
+
+        reportService -> bookingsClientPort "Gets the period's bookings"
+        reportService -> courtsClientPort "Gets the court catalog and schedules"
+
+        bookingsClientAdapter -> bookingsClientPort "Implements"
+        courtsClientAdapter -> courtsClientPort "Implements"
+
+        bookingsClientAdapter -> msReservas "Gets the period's bookings" "JSON/HTTP (synchronous)"
+        courtsClientAdapter -> msCanchas "Gets the court catalog and schedules" "JSON/HTTP (synchronous)"
+
+        // ===================================================================
+        //  Relationships — component level (Gateway)
+        // ===================================================================
+        edge -> authenticationFilter "Routes /api/*" "HTTP"
+
+        authenticationFilter -> routeConfig "Identity propagated, routing continues"
+        authenticationFilter -> errorHandlerGateway "Missing or invalid identity"
+
+        routeConfig -> msUsuarios "Routes /api/auth and /api/usuarios" "JSON/HTTP"
+        routeConfig -> msCanchas "Routes /api/canchas" "JSON/HTTP"
+        routeConfig -> msReservas "Routes /api/reservas and /api/disponibilidad" "JSON/HTTP"
+        routeConfig -> msReportes "Routes /api/reportes" "JSON/HTTP"
+        routeConfig -> errorHandlerGateway "Target service unavailable"
+
+        // ===================================================================
+        //  Relationships — component level (Shell)
+        // ===================================================================
+        routerShell -> sessionContext "Checks whether there is an active session before resolving the route"
+        routerShell -> layoutShell "Renders within"
+        layoutShell -> remoteLoader "Mounts the remote for the active route"
+
+        sessionContext -> edge "Authenticates the user" "JSON/HTTPS · /api/auth"
+        remoteLoader -> mfReservas "Loads the remote at runtime" "Module Federation (remoteEntry.js)"
+        remoteLoader -> mfAdministracion "Loads the remote at runtime" "Module Federation (remoteEntry.js)"
+        remoteLoader -> mfReportes "Loads the remote at runtime" "Module Federation (remoteEntry.js)"
+
+        // ===================================================================
+        //  Relationships — component level (mf-reservas)
+        // ===================================================================
+        viewsReservas -> uiComponentsReservas "Composes the screen with"
+        viewsReservas -> stateReservas "Reads and updates"
+        viewsReservas -> apiClientReservas "Requests data"
+        apiClientReservas -> edge "Checks availability and manages bookings" "JSON/HTTPS · /api"
+
+        // ===================================================================
+        //  Relationships — component level (mf-administracion)
+        // ===================================================================
+        viewsAdministracion -> uiComponentsAdministracion "Composes the screen with"
+        viewsAdministracion -> stateAdministracion "Reads and updates"
+        viewsAdministracion -> apiClientAdministracion "Requests data"
+        apiClientAdministracion -> edge "Manages courts and bookings" "JSON/HTTPS · /api"
+
+        // ===================================================================
+        //  Relationships — component level (mf-reportes)
+        // ===================================================================
+        viewsReportes -> uiComponentsReportes "Composes the screen with"
+        viewsReportes -> stateReportes "Reads and updates"
+        viewsReportes -> apiClientReportes "Requests data"
+        apiClientReportes -> edge "Requests the reports" "JSON/HTTPS · /api"
+
+        // ===================================================================
+        //  Deployment — Docker Compose
+        // ===================================================================
+        deploymentEnvironment "Local (Docker Compose)" {
+
+            equipo = deploymentNode "Developer's machine" "Project evaluation environment." "macOS / Linux / Windows" {
+
+                docker = deploymentNode "Docker Engine" "Orchestrated with Docker Compose v2." "Docker 24+" {
+
+                    redFrontend = deploymentNode "Network: frontend" "Bridge network that isolates the presentation containers." "docker network (bridge)" {
+
+                        nodoEdge = deploymentNode "rc-edge" "Only container connected to both networks." "nginx:1.27-alpine · port 80" {
+                            containerInstance edge
+                        }
+
+                        deploymentNode "rc-shell" "" "nginx:1.27-alpine · port 3000" {
+                            containerInstance shell
+                        }
+                        deploymentNode "rc-mf-reservas" "" "nginx:1.27-alpine · port 3001" {
+                            containerInstance mfReservas
+                        }
+                        deploymentNode "rc-mf-administracion" "" "nginx:1.27-alpine · port 3002" {
+                            containerInstance mfAdministracion
+                        }
+                        deploymentNode "rc-mf-reportes" "" "nginx:1.27-alpine · port 3003" {
+                            containerInstance mfReportes
+                        }
+                    }
+
+                    redBackend = deploymentNode "Network: backend" "Bridge network that isolates the API and persistence." "docker network (bridge)" {
+
+                        deploymentNode "rc-gateway" "" "eclipse-temurin:21-jre · port 8080" {
+                            containerInstance gateway
+                        }
+                        deploymentNode "rc-ms-usuarios" "" "eclipse-temurin:21-jre · port 8081" {
+                            containerInstance msUsuarios
+                        }
+                        deploymentNode "rc-ms-canchas" "" "eclipse-temurin:21-jre · port 8082" {
+                            containerInstance msCanchas
+                        }
+                        deploymentNode "rc-ms-reservas" "" "eclipse-temurin:21-jre · port 8083" {
+                            containerInstance msReservas
+                        }
+                        deploymentNode "rc-ms-reportes" "" "eclipse-temurin:21-jre · port 8084" {
+                            containerInstance msReportes
+                        }
+
+                        nodoPostgres = deploymentNode "rc-postgres" "Single instance with three independent databases. Each microservice has credentials that only allow it to connect to its own database." "postgres:16-alpine · port 5432" {
+                            deploymentNode "usuarios_db" "" "PostgreSQL database" {
+                                containerInstance usuariosDb
+                            }
+                            deploymentNode "canchas_db" "" "PostgreSQL database" {
+                                containerInstance canchasDb
+                            }
+                            deploymentNode "reservas_db" "" "PostgreSQL database" {
+                                containerInstance reservasDb
+                            }
+                        }
+
+                        volumen = infrastructureNode "pgdata volume" "Docker volume with the PostgreSQL data. The infra/postgres/init scripts run only when it is empty." "docker volume" {
+                            tags "Infrastructure"
+                        }
+                    }
+
+                    // Relationships between containers replicate automatically
+                    // between their instances; here we only need to declare
+                    // the one involving the infrastructure node.
+                    nodoPostgres -> volumen "Persists data to" "file system"
+                }
+            }
+        }
+    }
+
+    // =======================================================================
+    //  Views
+    // =======================================================================
+    views {
+
+        // LAYOUT NOTE
+        // No view uses `autoLayout`: a view with automatic layout arranges
+        // itself, but Structurizr then blocks dragging its elements. The
+        // starting positions of all twelve views are saved in
+        // workspace.json, so they open already arranged and can be moved by
+        // hand; dragging shows a save button, and the new positions are
+        // written to that same file.
+        //
+        // workspace.json should be versioned alongside this .dsl file: it is
+        // what keeps the layout. If `autoLayout` is added to a view and then
+        // removed, the "automaticLayout" key left behind in workspace.json
+        // must also be deleted, or the viewer will keep applying it.
+
+        systemContext sistema "01-Contexto" "Level 1 — The system and its users." {
+            include *
+        }
+
+        container sistema "02-Contenedores" "Level 2 — Microfrontends, gateway, microservices, and databases." {
+            include *
+        }
+
+        component msReservas "03-Componentes-ms-reservas" "Level 3 — Interior of ms-reservas (hexagonal architecture), where the business rules are applied." {
+            include *
+        }
+
+        deployment sistema "Local (Docker Compose)" "04-Despliegue" "Materialization of the system in Docker containers." {
+            include *
+        }
+
+        component msUsuarios "05-Componentes-ms-usuarios" "Level 3 — Interior of ms-usuarios (hexagonal architecture): registration and basic role-based authentication." {
+            include *
+        }
+
+        component msCanchas "06-Componentes-ms-canchas" "Level 3 — Interior of ms-canchas (hexagonal architecture): catalog, schedules, and blocks." {
+            include *
+        }
+
+        component msReportes "07-Componentes-ms-reportes" "Level 3 — Interior of ms-reportes (hexagonal architecture): REST aggregation, no database of its own." {
+            include *
+        }
+
+        component gateway "08-Componentes-gateway" "Level 3 — Interior of the API Gateway: user identification and routing." {
+            include *
+        }
+
+        component shell "09-Componentes-shell" "Level 3 — Interior of the shell: layout, session, and remote loading." {
+            include *
+        }
+
+        component mfReservas "10-Componentes-mf-reservas" "Level 3 — Interior of mf-reservas." {
+            include *
+        }
+
+        component mfAdministracion "11-Componentes-mf-administracion" "Level 3 — Interior of mf-administracion." {
+            include *
+        }
+
+        component mfReportes "12-Componentes-mf-reportes" "Level 3 — Interior of mf-reportes." {
+            include *
+        }
+
+        // --- Styles --------------------------------------------------------
+        styles {
+            element "Person" {
+                shape Person
+                background #0b5394
+                color #ffffff
+                fontSize 22
+            }
+
+            element "Software System" {
+                background #1168bd
+                color #ffffff
+            }
+
+            element "Container" {
+                background #438dd5
+                color #ffffff
+            }
+
+            element "Microfrontend" {
+                background #6b4fbb
+                color #ffffff
+                shape WebBrowser
+            }
+
+            element "Host" {
+                background #4b2e83
+            }
+
+            element "Gateway" {
+                background #b5651d
+                color #ffffff
+                shape Hexagon
+            }
+
+            element "Microservice" {
+                background #2e8b57
+                color #ffffff
+                shape RoundedBox
+            }
+
+            // --- Hexagonal architecture (ports & adapters) ------------------
+            element "Adapter-In" {
+                background #4a7ebb
+                color #ffffff
+            }
+
+            element "Port" {
+                background #e8a33d
+                color #000000
+                shape Hexagon
+            }
+
+            element "Application" {
+                background #2e8b57
+                color #ffffff
+            }
+
+            element "Adapter-Out" {
+                background #8e5b3f
+                color #ffffff
+            }
+
+            element "Database" {
+                background #7a5195
+                color #ffffff
+                shape Cylinder
+            }
+
+            element "Infrastructure" {
+                background #6c757d
+                color #ffffff
+                shape Pipe
+            }
+
+            element "Component" {
+                background #85bbf0
+                color #000000
+            }
+
+            element "Deployment Node" {
+                background #ffffff
+                color #444444
+                stroke #888888
+            }
+
+            relationship "Relationship" {
+                thickness 2
+                fontSize 20
+            }
+        }
+    }
 }

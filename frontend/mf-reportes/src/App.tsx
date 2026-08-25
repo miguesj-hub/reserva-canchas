@@ -1,12 +1,9 @@
 import './App.css';
+import ReportesYEstadisticas from './pages/ReportesYEstadisticas';
 
-const App = () => {
-  return (
-    <div className="content">
-      <h1>Rsbuild with React</h1>
-      <p>Start building amazing things with Rsbuild.</p>
-    </div>
-  );
+const App = ({ token, onLogout }: { token?: string; onLogout?: () => void }) => {
+  void token;
+  return <ReportesYEstadisticas onLogout={onLogout} />;
 };
 
 export default App;
