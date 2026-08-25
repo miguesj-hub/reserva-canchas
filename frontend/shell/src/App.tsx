@@ -36,37 +36,37 @@ function Remoto({
  * lateral de cada remote (mf-reservas / mf-administracion), no aquí. El shell
  * solo enruta y aísla fallos. */
 function AppLayout() {
-  const { token, role, logout } = useAuth();
+  const { sesion, logout } = useAuth();
 
   return (
     <main>
       <Routes>
         <Route
           path="/"
-          element={<Navigate to={role ? HOME_BY_ROLE[role] : '/login'} replace />}
+          element={<Navigate to={sesion ? HOME_BY_ROLE[sesion.rol] : '/login'} replace />}
         />
 
         <Route path="/perfil" element={<Perfil />} />
 
         {/* Cada sección queda restringida a su rol: si un cliente entra a
             /administracion (o viceversa) RoleRoute lo redirige a su home. */}
-        <Route element={<RoleRoute allow={['cliente']} />}>
+        <Route element={<RoleRoute allow={['USUARIO_FINAL']} />}>
           <Route
             path="/reservas/*"
             element={
               <Remoto nombre="Reservas">
-                <Reservas token={token ?? ''} onLogout={logout} />
+                <Reservas sesion={sesion} onLogout={logout} />
               </Remoto>
             }
           />
         </Route>
 
-        <Route element={<RoleRoute allow={['admin']} />}>
+        <Route element={<RoleRoute allow={['ADMINISTRADOR']} />}>
           <Route
             path="/administracion/*"
             element={
               <Remoto nombre="Administración">
-                <Administracion token={token ?? ''} onLogout={logout} />
+                <Administracion sesion={sesion} onLogout={logout} />
               </Remoto>
             }
           />
@@ -74,7 +74,7 @@ function AppLayout() {
             path="/reportes/*"
             element={
               <Remoto nombre="Reportes">
-                <Reportes token={token ?? ''} onLogout={logout} />
+                <Reportes sesion={sesion} onLogout={logout} />
               </Remoto>
             }
           />

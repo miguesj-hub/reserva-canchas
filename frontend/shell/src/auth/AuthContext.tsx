@@ -5,74 +5,119 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import {
+  api,
+  borrarCredencial,
+  guardarCredencial,
+  hayCredencial,
+} from '../api/client';
 
-const STORAGE_KEY = 'reservasport_token';
-const ROLE_STORAGE_KEY = 'reservasport_role';
+const SESION_KEY = 'reservasport_sesion';
 
-export type Role = 'admin' | 'cliente';
+/** Vocabulario canónico de §3.1 (R-001): idéntico en la base, el contrato y aquí. */
+export type Role = 'USUARIO_FINAL' | 'ADMINISTRADOR';
 
-type MockUser = { username: string; password: string; role: Role; nombre: string };
+/**
+ * La identidad de quien está usando la aplicación. Es lo que el shell baja a
+ * cada remote como prop, para que ninguno tenga que volver a preguntar quién
+ * es el usuario ni leer localStorage por su cuenta (Principio V).
+ */
+export type Sesion = {
+  usuarioId: number;
+  username: string;
+  nombre: string;
+  rol: Role;
+};
 
-// Backend no disponible todavía: credenciales fijas para probar los dos
-// perfiles de usuario. En cuanto exista un servicio de autenticación real,
-// este arreglo desaparece y login() pasa a llamar al backend.
-const MOCK_USERS: MockUser[] = [
-  { username: 'admin', password: 'admin', role: 'admin', nombre: 'Administrador' },
-  { username: 'cliente', password: 'cliente', role: 'cliente', nombre: 'Cliente' },
-];
+/** Lo que devuelve POST /api/auth/login y POST /api/auth/registro. */
+type UsuarioResponse = {
+  id: number;
+  username: string;
+  nombre: string;
+  rol: Role;
+  activo: boolean;
+};
 
 type AuthContextValue = {
-  token: string | null;
-  role: Role | null;
-  nombre: string | null;
+  sesion: Sesion | null;
   isAuthenticated: boolean;
-  login: (username: string, password: string) => boolean;
+  /** Lanza ApiError si la credencial no sirve o la cuenta está inactiva. */
+  login: (username: string, password: string) => Promise<Sesion>;
+  /** Registra un USUARIO_FINAL y deja la sesión abierta. Lanza ApiError si el username existe. */
+  registrar: (username: string, nombre: string, password: string) => Promise<Sesion>;
   logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(null);
-  const [role, setRole] = useState<Role | null>(null);
-  const [nombre, setNombre] = useState<string | null>(null);
+  const [sesion, setSesion] = useState<Sesion | null>(null);
 
+  // Al recargar la página, la sesión se recupera de localStorage. Se exige que
+  // estén las dos piezas —identidad y credencial—: sin la credencial, cada
+  // llamada a /api daría 401 y el usuario vería una sesión que no sirve.
   useEffect(() => {
-    const storedToken = localStorage.getItem(STORAGE_KEY);
-    const storedRole = localStorage.getItem(ROLE_STORAGE_KEY) as Role | null;
-    if (storedToken && storedRole) {
-      setToken(storedToken);
-      setRole(storedRole);
-      setNombre(MOCK_USERS.find((u) => u.role === storedRole)?.nombre ?? null);
+    const guardada = localStorage.getItem(SESION_KEY);
+    if (guardada && hayCredencial()) {
+      setSesion(JSON.parse(guardada) as Sesion);
+    } else {
+      borrarCredencial();
+      localStorage.removeItem(SESION_KEY);
     }
   }, []);
 
-  function login(username: string, password: string): boolean {
-    const user = MOCK_USERS.find(
-      (u) => u.username === username.trim() && u.password === password,
-    );
-    if (!user) return false;
+  function abrirSesion(usuario: UsuarioResponse, username: string, password: string): Sesion {
+    const nueva: Sesion = {
+      usuarioId: usuario.id,
+      username: usuario.username,
+      nombre: usuario.nombre,
+      rol: usuario.rol,
+    };
+    // La credencial se guarda solo después de que el backend la aceptó: nunca
+    // se conserva una que no sirve.
+    guardarCredencial(username, password);
+    localStorage.setItem(SESION_KEY, JSON.stringify(nueva));
+    setSesion(nueva);
+    return nueva;
+  }
 
-    const mockToken = `mock-jwt-${user.role}-${Date.now()}`;
-    localStorage.setItem(STORAGE_KEY, mockToken);
-    localStorage.setItem(ROLE_STORAGE_KEY, user.role);
-    setToken(mockToken);
-    setRole(user.role);
-    setNombre(user.nombre);
-    return true;
+  async function login(username: string, password: string): Promise<Sesion> {
+    const usuario = await api<UsuarioResponse>('/auth/login', {
+      method: 'POST',
+      body: { username: username.trim(), password },
+      publica: true,
+    });
+    return abrirSesion(usuario, username.trim(), password);
+  }
+
+  async function registrar(
+    username: string,
+    nombre: string,
+    password: string,
+  ): Promise<Sesion> {
+    const usuario = await api<UsuarioResponse>('/auth/registro', {
+      method: 'POST',
+      body: { username: username.trim(), nombre: nombre.trim(), password },
+      publica: true,
+    });
+    return abrirSesion(usuario, username.trim(), password);
   }
 
   function logout() {
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(ROLE_STORAGE_KEY);
-    setToken(null);
-    setRole(null);
-    setNombre(null);
+    borrarCredencial();
+    localStorage.removeItem(SESION_KEY);
+    setSesion(null);
   }
 
   return (
     <AuthContext.Provider
-      value={{ token, role, nombre, isAuthenticated: token !== null, login, logout }}
+      value={{
+        sesion,
+        isAuthenticated: sesion !== null,
+        login,
+        registrar,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

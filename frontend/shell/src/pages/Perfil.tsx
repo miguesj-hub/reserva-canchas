@@ -1,14 +1,35 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 
+/** Etiqueta legible de cada rol. El valor canónico se guarda en mayúsculas
+ * (R-001); traducirlo es cosa de la pantalla, no del contrato. */
+const ETIQUETA_ROL = {
+  USUARIO_FINAL: 'Usuario final',
+  ADMINISTRADOR: 'Administrador',
+} as const;
+
+/**
+ * Perfil de solo lectura (R-006).
+ *
+ * La maqueta traía edición de datos, cambio de contraseña, foto, teléfono,
+ * correo, notificaciones y métodos de pago. Nada de eso está en §3.1 ni tiene
+ * endpoint en los contratos, y los pagos y las notificaciones están
+ * explícitamente fuera de alcance (§3.5). Se retiran en lugar de dejarlos como
+ * botones que no hacen nada: una pantalla que promete lo que no existe es peor
+ * que una pantalla que no lo promete (Principio VI).
+ *
+ * Lo que queda sale de la prop `sesion`, así que no consume ningún endpoint.
+ */
 export default function Perfil() {
-  const { logout } = useAuth();
+  const { sesion, logout } = useAuth();
   const navigate = useNavigate();
 
   function handleLogout() {
     logout();
     navigate('/login', { replace: true });
   }
+
+  if (!sesion) return null;
 
   return (
     <div className="bg-background min-h-screen">
@@ -28,7 +49,7 @@ export default function Perfil() {
               Mi Perfil
             </h2>
             <p className="font-body-md text-body-md text-text-muted mt-2">
-              Gestiona tu información personal y preferencias.
+              Los datos de tu cuenta en el club.
             </p>
           </div>
           <button
@@ -41,166 +62,62 @@ export default function Perfil() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter md:gap-[24px]">
-          {/* Columna izquierda: tarjeta de identidad */}
-          <div className="lg:col-span-4 flex flex-col gap-gutter">
-            <div className="bg-surface rounded-xl shadow-[0_4px_20px_rgba(15,23,42,0.05)] p-[24px] flex flex-col items-center text-center">
-              <div className="relative mb-6 group cursor-pointer">
-                <img
-                  alt="Avatar del usuario"
-                  className="w-32 h-32 rounded-full object-cover border-4 border-surface shadow-sm group-hover:scale-105 transition-transform duration-300"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTI8mF1Ks8alT0_BwAnNDFejKUZOeV4nnDXHy9AeSu1hESi-ZSH4zp5Ef8YathOUp0LbvZZTYBxLHy1FP_9-x4C7Eu5f6WSKQ_wuX3qxydcxRyFCOdqGs_XyMl2gM4bGGHqquM0GfmXVDPEQ5uz9iuq0o_KSEPcNGWKm5l00IkFVNRGXUCqNmQs2ZWtoSZ2Y31b-JKyujaCPxEUiwcsC_JsPCHe4XpYuS1kTzkWJsjK_DXx72exr6h"
-                />
-                <div className="absolute bottom-0 right-0 bg-secondary text-on-secondary w-10 h-10 rounded-full flex items-center justify-center shadow-md border-2 border-surface hover:bg-secondary/90 transition-colors">
-                  <span className="material-symbols-outlined text-sm">edit</span>
-                </div>
-              </div>
-              <h3 className="font-headline-md text-headline-md text-text-primary mb-1">
-                Carlos Mendoza
+        <div className="bg-surface rounded-xl shadow-[0_4px_20px_rgba(15,23,42,0.05)] overflow-hidden max-w-2xl">
+          <div className="p-[24px] flex items-center gap-4 border-b border-border-subtle">
+            <div className="w-16 h-16 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary shrink-0">
+              <span className="material-symbols-outlined text-3xl">person</span>
+            </div>
+            <div className="min-w-0">
+              <h3 className="font-headline-md text-headline-md text-text-primary truncate">
+                {sesion.nombre}
               </h3>
-              <p className="font-body-md text-body-md text-text-muted mb-4">
-                Usuario Final
+              <p className="font-body-md text-body-md text-text-muted">
+                {ETIQUETA_ROL[sesion.rol]}
               </p>
-              <div className="w-full border-t border-border-subtle pt-4 mt-2">
-                <div className="flex items-center gap-3 py-3 text-left">
-                  <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary">
-                    <span className="material-symbols-outlined">mail</span>
-                  </div>
-                  <div className="flex-1 overflow-hidden">
-                    <p className="font-label-sm text-label-sm text-text-muted">
-                      Correo Electrónico
-                    </p>
-                    <p className="font-body-md text-body-md text-text-primary truncate">
-                      carlos.mendoza@email.com
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 py-3 text-left">
-                  <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary">
-                    <span className="material-symbols-outlined">phone</span>
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-label-sm text-label-sm text-text-muted">
-                      Teléfono
-                    </p>
-                    <p className="font-body-md text-body-md text-text-primary">
-                      +593 99 123 4567
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 
-          {/* Columna derecha: actividad y ajustes */}
-          <div className="lg:col-span-8 flex flex-col gap-gutter md:gap-[24px]">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-gutter md:gap-[24px]">
-              <div className="bg-surface rounded-xl shadow-[0_4px_20px_rgba(15,23,42,0.05)] p-[24px] flex items-center justify-between hover:shadow-md transition-shadow duration-300">
-                <div>
-                  <p className="font-label-md text-label-md text-text-muted mb-1">
-                    Reservas Totales
-                  </p>
-                  <p className="font-display text-display text-text-primary">24</p>
-                </div>
-                <div className="w-14 h-14 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary">
-                  <span className="material-symbols-outlined text-3xl">
-                    event_available
-                  </span>
-                </div>
+          <dl className="divide-y divide-border-subtle">
+            <div className="p-[24px] flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-text-muted shrink-0">
+                <span className="material-symbols-outlined">badge</span>
               </div>
-              <div className="bg-surface rounded-xl shadow-[0_4px_20px_rgba(15,23,42,0.05)] p-[24px] flex items-center justify-between hover:shadow-md transition-shadow duration-300">
-                <div>
-                  <p className="font-label-md text-label-md text-text-muted mb-1">
-                    Deporte Favorito
-                  </p>
-                  <p className="font-headline-sm text-headline-sm text-text-primary font-bold mt-2">
-                    Pádel
-                  </p>
-                </div>
-                <div className="w-14 h-14 rounded-full bg-success/20 flex items-center justify-center text-success">
-                  <span className="material-symbols-outlined text-3xl">
-                    sports_tennis
-                  </span>
-                </div>
+              <div className="min-w-0">
+                <dt className="font-label-sm text-label-sm text-text-muted">
+                  Usuario
+                </dt>
+                <dd className="font-body-md text-body-md text-text-primary truncate">
+                  {sesion.username}
+                </dd>
               </div>
             </div>
 
-            <div className="bg-surface rounded-xl shadow-[0_4px_20px_rgba(15,23,42,0.05)] overflow-hidden">
-              <div className="p-[24px] border-b border-border-subtle">
-                <h3 className="font-headline-sm text-headline-sm text-text-primary">
-                  Ajustes de Cuenta
-                </h3>
+            <div className="p-[24px] flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-text-muted shrink-0">
+                <span className="material-symbols-outlined">shield_person</span>
               </div>
-              <div className="divide-y divide-border-subtle">
-                <div className="p-[24px] flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-surface-bright transition-colors cursor-pointer group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-text-muted group-hover:text-secondary group-hover:bg-secondary-container/20 transition-colors">
-                      <span className="material-symbols-outlined">lock</span>
-                    </div>
-                    <div>
-                      <p className="font-body-md text-body-md font-semibold text-text-primary">
-                        Contraseña
-                      </p>
-                      <p className="font-label-sm text-label-sm text-text-muted">
-                        Actualizada hace 2 meses
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    className="px-4 py-2 bg-surface border border-border-subtle rounded-lg font-label-md text-label-md text-text-primary hover:border-secondary hover:text-secondary transition-colors"
-                    type="button"
-                  >
-                    Cambiar
-                  </button>
-                </div>
-
-                <div className="p-[24px] flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-surface-bright transition-colors group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-text-muted group-hover:text-secondary group-hover:bg-secondary-container/20 transition-colors">
-                      <span className="material-symbols-outlined">
-                        notifications_active
-                      </span>
-                    </div>
-                    <div>
-                      <p className="font-body-md text-body-md font-semibold text-text-primary">
-                        Notificaciones
-                      </p>
-                      <p className="font-label-sm text-label-sm text-text-muted">
-                        Alertas de reservas y promociones
-                      </p>
-                    </div>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      className="sr-only peer"
-                      defaultChecked
-                      type="checkbox"
-                    />
-                    <div className="w-11 h-6 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary" />
-                  </label>
-                </div>
-
-                <div className="p-[24px] flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-surface-bright transition-colors cursor-pointer group">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-text-muted group-hover:text-secondary group-hover:bg-secondary-container/20 transition-colors">
-                      <span className="material-symbols-outlined">credit_card</span>
-                    </div>
-                    <div>
-                      <p className="font-body-md text-body-md font-semibold text-text-primary">
-                        Métodos de Pago
-                      </p>
-                      <p className="font-label-sm text-label-sm text-text-muted">
-                        Gestiona tus tarjetas guardadas
-                      </p>
-                    </div>
-                  </div>
-                  <span className="material-symbols-outlined text-text-muted group-hover:text-secondary transition-colors">
-                    chevron_right
-                  </span>
-                </div>
+              <div>
+                <dt className="font-label-sm text-label-sm text-text-muted">Rol</dt>
+                <dd className="font-body-md text-body-md text-text-primary">
+                  {ETIQUETA_ROL[sesion.rol]}
+                </dd>
               </div>
             </div>
-          </div>
+
+            <div className="p-[24px] flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-text-muted shrink-0">
+                <span className="material-symbols-outlined">tag</span>
+              </div>
+              <div>
+                <dt className="font-label-sm text-label-sm text-text-muted">
+                  Identificador
+                </dt>
+                <dd className="font-body-md text-body-md text-text-primary">
+                  {sesion.usuarioId}
+                </dd>
+              </div>
+            </div>
+          </dl>
         </div>
       </div>
     </div>
