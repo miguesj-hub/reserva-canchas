@@ -193,25 +193,25 @@ cancela cualquier reserva del sistema. Cubre §7.2.
 disponibilidad de `cliente1`, editarle el horario, bloquearla por mantenimiento, inactivarla, y
 cancelar una reserva ajena desde el listado global. Es el escenario V3 del quickstart.
 
-- [ ] T084 [P] [US2] Añadir `MaintenanceBlock` al dominio de `backend/ms-canchas/.../canchas/domain/` y `MaintenanceBlockOverlapException` a `domain/exception/`
-- [ ] T085 [P] [US2] Añadir los `record` `CanchaRequest`, `BloqueoRequest` y `BloqueoResponse` a `dto/` de `ms-canchas`, con `jakarta.validation` y el deporte como enumeración cerrada (R-008)
-- [ ] T086 [US2] Ampliar `application/port/in/CourtUseCase.java` y `application/port/out/CourtRepositoryPort.java` con crear, editar, cambiar estado y gestionar bloqueos
-- [ ] T087 [US2] Implementar en `application/service/CourtService.java` la escritura del catálogo: crear, editar y cambiar estado, con **RN-07** (solo `ADMINISTRADOR`, leído de `X-User-Role`) y la validación de que la hora de cierre es posterior a la de apertura
-- [ ] T088 [US2] Implementar en `backend/ms-canchas/src/main/java/com/ups/reservacanchas/canchas/application/service/CourtService.java` el registro y retiro de bloqueos de mantenimiento (FR-034), sin cancelar las reservas existentes (§3.3.3)
-- [ ] T089 [P] [US2] Escribir `CourtServiceTest.java` con el puerto mockeado: **RN-07** con rol administrador y con rol usuario final, horario inválido, e inactivación que conserva la cancha
-- [ ] T090 [P] [US2] Crear `backend/ms-canchas/src/main/resources/db/migration/V3__bloqueos.sql` con la tabla `bloqueo_mantenimiento`, su FK a `cancha` y el `CHECK hasta > desde`
-- [ ] T091 [US2] Ampliar `adapter/out/persistence/` de `ms-canchas` con `MaintenanceBlockEntity` y los métodos nuevos del adaptador
-- [ ] T092 [US2] Ampliar `adapter/in/web/CourtController.java` con `POST /api/canchas`, `PUT /api/canchas/{id}`, `PATCH /api/canchas/{id}/estado` y las rutas de `/bloqueos`, según `contracts/canchas.yaml`
-- [ ] T093 [US2] Ampliar `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/port/out/CourtClientPort.java` y `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/adapter/out/client/CourtClientAdapter.java` para leer los bloqueos vigentes de una cancha
-- [ ] T094 [US2] Ampliar el cálculo de disponibilidad en `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/service/BookingService.java` para marcar como `MANTENIMIENTO` y no reservables los bloques comprendidos en un bloqueo vigente (FR-010)
-- [ ] T095 [US2] Implementar en `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/service/BookingService.java` la rama `ADMINISTRADOR` de la cancelación: puede cancelar cualquier reserva, con la misma restricción temporal de RN-04 (FR-020, FR-021)
-- [ ] T096 [P] [US2] Ampliar `BookingServiceCancelacionTest.java` con la rama de administrador: cancela ajena con éxito, y falla igual sobre una reserva ya iniciada
-- [ ] T097 [US2] Añadir `GET /api/reservas` (listado global, solo `ADMINISTRADOR`) a `BookingUseCase`, `BookingService`, `BookingRepositoryPort` y `BookingController`, con los filtros de fecha, cancha y estado de `contracts/reservas.yaml`
-- [ ] T098 [US2] Conectar `frontend/mf-administracion/src/pages/GestionCanchas.tsx`: eliminar el arreglo fijo `canchas`, conectar el ABM completo, y **sustituir el filtro `'Fútbol'` por `'Básquet'`** (R-008)
-- [ ] T099 [US2] Añadir a `GestionCanchas.tsx` la gestión de bloqueos de mantenimiento sobre `/api/canchas/{id}/bloqueos`
-- [ ] T100 [US2] Conectar `frontend/mf-administracion/src/pages/GestionReservas.tsx`: eliminar el arreglo fijo `reservas`, cargar de `GET /api/reservas` y cancelar cualquiera con `POST /api/reservas/{id}/cancelacion`
-- [ ] T101 [US2] Aceptar la prop `sesion` en `frontend/mf-administracion/src/App.tsx` y propagarla a sus pantallas
-- [ ] T102 [P] [US2] Actualizar `diagramas/workspace.dsl` con los componentes nuevos de `ms-canchas` y la relación de `ms-reservas` hacia los bloqueos, y regenerar los SVG (compuerta 8)
+- [X] T084 [P] [US2] Añadir `MaintenanceBlock` al dominio de `backend/ms-canchas/.../canchas/domain/` y `MaintenanceBlockOverlapException` a `domain/exception/`
+- [X] T085 [P] [US2] Añadir los `record` `CanchaRequest`, `BloqueoRequest` y `BloqueoResponse` a `dto/` de `ms-canchas`, con `jakarta.validation` y el deporte como enumeración cerrada (R-008)
+- [X] T086 [US2] Ampliar `application/port/in/CourtUseCase.java` y `application/port/out/CourtRepositoryPort.java` con crear, editar, cambiar estado y gestionar bloqueos
+- [X] T087 [US2] Implementar en `application/service/CourtService.java` la escritura del catálogo: crear, editar y cambiar estado, con **RN-07** (solo `ADMINISTRADOR`, leído de `X-User-Role`) y la validación de que la hora de cierre es posterior a la de apertura
+- [X] T088 [US2] Implementar en `backend/ms-canchas/src/main/java/com/ups/reservacanchas/canchas/application/service/CourtService.java` el registro y retiro de bloqueos de mantenimiento (FR-034), sin cancelar las reservas existentes (§3.3.3)
+- [X] T089 [P] [US2] Escribir `CourtServiceTest.java` con el puerto mockeado: **RN-07** con rol administrador y con rol usuario final, horario inválido, e inactivación que conserva la cancha
+- [X] T090 [P] [US2] Crear `backend/ms-canchas/src/main/resources/db/migration/V3__bloqueos.sql` con la tabla `bloqueo_mantenimiento`, su FK a `cancha` y el `CHECK hasta > desde`
+- [X] T091 [US2] Ampliar `adapter/out/persistence/` de `ms-canchas` con `MaintenanceBlockEntity` y los métodos nuevos del adaptador
+- [X] T092 [US2] Ampliar `adapter/in/web/CourtController.java` con `POST /api/canchas`, `PUT /api/canchas/{id}`, `PATCH /api/canchas/{id}/estado` y las rutas de `/bloqueos`, según `contracts/canchas.yaml`
+- [X] T093 [US2] Ampliar `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/port/out/CourtClientPort.java` y `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/adapter/out/client/CourtClientAdapter.java` para leer los bloqueos vigentes de una cancha
+- [X] T094 [US2] Ampliar el cálculo de disponibilidad en `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/service/BookingService.java` para marcar como `MANTENIMIENTO` y no reservables los bloques comprendidos en un bloqueo vigente (FR-010)
+- [X] T095 [US2] Implementar en `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/service/BookingService.java` la rama `ADMINISTRADOR` de la cancelación: puede cancelar cualquier reserva, con la misma restricción temporal de RN-04 (FR-020, FR-021)
+- [X] T096 [P] [US2] Ampliar `BookingServiceCancelacionTest.java` con la rama de administrador: cancela ajena con éxito, y falla igual sobre una reserva ya iniciada
+- [X] T097 [US2] Añadir `GET /api/reservas` (listado global, solo `ADMINISTRADOR`) a `BookingUseCase`, `BookingService`, `BookingRepositoryPort` y `BookingController`, con los filtros de fecha, cancha y estado de `contracts/reservas.yaml`
+- [X] T098 [US2] Conectar `frontend/mf-administracion/src/pages/GestionCanchas.tsx`: eliminar el arreglo fijo `canchas`, conectar el ABM completo, y **sustituir el filtro `'Fútbol'` por `'Básquet'`** (R-008)
+- [X] T099 [US2] Añadir a `GestionCanchas.tsx` la gestión de bloqueos de mantenimiento sobre `/api/canchas/{id}/bloqueos`
+- [X] T100 [US2] Conectar `frontend/mf-administracion/src/pages/GestionReservas.tsx`: eliminar el arreglo fijo `reservas`, cargar de `GET /api/reservas` y cancelar cualquiera con `POST /api/reservas/{id}/cancelacion`
+- [X] T101 [US2] Aceptar la prop `sesion` en `frontend/mf-administracion/src/App.tsx` y propagarla a sus pantallas
+- [X] T102 [P] [US2] Actualizar `diagramas/workspace.dsl` con los componentes nuevos de `ms-canchas` y la relación de `ms-reservas` hacia los bloqueos, y regenerar los SVG (compuerta 8)
 
 **Checkpoint**: US1 y US2 funcionan de forma independiente. Escenario V3 del quickstart en verde.
 

@@ -72,6 +72,21 @@ public class BookingController {
     }
 
     @Operation(
+            summary = "Listar todas las reservas del sistema",
+            description = "El listado global de §3.2 (FR-035). Solo ADMINISTRADOR; el rol lo aplica BookingService.")
+    @ApiResponse(responseCode = "200", description = "Listado global, sin paginación")
+    @ApiResponse(responseCode = "403", description = "El rol no permite consultar el listado global")
+    @GetMapping
+    public List<ReservaResponse> todas(
+            @RequestHeader("X-User-Role") String rol,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta,
+            @RequestParam(required = false) Long canchaId,
+            @RequestParam(required = false) BookingStatus estado) {
+        return useCase.listarTodas(rol, desde, hasta, canchaId, estado);
+    }
+
+    @Operation(
             summary = "Listar las reservas propias",
             description = "El filtro es X-User-Id, no un parámetro: no hay forma de pedir las de otro (FR-025).")
     @ApiResponse(responseCode = "200", description = "Solo las reservas de quien pregunta")

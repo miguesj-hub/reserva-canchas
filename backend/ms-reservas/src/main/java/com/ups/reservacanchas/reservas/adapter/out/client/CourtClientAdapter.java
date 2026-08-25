@@ -1,7 +1,10 @@
 package com.ups.reservacanchas.reservas.adapter.out.client;
 
 import com.ups.reservacanchas.reservas.application.port.out.CourtClientPort;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -49,6 +52,22 @@ public class CourtClientAdapter implements CourtClientPort {
                 });
     }
 
+    @Override
+    public List<Bloqueo> bloqueosDe(Long canchaId, LocalDate fecha) {
+        // El rango se acota al día consultado: pedir el histórico entero para
+        // pintar una rejilla de un día sería traer datos que nadie mira.
+        BloqueoHttp[] cuerpo = restClient.get()
+                .uri("/api/canchas/{id}/bloqueos?desde={desde}&hasta={hasta}", canchaId, fecha, fecha)
+                .retrieve()
+                .body(BloqueoHttp[].class);
+
+        return cuerpo == null
+                ? List.of()
+                : java.util.Arrays.stream(cuerpo)
+                        .map(b -> new Bloqueo(b.desde(), b.hasta()))
+                        .toList();
+    }
+
     private static Cancha toPort(CanchaHttp c) {
         return new Cancha(
                 c.id(),
@@ -64,6 +83,9 @@ public class CourtClientAdapter implements CourtClientPort {
      * puerto habla con su propio record y no con este, para que un cambio en el
      * contrato ajeno no se filtre hacia el dominio.
      */
+    /** La forma del JSON de bloqueos que devuelve ms-canchas. */
+    private record BloqueoHttp(Long id, Long canchaId, LocalDateTime desde, LocalDateTime hasta, String motivo) {}
+
     private record CanchaHttp(
             Long id,
             String nombre,

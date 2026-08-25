@@ -117,6 +117,11 @@ public class BookingRepositoryAdapter implements BookingRepositoryPort {
                 .toList();
     }
 
+    @Override
+    public List<Booking> buscarTodas(LocalDate desde, LocalDate hasta, Long canchaId) {
+        return jpaRepository.buscarTodas(desde, hasta, canchaId).stream().map(this::toDomain).toList();
+    }
+
     private Booking toDomain(BookingEntity e) {
         return new Booking(
                 e.getId(),

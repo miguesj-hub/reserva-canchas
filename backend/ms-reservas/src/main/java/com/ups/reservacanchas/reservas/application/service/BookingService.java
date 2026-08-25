@@ -125,6 +125,16 @@ public class BookingService implements BookingUseCase {
                             + cancha.nombre() + "' (" + cancha.horaApertura().format(HORA) + "–"
                             + cancha.horaCierre().format(HORA) + ").");
         }
+        // FR-010: un bloqueo de mantenimiento impide reservas nuevas. Es 422 y
+        // no 409 porque reintentar no lo va a resolver: el bloque no está
+        // disputado, está fuera de servicio.
+        boolean enMantenimiento = canchas.bloqueosDe(canchaId, fecha).stream()
+                .anyMatch(b -> b.cubre(bloque.inicioEn(fecha), bloque.finEn(fecha)));
+        if (enMantenimiento) {
+            throw new CourtNotBookableException(
+                    "El bloque " + textoBloque(bloque) + " del " + fecha
+                            + " está bloqueado por mantenimiento.");
+        }
         return cancha;
     }
 
@@ -152,21 +162,43 @@ public class BookingService implements BookingUseCase {
                 .orElseThrow(() -> new CourtNotFoundException("La cancha " + canchaId + " no existe."));
 
         List<Booking> confirmadas = bookings.findConfirmadasDe(canchaId, fecha);
+        List<CourtClientPort.Bloqueo> mantenimientos = canchas.bloqueosDe(canchaId, fecha);
 
         // FR-008: TODOS los bloques del horario, no solo los libres. La pantalla
         // necesita pintar la rejilla completa para que se vea qué hay ocupado.
         List<Bloque> bloques = new ArrayList<>();
         for (TimeSlot bloque : bloquesDelHorario(cancha)) {
-            boolean ocupado = confirmadas.stream()
-                    .anyMatch(reservada -> reservada.getBloque().seSolapaCon(bloque));
             bloques.add(new Bloque(
                     bloque.inicio().format(HORA),
                     bloque.fin().format(HORA),
-                    // MANTENIMIENTO todavía no lo produce nadie: los bloqueos
-                    // (FR-010) se administran en US2.
-                    ocupado ? Bloque.Estado.OCUPADO : Bloque.Estado.LIBRE));
+                    estadoDe(bloque, fecha, confirmadas, mantenimientos)));
         }
         return new DisponibilidadResponse(canchaId, fecha, bloques);
+    }
+
+    /**
+     * MANTENIMIENTO manda sobre OCUPADO cuando coinciden, y es deliberado: una
+     * reserva sobre un bloque en mantenimiento no debería existir, y si existe
+     * —porque el bloqueo se registró después, que es lo que §3.3.3 contempla—
+     * lo que la pantalla necesita saber es que ahí no se puede jugar, no que
+     * alguien lo tiene reservado.
+     */
+    private Bloque.Estado estadoDe(
+            TimeSlot bloque,
+            LocalDate fecha,
+            List<Booking> confirmadas,
+            List<CourtClientPort.Bloqueo> mantenimientos) {
+
+        LocalDateTime inicio = bloque.inicioEn(fecha);
+        LocalDateTime fin = bloque.finEn(fecha);
+
+        boolean enMantenimiento = mantenimientos.stream().anyMatch(b -> b.cubre(inicio, fin));
+        if (enMantenimiento) {
+            return Bloque.Estado.MANTENIMIENTO;
+        }
+        boolean ocupado = confirmadas.stream()
+                .anyMatch(reservada -> reservada.getBloque().seSolapaCon(bloque));
+        return ocupado ? Bloque.Estado.OCUPADO : Bloque.Estado.LIBRE;
     }
 
     /** Los bloques de una hora que caben enteros en el horario de atención (RN-07). */
@@ -201,6 +233,35 @@ public class BookingService implements BookingUseCase {
         Map<Long, Optional<CourtClientPort.Cancha>> cache = new HashMap<>();
 
         return bookings.findByUsuario(usuarioId).stream()
+                .filter(reserva -> estado == null || reserva.estadoVigente(ahora) == estado)
+                .map(reserva -> toResponse(
+                        reserva,
+                        cache.computeIfAbsent(reserva.getCanchaId(), canchas::buscar).orElse(null),
+                        ahora))
+                .toList();
+    }
+
+    @Override
+    public List<ReservaResponse> listarTodas(
+            String rol, LocalDate desde, LocalDate hasta, Long canchaId, BookingStatus estado) {
+
+        // FR-035: es el listado de §3.2, del administrador. Un usuario final que
+        // llame aquí recibe 403, no la lista recortada a lo suyo: para eso está
+        // /reservas/mias, y devolver algo distinto de lo pedido confunde más de
+        // lo que protege.
+        if (!ROL_ADMINISTRADOR.equals(rol)) {
+            throw new ForbiddenOperationException(
+                    "Solo un administrador puede consultar el listado global de reservas.");
+        }
+        if (desde != null && hasta != null && hasta.isBefore(desde)) {
+            throw new IllegalArgumentException(
+                    "El rango de fechas está invertido: 'hasta' es anterior a 'desde'.");
+        }
+
+        LocalDateTime ahora = LocalDateTime.now(clock);
+        Map<Long, Optional<CourtClientPort.Cancha>> cache = new HashMap<>();
+
+        return bookings.buscarTodas(desde, hasta, canchaId).stream()
                 .filter(reserva -> estado == null || reserva.estadoVigente(ahora) == estado)
                 .map(reserva -> toResponse(
                         reserva,

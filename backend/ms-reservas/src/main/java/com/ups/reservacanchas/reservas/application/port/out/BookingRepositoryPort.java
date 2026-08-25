@@ -23,4 +23,11 @@ public interface BookingRepositoryPort {
 
     /** Las confirmadas de una cancha en una fecha: lo que ocupa bloques (RN-02, FR-009). */
     List<Booking> findConfirmadasDe(Long canchaId, LocalDate fecha);
+
+    /**
+     * El listado global (FR-035). Los filtros de fecha y cancha se aplican en la
+     * consulta —son índices— y el de estado arriba, porque FINALIZADA se deriva
+     * al leer y la base no la conoce.
+     */
+    List<Booking> buscarTodas(LocalDate desde, LocalDate hasta, Long canchaId);
 }

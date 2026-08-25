@@ -26,6 +26,13 @@ public interface BookingUseCase {
     /** FR-025, FR-026. El filtro es el usuario que pregunta: no hay forma de pedir las de otro. */
     List<ReservaResponse> listarMias(Long usuarioId, BookingStatus estado);
 
+    /**
+     * FR-035: el listado global de §3.2, solo para el ADMINISTRADOR. Lo consume
+     * también ms-reportes por BookingsClientPort.
+     */
+    List<ReservaResponse> listarTodas(
+            String rol, LocalDate desde, LocalDate hasta, Long canchaId, BookingStatus estado);
+
     /** RN-03, RN-04, RN-05. */
     ReservaResponse cancelar(Long reservaId, Long usuarioId, String rol);
 }

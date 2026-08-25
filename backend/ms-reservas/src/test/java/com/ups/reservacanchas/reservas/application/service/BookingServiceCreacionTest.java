@@ -19,6 +19,8 @@ import com.ups.reservacanchas.reservas.domain.exception.ActiveBookingLimitExceed
 import com.ups.reservacanchas.reservas.domain.exception.CourtNotBookableException;
 import com.ups.reservacanchas.reservas.domain.exception.ForbiddenOperationException;
 import com.ups.reservacanchas.reservas.domain.exception.SlotAlreadyBookedException;
+import com.ups.reservacanchas.reservas.dto.Bloque;
+import com.ups.reservacanchas.reservas.dto.DisponibilidadResponse;
 import com.ups.reservacanchas.reservas.dto.ReservaRequest;
 import com.ups.reservacanchas.reservas.dto.ReservaResponse;
 import java.time.Clock;
@@ -231,6 +233,72 @@ class BookingServiceCreacionTest {
         assertThatThrownBy(() -> service.crear(peticionA(22), CLIENTE, "USUARIO_FINAL"))
                 .isInstanceOf(CourtNotBookableException.class)
                 .hasMessageContaining("fuera del horario");
+    }
+
+    // --- FR-010: bloqueos de mantenimiento ---------------------------------
+
+    @Test
+    void rechaza_reservar_un_bloque_en_mantenimiento_FR010() {
+        canchaActivaDe07a22();
+        when(canchas.bloqueosDe(CANCHA, MANANA)).thenReturn(List.of(
+                new CourtClientPort.Bloqueo(
+                        LocalDateTime.of(MANANA, LocalTime.of(18, 0)),
+                        LocalDateTime.of(MANANA, LocalTime.of(21, 0)))));
+
+        // 422 y no 409: el bloque no está disputado, está fuera de servicio, y
+        // reintentar no lo va a resolver.
+        assertThatThrownBy(() -> service.crear(peticionA(19), CLIENTE, "USUARIO_FINAL"))
+                .isInstanceOf(CourtNotBookableException.class)
+                .hasMessageContaining("mantenimiento");
+
+        verify(bookings, never()).save(any(Booking.class));
+    }
+
+    @Test
+    void un_bloque_fuera_del_rango_bloqueado_sigue_siendo_reservable_FR010() {
+        canchaActivaDe07a22();
+        topeDeTres();
+        // El bloqueo termina a las 19:00: el bloque de 19:00 a 20:00 se salva,
+        // porque el fin es exclusivo igual que en el resto del sistema.
+        when(canchas.bloqueosDe(CANCHA, MANANA)).thenReturn(List.of(
+                new CourtClientPort.Bloqueo(
+                        LocalDateTime.of(MANANA, LocalTime.of(15, 0)),
+                        LocalDateTime.of(MANANA, LocalTime.of(19, 0)))));
+        when(bookings.findByUsuario(CLIENTE)).thenReturn(List.of());
+        when(bookings.findConfirmadasDe(CANCHA, MANANA)).thenReturn(List.of());
+        when(bookings.save(any(Booking.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        assertThat(service.crear(peticionA(19), CLIENTE, "USUARIO_FINAL").estado())
+                .isEqualTo(BookingStatus.CONFIRMADA);
+    }
+
+    @Test
+    void la_disponibilidad_marca_los_bloques_bloqueados_como_mantenimiento_FR010() {
+        canchaActivaDe07a22();
+        when(bookings.findConfirmadasDe(CANCHA, MANANA)).thenReturn(List.of(
+                new Booking(1L, CANCHA, 3L, MANANA,
+                        TimeSlot.deUnaHoraDesde(LocalTime.of(8, 0)),
+                        BookingStatus.CONFIRMADA, AHORA, null)));
+        when(canchas.bloqueosDe(CANCHA, MANANA)).thenReturn(List.of(
+                new CourtClientPort.Bloqueo(
+                        LocalDateTime.of(MANANA, LocalTime.of(10, 0)),
+                        LocalDateTime.of(MANANA, LocalTime.of(12, 0)))));
+
+        DisponibilidadResponse disponibilidad = service.consultarDisponibilidad(CANCHA, MANANA);
+
+        assertThat(estadoDe(disponibilidad, "08:00")).isEqualTo(Bloque.Estado.OCUPADO);
+        assertThat(estadoDe(disponibilidad, "10:00")).isEqualTo(Bloque.Estado.MANTENIMIENTO);
+        assertThat(estadoDe(disponibilidad, "11:00")).isEqualTo(Bloque.Estado.MANTENIMIENTO);
+        // El bloqueo acaba a las 12:00, así que ese bloque ya está libre.
+        assertThat(estadoDe(disponibilidad, "12:00")).isEqualTo(Bloque.Estado.LIBRE);
+    }
+
+    private Bloque.Estado estadoDe(DisponibilidadResponse disponibilidad, String hora) {
+        return disponibilidad.bloques().stream()
+                .filter(b -> b.horaInicio().equals(hora))
+                .findFirst()
+                .orElseThrow()
+                .estado();
     }
 
     @Test
