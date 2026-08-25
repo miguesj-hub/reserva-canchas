@@ -457,8 +457,11 @@ por ser la lectura más simple compatible con §3 y con §3.5, y ninguna amplía
   cuyo bloque cae dentro del rango. Las Canceladas se reportan aparte, en su propio indicador.
 - **Conteo de "cancelaciones por período"**: cuenta las reservas que fueron canceladas dentro del
   rango consultado.
-- **Denominador de la ocupación**: las horas del horario de atención de la cancha en los días del
-  rango. Una cancha inactivada durante parte del rango aporta solo los días en que estuvo activa.
+- **Denominador de la ocupación**: las horas del horario de atención de la cancha en **todos** los
+  días del rango. No se descuentan los días en que la cancha estuviera inactiva: un supuesto previo
+  decía lo contrario, pero descontarlos exigiría un histórico de activación que el modelo de datos
+  no guarda, y ni FR-039 ni §3.3.5 lo piden. Una cancha inactiva aparece igualmente en el reporte,
+  con la ocupación que tuvo.
 - **Ranking de demanda**: se ordena por número de reservas no canceladas en el rango; las canchas
   sin reservas aparecen con cero y ocupan el extremo de menor demanda.
 - **Zona horaria**: una sola, la local de la instalación. No hay usuarios en husos distintos.
