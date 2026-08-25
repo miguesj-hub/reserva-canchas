@@ -1,7 +1,7 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Versión: (plantilla sin ratificar) → 1.0.0 → 1.1.0 → 1.1.1
+Versión: (plantilla sin ratificar) → 1.0.0 → 1.1.0 → 1.1.1 → 1.2.0
 Tipo de cambio: MAJOR — ratificación inicial (1.0.0). La plantilla no tenía ningún
 principio definido; esa versión estableció los siete principios rectores y la
 estructura de gobierno del proyecto integrador.
@@ -13,6 +13,18 @@ una feature puede ahora fallar la compuerta 7 por un seed que no puebla reportes
 Enmienda 1.1.1 (PATCH): se resuelve TODO(RUTA_TEMPLATE). Sin cambio normativo —
 la constitución ya usaba la ruta real; se cierra la nota tras corregir el
 documento referenciado.
+Enmienda 1.2.0 (MINOR): el Principio VI incorpora el caso de la maqueta del
+frontend, construida antes que los contratos. Fija que la maqueta no es fuente de
+requisitos ni de contrato, que ante discrepancia se ajusta la pantalla, que lo que
+muestre fuera del alcance se retira, y que una funcionalidad no está terminada
+mientras su pantalla lea datos fijos. Se añade la compuerta 8 "Pantalla conectada
+al endpoint real" (las anteriores 8 pasan a ser 9) y se corrige la descripción del
+frontend en "Estado del repositorio al ratificar", que lo daba por resuelto. Es
+MINOR y no PATCH porque añade obligaciones nuevas y verificables: una feature con
+interfaz puede ahora fallar una compuerta que antes no existía.
+
+Principios modificados en 1.2.0:
+  - VI. Contrato Antes que Implementación — ampliado, no renombrado.
 
 Principios definidos (ninguno renombrado; no había versión previa):
   - I. Alcance Cerrado y Trazable
@@ -245,6 +257,28 @@ el controller y sus DTOs, y queda publicado en el Swagger UI del microservicio
 - El contrato se congela al integrarse: cambiarlo obliga a actualizar en el mismo
   cambio a todos sus consumidores.
 
+**La maqueta del frontend no es contrato ni requisito.** Las cuatro aplicaciones
+del frontend se construyeron antes que los contratos: tienen todas sus pantallas,
+pero ninguna llamada HTTP, los datos como arrays fijos en cada módulo y una sesión
+simulada contra un `MOCK_USERS` en `AuthContext`. Eso invierte este principio en
+la mitad del sistema, así que la dirección en que se resuelve el conflicto queda
+fijada aquí y no se discute caso por caso:
+
+- La maqueta es un borrador de interfaz. NO es fuente de requisitos, ni de nombres
+  de campo, ni de contrato. La fuente de requisitos es
+  `Alcance_Funcional_Reserva_Canchas_v2.md`; la de contrato, el OpenAPI del
+  servicio dueño.
+- Donde la pantalla y el contrato no coincidan, se ajusta la pantalla. Un campo
+  existe en la API porque el alcance lo pide, no porque la maqueta lo dibuje.
+- Donde la pantalla muestre algo que el alcance no pide, se quita. Al ratificar
+  esta enmienda la maqueta arrastra funcionalidad de §3.5 y datos ajenos a §3:
+  Fútbol como deporte, precios por bloque, el estado "Pendiente Pago" —que la
+  RN-08 no admite—, y las secciones de Métodos de Pago y Notificaciones del
+  perfil. Retirarlo es trabajo obligatorio bajo el Principio I, no cosmética.
+- Una funcionalidad NO está terminada mientras su pantalla siga leyendo datos
+  fijos en vez del endpoint real. Una pantalla que "se ve bien" con datos
+  inventados no demuestra nada en E6 y no puntúa alcance funcional.
+
 **Se verifica contra**: rúbrica "Arquitectura de microservicios" (15%, que exige
 "API REST documentada (Swagger/OpenAPI)"); entregable E3, que pide además
 colección de pruebas.
@@ -406,7 +440,14 @@ la superficie que hay que explicar en E1 y sostener en E6.
 Esta constitución describe un sistema en construcción. Lo que hoy existe:
 
 - Frontend: Module Federation configurada y funcionando en el shell y en los tres
-  remotes.
+  remotes, con todas las pantallas del alcance ya maquetadas —incluidas login,
+  disponibilidad, nueva reserva, mis reservas, gestión de canchas, de reservas y
+  de usuarios, y los reportes con su ranking de demanda—. Pero es una maqueta:
+  no hay una sola llamada HTTP en los cuatro proyectos, ningún remote tiene el
+  `ApiClient` que le asigna el DSL, cada pantalla trae sus datos como arrays fijos
+  y la sesión se valida contra un `MOCK_USERS`. Conectar esas pantallas a los
+  contratos es trabajo pendiente, y el Principio VI fija cómo se resuelven las
+  discrepancias que aparezcan al hacerlo.
 - Backend: los cinco proyectos Maven generados con dependencias resueltas, pero
   cada uno tiene únicamente su `*Application.java` y su `application.yml`. La
   estructura hexagonal está por construirse encima, siguiendo el proceso de 8
@@ -458,7 +499,7 @@ integración es donde este proyecto se rompe o se sostiene.
 
 ## Compuertas de Calidad
 
-Una feature NO está terminada hasta que las ocho compuertas pasan. "Funciona en mi
+Una feature NO está terminada hasta que las nueve compuertas pasan. "Funciona en mi
 máquina" no es ninguna de ellas.
 
 1. **Traza al alcance.** La feature nombra la funcionalidad de §3.1–§3.3, la RN o
@@ -483,7 +524,13 @@ máquina" no es ninguna de ellas.
    migraciones y el seed aplicados solos. Si la feature añade o cambia una
    entidad, el seed se extiende para que siga poblando las pantallas y los cuatro
    indicadores de §3.3.5 con datos no vacíos (Principio VII).
-8. **Diagrama e informe actualizados en el mismo cambio.** Esta compuerta es
+8. **Pantalla conectada al endpoint real.** Si la feature tiene interfaz, su
+   pantalla consume el contrato publicado en la compuerta 6: no quedan arrays de
+   datos fijos ni sesión simulada en el camino que la feature recorre, y lo que
+   se ve en `http://localhost` viene de la base a través del gateway. Si la
+   pantalla mostraba algo fuera del alcance, se retiró en este mismo cambio
+   (Principio VI).
+9. **Diagrama e informe actualizados en el mismo cambio.** Esta compuerta es
    innegociable y se verifica explícitamente:
    - `diagramas/workspace.dsl` refleja el código integrado. Toda clase nueva que
      sea componente —`*Controller`, `*UseCase`, `*Service`, `*Port`, `*Adapter`—
@@ -515,7 +562,7 @@ se enmienda antes de actuar en contra.
 (3) `backend/STACK.md`, `template-backend/ARQUITECTURA.md` y
 `diagramas/workspace.dsl` — es el detalle técnico acordado;
 (4) el código. Si el código contradice al nivel (3), el código está mal o el
-documento quedó desactualizado, y la compuerta 8 obliga a resolverlo en el mismo
+documento quedó desactualizado, y la compuerta 9 obliga a resolverlo en el mismo
 cambio, no después.
 
 **Enmiendas.** Una enmienda requiere: (a) la razón escrita, trazada a un criterio
@@ -546,4 +593,4 @@ atienden antes de entregar.
 (qué componentes existen y cómo se relacionan). Esta constitución dice por qué, y
 qué no se negocia.
 
-**Version**: 1.1.1 | **Ratified**: 2026-08-24 | **Last Amended**: 2026-08-24
+**Version**: 1.2.0 | **Ratified**: 2026-08-24 | **Last Amended**: 2026-08-24

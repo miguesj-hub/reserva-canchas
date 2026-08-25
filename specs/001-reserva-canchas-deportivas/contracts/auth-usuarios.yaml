@@ -1,0 +1,224 @@
+openapi: 3.1.0
+info:
+  title: ms-usuarios — autenticación y usuarios
+  version: 1.0.0
+  description: |
+    Registro, autenticación y gestión de usuarios y roles.
+    Dueño de `usuarios_db`. Ningún otro servicio lee esa base (Principio IV).
+
+    `/api/auth/**` es público; `/api/usuarios/**` exige rol ADMINISTRADOR.
+servers:
+  - url: http://localhost/api
+    description: A través del edge y el gateway (único origen que conoce el navegador)
+  - url: http://localhost:8081
+    description: Directo al servicio, solo para Swagger UI y pruebas
+
+tags:
+  - name: auth
+    description: Rutas públicas. No requieren cabecera Authorization
+  - name: usuarios
+    description: Gestión de usuarios (§3.1) — solo ADMINISTRADOR
+
+paths:
+  /auth/registro:
+    post:
+      tags: [auth]
+      summary: Registrar un usuario final
+      description: |
+        Crea siempre un USUARIO_FINAL activo. El rol no se acepta como entrada:
+        los administradores se aprovisionan con el seed (supuesto del spec).
+        Implementa FR-001 y FR-002.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegistroRequest' }
+      responses:
+        '201':
+          description: Usuario creado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UsuarioResponse' }
+        '400': { $ref: '#/components/responses/SolicitudInvalida' }
+        '409':
+          description: El username ya pertenece a otra cuenta (FR-002)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /auth/login:
+    post:
+      tags: [auth]
+      summary: Verificar credenciales y obtener la identidad de la sesión
+      description: |
+        No emite ningún token (R-003): la autenticación posterior es HTTP Basic.
+        Su papel es decirle al shell si las credenciales sirven y quién es el
+        usuario, para poder pintar la sesión. Implementa FR-003 y FR-005.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+      responses:
+        '200':
+          description: Credenciales válidas y cuenta activa
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UsuarioResponse' }
+        '401':
+          description: |
+            Credenciales inválidas o cuenta inactiva. El mensaje no revela cuál
+            de los dos datos falló (FR-003).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /usuarios:
+    get:
+      tags: [usuarios]
+      summary: Listar los usuarios registrados
+      description: Implementa FR-045. Solo ADMINISTRADOR (FR-048).
+      responses:
+        '200':
+          description: Listado completo, sin paginación
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/UsuarioResponse' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/RolInsuficiente' }
+
+  /usuarios/{id}:
+    get:
+      tags: [usuarios]
+      summary: Consultar un usuario
+      description: |
+        Lo usa el AuthenticationFilter del gateway para resolver la identidad, y
+        la gestión de usuarios para el detalle.
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: El usuario
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UsuarioResponse' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/RolInsuficiente' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+
+  /usuarios/{id}/estado:
+    patch:
+      tags: [usuarios]
+      summary: Activar o inactivar un usuario
+      description: |
+        Implementa FR-046. Un usuario inactivo no puede iniciar sesión (FR-005).
+        Sus reservas se conservan: son de otro dominio y esta base no las conoce (FR-047).
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [activo]
+              properties:
+                activo: { type: boolean }
+      responses:
+        '200':
+          description: Estado actualizado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UsuarioResponse' }
+        '400': { $ref: '#/components/responses/SolicitudInvalida' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/RolInsuficiente' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: |
+        Verificada por el gateway en cada petición (R-003). El gateway inyecta
+        X-User-Id y X-User-Role, y descarta las que vengan del cliente.
+
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer, format: int64 }
+
+  schemas:
+    Rol:
+      type: string
+      enum: [USUARIO_FINAL, ADMINISTRADOR]
+      description: Vocabulario de §3.1 (R-001)
+
+    RegistroRequest:
+      type: object
+      required: [username, nombre, password]
+      properties:
+        username: { type: string, minLength: 3, maxLength: 60 }
+        nombre:   { type: string, minLength: 1, maxLength: 120 }
+        password: { type: string, minLength: 6, maxLength: 72 }
+
+    LoginRequest:
+      type: object
+      required: [username, password]
+      properties:
+        username: { type: string }
+        password: { type: string }
+
+    UsuarioResponse:
+      type: object
+      description: Nunca incluye el hash de la contraseña.
+      required: [id, username, nombre, rol, activo]
+      properties:
+        id:       { type: integer, format: int64 }
+        username: { type: string }
+        nombre:   { type: string }
+        rol:      { $ref: '#/components/schemas/Rol' }
+        activo:   { type: boolean }
+
+    Error:
+      type: object
+      description: Cuerpo de error uniforme en los cuatro servicios.
+      required: [timestamp, status, error, message, path]
+      properties:
+        timestamp: { type: string, format: date-time }
+        status:    { type: integer }
+        error:     { type: string }
+        message:   { type: string }
+        path:      { type: string }
+
+  responses:
+    SolicitudInvalida:
+      description: Cuerpo inválido o enumeración fuera de la lista
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NoAutenticado:
+      description: Credenciales ausentes, inválidas o cuenta inactiva
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    RolInsuficiente:
+      description: Autenticado, pero el rol no permite la operación (FR-006)
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NoEncontrado:
+      description: El recurso no existe
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+security:
+  - basicAuth: []

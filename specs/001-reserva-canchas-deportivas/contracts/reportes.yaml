@@ -1,0 +1,269 @@
+openapi: 3.1.0
+info:
+  title: ms-reportes — indicadores de uso
+  version: 1.0.0
+  description: |
+    Los cuatro indicadores de §3.3.5, de solo lectura y solo para el
+    ADMINISTRADOR.
+
+    **Este servicio no tiene base de datos.** Sin JPA, sin driver JDBC y sin
+    Flyway. Obtiene las reservas de `ms-reservas` por `BookingsClientPort` y el
+    catálogo de `ms-canchas` por `CourtsClientPort`, y agrega en memoria dentro
+    de `ReportService`. Es la aplicación del Principio IV, y resuelve a favor de
+    §4.3 la ambigüedad de la tabla de §4.2.
+
+    Los números tienen que coincidir con un conteo manual sobre el listado
+    global de reservas del mismo rango (FR-042, SC-006).
+servers:
+  - url: http://localhost/api
+  - url: http://localhost:8084
+
+tags:
+  - name: reportes
+    description: Los cuatro indicadores de §3.3.5
+
+paths:
+  /reportes/reservas:
+    get:
+      tags: [reportes]
+      summary: Indicador 1 — reservas por cancha y por deporte
+      description: |
+        Implementa FR-038. Cuenta las reservas CONFIRMADAS y FINALIZADAS cuyo
+        bloque cae dentro del rango. Las canceladas se reportan aparte, en su
+        propio indicador.
+      parameters:
+        - $ref: '#/components/parameters/Desde'
+        - $ref: '#/components/parameters/Hasta'
+      responses:
+        '200':
+          description: Conteos por cancha y por deporte
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ReservasPorPeriodo' }
+        '400': { $ref: '#/components/responses/RangoInvalido' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/RolInsuficiente' }
+        '503': { $ref: '#/components/responses/OrigenNoDisponible' }
+
+  /reportes/ocupacion:
+    get:
+      tags: [reportes]
+      summary: Indicador 2 — porcentaje de ocupación por cancha
+      description: |
+        Implementa FR-039. Horas reservadas sobre horas disponibles del horario
+        de atención de cada cancha en los días del rango. Una cancha inactivada
+        durante parte del rango aporta solo los días en que estuvo activa.
+
+        Una cancha sin reservas aparece con 0%, no se omite: es la que el
+        ranking necesita en el extremo de menor demanda.
+      parameters:
+        - $ref: '#/components/parameters/Desde'
+        - $ref: '#/components/parameters/Hasta'
+      responses:
+        '200':
+          description: Ocupación por cancha
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/OcupacionCancha' }
+        '400': { $ref: '#/components/responses/RangoInvalido' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/RolInsuficiente' }
+        '503': { $ref: '#/components/responses/OrigenNoDisponible' }
+
+  /reportes/cancelaciones:
+    get:
+      tags: [reportes]
+      summary: Indicador 3 — cancelaciones por período
+      description: |
+        Implementa FR-040. Cuenta las reservas que fueron canceladas dentro del
+        rango, por la fecha de cancelación y no por la del bloque.
+      parameters:
+        - $ref: '#/components/parameters/Desde'
+        - $ref: '#/components/parameters/Hasta'
+      responses:
+        '200':
+          description: Cancelaciones del período
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Cancelaciones' }
+        '400': { $ref: '#/components/responses/RangoInvalido' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/RolInsuficiente' }
+        '503': { $ref: '#/components/responses/OrigenNoDisponible' }
+
+  /reportes/demanda:
+    get:
+      tags: [reportes]
+      summary: Indicador 4 — ranking de canchas por demanda
+      description: |
+        Implementa FR-041. Es el indicador que suele quedarse fuera y es uno de
+        los cuatro que §3.3.5 exige.
+
+        Ordena las canchas por número de reservas no canceladas en el rango, de
+        mayor a menor. Devuelve **todas** las canchas, incluidas las de cero
+        reservas: el extremo de menor demanda es parte del indicador. Los dos
+        extremos vienen además señalados para que la pantalla no tenga que
+        deducirlos.
+      parameters:
+        - $ref: '#/components/parameters/Desde'
+        - $ref: '#/components/parameters/Hasta'
+      responses:
+        '200':
+          description: Ranking completo, de mayor a menor demanda
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RankingDemanda' }
+        '400': { $ref: '#/components/responses/RangoInvalido' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/RolInsuficiente' }
+        '503': { $ref: '#/components/responses/OrigenNoDisponible' }
+
+  /reportes/resumen:
+    get:
+      tags: [reportes]
+      summary: Los cuatro indicadores en una sola respuesta
+      description: |
+        Conveniencia para el panel del administrador (R-005), que muestra los
+        cuatro acotados al día en curso y encadenaría cuatro llamadas.
+        No es un quinto indicador: no añade ningún dato que los otros cuatro no
+        den.
+      parameters:
+        - $ref: '#/components/parameters/Desde'
+        - $ref: '#/components/parameters/Hasta'
+      responses:
+        '200':
+          description: Los cuatro indicadores del rango
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Resumen' }
+        '400': { $ref: '#/components/responses/RangoInvalido' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/RolInsuficiente' }
+        '503': { $ref: '#/components/responses/OrigenNoDisponible' }
+
+components:
+  securitySchemes:
+    basicAuth: { type: http, scheme: basic }
+
+  parameters:
+    Desde:
+      name: desde
+      in: query
+      required: true
+      schema: { type: string, format: date }
+    Hasta:
+      name: hasta
+      in: query
+      required: true
+      description: Debe ser igual o posterior a `desde`; si no, 400 (FR-044).
+      schema: { type: string, format: date }
+
+  schemas:
+    ConteoCancha:
+      type: object
+      required: [canchaId, canchaNombre, deporte, reservas]
+      properties:
+        canchaId:     { type: integer, format: int64 }
+        canchaNombre: { type: string }
+        deporte:      { type: string, enum: [PADEL, TENIS, BASQUET] }
+        reservas:     { type: integer }
+
+    ConteoDeporte:
+      type: object
+      required: [deporte, reservas]
+      properties:
+        deporte:  { type: string, enum: [PADEL, TENIS, BASQUET] }
+        reservas: { type: integer }
+
+    ReservasPorPeriodo:
+      type: object
+      required: [desde, hasta, total, porCancha, porDeporte]
+      properties:
+        desde:      { type: string, format: date }
+        hasta:      { type: string, format: date }
+        total:      { type: integer }
+        porCancha:  { type: array, items: { $ref: '#/components/schemas/ConteoCancha' } }
+        porDeporte: { type: array, items: { $ref: '#/components/schemas/ConteoDeporte' } }
+
+    OcupacionCancha:
+      type: object
+      required: [canchaId, canchaNombre, deporte, horasReservadas, horasDisponibles, porcentaje]
+      properties:
+        canchaId:         { type: integer, format: int64 }
+        canchaNombre:     { type: string }
+        deporte:          { type: string, enum: [PADEL, TENIS, BASQUET] }
+        horasReservadas:  { type: number, format: double }
+        horasDisponibles: { type: number, format: double, description: 'Del horario de atención, en los días del rango' }
+        porcentaje:       { type: number, format: double, description: 'horasReservadas / horasDisponibles × 100' }
+
+    Cancelaciones:
+      type: object
+      required: [desde, hasta, total, porCancha]
+      properties:
+        desde:     { type: string, format: date }
+        hasta:     { type: string, format: date }
+        total:     { type: integer }
+        porCancha: { type: array, items: { $ref: '#/components/schemas/ConteoCancha' } }
+
+    FilaRanking:
+      type: object
+      required: [posicion, canchaId, canchaNombre, deporte, reservas]
+      properties:
+        posicion:     { type: integer, description: '1 es la de mayor demanda' }
+        canchaId:     { type: integer, format: int64 }
+        canchaNombre: { type: string }
+        deporte:      { type: string, enum: [PADEL, TENIS, BASQUET] }
+        reservas:     { type: integer }
+
+    RankingDemanda:
+      type: object
+      required: [desde, hasta, ranking]
+      properties:
+        desde:   { type: string, format: date }
+        hasta:   { type: string, format: date }
+        ranking:
+          type: array
+          description: Todas las canchas, de mayor a menor demanda, incluidas las de cero.
+          items: { $ref: '#/components/schemas/FilaRanking' }
+        mayorDemanda: { $ref: '#/components/schemas/FilaRanking' }
+        menorDemanda: { $ref: '#/components/schemas/FilaRanking' }
+
+    Resumen:
+      type: object
+      required: [reservas, ocupacion, cancelaciones, demanda]
+      properties:
+        reservas:      { $ref: '#/components/schemas/ReservasPorPeriodo' }
+        ocupacion:     { type: array, items: { $ref: '#/components/schemas/OcupacionCancha' } }
+        cancelaciones: { $ref: '#/components/schemas/Cancelaciones' }
+        demanda:       { $ref: '#/components/schemas/RankingDemanda' }
+
+    Error:
+      type: object
+      required: [timestamp, status, error, message, path]
+      properties:
+        timestamp: { type: string, format: date-time }
+        status:    { type: integer }
+        error:     { type: string }
+        message:   { type: string }
+        path:      { type: string }
+
+  responses:
+    RangoInvalido:
+      description: Rango de fechas ausente o invertido (FR-044)
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    NoAutenticado:
+      description: Credenciales ausentes, inválidas o cuenta inactiva
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    RolInsuficiente:
+      description: El módulo de reportes es solo del ADMINISTRADOR (FR-043)
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    OrigenNoDisponible:
+      description: |
+        `ms-reservas` o `ms-canchas` no responde. El reporte no puede calcularse
+        y se dice, en lugar de devolver ceros que parecerían datos reales.
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+security:
+  - basicAuth: []

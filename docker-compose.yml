@@ -1,0 +1,59 @@
+name: reserva-canchas
+
+services:
+  shell:
+    profiles: [frontend, full]
+    container_name: rc-shell
+    build: 
+      context: ./frontend/shell
+      args:
+        API_BASE_URL: /api
+    networks: [frontend]
+    restart: unless-stoped
+    ports:
+      - "${SHELL_PORT:-3000}:80"
+  
+  mf-reservas:
+    profiles: [frontend, full]
+    container_name: rc-mf-reservas
+    build:
+      context: ./frontend/mf-reservas
+      args:
+        # Prefijo con el que el bundle pide sus propios chunks. Debe coincidir
+        # con la ruta que publica el edge para este remote.
+        PUBLIC_PATH: /mf-reservas/
+    restart: unless-stopped
+    ports:
+      - "${MF_RESERVAS_PORT:-3001}:80"
+    networks: [frontend]
+
+  mf-administracion:
+    profiles: [frontend, full]
+    build:
+      context: ./frontend/mf-administracion
+      args:
+        PUBLIC_PATH: /mf-administracion/
+    container_name: rc-mf-administracion
+    restart: unless-stopped
+    ports:
+      - "${MF_ADMINISTRACION_PORT:-3002}:80"
+    networks: [frontend]
+
+  mf-reportes:
+    profiles: [frontend, full]
+    build:
+      context: ./frontend/mf-reportes
+      args:
+        PUBLIC_PATH: /mf-reportes/
+    container_name: rc-mf-reportes
+    restart: unless-stopped
+    ports:
+      - "${MF_REPORTES_PORT:-3003}:80"
+    networks: [frontend]
+
+
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge

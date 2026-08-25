@@ -1,0 +1,285 @@
+openapi: 3.1.0
+info:
+  title: ms-canchas — catálogo de canchas
+  version: 1.0.0
+  description: |
+    Catálogo de canchas, deportes, horarios de atención y bloqueos de mantenimiento.
+    Dueño de `canchas_db`.
+
+    Lectura: cualquier usuario autenticado. Escritura: solo ADMINISTRADOR (RN-07).
+    `ms-reservas` consume `GET /canchas/{id}` para validar la cancha antes de reservar,
+    y `ms-reportes` consume `GET /canchas` para el denominador de la ocupación.
+servers:
+  - url: http://localhost/api
+  - url: http://localhost:8082
+
+tags:
+  - name: canchas
+    description: Catálogo (§3.3.4)
+  - name: bloqueos
+    description: Bloqueos de mantenimiento (§3.1)
+
+paths:
+  /canchas:
+    get:
+      tags: [canchas]
+      summary: Listar canchas
+      description: |
+        Implementa FR-011. Por defecto solo las activas, que es lo que la
+        consulta de disponibilidad necesita; la gestión pide `activa=false` o
+        el listado completo.
+      parameters:
+        - name: deporte
+          in: query
+          schema: { $ref: '#/components/schemas/Deporte' }
+        - name: activa
+          in: query
+          description: Si se omite, devuelve solo las activas
+          schema: { type: boolean }
+      responses:
+        '200':
+          description: Listado, sin paginación
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/CanchaResponse' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+    post:
+      tags: [canchas]
+      summary: Crear una cancha
+      description: Implementa FR-029. Solo ADMINISTRADOR (RN-07, FR-033).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CanchaRequest' }
+      responses:
+        '201':
+          description: Cancha creada
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CanchaResponse' }
+        '400': { $ref: '#/components/responses/SolicitudInvalida' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/RolInsuficiente' }
+
+  /canchas/{id}:
+    get:
+      tags: [canchas]
+      summary: Consultar una cancha
+      description: |
+        Lo consume `ms-reservas` por `CourtClientPort` para comprobar que la
+        cancha existe, está activa y el bloque cae dentro de su horario, antes
+        de persistir la reserva (Principio IV: no lee `canchas_db`).
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      responses:
+        '200':
+          description: La cancha
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CanchaResponse' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+    put:
+      tags: [canchas]
+      summary: Editar una cancha
+      description: |
+        Implementa FR-030, incluido el horario de atención. Cambiarlo cambia los
+        bloques que la disponibilidad ofrece. Solo ADMINISTRADOR.
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CanchaRequest' }
+      responses:
+        '200':
+          description: Cancha actualizada
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CanchaResponse' }
+        '400': { $ref: '#/components/responses/SolicitudInvalida' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/RolInsuficiente' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+
+  /canchas/{id}/estado:
+    patch:
+      tags: [canchas]
+      summary: Activar o inactivar una cancha
+      description: |
+        Implementa FR-031. Una cancha inactiva no se ofrece para nuevas reservas.
+        Las reservas ya confirmadas sobre ella se conservan (FR-032): el
+        administrador decide si las cancela desde el listado global.
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [activa]
+              properties:
+                activa: { type: boolean }
+      responses:
+        '200':
+          description: Estado actualizado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CanchaResponse' }
+        '400': { $ref: '#/components/responses/SolicitudInvalida' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/RolInsuficiente' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+
+  /canchas/{id}/bloqueos:
+    get:
+      tags: [bloqueos]
+      summary: Listar los bloqueos de mantenimiento de una cancha
+      description: |
+        Lo consume `ms-reservas` para descontar de la disponibilidad los bloques
+        bloqueados (FR-010).
+      parameters:
+        - { $ref: '#/components/parameters/Id' }
+        - name: desde
+          in: query
+          schema: { type: string, format: date }
+        - name: hasta
+          in: query
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: Bloqueos vigentes en el rango
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/BloqueoResponse' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+    post:
+      tags: [bloqueos]
+      summary: Registrar un bloqueo de mantenimiento
+      description: |
+        Implementa FR-034. Impide reservas nuevas en el rango, pero no cancela
+        las existentes: §3.3.3 describe que el administrador las cancele.
+        Solo ADMINISTRADOR.
+      parameters: [{ $ref: '#/components/parameters/Id' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/BloqueoRequest' }
+      responses:
+        '201':
+          description: Bloqueo registrado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/BloqueoResponse' }
+        '400': { $ref: '#/components/responses/SolicitudInvalida' }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/RolInsuficiente' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+
+  /canchas/{id}/bloqueos/{bloqueoId}:
+    delete:
+      tags: [bloqueos]
+      summary: Retirar un bloqueo de mantenimiento
+      description: Solo ADMINISTRADOR.
+      parameters:
+        - { $ref: '#/components/parameters/Id' }
+        - name: bloqueoId
+          in: path
+          required: true
+          schema: { type: integer, format: int64 }
+      responses:
+        '204': { description: Bloqueo retirado }
+        '401': { $ref: '#/components/responses/NoAutenticado' }
+        '403': { $ref: '#/components/responses/RolInsuficiente' }
+        '404': { $ref: '#/components/responses/NoEncontrado' }
+
+components:
+  securitySchemes:
+    basicAuth: { type: http, scheme: basic }
+
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer, format: int64 }
+
+  schemas:
+    Deporte:
+      type: string
+      enum: [PADEL, TENIS, BASQUET]
+      description: |
+        Enumeración cerrada (R-008). Un valor fuera de la lista se rechaza con
+        400. "Fútbol" no está en el alcance.
+
+    CanchaRequest:
+      type: object
+      required: [nombre, deporte, horaApertura, horaCierre]
+      properties:
+        nombre:       { type: string, minLength: 1, maxLength: 120 }
+        deporte:      { $ref: '#/components/schemas/Deporte' }
+        horaApertura: { type: string, pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]$', examples: ['07:00'] }
+        horaCierre:   { type: string, pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]$', examples: ['22:00'] }
+        activa:       { type: boolean, default: true }
+
+    CanchaResponse:
+      type: object
+      required: [id, nombre, deporte, horaApertura, horaCierre, activa]
+      properties:
+        id:           { type: integer, format: int64 }
+        nombre:       { type: string }
+        deporte:      { $ref: '#/components/schemas/Deporte' }
+        horaApertura: { type: string, examples: ['07:00'] }
+        horaCierre:   { type: string, examples: ['22:00'] }
+        activa:       { type: boolean }
+
+    BloqueoRequest:
+      type: object
+      required: [desde, hasta]
+      properties:
+        desde:  { type: string, format: date-time }
+        hasta:  { type: string, format: date-time }
+        motivo: { type: string, maxLength: 200 }
+
+    BloqueoResponse:
+      type: object
+      required: [id, canchaId, desde, hasta]
+      properties:
+        id:       { type: integer, format: int64 }
+        canchaId: { type: integer, format: int64 }
+        desde:    { type: string, format: date-time }
+        hasta:    { type: string, format: date-time }
+        motivo:   { type: string }
+
+    Error:
+      type: object
+      required: [timestamp, status, error, message, path]
+      properties:
+        timestamp: { type: string, format: date-time }
+        status:    { type: integer }
+        error:     { type: string }
+        message:   { type: string }
+        path:      { type: string }
+
+  responses:
+    SolicitudInvalida:
+      description: Cuerpo inválido, deporte fuera de la enumeración, u hora de cierre no posterior a la de apertura
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    NoAutenticado:
+      description: Credenciales ausentes, inválidas o cuenta inactiva
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    RolInsuficiente:
+      description: Solo el ADMINISTRADOR gestiona el catálogo (RN-07, FR-033)
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+    NoEncontrado:
+      description: La cancha o el bloqueo no existe
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } }
+
+security:
+  - basicAuth: []
