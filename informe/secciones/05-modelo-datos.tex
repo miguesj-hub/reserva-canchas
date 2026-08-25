@@ -1,0 +1,93 @@
+% !TeX root = ../informe.tex
+% ===========================================================================
+%  5. Modelo de datos
+%
+%  El documento de alcance pide explícitamente el «modelo de datos» como
+%  parte del entregable E1, y vale un 15 % de la rúbrica. Lo que se evalúa
+%  no es solo que las tablas estén normalizadas, sino que se demuestre la
+%  INDEPENDENCIA DE DATOS entre microservicios.
+% ===========================================================================
+
+\section{Modelo de datos}
+\label{sec:modelo-datos}
+
+\subsection{Estrategia de persistencia}
+\label{sec:estrategia-datos}
+
+\instruccion{Explica el reparto: qué base pertenece a qué servicio y qué
+principio se sigue. Si se optó por una sola instancia de PostgreSQL con
+varias bases en lugar de varias instancias, dilo aquí y justifícalo — es una
+pregunta previsible en la defensa.}
+
+\ph{Una base por microservicio: qué implica y cómo se garantiza.}
+
+\begin{table}[H]
+  \centering
+  \caption{Reparto de bases de datos.}
+  \label{tab:bases}
+  \begin{tabular}{L{3.2cm} L{3.4cm} L{6.6cm}}
+    \toprule
+    \textbf{Base} & \textbf{Servicio dueño} & \textbf{Contenido} \\
+    \midrule
+    \id{usuarios\_db} & \id{ms-usuarios} & \ph{...} \\
+    \id{canchas\_db}  & \id{ms-canchas}  & \ph{...} \\
+    \id{reservas\_db} & \id{ms-reservas} & \ph{...} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Diagrama entidad-relación}
+\label{sec:der}
+
+\instruccion{Un DER por base, o uno global con las fronteras entre bases
+marcadas. Lo segundo comunica mejor la independencia, que es justo lo que se
+evalúa.}
+
+\begin{figure}[H]
+  \centering
+  \diagrama{modelo-datos}
+  \caption{Modelo entidad-relación, con la frontera de cada base de datos.}
+  \label{fig:der}
+\end{figure}
+
+\subsection{Diccionario de datos}
+\label{sec:diccionario}
+
+\instruccion{Una tabla por entidad. No hace falta repetir todos los tipos
+SQL: basta el campo, su tipo lógico y qué significa. Los tipos exactos están
+en los scripts del anexo.}
+
+\begin{table}[H]
+  \centering
+  \caption{Entidad \id{reservas}.}
+  \label{tab:dic-reservas}
+  \begin{tabular}{L{3.4cm} L{3.2cm} L{6.6cm}}
+    \toprule
+    \textbf{Campo} & \textbf{Tipo} & \textbf{Descripción} \\
+    \midrule
+    \ph{...} & \ph{...} & \ph{...} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Integridad entre bases de datos}
+\label{sec:integridad}
+
+\instruccion{Es el apartado que más distingue un modelo de microservicios de
+un monolito con varias tablas. Explica qué referencias cruzan la frontera
+entre bases, por qué no pueden ser claves foráneas y dónde se valida
+entonces la integridad.}
+
+\ph{Referencias lógicas sin clave foránea: cuáles son, dónde se validan y
+qué ocurre si la validación falla.}
+
+\subsection{Restricciones que implementan reglas de negocio}
+\label{sec:restricciones}
+
+\instruccion{Aquí va la restricción de exclusión que impide el solapamiento.
+Es el punto técnico más fuerte del modelo de datos: explica por qué está en
+el motor y no en el código de la aplicación. El detalle de la regla como tal
+va en la \cref{sec:solapamiento}; aquí solo el mecanismo de base de datos.}
+
+\ph{Restricciones e índices que sostienen las reglas y las consultas de
+disponibilidad.}

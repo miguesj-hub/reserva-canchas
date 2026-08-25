@@ -1,0 +1,80 @@
+% !TeX root = ../informe.tex
+% ===========================================================================
+%  6. Reglas de negocio
+%
+%  Vale un 10 % de la rúbrica, «en especial la validación de solapamiento de
+%  horarios». Lo que se evalúa es la trazabilidad: cada regla, dónde se
+%  implementa y cómo se comprueba.
+%
+%  Los \label{rn:NN} de la tabla son los que hacen funcionar \rn{NN} desde
+%  el resto del documento.
+% ===========================================================================
+
+\section{Reglas de negocio}
+\label{sec:reglas-negocio}
+
+\subsection{Catálogo de reglas}
+\label{sec:catalogo-reglas}
+
+\instruccion{Una fila por regla, con la columna de implementación rellenada
+de verdad: «ms-reservas, ReservaService» dice algo; «se valida en el backend»
+no. Esta tabla es la que se mira para puntuar este criterio.}
+
+\begin{table}[H]
+  \centering
+  \caption{Reglas de negocio y dónde se implementa cada una.}
+  \label{tab:reglas}
+  \begin{tabular}{C{1.6cm} L{7.2cm} L{4.4cm}}
+    \toprule
+    \textbf{ID} & \textbf{Descripción} & \textbf{Implementación} \\
+    \midrule
+    \textbf{RN-01}\label{rn:01} & \ph{Bloques horarios predefinidos} & \ph{...} \\
+    \textbf{RN-02}\label{rn:02} & \ph{No se permite solapamiento}    & \ph{...} \\
+    \textbf{RN-03}\label{rn:03} & \ph{Permisos de cancelación}       & \ph{...} \\
+    \textbf{RN-04}\label{rn:04} & \ph{No se cancelan reservas pasadas} & \ph{...} \\
+    \textbf{RN-05}\label{rn:05} & \ph{Cancelar libera el bloque}     & \ph{...} \\
+    \textbf{RN-06}\label{rn:06} & \ph{Límite de reservas activas}    & \ph{...} \\
+    \textbf{RN-07}\label{rn:07} & \ph{Solo el administrador gestiona canchas} & \ph{...} \\
+    \textbf{RN-08}\label{rn:08} & \ph{Estados de una reserva}        & \ph{...} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Validación de solapamiento de horarios}
+\label{sec:solapamiento}
+
+\instruccion{La regla que el documento de alcance destaca sobre las demás.
+Dedícale espacio: qué problema hay si dos personas reservan a la vez, dónde
+se resuelve y por qué ahí. Si la validación está en la base de datos y no en
+el servicio, explica el razonamiento: es un argumento de concurrencia, no de
+comodidad.}
+
+\ph{Mecanismo elegido para \rn{02} y por qué resiste peticiones
+concurrentes sobre el mismo bloque.}
+
+\subsection{Estados de una reserva}
+\label{sec:estados-reserva}
+
+\ph{Los tres estados de \rn{08} y las transiciones permitidas entre ellos.
+Un diagrama de estados pequeño comunica esto mejor que un párrafo.}
+
+\subsection{Traducción de reglas a respuestas HTTP}
+\label{sec:errores}
+
+\instruccion{Qué código devuelve la API cuando se viola cada regla. Importa
+más de lo que parece: un 500 genérico ante una reserva duplicada es un
+defecto, y un 409 con un mensaje claro es lo que permite que la interfaz
+reaccione bien.}
+
+\begin{table}[H]
+  \centering
+  \caption{Correspondencia entre violación de regla y respuesta HTTP.}
+  \label{tab:errores}
+  \begin{tabular}{C{1.6cm} C{2.4cm} L{8.6cm}}
+    \toprule
+    \textbf{Regla} & \textbf{HTTP} & \textbf{Código de error y significado} \\
+    \midrule
+    \ph{...} & \ph{...} & \ph{...} \\
+    \bottomrule
+  \end{tabular}
+\end{table}

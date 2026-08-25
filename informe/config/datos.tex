@@ -1,0 +1,39 @@
+% !TeX root = ../informe.tex
+% ===========================================================================
+%  Datos de la portada y metadatos del PDF.
+%  Este es el único archivo que hay que editar con los datos del equipo.
+% ===========================================================================
+
+\newcommand{\tituloInforme}{Sistema de Reserva de Canchas Deportivas}
+\newcommand{\subtituloInforme}{Arquitectura de Microfrontends y Microservicios}
+\newcommand{\nombreCurso}{Desarrollo de Aplicaciones Empresariales}
+\newcommand{\nombrePrograma}{Maestría en Ingeniería de Software}
+\newcommand{\nombreUniversidad}{Nombre de la Universidad}
+\newcommand{\tipoTrabajo}{Proyecto Integrador}
+
+% --- Integrantes del equipo ------------------------------------------------
+% Un par nombre/correo por integrante. Dejar vacíos los que sobren: la
+% portada omite automáticamente los que estén en blanco.
+\newcommand{\autorUno}{Pablo Jara Muñoz}
+\newcommand{\correoUno}{pablojaramunoz@gmail.com}
+
+\newcommand{\autorDos}{Miguel Lara}
+\newcommand{\correoDos}{miguel.larasj@gmail.com}
+
+\newcommand{\autorTres}{Sebastián Uyaguari}
+\newcommand{\correoTres}{sebastianuyaguari@gmail.com}
+
+\newcommand{\autorCuatro}{Adrián Espinoza}
+\newcommand{\correoCuatro}{adrian.espinoza1292@gmail.com}
+
+\newcommand{\nombreDocente}{Nombre del Docente}
+\newcommand{\ciudadFecha}{Ciudad, \today}
+
+% --- Metadatos del PDF -----------------------------------------------------
+\hypersetup{
+    pdftitle  = {\tituloInforme},
+    pdfauthor = {\autorUno, \autorDos, \autorTres, \autorCuatro},
+    pdfsubject= {\nombreCurso\ --- \nombrePrograma},
+    pdfkeywords = {microservicios, microfrontends, Module Federation,
+                   Spring Boot, PostgreSQL, Docker}
+}
