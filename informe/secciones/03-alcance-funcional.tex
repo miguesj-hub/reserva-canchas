@@ -26,7 +26,16 @@ de una condición (cancelar solo las propias), dilo en la celda.}
     \toprule
     \textbf{Funcionalidad} & \textbf{Usuario final} & \textbf{Administrador} \\
     \midrule
-    \ph{...} & \ph{...} & \ph{...} \\
+    Registro e inicio de sesión                     & Sí & Sí \\
+    Consultar disponibilidad de canchas             & Sí & Sí \\
+    Crear una reserva                               & Sí & No \\
+    Cancelar una reserva                            & Solo las propias & Cualquiera \\
+    Consultar el historial de reservas propias      & Sí & No \\
+    Consultar el listado global de reservas         & No & Sí \\
+    Gestionar el catálogo de canchas                & No & Sí \\
+    Gestionar horarios y bloqueos de mantenimiento  & No & Sí \\
+    Gestionar usuarios (activar / inactivar)        & No & Sí \\
+    Visualizar los reportes de ocupación            & No & Sí \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -47,7 +56,14 @@ descomposición no está clara.}
     \toprule
     \textbf{Módulo} & \textbf{Pantalla} & \textbf{Descripción} \\
     \midrule
-    \ph{...} & \ph{...} & \ph{...} \\
+    Seguridad      & Inicio de sesión / Registro & Autenticación de ambos roles y alta de cuentas nuevas. \\
+    Reservas       & Consulta de disponibilidad  & Rejilla de bloques por cancha y fecha, libres y ocupados. \\
+    Reservas       & Nueva reserva               & Confirmación del bloque elegido. \\
+    Reservas       & Mis reservas                & Listado propio, con la opción de cancelar. \\
+    Administración & Gestión de canchas          & Alta, edición, horario, bloqueos y estado de cada cancha. \\
+    Administración & Gestión de reservas         & Listado global, con la opción de cancelar cualquiera. \\
+    Administración & Gestión de usuarios         & Activar e inactivar cuentas. \\
+    Reportes       & Reportes y estadísticas     & Los cuatro indicadores de ocupación y demanda. \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -58,4 +74,27 @@ descomposición no está clara.}
 \instruccion{Enumera lo excluido. No es una disculpa: delimitar el alcance
 es una decisión de diseño, y declararla evita que se lea como una carencia.}
 
-\ph{Funcionalidades excluidas y el motivo.}
+Queda fuera del alcance, por decisión explícita y no por olvido:
+
+\begin{itemize}
+  \item \textbf{Pasarela de pagos o cobro en línea.} El club cobra por sus
+        medios; la reserva no es una transacción económica en este sistema.
+  \item \textbf{Notificaciones por correo, SMS o push.} Las confirmaciones y
+        los rechazos se comunican \emph{en pantalla}, en el momento. Añadir un
+        canal asíncrono traería una infraestructura —cola, reintentos,
+        plantillas— que ningún criterio de la rúbrica evalúa.
+  \item \textbf{Reservas recurrentes.} Cada reserva es un bloque concreto en
+        una fecha concreta.
+  \item \textbf{Torneos, ligas e inscripciones grupales.} La unidad reservable
+        es un bloque para un usuario, no un evento con participantes.
+  \item \textbf{Aplicación móvil nativa.} El sistema es web y responsive; se
+        usa desde el navegador del teléfono.
+  \item \textbf{Reportes analíticos o de inteligencia de negocio.} Los cuatro
+        indicadores de §\ref{sec:alcance} se calculan sobre los datos vivos y se
+        muestran en pantalla; no hay exportación a formatos analíticos.
+\end{itemize}
+
+Esta lista importa tanto como la de funcionalidades incluidas. Delimitar el
+alcance es lo que permite que lo que sí está construido esté \emph{terminado}:
+el tiempo que se gastara en cualquiera de estos seis puntos saldría del que
+sostiene las ocho reglas de negocio y sus pruebas.

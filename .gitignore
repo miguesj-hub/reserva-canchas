@@ -41,3 +41,18 @@ Spring_Boot_Microservicios.md
 
 # Configuración del IDE, propia de cada máquina.
 .idea/
+
+# Intermedios de LaTeX. El PDF sí se versiona; estos no.
+*.aux
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.tdo
+*.toc
+informe/*.bbl
