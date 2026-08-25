@@ -1,343 +1,455 @@
 /**
- * Sistema de Reserva de Canchas Deportivas
- * Modelo C4 en Structurizr DSL
+ * Sports Court Booking System
+ * C4 model in Structurizr DSL
  *
  * Desarrollo de Aplicaciones Empresariales — Maestría en Ingeniería de Software
  *
- * Vistas incluidas:
- *   1. Contexto      — el sistema y sus usuarios
- *   2. Contenedores  — microfrontends, gateway, microservicios y bases de datos
- *   3. Componentes   — interior de ms-reservas (donde viven las reglas RN-01..RN-08)
- *   4. Despliegue    — cómo se materializa todo en Docker Compose
+ * Views included:
+ *   01. Context               — the system and its users
+ *   02. Containers             — microfrontends, gateway, microservices, and databases
+ *   03. Components (ms-reservas)   — where rules RN-01..RN-08 live
+ *   04. Deployment              — how it all materializes in Docker Compose
+ *   05-08. Components (ms-usuarios, ms-canchas, ms-reportes, gateway)
+ *   09-12. Components (shell, mf-reservas, mf-administracion, mf-reportes)
  *
- * Levantar el visor:  docker compose up -d   (en esta misma carpeta)
+ * Start the viewer:  docker compose up -d   (in this same folder)
  */
-workspace "Sistema de Reserva de Canchas Deportivas" "Arquitectura de microfrontends y microservicios para la reserva de canchas de pádel, tenis y básquet." {
+workspace "Sports Court Booking System" "Microfrontend and microservices architecture for booking padel, tennis, and basketball courts." {
 
     model {
 
         // ===================================================================
-        //  Actores
+        //  Actors
         // ===================================================================
-        usuarioFinal = person "Usuario Final" "Consulta disponibilidad, crea y cancela sus propias reservas."
-        administrador = person "Administrador" "Gestiona el catálogo de canchas, cancela cualquier reserva y consulta los reportes de ocupación."
+        usuarioFinal = person "End User" "Checks availability, creates and cancels their own bookings."
+        administrador = person "Administrator" "Manages the court catalog, cancels any booking, and views occupancy reports."
 
         // ===================================================================
-        //  Sistema
+        //  System
         // ===================================================================
-        sistema = softwareSystem "Sistema de Reserva de Canchas" "Permite reservar canchas deportivas por bloques horarios, con gestión administrativa y reportes de ocupación." {
+        sistema = softwareSystem "Court Booking System" "Allows booking sports courts by time blocks, with administrative management and occupancy reports." {
 
-            // --- Capa de entrada -------------------------------------------
-            edge = container "Edge" "Publica el shell, los microfrontends remotos y la API bajo un mismo origen (http://localhost). Al unificar el origen desaparece el CORS de los chunks federados y los remotes dejan de depender de hostnames internos de Docker." "nginx 1.27" {
-                tags "Infraestructura"
+            // --- Entry layer -------------------------------------------
+            edge = container "Edge" "Serves the shell, the remote microfrontends, and the API under a single origin (http://localhost)." "nginx 1.27" {
+                tags "Infrastructure"
             }
 
             // --- Microfrontends --------------------------------------------
-            shell = container "Shell (host)" "Contenedor principal: layout, navegación, sesión del usuario y orquestación de los remotes en tiempo de ejecución." "React + Module Federation" {
+            shell = container "Shell (host)" "Main container: layout, navigation, user session, and runtime orchestration of the remotes." "React + Module Federation" {
                 tags "Microfrontend" "Host"
 
-                // --- Componentes internos ---------------------------------
-                routerShell = component "Router" "Define las rutas de nivel superior y resuelve a qué remote delegar cada una." "React Router"
-                layoutShell = component "Layout" "Estructura visual común (header, navegación) que envuelve al remote activo." "React"
-                sesionContext = component "SesionContext" "Mantiene la identidad y el rol del usuario autenticado, y expone el estado de sesión al shell y a los remotes." "React Context"
-                remoteLoader = component "RemoteLoader" "Carga en tiempo de ejecución el remoteEntry.js de cada microfrontend." "Module Federation"
+                // --- Internal components ---------------------------------
+                routerShell = component "Router" "Defines the top-level routes and resolves which remote to delegate each one to." "React Router"
+                layoutShell = component "Layout" "Shared visual structure (header, navigation) that wraps the active remote." "React"
+                sessionContext = component "SessionContext" "Holds the authenticated user's identity and role, and exposes session state to the shell and the remotes." "React Context"
+                remoteLoader = component "RemoteLoader" "Loads each microfrontend's remoteEntry.js at runtime." "Module Federation"
             }
 
-            mfReservas = container "mf-reservas" "Consulta de disponibilidad, creación y cancelación de reservas del usuario final." "React + Module Federation (remote)" {
+            mfReservas = container "mf-reservas" "Availability lookup, booking creation, and cancellation for the end user." "React + Module Federation (remote)" {
                 tags "Microfrontend"
 
-                // --- Componentes internos ---------------------------------
-                vistasReservas = component "Vistas" "Pantallas de disponibilidad, creación y cancelación de reservas, y el historial \"Mis reservas\"." "React Router (rutas del remote)"
-                componentesReservas = component "Componentes UI" "Piezas reutilizables: calendario de bloques, tarjeta de reserva, selector de cancha." "React"
-                estadoReservas = component "Estado" "Mantiene en memoria la cancha/fecha seleccionada y el resultado de disponibilidad mientras el usuario arma la reserva." "React Context / hooks"
-                apiClientReservas = component "ApiClient" "Encapsula las llamadas HTTP a /api/reservas y /api/disponibilidad." "Fetch API"
+                // --- Internal components ---------------------------------
+                viewsReservas = component "Views" "Availability, booking creation and cancellation screens, and the \"My Bookings\" history." "React Router (remote routes)"
+                uiComponentsReservas = component "UI Components" "Reusable pieces: time-block calendar, booking card, court selector." "React"
+                stateReservas = component "State" "Holds the selected court/date and the availability result while the user builds a booking." "React Context / hooks"
+                apiClientReservas = component "ApiClient" "Wraps the HTTP calls to /api/reservas and /api/disponibilidad." "Fetch API"
             }
 
-            mfAdministracion = container "mf-administracion" "Gestión del catálogo de canchas, horarios, bloqueos y cancelación de cualquier reserva." "React + Module Federation (remote)" {
+            mfAdministracion = container "mf-administracion" "Management of the court catalog, schedules, blocks, and cancellation of any booking." "React + Module Federation (remote)" {
                 tags "Microfrontend"
 
-                // --- Componentes internos ---------------------------------
-                vistasAdministracion = component "Vistas" "Pantallas de catálogo de canchas, horarios, bloqueos por mantenimiento y cancelación administrativa de reservas." "React Router (rutas del remote)"
-                componentesAdministracion = component "Componentes UI" "Piezas reutilizables: formulario de cancha, tabla de reservas, editor de horarios." "React"
-                estadoAdministracion = component "Estado" "Mantiene el formulario y los filtros activos mientras el administrador edita el catálogo." "React Context / hooks"
-                apiClientAdministracion = component "ApiClient" "Encapsula las llamadas HTTP a /api/canchas y /api/reservas." "Fetch API"
+                // --- Internal components ---------------------------------
+                viewsAdministracion = component "Views" "Court catalog, schedules, maintenance blocks, and administrative booking-cancellation screens." "React Router (remote routes)"
+                uiComponentsAdministracion = component "UI Components" "Reusable pieces: court form, bookings table, schedule editor." "React"
+                stateAdministracion = component "State" "Holds the active form and filters while the administrator edits the catalog." "React Context / hooks"
+                apiClientAdministracion = component "ApiClient" "Wraps the HTTP calls to /api/canchas and /api/reservas." "Fetch API"
             }
 
-            mfReportes = container "mf-reportes" "Visualización de los reportes de ocupación, reservas por período y cancelaciones." "React + Module Federation (remote)" {
+            mfReportes = container "mf-reportes" "Displays occupancy reports, bookings by period, and cancellations." "React + Module Federation (remote)" {
                 tags "Microfrontend"
 
-                // --- Componentes internos ---------------------------------
-                vistasReportes = component "Vistas" "Pantallas de ocupación, reservas por período y cancelaciones." "React Router (rutas del remote)"
-                componentesReportes = component "Componentes UI" "Piezas reutilizables: gráficos y tablas de reporte, selector de rango de fechas." "React"
-                estadoReportes = component "Estado" "Mantiene el rango de fechas y los filtros seleccionados por el administrador." "React Context / hooks"
-                apiClientReportes = component "ApiClient" "Encapsula las llamadas HTTP a /api/reportes." "Fetch API"
+                // --- Internal components ---------------------------------
+                viewsReportes = component "Views" "Occupancy, bookings-by-period, and cancellations screens." "React Router (remote routes)"
+                uiComponentsReportes = component "UI Components" "Reusable pieces: report charts and tables, date-range picker." "React"
+                stateReportes = component "State" "Holds the date range and filters selected by the administrator." "React Context / hooks"
+                apiClientReportes = component "ApiClient" "Wraps the HTTP calls to /api/reportes." "Fetch API"
             }
 
             // --- API Gateway -----------------------------------------------
-            gateway = container "API Gateway" "Punto de entrada único a la API. Identifica al usuario autenticado (RN-03) y enruta cada petición al microservicio correspondiente." "Spring Cloud Gateway (:8080)" {
+            gateway = container "API Gateway" "Single entry point to the API. Identifies the authenticated user (RN-03) and routes each request to the corresponding microservice." "Spring Cloud Gateway (:8080)" {
                 tags "Gateway"
 
-                // --- Componentes internos ---------------------------------
-                // Autenticación básica con roles (§4.4 del alcance): no se
-                // exige un mecanismo avanzado tipo OAuth2/JWT.
-                autenticacionFilter = component "AutenticacionFilter" "Identifica al usuario de la petición entrante y propaga su identidad y rol como cabeceras X-Usuario-Id / X-Usuario-Rol." "GlobalFilter"
-                routeConfig = component "RouteConfig" "Define las rutas hacia cada microservicio (predicates y filtros)." "Spring Cloud Gateway (RouteLocator)"
-                manejadorErroresGateway = component "ManejadorDeErrores" "Traduce fallos de los microservicios destino (timeout, no disponible) o identidad ausente/inválida a códigos HTTP." "ErrorWebExceptionHandler"
+                // --- Internal components ---------------------------------
+                // Basic role-based authentication (scope document §4.4): no
+                // advanced mechanism such as OAuth2/JWT is required.
+                authenticationFilter = component "AuthenticationFilter" "Identifies the user making the request and propagates their identity and role as X-Usuario-Id / X-Usuario-Rol headers." "GlobalFilter"
+                routeConfig = component "RouteConfig" "Defines the routes to each microservice (predicates and filters)." "Spring Cloud Gateway (RouteLocator)"
+                errorHandlerGateway = component "ErrorHandler" "Translates failures from the target microservices (timeout, unavailable) or missing/invalid identity into HTTP status codes." "ErrorWebExceptionHandler"
             }
 
-            // --- Microservicios ---------------------------------------------
-            msUsuarios = container "ms-usuarios" "Registro, autenticación y gestión de usuarios y roles. Valida las credenciales del usuario final o administrador y confirma su rol." "Spring Boot 4 (:8081)" {
-                tags "Microservicio"
+            // --- Microservices (hexagonal: ports & adapters) ---------------
+            // Each microservice's core (use case + port interfaces) has no
+            // dependency on Spring MVC or Spring Data; only the adapters do.
+            // Driving adapters (web) call the input port; the application
+            // service implements it. The application service depends only on
+            // output ports; driven adapters (JPA, RestClient) implement them.
+            msUsuarios = container "ms-usuarios" "Registration, authentication, and management of users and roles. Validates the end user's or administrator's credentials and confirms their role." "Spring Boot 4 (:8081)" {
+                tags "Microservice"
 
-                // --- Componentes internos ---------------------------------
-                usuarioController = component "UsuarioController" "Expone los endpoints de registro, login y gestión de usuarios y roles." "Spring MVC @RestController"
-                usuarioService = component "UsuarioService" "Valida las credenciales (usuario/contraseña) y gestiona el ciclo de vida de usuarios y roles." "Spring @Service"
-                usuarioRepository = component "UsuarioRepository" "Acceso a la tabla de usuarios y roles." "Spring Data JPA"
-                manejadorErroresUsuarios = component "ManejadorDeErrores" "Traduce credenciales inválidas y conflictos (usuario ya registrado) a códigos HTTP." "@RestControllerAdvice"
+                // --- Driving adapter (web) --------------------------------
+                userController = component "UserController" "Exposes the registration, login, and user/role management endpoints; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                    tags "Adapter-In"
+                }
+                errorHandlerUser = component "ErrorHandler" "Translates invalid credentials and conflicts (user already registered) into HTTP status codes." "@RestControllerAdvice" {
+                    tags "Adapter-In"
+                }
+
+                // --- Domain: input port + application ---------------------
+                userUseCase = component "UserUseCase" "Input port: registration, authentication, and role management operations, with no dependency on Spring MVC or JPA." "Java interface" {
+                    tags "Port"
+                }
+                userService = component "UserService" "Implements the input port: validates credentials and manages the user and role lifecycle." "Spring @Service" {
+                    tags "Application"
+                }
+
+                // --- Domain: output port -----------------------------------
+                userRepositoryPort = component "UserRepositoryPort" "Output port: persistence operations over users and roles that the application core needs." "Java interface" {
+                    tags "Port"
+                }
+
+                // --- Driven adapter (persistence) --------------------------
+                userRepositoryAdapter = component "UserRepositoryAdapter" "Implements the output port against the users and roles table." "Spring Data JPA" {
+                    tags "Adapter-Out"
+                }
             }
 
-            msCanchas = container "ms-canchas" "Catálogo de canchas y deportes, horarios de atención y bloqueos por mantenimiento." "Spring Boot 4 (:8082)" {
-                tags "Microservicio"
+            msCanchas = container "ms-canchas" "Catalog of courts and sports, opening hours, and maintenance blocks." "Spring Boot 4 (:8082)" {
+                tags "Microservice"
 
-                // --- Componentes internos ---------------------------------
-                canchaController = component "CanchaController" "Expone los endpoints del catálogo de canchas, horarios de atención y bloqueos por mantenimiento." "Spring MVC @RestController"
-                canchaService = component "CanchaService" "Aplica las reglas del catálogo: activación de canchas, validación de horarios y bloqueos." "Spring @Service"
-                canchaRepository = component "CanchaRepository" "Acceso a canchas, horarios y bloqueos." "Spring Data JPA"
-                manejadorErroresCanchas = component "ManejadorDeErrores" "Traduce canchas inexistentes o inactivas a códigos HTTP." "@RestControllerAdvice"
+                // --- Driving adapter (web) --------------------------------
+                courtController = component "CourtController" "Exposes the endpoints for the court catalog, opening hours, and maintenance blocks; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                    tags "Adapter-In"
+                }
+                errorHandlerCourt = component "ErrorHandler" "Translates non-existent or inactive courts into HTTP status codes." "@RestControllerAdvice" {
+                    tags "Adapter-In"
+                }
+
+                // --- Domain: input port + application ---------------------
+                courtUseCase = component "CourtUseCase" "Input port: catalog, schedule, and maintenance-block operations, with no dependency on Spring MVC or JPA." "Java interface" {
+                    tags "Port"
+                }
+                courtService = component "CourtService" "Implements the input port: applies the catalog rules (court activation, schedule and block validation)." "Spring @Service" {
+                    tags "Application"
+                }
+
+                // --- Domain: output port -----------------------------------
+                courtRepositoryPort = component "CourtRepositoryPort" "Output port: persistence operations over courts, schedules, and blocks that the application core needs." "Java interface" {
+                    tags "Port"
+                }
+
+                // --- Driven adapter (persistence) --------------------------
+                courtRepositoryAdapter = component "CourtRepositoryAdapter" "Implements the output port against the courts, schedules, and blocks tables." "Spring Data JPA" {
+                    tags "Adapter-Out"
+                }
             }
 
-            msReservas = container "ms-reservas" "Creación, consulta y cancelación de reservas. Concentra las reglas de negocio RN-01 a RN-08." "Spring Boot 4 (:8083)" {
-                tags "Microservicio"
+            msReservas = container "ms-reservas" "Creation, lookup, and cancellation of bookings. Concentrates business rules RN-01 through RN-08." "Spring Boot 4 (:8083)" {
+                tags "Microservice"
 
-                // --- Componentes internos ---------------------------------
-                // Nota: reservas y disponibilidad viven en un único controller
-                // y un único service en el código (ReservaController /
-                // ReservaService); no existen clases Disponibilidad* separadas.
-                reservaController = component "ReservaController" "Expone los endpoints REST de reservas y disponibilidad, y traduce las violaciones de reglas de negocio a códigos HTTP (409 ante solapamiento)." "Spring MVC @RestController"
-                reservaService = component "ReservaService" "Aplica las reglas de negocio: calcula la disponibilidad, límite de reservas activas (RN-06), cancelación solo de reservas futuras (RN-04) y permisos por rol (RN-03)." "Spring @Service"
-                canchaClient = component "CanchaClient" "Consulta a ms-canchas que la cancha exista, esté activa y que el bloque caiga dentro de su horario de atención." "Spring RestClient"
-                reservaRepository = component "ReservaRepository" "Acceso a la tabla reservas. La restricción EXCLUDE de PostgreSQL garantiza el no solapamiento (RN-02) incluso ante peticiones concurrentes." "Spring Data JPA"
-                configuracionRepository = component "ConfiguracionRepository" "Lee los parámetros configurables, como el máximo de reservas activas simultáneas." "Spring Data JPA"
-                manejadorErroresReservas = component "ManejadorDeErrores" "Traduce las excepciones de negocio (solapamiento, permisos, reserva no encontrada) a códigos HTTP." "@RestControllerAdvice"
+                // --- Driving adapter (web) --------------------------------
+                bookingController = component "BookingController" "Exposes the REST endpoints for bookings and availability; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                    tags "Adapter-In"
+                }
+                errorHandlerBooking = component "ErrorHandler" "Translates business exceptions (overlap, permissions, booking not found) into HTTP status codes (409 on overlap)." "@RestControllerAdvice" {
+                    tags "Adapter-In"
+                }
+
+                // --- Domain: input port + application ---------------------
+                bookingUseCase = component "BookingUseCase" "Input port: create, look up, and cancel bookings; calculate availability. No dependency on Spring MVC or JPA." "Java interface" {
+                    tags "Port"
+                }
+                bookingService = component "BookingService" "Implements the input port: applies RN-01..RN-08 (availability, active-bookings limit RN-06, future-only cancellation RN-04, role-based permissions RN-03)." "Spring @Service" {
+                    tags "Application"
+                }
+
+                // --- Domain: output ports ------------------------------------
+                bookingRepositoryPort = component "BookingRepositoryPort" "Output port: persistence operations over bookings that the application core needs." "Java interface" {
+                    tags "Port"
+                }
+                configurationRepositoryPort = component "ConfigurationRepositoryPort" "Output port: reads configurable parameters, such as the maximum number of simultaneous active bookings." "Java interface" {
+                    tags "Port"
+                }
+                courtClientPort = component "CourtClientPort" "Output port: checks whether a court exists, is active, and its opening hours, without depending on how that check travels over the network." "Java interface" {
+                    tags "Port"
+                }
+
+                // --- Driven adapters ------------------------------------------
+                bookingRepositoryAdapter = component "BookingRepositoryAdapter" "Implements the booking-persistence output port. The PostgreSQL EXCLUDE constraint prevents overlap (RN-02)." "Spring Data JPA" {
+                    tags "Adapter-Out"
+                }
+                configurationRepositoryAdapter = component "ConfigurationRepositoryAdapter" "Implements the configuration-reading output port." "Spring Data JPA" {
+                    tags "Adapter-Out"
+                }
+                courtClientAdapter = component "CourtClientAdapter" "Implements the court-check output port by calling ms-canchas over REST." "Spring RestClient" {
+                    tags "Adapter-Out"
+                }
             }
 
-            msReportes = container "ms-reportes" "Genera los reportes de ocupación, reservas por período y cancelaciones. No tiene base de datos propia: agrega vía REST para respetar la independencia de datos entre microservicios." "Spring Boot 4 (:8084)" {
-                tags "Microservicio"
+            msReportes = container "ms-reportes" "Generates occupancy reports, bookings by period, and cancellations. Has no database of its own: aggregates via REST." "Spring Boot 4 (:8084)" {
+                tags "Microservice"
 
-                // --- Componentes internos ---------------------------------
-                reporteController = component "ReporteController" "Expone los endpoints de ocupación, reservas por período y cancelaciones." "Spring MVC @RestController"
-                reporteService = component "ReporteService" "Agrega y calcula las métricas de ocupación combinando reservas y catálogo." "Spring @Service"
-                clienteReservas = component "ReservasClient" "Consulta a ms-reservas las reservas del período." "Spring RestClient"
-                clienteCanchas = component "CanchasClient" "Consulta a ms-canchas el catálogo de canchas y sus horarios." "Spring RestClient"
-                manejadorErroresReportes = component "ManejadorDeErrores" "Traduce los fallos de los servicios origen (no disponible) a códigos HTTP." "@RestControllerAdvice"
+                // --- Driving adapter (web) --------------------------------
+                reportController = component "ReportController" "Exposes the occupancy, bookings-by-period, and cancellations endpoints; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                    tags "Adapter-In"
+                }
+                errorHandlerReport = component "ErrorHandler" "Translates failures from the source services (unavailable) into HTTP status codes." "@RestControllerAdvice" {
+                    tags "Adapter-In"
+                }
+
+                // --- Domain: input port + application ---------------------
+                reportUseCase = component "ReportUseCase" "Input port: occupancy, bookings-by-period, and cancellations operations. No dependency on Spring MVC or the REST clients." "Java interface" {
+                    tags "Port"
+                }
+                reportService = component "ReportService" "Implements the input port: aggregates and computes occupancy metrics by combining bookings and catalog data." "Spring @Service" {
+                    tags "Application"
+                }
+
+                // --- Domain: output ports ------------------------------------
+                bookingsClientPort = component "BookingsClientPort" "Output port: gets the period's bookings, without depending on how that call travels over the network." "Java interface" {
+                    tags "Port"
+                }
+                courtsClientPort = component "CourtsClientPort" "Output port: gets the court catalog and schedules, without depending on how that call travels over the network." "Java interface" {
+                    tags "Port"
+                }
+
+                // --- Driven adapters ------------------------------------------
+                bookingsClientAdapter = component "BookingsClientAdapter" "Implements the bookings output port by calling ms-reservas over REST." "Spring RestClient" {
+                    tags "Adapter-Out"
+                }
+                courtsClientAdapter = component "CourtsClientAdapter" "Implements the catalog output port by calling ms-canchas over REST." "Spring RestClient" {
+                    tags "Adapter-Out"
+                }
             }
 
-            // --- Persistencia ------------------------------------------------
-            usuariosDb = container "usuarios_db" "Usuarios, roles y credenciales." "PostgreSQL 16" {
-                tags "Base de Datos"
+            // --- Persistence ------------------------------------------------
+            usuariosDb = container "usuarios_db" "Users, roles, and credentials." "PostgreSQL 16" {
+                tags "Database"
             }
 
-            canchasDb = container "canchas_db" "Canchas, deportes, horarios de atención y bloqueos de mantenimiento." "PostgreSQL 16" {
-                tags "Base de Datos"
+            canchasDb = container "canchas_db" "Courts, sports, opening hours, and maintenance blocks." "PostgreSQL 16" {
+                tags "Database"
             }
 
-            reservasDb = container "reservas_db" "Reservas con su estado, más los parámetros configurables. Aloja la restricción de exclusión que implementa RN-02." "PostgreSQL 16" {
-                tags "Base de Datos"
+            reservasDb = container "reservas_db" "Bookings with their status, plus configurable parameters. Hosts the exclusion constraint that implements RN-02." "PostgreSQL 16" {
+                tags "Database"
             }
         }
 
         // ===================================================================
-        //  Relaciones — nivel de contexto
+        //  Relationships — context level
         // ===================================================================
-        usuarioFinal -> sistema "Consulta disponibilidad, reserva y cancela sus reservas"
-        administrador -> sistema "Gestiona canchas y reservas, y consulta reportes"
-
-        // ===================================================================
-        //  Relaciones — nivel de contenedores
-        // ===================================================================
-        usuarioFinal -> edge "Accede a la aplicación" "HTTP :80"
-        administrador -> edge "Accede a la aplicación" "HTTP :80"
-
-        edge -> shell "Sirve la aplicación contenedora" "HTTP"
-        edge -> mfReservas "Sirve /mf-reservas/" "HTTP"
-        edge -> mfAdministracion "Sirve /mf-administracion/" "HTTP"
-        edge -> mfReportes "Sirve /mf-reportes/" "HTTP"
-        edge -> gateway "Enruta /api/*" "HTTP"
-
-        shell -> mfReservas "Carga el remote en tiempo de ejecución" "Module Federation (remoteEntry.js)"
-        shell -> mfAdministracion "Carga el remote en tiempo de ejecución" "Module Federation (remoteEntry.js)"
-        shell -> mfReportes "Carga el remote en tiempo de ejecución" "Module Federation (remoteEntry.js)"
-
-        shell -> edge "Autentica al usuario" "JSON/HTTPS · /api/auth"
-        mfReservas -> edge "Consulta disponibilidad y gestiona reservas" "JSON/HTTPS · /api"
-        mfAdministracion -> edge "Gestiona canchas y reservas" "JSON/HTTPS · /api"
-        mfReportes -> edge "Solicita los reportes" "JSON/HTTPS · /api"
-
-        gateway -> msUsuarios "Enruta /api/auth y /api/usuarios" "JSON/HTTP"
-        gateway -> msCanchas "Enruta /api/canchas" "JSON/HTTP"
-        gateway -> msReservas "Enruta /api/reservas y /api/disponibilidad" "JSON/HTTP"
-        gateway -> msReportes "Enruta /api/reportes" "JSON/HTTP"
-
-        msReservas -> msCanchas "Valida que la cancha exista, esté activa y el bloque esté dentro de su horario" "JSON/HTTP (síncrono)"
-        msReportes -> msReservas "Obtiene las reservas del período" "JSON/HTTP (síncrono)"
-        msReportes -> msCanchas "Obtiene el catálogo de canchas y sus horarios" "JSON/HTTP (síncrono)"
-
-        msUsuarios -> usuariosDb "Lee y escribe" "JDBC"
-        msCanchas -> canchasDb "Lee y escribe" "JDBC"
-        msReservas -> reservasDb "Lee y escribe" "JDBC"
+        usuarioFinal -> sistema "Checks availability, books, and cancels their bookings"
+        administrador -> sistema "Manages courts and bookings, and views reports"
 
         // ===================================================================
-        //  Relaciones — nivel de componentes (ms-reservas)
+        //  Relationships — container level
         // ===================================================================
-        gateway -> reservaController "Enruta /api/reservas y /api/disponibilidad" "JSON/HTTP"
+        usuarioFinal -> edge "Accesses the application" "HTTP :80"
+        administrador -> edge "Accesses the application" "HTTP :80"
 
-        reservaController -> reservaService "Invoca"
-        reservaController -> manejadorErroresReservas "Excepciones no controladas"
+        edge -> shell "Serves the container application" "HTTP"
+        edge -> mfReservas "Serves /mf-reservas/" "HTTP"
+        edge -> mfAdministracion "Serves /mf-administracion/" "HTTP"
+        edge -> mfReportes "Serves /mf-reportes/" "HTTP"
+        edge -> gateway "Routes /api/*" "HTTP"
 
-        reservaService -> canchaClient "Valida la cancha y obtiene su horario de atención"
-        reservaService -> reservaRepository "Persiste, consulta y calcula disponibilidad sobre las reservas"
-        reservaService -> configuracionRepository "Lee el máximo de reservas activas (RN-06)"
+        shell -> mfReservas "Loads the remote at runtime" "Module Federation (remoteEntry.js)"
+        shell -> mfAdministracion "Loads the remote at runtime" "Module Federation (remoteEntry.js)"
+        shell -> mfReportes "Loads the remote at runtime" "Module Federation (remoteEntry.js)"
 
-        canchaClient -> msCanchas "Consulta el catálogo" "JSON/HTTP"
-        reservaRepository -> reservasDb "Lee y escribe" "JDBC"
-        configuracionRepository -> reservasDb "Lee" "JDBC"
+        shell -> edge "Authenticates the user" "JSON/HTTPS · /api/auth"
+        mfReservas -> edge "Checks availability and manages bookings" "JSON/HTTPS · /api"
+        mfAdministracion -> edge "Manages courts and bookings" "JSON/HTTPS · /api"
+        mfReportes -> edge "Requests the reports" "JSON/HTTPS · /api"
 
-        // ===================================================================
-        //  Relaciones — nivel de componentes (ms-usuarios)
-        // ===================================================================
-        gateway -> usuarioController "Enruta /api/auth y /api/usuarios" "JSON/HTTP"
+        gateway -> msUsuarios "Routes /api/auth and /api/usuarios" "JSON/HTTP"
+        gateway -> msCanchas "Routes /api/canchas" "JSON/HTTP"
+        gateway -> msReservas "Routes /api/reservas and /api/disponibilidad" "JSON/HTTP"
+        gateway -> msReportes "Routes /api/reportes" "JSON/HTTP"
 
-        usuarioController -> usuarioService "Invoca"
-        usuarioController -> manejadorErroresUsuarios "Excepciones no controladas"
+        msReservas -> msCanchas "Checks that the court exists, is active, and the block is within its schedule" "JSON/HTTP (synchronous)"
+        msReportes -> msReservas "Gets the period's bookings" "JSON/HTTP (synchronous)"
+        msReportes -> msCanchas "Gets the court catalog and schedules" "JSON/HTTP (synchronous)"
 
-        usuarioService -> usuarioRepository "Persiste y consulta usuarios y roles"
-
-        usuarioRepository -> usuariosDb "Lee y escribe" "JDBC"
-
-        // ===================================================================
-        //  Relaciones — nivel de componentes (ms-canchas)
-        // ===================================================================
-        gateway -> canchaController "Enruta /api/canchas" "JSON/HTTP"
-
-        canchaController -> canchaService "Invoca"
-        canchaController -> manejadorErroresCanchas "Excepciones no controladas"
-
-        canchaService -> canchaRepository "Persiste y consulta el catálogo"
-
-        canchaRepository -> canchasDb "Lee y escribe" "JDBC"
+        msUsuarios -> usuariosDb "Reads and writes" "JDBC"
+        msCanchas -> canchasDb "Reads and writes" "JDBC"
+        msReservas -> reservasDb "Reads and writes" "JDBC"
 
         // ===================================================================
-        //  Relaciones — nivel de componentes (ms-reportes)
+        //  Relationships — component level (ms-reservas, hexagonal)
         // ===================================================================
-        gateway -> reporteController "Enruta /api/reportes" "JSON/HTTP"
+        gateway -> bookingController "Routes /api/reservas and /api/disponibilidad" "JSON/HTTP"
 
-        reporteController -> reporteService "Invoca"
-        reporteController -> manejadorErroresReportes "Excepciones no controladas"
+        bookingController -> bookingUseCase "Invokes"
+        bookingController -> errorHandlerBooking "Unhandled exceptions"
+        bookingService -> bookingUseCase "Implements"
 
-        reporteService -> clienteReservas "Obtiene las reservas del período"
-        reporteService -> clienteCanchas "Obtiene el catálogo de canchas y sus horarios"
+        bookingService -> courtClientPort "Checks the court and gets its opening hours"
+        bookingService -> bookingRepositoryPort "Persists, queries, and calculates availability over bookings"
+        bookingService -> configurationRepositoryPort "Reads the maximum active bookings (RN-06)"
 
-        clienteReservas -> msReservas "Obtiene las reservas del período" "JSON/HTTP (síncrono)"
-        clienteCanchas -> msCanchas "Obtiene el catálogo de canchas y sus horarios" "JSON/HTTP (síncrono)"
+        courtClientAdapter -> courtClientPort "Implements"
+        bookingRepositoryAdapter -> bookingRepositoryPort "Implements"
+        configurationRepositoryAdapter -> configurationRepositoryPort "Implements"
 
-        // ===================================================================
-        //  Relaciones — nivel de componentes (Gateway)
-        // ===================================================================
-        edge -> autenticacionFilter "Enruta /api/*" "HTTP"
-
-        autenticacionFilter -> routeConfig "Identidad propagada, continúa el enrutamiento"
-        autenticacionFilter -> manejadorErroresGateway "Identidad ausente o inválida"
-
-        routeConfig -> msUsuarios "Enruta /api/auth y /api/usuarios" "JSON/HTTP"
-        routeConfig -> msCanchas "Enruta /api/canchas" "JSON/HTTP"
-        routeConfig -> msReservas "Enruta /api/reservas y /api/disponibilidad" "JSON/HTTP"
-        routeConfig -> msReportes "Enruta /api/reportes" "JSON/HTTP"
-        routeConfig -> manejadorErroresGateway "Servicio destino no disponible"
+        courtClientAdapter -> msCanchas "Queries the catalog" "JSON/HTTP"
+        bookingRepositoryAdapter -> reservasDb "Reads and writes" "JDBC"
+        configurationRepositoryAdapter -> reservasDb "Reads" "JDBC"
 
         // ===================================================================
-        //  Relaciones — nivel de componentes (Shell)
+        //  Relationships — component level (ms-usuarios, hexagonal)
         // ===================================================================
-        routerShell -> sesionContext "Consulta si hay sesión activa antes de resolver la ruta"
-        routerShell -> layoutShell "Renderiza dentro de"
-        layoutShell -> remoteLoader "Monta el remote correspondiente a la ruta activa"
+        gateway -> userController "Routes /api/auth and /api/usuarios" "JSON/HTTP"
 
-        sesionContext -> edge "Autentica al usuario" "JSON/HTTPS · /api/auth"
-        remoteLoader -> mfReservas "Carga el remote en tiempo de ejecución" "Module Federation (remoteEntry.js)"
-        remoteLoader -> mfAdministracion "Carga el remote en tiempo de ejecución" "Module Federation (remoteEntry.js)"
-        remoteLoader -> mfReportes "Carga el remote en tiempo de ejecución" "Module Federation (remoteEntry.js)"
+        userController -> userUseCase "Invokes"
+        userController -> errorHandlerUser "Unhandled exceptions"
+        userService -> userUseCase "Implements"
 
-        // ===================================================================
-        //  Relaciones — nivel de componentes (mf-reservas)
-        // ===================================================================
-        vistasReservas -> componentesReservas "Compone la pantalla con"
-        vistasReservas -> estadoReservas "Lee y actualiza"
-        vistasReservas -> apiClientReservas "Solicita datos"
-        apiClientReservas -> edge "Consulta disponibilidad y gestiona reservas" "JSON/HTTPS · /api"
+        userService -> userRepositoryPort "Persists and queries users and roles"
+        userRepositoryAdapter -> userRepositoryPort "Implements"
+
+        userRepositoryAdapter -> usuariosDb "Reads and writes" "JDBC"
 
         // ===================================================================
-        //  Relaciones — nivel de componentes (mf-administracion)
+        //  Relationships — component level (ms-canchas, hexagonal)
         // ===================================================================
-        vistasAdministracion -> componentesAdministracion "Compone la pantalla con"
-        vistasAdministracion -> estadoAdministracion "Lee y actualiza"
-        vistasAdministracion -> apiClientAdministracion "Solicita datos"
-        apiClientAdministracion -> edge "Gestiona canchas y reservas" "JSON/HTTPS · /api"
+        gateway -> courtController "Routes /api/canchas" "JSON/HTTP"
+
+        courtController -> courtUseCase "Invokes"
+        courtController -> errorHandlerCourt "Unhandled exceptions"
+        courtService -> courtUseCase "Implements"
+
+        courtService -> courtRepositoryPort "Persists and queries the catalog"
+        courtRepositoryAdapter -> courtRepositoryPort "Implements"
+
+        courtRepositoryAdapter -> canchasDb "Reads and writes" "JDBC"
 
         // ===================================================================
-        //  Relaciones — nivel de componentes (mf-reportes)
+        //  Relationships — component level (ms-reportes, hexagonal)
         // ===================================================================
-        vistasReportes -> componentesReportes "Compone la pantalla con"
-        vistasReportes -> estadoReportes "Lee y actualiza"
-        vistasReportes -> apiClientReportes "Solicita datos"
-        apiClientReportes -> edge "Solicita los reportes" "JSON/HTTPS · /api"
+        gateway -> reportController "Routes /api/reportes" "JSON/HTTP"
+
+        reportController -> reportUseCase "Invokes"
+        reportController -> errorHandlerReport "Unhandled exceptions"
+        reportService -> reportUseCase "Implements"
+
+        reportService -> bookingsClientPort "Gets the period's bookings"
+        reportService -> courtsClientPort "Gets the court catalog and schedules"
+
+        bookingsClientAdapter -> bookingsClientPort "Implements"
+        courtsClientAdapter -> courtsClientPort "Implements"
+
+        bookingsClientAdapter -> msReservas "Gets the period's bookings" "JSON/HTTP (synchronous)"
+        courtsClientAdapter -> msCanchas "Gets the court catalog and schedules" "JSON/HTTP (synchronous)"
 
         // ===================================================================
-        //  Despliegue — Docker Compose
+        //  Relationships — component level (Gateway)
+        // ===================================================================
+        edge -> authenticationFilter "Routes /api/*" "HTTP"
+
+        authenticationFilter -> routeConfig "Identity propagated, routing continues"
+        authenticationFilter -> errorHandlerGateway "Missing or invalid identity"
+
+        routeConfig -> msUsuarios "Routes /api/auth and /api/usuarios" "JSON/HTTP"
+        routeConfig -> msCanchas "Routes /api/canchas" "JSON/HTTP"
+        routeConfig -> msReservas "Routes /api/reservas and /api/disponibilidad" "JSON/HTTP"
+        routeConfig -> msReportes "Routes /api/reportes" "JSON/HTTP"
+        routeConfig -> errorHandlerGateway "Target service unavailable"
+
+        // ===================================================================
+        //  Relationships — component level (Shell)
+        // ===================================================================
+        routerShell -> sessionContext "Checks whether there is an active session before resolving the route"
+        routerShell -> layoutShell "Renders within"
+        layoutShell -> remoteLoader "Mounts the remote for the active route"
+
+        sessionContext -> edge "Authenticates the user" "JSON/HTTPS · /api/auth"
+        remoteLoader -> mfReservas "Loads the remote at runtime" "Module Federation (remoteEntry.js)"
+        remoteLoader -> mfAdministracion "Loads the remote at runtime" "Module Federation (remoteEntry.js)"
+        remoteLoader -> mfReportes "Loads the remote at runtime" "Module Federation (remoteEntry.js)"
+
+        // ===================================================================
+        //  Relationships — component level (mf-reservas)
+        // ===================================================================
+        viewsReservas -> uiComponentsReservas "Composes the screen with"
+        viewsReservas -> stateReservas "Reads and updates"
+        viewsReservas -> apiClientReservas "Requests data"
+        apiClientReservas -> edge "Checks availability and manages bookings" "JSON/HTTPS · /api"
+
+        // ===================================================================
+        //  Relationships — component level (mf-administracion)
+        // ===================================================================
+        viewsAdministracion -> uiComponentsAdministracion "Composes the screen with"
+        viewsAdministracion -> stateAdministracion "Reads and updates"
+        viewsAdministracion -> apiClientAdministracion "Requests data"
+        apiClientAdministracion -> edge "Manages courts and bookings" "JSON/HTTPS · /api"
+
+        // ===================================================================
+        //  Relationships — component level (mf-reportes)
+        // ===================================================================
+        viewsReportes -> uiComponentsReportes "Composes the screen with"
+        viewsReportes -> stateReportes "Reads and updates"
+        viewsReportes -> apiClientReportes "Requests data"
+        apiClientReportes -> edge "Requests the reports" "JSON/HTTPS · /api"
+
+        // ===================================================================
+        //  Deployment — Docker Compose
         // ===================================================================
         deploymentEnvironment "Local (Docker Compose)" {
 
-            equipo = deploymentNode "Equipo del desarrollador" "Entorno de evaluación del proyecto." "macOS / Linux / Windows" {
+            equipo = deploymentNode "Developer's machine" "Project evaluation environment." "macOS / Linux / Windows" {
 
-                docker = deploymentNode "Docker Engine" "Orquestado con Docker Compose v2." "Docker 24+" {
+                docker = deploymentNode "Docker Engine" "Orchestrated with Docker Compose v2." "Docker 24+" {
 
-                    redFrontend = deploymentNode "Red: frontend" "Red bridge que aísla los contenedores de presentación." "docker network (bridge)" {
+                    redFrontend = deploymentNode "Network: frontend" "Bridge network that isolates the presentation containers." "docker network (bridge)" {
 
-                        nodoEdge = deploymentNode "rc-edge" "Único contenedor conectado a ambas redes." "nginx:1.27-alpine · puerto 80" {
+                        nodoEdge = deploymentNode "rc-edge" "Only container connected to both networks." "nginx:1.27-alpine · port 80" {
                             containerInstance edge
                         }
 
-                        deploymentNode "rc-shell" "" "nginx:1.27-alpine · puerto 3000" {
+                        deploymentNode "rc-shell" "" "nginx:1.27-alpine · port 3000" {
                             containerInstance shell
                         }
-                        deploymentNode "rc-mf-reservas" "" "nginx:1.27-alpine · puerto 3001" {
+                        deploymentNode "rc-mf-reservas" "" "nginx:1.27-alpine · port 3001" {
                             containerInstance mfReservas
                         }
-                        deploymentNode "rc-mf-administracion" "" "nginx:1.27-alpine · puerto 3002" {
+                        deploymentNode "rc-mf-administracion" "" "nginx:1.27-alpine · port 3002" {
                             containerInstance mfAdministracion
                         }
-                        deploymentNode "rc-mf-reportes" "" "nginx:1.27-alpine · puerto 3003" {
+                        deploymentNode "rc-mf-reportes" "" "nginx:1.27-alpine · port 3003" {
                             containerInstance mfReportes
                         }
                     }
 
-                    redBackend = deploymentNode "Red: backend" "Red bridge que aísla la API y la persistencia." "docker network (bridge)" {
+                    redBackend = deploymentNode "Network: backend" "Bridge network that isolates the API and persistence." "docker network (bridge)" {
 
-                        deploymentNode "rc-gateway" "" "eclipse-temurin:21-jre · puerto 8080" {
+                        deploymentNode "rc-gateway" "" "eclipse-temurin:21-jre · port 8080" {
                             containerInstance gateway
                         }
-                        deploymentNode "rc-ms-usuarios" "" "eclipse-temurin:21-jre · puerto 8081" {
+                        deploymentNode "rc-ms-usuarios" "" "eclipse-temurin:21-jre · port 8081" {
                             containerInstance msUsuarios
                         }
-                        deploymentNode "rc-ms-canchas" "" "eclipse-temurin:21-jre · puerto 8082" {
+                        deploymentNode "rc-ms-canchas" "" "eclipse-temurin:21-jre · port 8082" {
                             containerInstance msCanchas
                         }
-                        deploymentNode "rc-ms-reservas" "" "eclipse-temurin:21-jre · puerto 8083" {
+                        deploymentNode "rc-ms-reservas" "" "eclipse-temurin:21-jre · port 8083" {
                             containerInstance msReservas
                         }
-                        deploymentNode "rc-ms-reportes" "" "eclipse-temurin:21-jre · puerto 8084" {
+                        deploymentNode "rc-ms-reportes" "" "eclipse-temurin:21-jre · port 8084" {
                             containerInstance msReportes
                         }
 
-                        nodoPostgres = deploymentNode "rc-postgres" "Una sola instancia con tres bases independientes. Cada microservicio recibe credenciales que solo le permiten conectarse a la suya: el aislamiento lo impone el motor, no una convención." "postgres:16-alpine · puerto 5432" {
+                        nodoPostgres = deploymentNode "rc-postgres" "Single instance with three independent databases. Each microservice has credentials that only allow it to connect to its own database." "postgres:16-alpine · port 5432" {
                             deploymentNode "usuarios_db" "" "PostgreSQL database" {
                                 containerInstance usuariosDb
                             }
@@ -349,87 +461,87 @@ workspace "Sistema de Reserva de Canchas Deportivas" "Arquitectura de microfront
                             }
                         }
 
-                        volumen = infrastructureNode "Volumen pgdata" "Volumen Docker con los datos de PostgreSQL. Los scripts de infra/postgres/init se ejecutan solo cuando está vacío." "docker volume" {
-                            tags "Infraestructura"
+                        volumen = infrastructureNode "pgdata volume" "Docker volume with the PostgreSQL data. The infra/postgres/init scripts run only when it is empty." "docker volume" {
+                            tags "Infrastructure"
                         }
                     }
 
-                    // Las relaciones entre contenedores se replican solas entre
-                    // sus instancias; aquí solo hace falta declarar la que
-                    // involucra al nodo de infraestructura.
-                    nodoPostgres -> volumen "Persiste los datos en" "sistema de archivos"
+                    // Relationships between containers replicate automatically
+                    // between their instances; here we only need to declare
+                    // the one involving the infrastructure node.
+                    nodoPostgres -> volumen "Persists data to" "file system"
                 }
             }
         }
     }
 
     // =======================================================================
-    //  Vistas
+    //  Views
     // =======================================================================
     views {
 
-        // NOTA SOBRE EL LAYOUT
-        // Ninguna vista lleva `autoLayout`: una vista con layout automático se
-        // ordena sola, pero Structurizr bloquea el arrastre de sus elementos.
-        // Las posiciones iniciales de las cuatro vistas están guardadas en
-        // workspace.json, así que abren ordenadas y se pueden mover a mano; al
-        // arrastrar aparece el botón de guardar y las nuevas posiciones se
-        // escriben en ese mismo archivo.
+        // LAYOUT NOTE
+        // No view uses `autoLayout`: a view with automatic layout arranges
+        // itself, but Structurizr then blocks dragging its elements. The
+        // starting positions of all twelve views are saved in
+        // workspace.json, so they open already arranged and can be moved by
+        // hand; dragging shows a save button, and the new positions are
+        // written to that same file.
         //
-        // Conviene versionar workspace.json junto a este .dsl: es lo que
-        // conserva el layout. Si se añade `autoLayout` a una vista y luego se
-        // quita, hay que borrar también la clave "automaticLayout" que quedó
-        // escrita en workspace.json, o el visor la seguirá aplicando.
+        // workspace.json should be versioned alongside this .dsl file: it is
+        // what keeps the layout. If `autoLayout` is added to a view and then
+        // removed, the "automaticLayout" key left behind in workspace.json
+        // must also be deleted, or the viewer will keep applying it.
 
-        systemContext sistema "01-Contexto" "Nivel 1 — El sistema y sus usuarios." {
+        systemContext sistema "01-Contexto" "Level 1 — The system and its users." {
             include *
         }
 
-        container sistema "02-Contenedores" "Nivel 2 — Microfrontends, gateway, microservicios y bases de datos." {
+        container sistema "02-Contenedores" "Level 2 — Microfrontends, gateway, microservices, and databases." {
             include *
         }
 
-        component msReservas "03-Componentes-ms-reservas" "Nivel 3 — Interior de ms-reservas, donde se aplican las reglas de negocio." {
+        component msReservas "03-Componentes-ms-reservas" "Level 3 — Interior of ms-reservas (hexagonal architecture), where the business rules are applied." {
             include *
         }
 
-        deployment sistema "Local (Docker Compose)" "04-Despliegue" "Materialización del sistema en contenedores Docker." {
+        deployment sistema "Local (Docker Compose)" "04-Despliegue" "Materialization of the system in Docker containers." {
             include *
         }
 
-        component msUsuarios "05-Componentes-ms-usuarios" "Nivel 3 — Interior de ms-usuarios: registro y autenticación básica con roles." {
+        component msUsuarios "05-Componentes-ms-usuarios" "Level 3 — Interior of ms-usuarios (hexagonal architecture): registration and basic role-based authentication." {
             include *
         }
 
-        component msCanchas "06-Componentes-ms-canchas" "Nivel 3 — Interior de ms-canchas: catálogo, horarios y bloqueos." {
+        component msCanchas "06-Componentes-ms-canchas" "Level 3 — Interior of ms-canchas (hexagonal architecture): catalog, schedules, and blocks." {
             include *
         }
 
-        component msReportes "07-Componentes-ms-reportes" "Nivel 3 — Interior de ms-reportes: agregación vía REST sin base propia." {
+        component msReportes "07-Componentes-ms-reportes" "Level 3 — Interior of ms-reportes (hexagonal architecture): REST aggregation, no database of its own." {
             include *
         }
 
-        component gateway "08-Componentes-gateway" "Nivel 3 — Interior del API Gateway: identificación del usuario y enrutamiento." {
+        component gateway "08-Componentes-gateway" "Level 3 — Interior of the API Gateway: user identification and routing." {
             include *
         }
 
-        component shell "09-Componentes-shell" "Nivel 3 — Interior del shell: layout, sesión y carga de remotes." {
+        component shell "09-Componentes-shell" "Level 3 — Interior of the shell: layout, session, and remote loading." {
             include *
         }
 
-        component mfReservas "10-Componentes-mf-reservas" "Nivel 3 — Interior de mf-reservas." {
+        component mfReservas "10-Componentes-mf-reservas" "Level 3 — Interior of mf-reservas." {
             include *
         }
 
-        component mfAdministracion "11-Componentes-mf-administracion" "Nivel 3 — Interior de mf-administracion." {
+        component mfAdministracion "11-Componentes-mf-administracion" "Level 3 — Interior of mf-administracion." {
             include *
         }
 
-        component mfReportes "12-Componentes-mf-reportes" "Nivel 3 — Interior de mf-reportes." {
+        component mfReportes "12-Componentes-mf-reportes" "Level 3 — Interior of mf-reportes." {
             include *
         }
 
-        // --- Estilos --------------------------------------------------------
+        // --- Styles --------------------------------------------------------
         styles {
             element "Person" {
                 shape Person
@@ -464,19 +576,41 @@ workspace "Sistema de Reserva de Canchas Deportivas" "Arquitectura de microfront
                 shape Hexagon
             }
 
-            element "Microservicio" {
+            element "Microservice" {
                 background #2e8b57
                 color #ffffff
                 shape RoundedBox
             }
 
-            element "Base de Datos" {
+            // --- Hexagonal architecture (ports & adapters) ------------------
+            element "Adapter-In" {
+                background #4a7ebb
+                color #ffffff
+            }
+
+            element "Port" {
+                background #e8a33d
+                color #000000
+                shape Hexagon
+            }
+
+            element "Application" {
+                background #2e8b57
+                color #ffffff
+            }
+
+            element "Adapter-Out" {
+                background #8e5b3f
+                color #ffffff
+            }
+
+            element "Database" {
                 background #7a5195
                 color #ffffff
                 shape Cylinder
             }
 
-            element "Infraestructura" {
+            element "Infrastructure" {
                 background #6c757d
                 color #ffffff
                 shape Pipe

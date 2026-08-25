@@ -7,3 +7,6 @@ structurizr-lite.war
 structurizr-cli/
 
 # workspace.json NO se ignora: guarda el layout de los diagramas.
+
+# macOS
+.DS_Store
