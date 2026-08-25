@@ -1,7 +1,7 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Versión: (plantilla sin ratificar) → 1.0.0 → 1.1.0
+Versión: (plantilla sin ratificar) → 1.0.0 → 1.1.0 → 1.1.1
 Tipo de cambio: MAJOR — ratificación inicial (1.0.0). La plantilla no tenía ningún
 principio definido; esa versión estableció los siete principios rectores y la
 estructura de gobierno del proyecto integrador.
@@ -10,6 +10,9 @@ de exigir genéricamente "datos de prueba cargados" a fijar el contenido mínimo
 verificable del seed, incluidas reservas de ejemplo en los tres estados de RN-08.
 Es MINOR y no PATCH porque añade una obligación nueva y verificable sobre E4:
 una feature puede ahora fallar la compuerta 7 por un seed que no puebla reportes.
+Enmienda 1.1.1 (PATCH): se resuelve TODO(RUTA_TEMPLATE). Sin cambio normativo —
+la constitución ya usaba la ruta real; se cierra la nota tras corregir el
+documento referenciado.
 
 Principios definidos (ninguno renombrado; no había versión previa):
   - I. Alcance Cerrado y Trazable
@@ -34,15 +37,14 @@ de acceso cruzado a bases de datos (§4.3), Edge nginx de origen único, aislami
 de bases por credenciales, ms-reportes sin base propia, RN-02 sostenida por
 restricción EXCLUDE de PostgreSQL, Flyway con ddl-auto: validate.
 
-TODO resueltos en 1.1.0:
-  - TODO(SEED_DATA_ALCANCE) → resuelto: el seed incluye usuarios, catálogo de
-    canchas y reservas de ejemplo. Decisión del equipo, 2026-08-24.
+TODO resueltos:
+  - TODO(SEED_DATA_ALCANCE) → resuelto en 1.1.0: el seed incluye usuarios,
+    catálogo de canchas y reservas de ejemplo. Decisión del equipo, 2026-08-24.
+  - TODO(RUTA_TEMPLATE) → resuelto en 1.1.1: `template-backend/ARQUITECTURA.md`
+    referenciaba el template como `backend/microservice-template/`; corregido a
+    `template-backend/microservice-template/`, que es donde vive.
 
-TODO pendientes:
-  - TODO(RUTA_TEMPLATE): `template-backend/ARQUITECTURA.md` referencia el
-    template como `backend/microservice-template/`, pero en el repositorio vive
-    en `template-backend/microservice-template/`. Esta constitución usa la ruta
-    real; corregir la referencia en ARQUITECTURA.md fuera de este flujo.
+TODO pendientes: ninguno.
 -->
 
 # Constitución del Sistema de Reserva de Canchas Deportivas
@@ -544,4 +546,4 @@ atienden antes de entregar.
 (qué componentes existen y cómo se relacionan). Esta constitución dice por qué, y
 qué no se negocia.
 
-**Version**: 1.1.0 | **Ratified**: 2026-08-24 | **Last Amended**: 2026-08-24
+**Version**: 1.1.1 | **Ratified**: 2026-08-24 | **Last Amended**: 2026-08-24
