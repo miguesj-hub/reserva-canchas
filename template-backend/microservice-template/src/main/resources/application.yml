@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: microservice-template
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/template_db}
+    username: ${SPRING_DATASOURCE_USERNAME:template_app}
+    password: ${SPRING_DATASOURCE_PASSWORD:template_pass}
+
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:validate}
+    open-in-view: false
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+app:
+  clients:
+    # Example: URL of another microservice this one calls over HTTP.
+    # In Docker: http://<service-name>:8080 (service name + internal port).
+    other-service-url: ${APP_CLIENTS_OTHER_SERVICE_URL:http://localhost:18085}
