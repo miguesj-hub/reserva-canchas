@@ -3,7 +3,7 @@
   "description" : "Arquitectura de microfrontends y microservicios para la reserva de canchas de pádel, tenis y básquet.",
   "documentation" : { },
   "id" : 1,
-  "lastModifiedDate" : "2026-08-20T05:16:01Z",
+  "lastModifiedDate" : "2026-08-24T03:04:53Z",
   "model" : {
     "deploymentNodes" : [ {
       "children" : [ {
@@ -16,7 +16,7 @@
               "id" : "138",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "16f67113-38cc-4c40-a5d6-7c83f6a2dfd6"
+                "structurizr.dsl.identifier" : "e8310498-5b89-45f7-b751-8dd0276a4edb"
               },
               "relationships" : [ {
                 "description" : "Sirve la aplicación contenedora",
@@ -74,7 +74,7 @@
               "id" : "140",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "ed18c602-b484-4e76-8b21-1b52a9d9af9e"
+                "structurizr.dsl.identifier" : "ac7ce055-3546-4eda-bed7-7dee7039377d"
               },
               "relationships" : [ {
                 "description" : "Autentica al usuario",
@@ -112,7 +112,7 @@
             "instances" : "1",
             "name" : "rc-shell",
             "properties" : {
-              "structurizr.dsl.identifier" : "50f1d26a-bb98-4ba9-b7f9-31e924af8daa"
+              "structurizr.dsl.identifier" : "f17201e4-77bd-40fa-8543-756065c40864"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "nginx:1.27-alpine · puerto 3000"
@@ -124,7 +124,7 @@
               "id" : "144",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "f9b4ed95-b836-4369-bbfb-16458dc874c0"
+                "structurizr.dsl.identifier" : "aa0e4ec7-8190-43bf-8bb6-da3cae43ae48"
               },
               "relationships" : [ {
                 "description" : "Consulta disponibilidad y gestiona reservas",
@@ -141,7 +141,7 @@
             "instances" : "1",
             "name" : "rc-mf-reservas",
             "properties" : {
-              "structurizr.dsl.identifier" : "233e2c27-e5c9-4110-8981-074c572a225c"
+              "structurizr.dsl.identifier" : "e2bba4ca-1c4b-40d6-a054-07b000039db0"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "nginx:1.27-alpine · puerto 3001"
@@ -153,7 +153,7 @@
               "id" : "149",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "77d0defc-1506-45c5-b951-2dc06cf2c6aa"
+                "structurizr.dsl.identifier" : "d707c165-453e-4927-a828-b582e3f339c7"
               },
               "relationships" : [ {
                 "description" : "Gestiona canchas y reservas",
@@ -170,7 +170,7 @@
             "instances" : "1",
             "name" : "rc-mf-administracion",
             "properties" : {
-              "structurizr.dsl.identifier" : "376f904d-cdf5-49ab-825c-30680791a963"
+              "structurizr.dsl.identifier" : "d91ac46e-0c6f-4df6-b5e5-50e3c0ae2467"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "nginx:1.27-alpine · puerto 3002"
@@ -182,7 +182,7 @@
               "id" : "154",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "a545cc6b-3c02-42dc-98d3-b5d61bf94693"
+                "structurizr.dsl.identifier" : "1539ce89-50c1-44a1-baa9-21875e095709"
               },
               "relationships" : [ {
                 "description" : "Solicita los reportes",
@@ -199,7 +199,7 @@
             "instances" : "1",
             "name" : "rc-mf-reportes",
             "properties" : {
-              "structurizr.dsl.identifier" : "94c041c5-b690-40d9-82d0-a1b20fa4e700"
+              "structurizr.dsl.identifier" : "911610e7-da29-4d84-8738-f4971f814ca9"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "nginx:1.27-alpine · puerto 3003"
@@ -223,7 +223,7 @@
               "id" : "160",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "d0f12fc7-5732-4e6e-87d7-54bdd33a346a"
+                "structurizr.dsl.identifier" : "d7f3605e-d7e1-475c-91f5-cf66ab273905"
               },
               "relationships" : [ {
                 "description" : "Enruta /api/auth y /api/usuarios",
@@ -261,7 +261,7 @@
             "instances" : "1",
             "name" : "rc-gateway",
             "properties" : {
-              "structurizr.dsl.identifier" : "b1309807-48da-4295-b0c2-23ce01168c46"
+              "structurizr.dsl.identifier" : "7fe77a8c-6fe1-47d3-b646-6a40918fb11a"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "eclipse-temurin:21-jre · puerto 8080"
@@ -273,7 +273,7 @@
               "id" : "163",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "707e7783-a72a-447d-9c5d-f8d9f594502d"
+                "structurizr.dsl.identifier" : "2238fac6-e6ac-4000-9b24-0c6a54283601"
               },
               "relationships" : [ {
                 "description" : "Lee y escribe",
@@ -290,7 +290,7 @@
             "instances" : "1",
             "name" : "rc-ms-usuarios",
             "properties" : {
-              "structurizr.dsl.identifier" : "a0eaf175-d937-4bfa-bf41-4863987faefb"
+              "structurizr.dsl.identifier" : "2e94e6d7-10e2-43ea-a1a0-d7b0eac5bf21"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "eclipse-temurin:21-jre · puerto 8081"
@@ -302,7 +302,7 @@
               "id" : "166",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "2909ca61-9394-4f5b-a0c1-88ea265f2122"
+                "structurizr.dsl.identifier" : "39edde4d-c4d4-423c-909a-55c3b798a038"
               },
               "relationships" : [ {
                 "description" : "Lee y escribe",
@@ -319,7 +319,7 @@
             "instances" : "1",
             "name" : "rc-ms-canchas",
             "properties" : {
-              "structurizr.dsl.identifier" : "3d4dfcb5-eb1c-4092-a80a-2c00c28e4225"
+              "structurizr.dsl.identifier" : "a33619ee-0116-4795-9089-f25bf22bf2ae"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "eclipse-temurin:21-jre · puerto 8082"
@@ -331,7 +331,7 @@
               "id" : "169",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "357547f6-31d2-46c6-8c6e-60c1eb698bc6"
+                "structurizr.dsl.identifier" : "f06bd145-6868-4af3-b090-9f27076efadc"
               },
               "relationships" : [ {
                 "description" : "Valida que la cancha exista, esté activa y el bloque esté dentro de su horario",
@@ -355,7 +355,7 @@
             "instances" : "1",
             "name" : "rc-ms-reservas",
             "properties" : {
-              "structurizr.dsl.identifier" : "1c05b2c8-0705-4227-80fb-e25beee66058"
+              "structurizr.dsl.identifier" : "f8e0f4d2-e368-41f7-8cce-1b881920a538"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "eclipse-temurin:21-jre · puerto 8083"
@@ -367,7 +367,7 @@
               "id" : "173",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "c9e9d880-14c8-444a-924f-1e5f8a51dcad"
+                "structurizr.dsl.identifier" : "2887dcae-ff48-4ece-b95e-bbeb5d91a206"
               },
               "relationships" : [ {
                 "description" : "Obtiene el catálogo de canchas y sus horarios",
@@ -391,7 +391,7 @@
             "instances" : "1",
             "name" : "rc-ms-reportes",
             "properties" : {
-              "structurizr.dsl.identifier" : "35836542-d5b4-4aa9-be41-989811871579"
+              "structurizr.dsl.identifier" : "cabc66bd-b797-4ae9-ade8-765235f5952c"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "eclipse-temurin:21-jre · puerto 8084"
@@ -404,7 +404,7 @@
                 "id" : "179",
                 "instanceId" : 1,
                 "properties" : {
-                  "structurizr.dsl.identifier" : "7a24ec0e-a997-46f2-9bf7-eb83d90afef8"
+                  "structurizr.dsl.identifier" : "6541b713-9d6b-4027-978d-7c7d98e3b0b3"
                 },
                 "tags" : "Container Instance"
               } ],
@@ -413,7 +413,7 @@
               "instances" : "1",
               "name" : "usuarios_db",
               "properties" : {
-                "structurizr.dsl.identifier" : "2b3dfe5a-8093-4149-8d61-2fe934ad56ca"
+                "structurizr.dsl.identifier" : "b7579350-c3ce-4e6e-8951-81cda8e8e374"
               },
               "tags" : "Element,Deployment Node",
               "technology" : "PostgreSQL database"
@@ -425,7 +425,7 @@
                 "id" : "182",
                 "instanceId" : 1,
                 "properties" : {
-                  "structurizr.dsl.identifier" : "0b97439b-1a62-44e7-873b-3a02d04d9285"
+                  "structurizr.dsl.identifier" : "2cbcf1f6-ce7a-4046-a535-4eea0e3335d4"
                 },
                 "tags" : "Container Instance"
               } ],
@@ -434,7 +434,7 @@
               "instances" : "1",
               "name" : "canchas_db",
               "properties" : {
-                "structurizr.dsl.identifier" : "f436b545-28b8-4a1e-8578-774d52c646b5"
+                "structurizr.dsl.identifier" : "99567d8a-1933-49e3-9671-0cf976a19e13"
               },
               "tags" : "Element,Deployment Node",
               "technology" : "PostgreSQL database"
@@ -446,7 +446,7 @@
                 "id" : "185",
                 "instanceId" : 1,
                 "properties" : {
-                  "structurizr.dsl.identifier" : "90b9b178-4c17-42b2-b838-d9aabb26bdac"
+                  "structurizr.dsl.identifier" : "60eedbbb-4c1c-4f8a-93ae-276ce137b4d6"
                 },
                 "tags" : "Container Instance"
               } ],
@@ -455,7 +455,7 @@
               "instances" : "1",
               "name" : "reservas_db",
               "properties" : {
-                "structurizr.dsl.identifier" : "28c1471b-2b8e-49f0-b83b-68f6045c928c"
+                "structurizr.dsl.identifier" : "2fe3bcc3-1b57-4cd5-9523-fb4c9d504204"
               },
               "tags" : "Element,Deployment Node",
               "technology" : "PostgreSQL database"

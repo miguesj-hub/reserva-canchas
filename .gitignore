@@ -7,3 +7,8 @@ structurizr-lite.war
 structurizr-cli/
 
 # workspace.json NO se ignora: guarda el layout de los diagramas.
+
+
+# Credenciales locales — nunca versionar (taller §6.2)
+*/.env
+material-curso/
