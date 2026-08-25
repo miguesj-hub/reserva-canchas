@@ -3,7 +3,7 @@
   "description" : "Microfrontend and microservices architecture for booking padel, tennis, and basketball courts.",
   "documentation" : { },
   "id" : 1,
-  "lastModifiedDate" : "2026-08-25T15:08:30Z",
+  "lastModifiedDate" : "2026-08-25T20:53:44Z",
   "model" : {
     "deploymentNodes" : [ {
       "children" : [ {
@@ -12,52 +12,52 @@
             "containerInstances" : [ {
               "containerId" : "4",
               "environment" : "Local (Docker Compose)",
-              "id" : "161",
+              "id" : "165",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "e589c8a4-7fa6-4a9f-8c8f-ee25937d5840"
+                "structurizr.dsl.identifier" : "c0a33df1-0b8e-4385-90ed-e04fec61ace5"
               },
               "relationships" : [ {
                 "description" : "Serves the container application",
-                "destinationId" : "163",
-                "id" : "165",
-                "linkedRelationshipId" : "70",
-                "sourceId" : "161",
-                "technology" : "HTTP"
-              }, {
-                "description" : "Serves /mf-reservas/",
                 "destinationId" : "167",
                 "id" : "169",
                 "linkedRelationshipId" : "71",
-                "sourceId" : "161",
+                "sourceId" : "165",
+                "technology" : "HTTP"
+              }, {
+                "description" : "Serves /mf-reservas/",
+                "destinationId" : "171",
+                "id" : "173",
+                "linkedRelationshipId" : "72",
+                "sourceId" : "165",
                 "technology" : "HTTP"
               }, {
                 "description" : "Serves /mf-administracion/",
-                "destinationId" : "172",
-                "id" : "174",
-                "linkedRelationshipId" : "72",
-                "sourceId" : "161",
+                "destinationId" : "176",
+                "id" : "178",
+                "linkedRelationshipId" : "73",
+                "sourceId" : "165",
                 "technology" : "HTTP"
               }, {
                 "description" : "Serves /mf-reportes/",
-                "destinationId" : "177",
-                "id" : "179",
-                "linkedRelationshipId" : "73",
-                "sourceId" : "161",
+                "destinationId" : "181",
+                "id" : "183",
+                "linkedRelationshipId" : "74",
+                "sourceId" : "165",
                 "technology" : "HTTP"
               }, {
                 "description" : "Routes /api/*",
-                "destinationId" : "183",
-                "id" : "184",
-                "linkedRelationshipId" : "74",
-                "sourceId" : "161",
+                "destinationId" : "187",
+                "id" : "188",
+                "linkedRelationshipId" : "75",
+                "sourceId" : "165",
                 "technology" : "HTTP"
               } ],
               "tags" : "Container Instance"
             } ],
             "description" : "Only container connected to both networks.",
             "environment" : "Local (Docker Compose)",
-            "id" : "160",
+            "id" : "164",
             "instances" : "1",
             "name" : "rc-edge",
             "properties" : {
@@ -69,48 +69,48 @@
             "containerInstances" : [ {
               "containerId" : "5",
               "environment" : "Local (Docker Compose)",
-              "id" : "163",
+              "id" : "167",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "c46a75f0-6038-4d92-8433-3d4fd07533ea"
+                "structurizr.dsl.identifier" : "b27476a2-9561-48a7-9486-3a456303f6ee"
               },
               "relationships" : [ {
                 "description" : "Authenticates the user",
-                "destinationId" : "161",
-                "id" : "164",
-                "linkedRelationshipId" : "78",
-                "sourceId" : "163",
+                "destinationId" : "165",
+                "id" : "168",
+                "linkedRelationshipId" : "79",
+                "sourceId" : "167",
                 "technology" : "JSON/HTTPS · /api/auth"
               }, {
                 "description" : "Loads the remote at runtime",
-                "destinationId" : "167",
-                "id" : "170",
-                "linkedRelationshipId" : "75",
-                "sourceId" : "163",
-                "technology" : "Module Federation (remoteEntry.js)"
-              }, {
-                "description" : "Loads the remote at runtime",
-                "destinationId" : "172",
-                "id" : "175",
+                "destinationId" : "171",
+                "id" : "174",
                 "linkedRelationshipId" : "76",
-                "sourceId" : "163",
+                "sourceId" : "167",
                 "technology" : "Module Federation (remoteEntry.js)"
               }, {
                 "description" : "Loads the remote at runtime",
-                "destinationId" : "177",
-                "id" : "180",
+                "destinationId" : "176",
+                "id" : "179",
                 "linkedRelationshipId" : "77",
-                "sourceId" : "163",
+                "sourceId" : "167",
+                "technology" : "Module Federation (remoteEntry.js)"
+              }, {
+                "description" : "Loads the remote at runtime",
+                "destinationId" : "181",
+                "id" : "184",
+                "linkedRelationshipId" : "78",
+                "sourceId" : "167",
                 "technology" : "Module Federation (remoteEntry.js)"
               } ],
               "tags" : "Container Instance"
             } ],
             "environment" : "Local (Docker Compose)",
-            "id" : "162",
+            "id" : "166",
             "instances" : "1",
             "name" : "rc-shell",
             "properties" : {
-              "structurizr.dsl.identifier" : "b87c154f-ceed-4e9a-a27c-cd4716de7cbb"
+              "structurizr.dsl.identifier" : "61741600-22fe-49f0-bd0a-0e2ab41982ce"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "nginx:1.27-alpine · port 3000"
@@ -118,27 +118,27 @@
             "containerInstances" : [ {
               "containerId" : "10",
               "environment" : "Local (Docker Compose)",
-              "id" : "167",
+              "id" : "171",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "5ddb2edb-52a7-4b2e-99d5-994795270896"
+                "structurizr.dsl.identifier" : "20d3a98b-67d1-44e4-b8fd-9823b95f1ef0"
               },
               "relationships" : [ {
                 "description" : "Checks availability and manages bookings",
-                "destinationId" : "161",
-                "id" : "168",
-                "linkedRelationshipId" : "79",
-                "sourceId" : "167",
+                "destinationId" : "165",
+                "id" : "172",
+                "linkedRelationshipId" : "80",
+                "sourceId" : "171",
                 "technology" : "JSON/HTTPS · /api"
               } ],
               "tags" : "Container Instance"
             } ],
             "environment" : "Local (Docker Compose)",
-            "id" : "166",
+            "id" : "170",
             "instances" : "1",
             "name" : "rc-mf-reservas",
             "properties" : {
-              "structurizr.dsl.identifier" : "af53f6fd-2fa7-452f-ae20-6774830d88eb"
+              "structurizr.dsl.identifier" : "1f8da0f1-83eb-41b3-9050-ab4d8c456d57"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "nginx:1.27-alpine · port 3001"
@@ -146,27 +146,27 @@
             "containerInstances" : [ {
               "containerId" : "15",
               "environment" : "Local (Docker Compose)",
-              "id" : "172",
+              "id" : "176",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "536cd558-d520-49d9-acba-e1ec2b180cb3"
+                "structurizr.dsl.identifier" : "8db577d9-f192-422f-bab3-5d9693c2f2de"
               },
               "relationships" : [ {
                 "description" : "Manages courts, bookings, and users",
-                "destinationId" : "161",
-                "id" : "173",
-                "linkedRelationshipId" : "80",
-                "sourceId" : "172",
+                "destinationId" : "165",
+                "id" : "177",
+                "linkedRelationshipId" : "81",
+                "sourceId" : "176",
                 "technology" : "JSON/HTTPS · /api"
               } ],
               "tags" : "Container Instance"
             } ],
             "environment" : "Local (Docker Compose)",
-            "id" : "171",
+            "id" : "175",
             "instances" : "1",
             "name" : "rc-mf-administracion",
             "properties" : {
-              "structurizr.dsl.identifier" : "e8c1d079-6e3e-447e-b105-70466bd96a13"
+              "structurizr.dsl.identifier" : "d80a29e6-b051-43b6-86f6-f00d96b46924"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "nginx:1.27-alpine · port 3002"
@@ -174,34 +174,34 @@
             "containerInstances" : [ {
               "containerId" : "20",
               "environment" : "Local (Docker Compose)",
-              "id" : "177",
+              "id" : "181",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "9f754d2f-6c4d-4413-ad3b-fefb5251a0cb"
+                "structurizr.dsl.identifier" : "ad5f7d42-6064-40a3-90ef-cf6bc7aac81c"
               },
               "relationships" : [ {
                 "description" : "Requests the reports",
-                "destinationId" : "161",
-                "id" : "178",
-                "linkedRelationshipId" : "81",
-                "sourceId" : "177",
+                "destinationId" : "165",
+                "id" : "182",
+                "linkedRelationshipId" : "82",
+                "sourceId" : "181",
                 "technology" : "JSON/HTTPS · /api"
               } ],
               "tags" : "Container Instance"
             } ],
             "environment" : "Local (Docker Compose)",
-            "id" : "176",
+            "id" : "180",
             "instances" : "1",
             "name" : "rc-mf-reportes",
             "properties" : {
-              "structurizr.dsl.identifier" : "6925e8e4-11ae-4a67-a55f-46c387776c53"
+              "structurizr.dsl.identifier" : "cbed6a77-968e-4594-b0b0-5daec1b4e356"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "nginx:1.27-alpine · port 3003"
           } ],
           "description" : "Bridge network that isolates the presentation containers.",
           "environment" : "Local (Docker Compose)",
-          "id" : "159",
+          "id" : "163",
           "instances" : "1",
           "name" : "Network: frontend",
           "properties" : {
@@ -214,48 +214,48 @@
             "containerInstances" : [ {
               "containerId" : "25",
               "environment" : "Local (Docker Compose)",
-              "id" : "183",
+              "id" : "187",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "8b15a4d4-727e-4e6d-84ab-a805ce990808"
+                "structurizr.dsl.identifier" : "34e92674-76d1-4e2b-bee2-3b3771a3c292"
               },
               "relationships" : [ {
                 "description" : "Routes /api/auth and /api/usuarios",
-                "destinationId" : "186",
-                "id" : "187",
-                "linkedRelationshipId" : "82",
-                "sourceId" : "183",
+                "destinationId" : "190",
+                "id" : "191",
+                "linkedRelationshipId" : "83",
+                "sourceId" : "187",
                 "technology" : "JSON/HTTP"
               }, {
                 "description" : "Routes /api/canchas",
-                "destinationId" : "189",
-                "id" : "190",
-                "linkedRelationshipId" : "83",
-                "sourceId" : "183",
+                "destinationId" : "193",
+                "id" : "194",
+                "linkedRelationshipId" : "84",
+                "sourceId" : "187",
                 "technology" : "JSON/HTTP"
               }, {
                 "description" : "Routes /api/reservas and /api/disponibilidad",
-                "destinationId" : "192",
-                "id" : "193",
-                "linkedRelationshipId" : "84",
-                "sourceId" : "183",
-                "technology" : "JSON/HTTP"
-              }, {
-                "description" : "Routes /api/reportes",
                 "destinationId" : "196",
                 "id" : "197",
                 "linkedRelationshipId" : "85",
-                "sourceId" : "183",
+                "sourceId" : "187",
+                "technology" : "JSON/HTTP"
+              }, {
+                "description" : "Routes /api/reportes",
+                "destinationId" : "200",
+                "id" : "201",
+                "linkedRelationshipId" : "86",
+                "sourceId" : "187",
                 "technology" : "JSON/HTTP"
               } ],
               "tags" : "Container Instance"
             } ],
             "environment" : "Local (Docker Compose)",
-            "id" : "182",
+            "id" : "186",
             "instances" : "1",
             "name" : "rc-gateway",
             "properties" : {
-              "structurizr.dsl.identifier" : "2a26c5c1-9336-4db1-9d8a-32fc445c0a5b"
+              "structurizr.dsl.identifier" : "b025afae-3a91-4eab-8949-b22555b40982"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "eclipse-temurin:21-jre · port 8080"
@@ -263,166 +263,146 @@
             "containerInstances" : [ {
               "containerId" : "29",
               "environment" : "Local (Docker Compose)",
-              "id" : "186",
+              "id" : "190",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "2a670a23-f085-4e1c-8d92-c0c1095a00d2"
+                "structurizr.dsl.identifier" : "03917e3c-f792-4b8a-b5e8-336d6cb5893b"
               },
               "relationships" : [ {
                 "description" : "Reads and writes",
-                "destinationId" : "202",
-                "id" : "203",
-                "linkedRelationshipId" : "89",
-                "sourceId" : "186",
+                "destinationId" : "206",
+                "id" : "207",
+                "linkedRelationshipId" : "90",
+                "sourceId" : "190",
                 "technology" : "JDBC"
               } ],
               "tags" : "Container Instance"
             } ],
             "environment" : "Local (Docker Compose)",
-            "id" : "185",
+            "id" : "189",
             "instances" : "1",
             "name" : "rc-ms-usuarios",
             "properties" : {
-              "structurizr.dsl.identifier" : "217474ce-fa7c-431a-a8de-82bc828426e5"
+              "structurizr.dsl.identifier" : "615440d1-6d16-4644-a378-e2e90cb6fe94"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "eclipse-temurin:21-jre · port 8081"
           }, {
             "containerInstances" : [ {
-              "containerId" : "36",
+              "containerId" : "37",
               "environment" : "Local (Docker Compose)",
-              "id" : "189",
+              "id" : "193",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "3e0d3bc5-f56c-4d21-8bba-a4bb9267dc2a"
+                "structurizr.dsl.identifier" : "9bfe6c19-9918-4e3b-b3d4-fce14a66f682"
               },
               "relationships" : [ {
                 "description" : "Reads and writes",
-                "destinationId" : "205",
-                "id" : "206",
-                "linkedRelationshipId" : "90",
-                "sourceId" : "189",
+                "destinationId" : "209",
+                "id" : "210",
+                "linkedRelationshipId" : "91",
+                "sourceId" : "193",
                 "technology" : "JDBC"
               } ],
               "tags" : "Container Instance"
             } ],
             "environment" : "Local (Docker Compose)",
-            "id" : "188",
+            "id" : "192",
             "instances" : "1",
             "name" : "rc-ms-canchas",
             "properties" : {
-              "structurizr.dsl.identifier" : "9ed08028-8de9-4d9c-9c67-ea6e66e27b0d"
+              "structurizr.dsl.identifier" : "9b3e5ed8-9c90-41e7-8b38-459817582f3e"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "eclipse-temurin:21-jre · port 8082"
           }, {
             "containerInstances" : [ {
-              "containerId" : "43",
-              "environment" : "Local (Docker Compose)",
-              "id" : "192",
-              "instanceId" : 1,
-              "properties" : {
-                "structurizr.dsl.identifier" : "db7bd589-a204-457d-a876-700570e6990e"
-              },
-              "relationships" : [ {
-                "description" : "Checks that the court exists, is active, and the block is within its schedule",
-                "destinationId" : "189",
-                "id" : "194",
-                "linkedRelationshipId" : "86",
-                "sourceId" : "192",
-                "technology" : "JSON/HTTP (synchronous)"
-              }, {
-                "description" : "Reads and writes",
-                "destinationId" : "208",
-                "id" : "209",
-                "linkedRelationshipId" : "91",
-                "sourceId" : "192",
-                "technology" : "JDBC"
-              } ],
-              "tags" : "Container Instance"
-            } ],
-            "environment" : "Local (Docker Compose)",
-            "id" : "191",
-            "instances" : "1",
-            "name" : "rc-ms-reservas",
-            "properties" : {
-              "structurizr.dsl.identifier" : "c5b22efe-6aa7-4917-b8a8-84daecc589ef"
-            },
-            "tags" : "Element,Deployment Node",
-            "technology" : "eclipse-temurin:21-jre · port 8083"
-          }, {
-            "containerInstances" : [ {
-              "containerId" : "54",
+              "containerId" : "44",
               "environment" : "Local (Docker Compose)",
               "id" : "196",
               "instanceId" : 1,
               "properties" : {
-                "structurizr.dsl.identifier" : "4a4688ec-7470-421d-afc0-d4534e312d0f"
+                "structurizr.dsl.identifier" : "a5a47633-9c4e-4efb-8c2f-ab1199a729fa"
               },
               "relationships" : [ {
-                "description" : "Gets the court catalog and schedules",
-                "destinationId" : "189",
+                "description" : "Checks that the court exists, is active, and the block is within its schedule",
+                "destinationId" : "193",
                 "id" : "198",
-                "linkedRelationshipId" : "88",
-                "sourceId" : "196",
-                "technology" : "JSON/HTTP (synchronous)"
-              }, {
-                "description" : "Gets the period's bookings",
-                "destinationId" : "192",
-                "id" : "199",
                 "linkedRelationshipId" : "87",
                 "sourceId" : "196",
                 "technology" : "JSON/HTTP (synchronous)"
+              }, {
+                "description" : "Reads and writes",
+                "destinationId" : "212",
+                "id" : "213",
+                "linkedRelationshipId" : "92",
+                "sourceId" : "196",
+                "technology" : "JDBC"
               } ],
               "tags" : "Container Instance"
             } ],
             "environment" : "Local (Docker Compose)",
             "id" : "195",
             "instances" : "1",
+            "name" : "rc-ms-reservas",
+            "properties" : {
+              "structurizr.dsl.identifier" : "5a3a5497-4bea-41f9-a223-db2f30a8f491"
+            },
+            "tags" : "Element,Deployment Node",
+            "technology" : "eclipse-temurin:21-jre · port 8083"
+          }, {
+            "containerInstances" : [ {
+              "containerId" : "55",
+              "environment" : "Local (Docker Compose)",
+              "id" : "200",
+              "instanceId" : 1,
+              "properties" : {
+                "structurizr.dsl.identifier" : "81f8a9b1-3363-4a84-b3a5-8f83f844edd3"
+              },
+              "relationships" : [ {
+                "description" : "Gets the court catalog and schedules",
+                "destinationId" : "193",
+                "id" : "202",
+                "linkedRelationshipId" : "89",
+                "sourceId" : "200",
+                "technology" : "JSON/HTTP (synchronous)"
+              }, {
+                "description" : "Gets the period's bookings",
+                "destinationId" : "196",
+                "id" : "203",
+                "linkedRelationshipId" : "88",
+                "sourceId" : "200",
+                "technology" : "JSON/HTTP (synchronous)"
+              } ],
+              "tags" : "Container Instance"
+            } ],
+            "environment" : "Local (Docker Compose)",
+            "id" : "199",
+            "instances" : "1",
             "name" : "rc-ms-reportes",
             "properties" : {
-              "structurizr.dsl.identifier" : "08d6d9a5-8a08-4d4f-a71e-fe2484761446"
+              "structurizr.dsl.identifier" : "77b5bc9d-7746-4b98-bf92-e2af47608862"
             },
             "tags" : "Element,Deployment Node",
             "technology" : "eclipse-temurin:21-jre · port 8084"
           }, {
             "children" : [ {
               "containerInstances" : [ {
-                "containerId" : "63",
+                "containerId" : "64",
                 "environment" : "Local (Docker Compose)",
-                "id" : "202",
+                "id" : "206",
                 "instanceId" : 1,
                 "properties" : {
-                  "structurizr.dsl.identifier" : "4086b2e1-bd2d-41d0-8b44-4ea1e61a8977"
+                  "structurizr.dsl.identifier" : "475bb283-236a-4b88-a13e-0869e6c536a0"
                 },
                 "tags" : "Container Instance"
               } ],
               "environment" : "Local (Docker Compose)",
-              "id" : "201",
+              "id" : "205",
               "instances" : "1",
               "name" : "usuarios_db",
               "properties" : {
-                "structurizr.dsl.identifier" : "b03e2b9d-5993-4c97-a0c5-7e9cc41c50dd"
-              },
-              "tags" : "Element,Deployment Node",
-              "technology" : "PostgreSQL database"
-            }, {
-              "containerInstances" : [ {
-                "containerId" : "64",
-                "environment" : "Local (Docker Compose)",
-                "id" : "205",
-                "instanceId" : 1,
-                "properties" : {
-                  "structurizr.dsl.identifier" : "d619f8e6-9a84-4f27-891c-10007cf2e28a"
-                },
-                "tags" : "Container Instance"
-              } ],
-              "environment" : "Local (Docker Compose)",
-              "id" : "204",
-              "instances" : "1",
-              "name" : "canchas_db",
-              "properties" : {
-                "structurizr.dsl.identifier" : "09b4821b-6d87-4906-b00e-83369c4468a7"
+                "structurizr.dsl.identifier" : "31f28481-48dd-4b2c-bd3e-4b2dee515541"
               },
               "tags" : "Element,Deployment Node",
               "technology" : "PostgreSQL database"
@@ -430,26 +410,46 @@
               "containerInstances" : [ {
                 "containerId" : "65",
                 "environment" : "Local (Docker Compose)",
-                "id" : "208",
+                "id" : "209",
                 "instanceId" : 1,
                 "properties" : {
-                  "structurizr.dsl.identifier" : "081679b8-73cb-4fc9-ba2f-59e20b3561a5"
+                  "structurizr.dsl.identifier" : "f2e77d5e-a590-4d54-900c-ef2c2da96126"
                 },
                 "tags" : "Container Instance"
               } ],
               "environment" : "Local (Docker Compose)",
-              "id" : "207",
+              "id" : "208",
+              "instances" : "1",
+              "name" : "canchas_db",
+              "properties" : {
+                "structurizr.dsl.identifier" : "3da88097-12ad-4e0c-8707-28aeba5301ec"
+              },
+              "tags" : "Element,Deployment Node",
+              "technology" : "PostgreSQL database"
+            }, {
+              "containerInstances" : [ {
+                "containerId" : "66",
+                "environment" : "Local (Docker Compose)",
+                "id" : "212",
+                "instanceId" : 1,
+                "properties" : {
+                  "structurizr.dsl.identifier" : "abc60c27-2b2f-4156-ae9f-514c20eed1c8"
+                },
+                "tags" : "Container Instance"
+              } ],
+              "environment" : "Local (Docker Compose)",
+              "id" : "211",
               "instances" : "1",
               "name" : "reservas_db",
               "properties" : {
-                "structurizr.dsl.identifier" : "06230363-1d3f-497f-a1b7-bce5638ccf73"
+                "structurizr.dsl.identifier" : "12a3e6dc-60d4-423c-bafb-d35a837ee7fa"
               },
               "tags" : "Element,Deployment Node",
               "technology" : "PostgreSQL database"
             } ],
             "description" : "Single instance with three independent databases. Each microservice has credentials that only allow it to connect to its own database.",
             "environment" : "Local (Docker Compose)",
-            "id" : "200",
+            "id" : "204",
             "instances" : "1",
             "name" : "rc-postgres",
             "properties" : {
@@ -457,9 +457,9 @@
             },
             "relationships" : [ {
               "description" : "Persists data to",
-              "destinationId" : "210",
-              "id" : "211",
-              "sourceId" : "200",
+              "destinationId" : "214",
+              "id" : "215",
+              "sourceId" : "204",
               "tags" : "Relationship",
               "technology" : "file system"
             } ],
@@ -468,11 +468,11 @@
           } ],
           "description" : "Bridge network that isolates the API and persistence.",
           "environment" : "Local (Docker Compose)",
-          "id" : "181",
+          "id" : "185",
           "infrastructureNodes" : [ {
             "description" : "Docker volume with the PostgreSQL data. The infra/postgres/init scripts run only when it is empty.",
             "environment" : "Local (Docker Compose)",
-            "id" : "210",
+            "id" : "214",
             "name" : "pgdata volume",
             "properties" : {
               "structurizr.dsl.identifier" : "volumen"
@@ -490,7 +490,7 @@
         } ],
         "description" : "Orchestrated with Docker Compose v2.",
         "environment" : "Local (Docker Compose)",
-        "id" : "158",
+        "id" : "162",
         "instances" : "1",
         "name" : "Docker Engine",
         "properties" : {
@@ -501,7 +501,7 @@
       } ],
       "description" : "Project evaluation environment.",
       "environment" : "Local (Docker Compose)",
-      "id" : "157",
+      "id" : "161",
       "instances" : "1",
       "name" : "Developer's machine",
       "properties" : {
@@ -520,13 +520,13 @@
       "relationships" : [ {
         "description" : "Checks availability, books, and cancels their bookings",
         "destinationId" : "3",
-        "id" : "66",
+        "id" : "67",
         "sourceId" : "1",
         "tags" : "Relationship"
       }, {
         "description" : "Accesses the application",
         "destinationId" : "4",
-        "id" : "68",
+        "id" : "69",
         "sourceId" : "1",
         "tags" : "Relationship",
         "technology" : "HTTP :80"
@@ -542,13 +542,13 @@
       "relationships" : [ {
         "description" : "Manages courts and bookings, and views reports",
         "destinationId" : "3",
-        "id" : "67",
+        "id" : "68",
         "sourceId" : "2",
         "tags" : "Relationship"
       }, {
         "description" : "Accesses the application",
         "destinationId" : "4",
-        "id" : "69",
+        "id" : "70",
         "sourceId" : "2",
         "tags" : "Relationship",
         "technology" : "HTTP :80"
@@ -567,42 +567,42 @@
         "relationships" : [ {
           "description" : "Serves the container application",
           "destinationId" : "5",
-          "id" : "70",
+          "id" : "71",
           "sourceId" : "4",
           "tags" : "Relationship",
           "technology" : "HTTP"
         }, {
           "description" : "Serves /mf-reservas/",
           "destinationId" : "10",
-          "id" : "71",
+          "id" : "72",
           "sourceId" : "4",
           "tags" : "Relationship",
           "technology" : "HTTP"
         }, {
           "description" : "Serves /mf-administracion/",
           "destinationId" : "15",
-          "id" : "72",
+          "id" : "73",
           "sourceId" : "4",
           "tags" : "Relationship",
           "technology" : "HTTP"
         }, {
           "description" : "Serves /mf-reportes/",
           "destinationId" : "20",
-          "id" : "73",
-          "sourceId" : "4",
-          "tags" : "Relationship",
-          "technology" : "HTTP"
-        }, {
-          "description" : "Routes /api/*",
-          "destinationId" : "25",
           "id" : "74",
           "sourceId" : "4",
           "tags" : "Relationship",
           "technology" : "HTTP"
         }, {
           "description" : "Routes /api/*",
+          "destinationId" : "25",
+          "id" : "75",
+          "sourceId" : "4",
+          "tags" : "Relationship",
+          "technology" : "HTTP"
+        }, {
+          "description" : "Routes /api/*",
           "destinationId" : "26",
-          "id" : "129",
+          "id" : "133",
           "sourceId" : "4",
           "tags" : "Relationship",
           "technology" : "HTTP"
@@ -621,13 +621,13 @@
           "relationships" : [ {
             "description" : "Checks whether there is an active session before resolving the route",
             "destinationId" : "8",
-            "id" : "138",
+            "id" : "142",
             "sourceId" : "6",
             "tags" : "Relationship"
           }, {
             "description" : "Renders within",
             "destinationId" : "7",
-            "id" : "139",
+            "id" : "143",
             "sourceId" : "6",
             "tags" : "Relationship"
           } ],
@@ -644,7 +644,7 @@
           "relationships" : [ {
             "description" : "Mounts the remote for the active route",
             "destinationId" : "9",
-            "id" : "140",
+            "id" : "144",
             "sourceId" : "7",
             "tags" : "Relationship"
           } ],
@@ -661,7 +661,7 @@
           "relationships" : [ {
             "description" : "Authenticates the user",
             "destinationId" : "4",
-            "id" : "141",
+            "id" : "145",
             "sourceId" : "8",
             "tags" : "Relationship",
             "technology" : "JSON/HTTPS · /api/auth"
@@ -679,21 +679,21 @@
           "relationships" : [ {
             "description" : "Loads the remote at runtime",
             "destinationId" : "10",
-            "id" : "142",
+            "id" : "146",
             "sourceId" : "9",
             "tags" : "Relationship",
             "technology" : "Module Federation (remoteEntry.js)"
           }, {
             "description" : "Loads the remote at runtime",
             "destinationId" : "15",
-            "id" : "143",
+            "id" : "147",
             "sourceId" : "9",
             "tags" : "Relationship",
             "technology" : "Module Federation (remoteEntry.js)"
           }, {
             "description" : "Loads the remote at runtime",
             "destinationId" : "20",
-            "id" : "144",
+            "id" : "148",
             "sourceId" : "9",
             "tags" : "Relationship",
             "technology" : "Module Federation (remoteEntry.js)"
@@ -711,28 +711,28 @@
         "relationships" : [ {
           "description" : "Loads the remote at runtime",
           "destinationId" : "10",
-          "id" : "75",
-          "sourceId" : "5",
-          "tags" : "Relationship",
-          "technology" : "Module Federation (remoteEntry.js)"
-        }, {
-          "description" : "Loads the remote at runtime",
-          "destinationId" : "15",
           "id" : "76",
           "sourceId" : "5",
           "tags" : "Relationship",
           "technology" : "Module Federation (remoteEntry.js)"
         }, {
           "description" : "Loads the remote at runtime",
-          "destinationId" : "20",
+          "destinationId" : "15",
           "id" : "77",
+          "sourceId" : "5",
+          "tags" : "Relationship",
+          "technology" : "Module Federation (remoteEntry.js)"
+        }, {
+          "description" : "Loads the remote at runtime",
+          "destinationId" : "20",
+          "id" : "78",
           "sourceId" : "5",
           "tags" : "Relationship",
           "technology" : "Module Federation (remoteEntry.js)"
         }, {
           "description" : "Authenticates the user",
           "destinationId" : "4",
-          "id" : "78",
+          "id" : "79",
           "sourceId" : "5",
           "tags" : "Relationship",
           "technology" : "JSON/HTTPS · /api/auth"
@@ -751,19 +751,19 @@
           "relationships" : [ {
             "description" : "Composes the screen with",
             "destinationId" : "12",
-            "id" : "145",
+            "id" : "149",
             "sourceId" : "11",
             "tags" : "Relationship"
           }, {
             "description" : "Reads and updates",
             "destinationId" : "13",
-            "id" : "146",
+            "id" : "150",
             "sourceId" : "11",
             "tags" : "Relationship"
           }, {
             "description" : "Requests data",
             "destinationId" : "14",
-            "id" : "147",
+            "id" : "151",
             "sourceId" : "11",
             "tags" : "Relationship"
           } ],
@@ -800,7 +800,7 @@
           "relationships" : [ {
             "description" : "Checks availability and manages bookings",
             "destinationId" : "4",
-            "id" : "148",
+            "id" : "152",
             "sourceId" : "14",
             "tags" : "Relationship",
             "technology" : "JSON/HTTPS · /api"
@@ -818,7 +818,7 @@
         "relationships" : [ {
           "description" : "Checks availability and manages bookings",
           "destinationId" : "4",
-          "id" : "79",
+          "id" : "80",
           "sourceId" : "10",
           "tags" : "Relationship",
           "technology" : "JSON/HTTPS · /api"
@@ -837,19 +837,19 @@
           "relationships" : [ {
             "description" : "Composes the screen with",
             "destinationId" : "17",
-            "id" : "149",
+            "id" : "153",
             "sourceId" : "16",
             "tags" : "Relationship"
           }, {
             "description" : "Reads and updates",
             "destinationId" : "18",
-            "id" : "150",
+            "id" : "154",
             "sourceId" : "16",
             "tags" : "Relationship"
           }, {
             "description" : "Requests data",
             "destinationId" : "19",
-            "id" : "151",
+            "id" : "155",
             "sourceId" : "16",
             "tags" : "Relationship"
           } ],
@@ -886,7 +886,7 @@
           "relationships" : [ {
             "description" : "Manages courts, bookings, and users",
             "destinationId" : "4",
-            "id" : "152",
+            "id" : "156",
             "sourceId" : "19",
             "tags" : "Relationship",
             "technology" : "JSON/HTTPS · /api"
@@ -904,7 +904,7 @@
         "relationships" : [ {
           "description" : "Manages courts, bookings, and users",
           "destinationId" : "4",
-          "id" : "80",
+          "id" : "81",
           "sourceId" : "15",
           "tags" : "Relationship",
           "technology" : "JSON/HTTPS · /api"
@@ -923,19 +923,19 @@
           "relationships" : [ {
             "description" : "Composes the screen with",
             "destinationId" : "22",
-            "id" : "153",
+            "id" : "157",
             "sourceId" : "21",
             "tags" : "Relationship"
           }, {
             "description" : "Reads and updates",
             "destinationId" : "23",
-            "id" : "154",
+            "id" : "158",
             "sourceId" : "21",
             "tags" : "Relationship"
           }, {
             "description" : "Requests data",
             "destinationId" : "24",
-            "id" : "155",
+            "id" : "159",
             "sourceId" : "21",
             "tags" : "Relationship"
           } ],
@@ -972,7 +972,7 @@
           "relationships" : [ {
             "description" : "Requests the reports",
             "destinationId" : "4",
-            "id" : "156",
+            "id" : "160",
             "sourceId" : "24",
             "tags" : "Relationship",
             "technology" : "JSON/HTTPS · /api"
@@ -990,7 +990,7 @@
         "relationships" : [ {
           "description" : "Requests the reports",
           "destinationId" : "4",
-          "id" : "81",
+          "id" : "82",
           "sourceId" : "20",
           "tags" : "Relationship",
           "technology" : "JSON/HTTPS · /api"
@@ -1009,20 +1009,20 @@
           "relationships" : [ {
             "description" : "Verifies the Basic credential on every request (POST /api/auth/login). Does not read usuarios_db: it asks its owner.",
             "destinationId" : "29",
-            "id" : "130",
+            "id" : "134",
             "sourceId" : "26",
             "tags" : "Relationship",
             "technology" : "JSON/HTTP"
           }, {
             "description" : "Identity propagated, routing continues",
             "destinationId" : "27",
-            "id" : "131",
+            "id" : "135",
             "sourceId" : "26",
             "tags" : "Relationship"
           }, {
             "description" : "Missing or invalid identity",
             "destinationId" : "28",
-            "id" : "132",
+            "id" : "136",
             "sourceId" : "26",
             "tags" : "Relationship"
           } ],
@@ -1039,35 +1039,35 @@
           "relationships" : [ {
             "description" : "Routes /api/auth and /api/usuarios",
             "destinationId" : "29",
-            "id" : "133",
+            "id" : "137",
             "sourceId" : "27",
             "tags" : "Relationship",
             "technology" : "JSON/HTTP"
           }, {
             "description" : "Routes /api/canchas",
-            "destinationId" : "36",
-            "id" : "134",
+            "destinationId" : "37",
+            "id" : "138",
             "sourceId" : "27",
             "tags" : "Relationship",
             "technology" : "JSON/HTTP"
           }, {
             "description" : "Routes /api/reservas and /api/disponibilidad",
-            "destinationId" : "43",
-            "id" : "135",
+            "destinationId" : "44",
+            "id" : "139",
             "sourceId" : "27",
             "tags" : "Relationship",
             "technology" : "JSON/HTTP"
           }, {
             "description" : "Routes /api/reportes",
-            "destinationId" : "54",
-            "id" : "136",
+            "destinationId" : "55",
+            "id" : "140",
             "sourceId" : "27",
             "tags" : "Relationship",
             "technology" : "JSON/HTTP"
           }, {
             "description" : "Target service unavailable",
             "destinationId" : "28",
-            "id" : "137",
+            "id" : "141",
             "sourceId" : "27",
             "tags" : "Relationship"
           } ],
@@ -1094,56 +1094,63 @@
         "relationships" : [ {
           "description" : "Routes /api/auth and /api/usuarios",
           "destinationId" : "29",
-          "id" : "82",
-          "sourceId" : "25",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP"
-        }, {
-          "description" : "Routes /api/canchas",
-          "destinationId" : "36",
           "id" : "83",
-          "sourceId" : "25",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP"
-        }, {
-          "description" : "Routes /api/reservas and /api/disponibilidad",
-          "destinationId" : "43",
-          "id" : "84",
-          "sourceId" : "25",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP"
-        }, {
-          "description" : "Routes /api/reportes",
-          "destinationId" : "54",
-          "id" : "85",
-          "sourceId" : "25",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP"
-        }, {
-          "description" : "Routes /api/reservas and /api/disponibilidad",
-          "destinationId" : "44",
-          "id" : "92",
-          "sourceId" : "25",
-          "tags" : "Relationship",
-          "technology" : "JSON/HTTP"
-        }, {
-          "description" : "Routes /api/auth and /api/usuarios",
-          "destinationId" : "30",
-          "id" : "105",
           "sourceId" : "25",
           "tags" : "Relationship",
           "technology" : "JSON/HTTP"
         }, {
           "description" : "Routes /api/canchas",
           "destinationId" : "37",
-          "id" : "112",
+          "id" : "84",
+          "sourceId" : "25",
+          "tags" : "Relationship",
+          "technology" : "JSON/HTTP"
+        }, {
+          "description" : "Routes /api/reservas and /api/disponibilidad",
+          "destinationId" : "44",
+          "id" : "85",
           "sourceId" : "25",
           "tags" : "Relationship",
           "technology" : "JSON/HTTP"
         }, {
           "description" : "Routes /api/reportes",
           "destinationId" : "55",
-          "id" : "119",
+          "id" : "86",
+          "sourceId" : "25",
+          "tags" : "Relationship",
+          "technology" : "JSON/HTTP"
+        }, {
+          "description" : "Routes /api/reservas and /api/disponibilidad",
+          "destinationId" : "45",
+          "id" : "93",
+          "sourceId" : "25",
+          "tags" : "Relationship",
+          "technology" : "JSON/HTTP"
+        }, {
+          "description" : "Routes /api/auth (public)",
+          "destinationId" : "30",
+          "id" : "106",
+          "sourceId" : "25",
+          "tags" : "Relationship",
+          "technology" : "JSON/HTTP"
+        }, {
+          "description" : "Routes /api/usuarios (ADMINISTRADOR only)",
+          "destinationId" : "31",
+          "id" : "107",
+          "sourceId" : "25",
+          "tags" : "Relationship",
+          "technology" : "JSON/HTTP"
+        }, {
+          "description" : "Routes /api/canchas",
+          "destinationId" : "38",
+          "id" : "116",
+          "sourceId" : "25",
+          "tags" : "Relationship",
+          "technology" : "JSON/HTTP"
+        }, {
+          "description" : "Routes /api/reportes",
+          "destinationId" : "56",
+          "id" : "123",
           "sourceId" : "25",
           "tags" : "Relationship",
           "technology" : "JSON/HTTP"
@@ -1157,19 +1164,42 @@
           "id" : "30",
           "name" : "AuthController",
           "properties" : {
-            "structurizr.dsl.identifier" : "userController"
+            "structurizr.dsl.identifier" : "authController"
           },
           "relationships" : [ {
             "description" : "Invokes",
-            "destinationId" : "32",
-            "id" : "106",
+            "destinationId" : "33",
+            "id" : "108",
             "sourceId" : "30",
             "tags" : "Relationship"
           }, {
             "description" : "Unhandled exceptions",
-            "destinationId" : "31",
-            "id" : "107",
+            "destinationId" : "32",
+            "id" : "109",
             "sourceId" : "30",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component,Adapter-In",
+          "technology" : "Spring MVC @RestController"
+        }, {
+          "description" : "Exposes GET /api/usuarios, GET /api/usuarios/{id} and PATCH /api/usuarios/{id}/estado. Separate from AuthController because those are the only two public routes of the system and these require ADMINISTRADOR.",
+          "documentation" : { },
+          "id" : "31",
+          "name" : "UserController",
+          "properties" : {
+            "structurizr.dsl.identifier" : "userController"
+          },
+          "relationships" : [ {
+            "description" : "Invokes. Passes X-User-Role through; it decides nothing itself",
+            "destinationId" : "33",
+            "id" : "110",
+            "sourceId" : "31",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Unhandled exceptions",
+            "destinationId" : "32",
+            "id" : "111",
+            "sourceId" : "31",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component,Adapter-In",
@@ -1177,7 +1207,7 @@
         }, {
           "description" : "Translates invalid credentials and conflicts (user already registered) into HTTP status codes.",
           "documentation" : { },
-          "id" : "31",
+          "id" : "32",
           "name" : "ErrorHandler",
           "properties" : {
             "structurizr.dsl.identifier" : "errorHandlerUser"
@@ -1187,7 +1217,7 @@
         }, {
           "description" : "Input port: registration, authentication, and role management operations, with no dependency on Spring MVC or JPA.",
           "documentation" : { },
-          "id" : "32",
+          "id" : "33",
           "name" : "UserUseCase",
           "properties" : {
             "structurizr.dsl.identifier" : "userUseCase"
@@ -1195,24 +1225,24 @@
           "tags" : "Element,Component,Port",
           "technology" : "Java interface"
         }, {
-          "description" : "Implements the input port: validates credentials and manages the user and role lifecycle.",
+          "description" : "Implements the input port: validates credentials (FR-003, FR-005) and manages the user lifecycle. Applies FR-048: only an ADMINISTRADOR lists users or changes their state.",
           "documentation" : { },
-          "id" : "33",
+          "id" : "34",
           "name" : "UserService",
           "properties" : {
             "structurizr.dsl.identifier" : "userService"
           },
           "relationships" : [ {
             "description" : "Implements",
-            "destinationId" : "32",
-            "id" : "108",
-            "sourceId" : "33",
+            "destinationId" : "33",
+            "id" : "112",
+            "sourceId" : "34",
             "tags" : "Relationship"
           }, {
             "description" : "Persists and queries users and roles",
-            "destinationId" : "34",
-            "id" : "109",
-            "sourceId" : "33",
+            "destinationId" : "35",
+            "id" : "113",
+            "sourceId" : "34",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component,Application",
@@ -1220,7 +1250,7 @@
         }, {
           "description" : "Output port: persistence operations over users and roles that the application core needs.",
           "documentation" : { },
-          "id" : "34",
+          "id" : "35",
           "name" : "UserRepositoryPort",
           "properties" : {
             "structurizr.dsl.identifier" : "userRepositoryPort"
@@ -1230,22 +1260,22 @@
         }, {
           "description" : "Implements the output port against the users and roles table.",
           "documentation" : { },
-          "id" : "35",
+          "id" : "36",
           "name" : "UserRepositoryAdapter",
           "properties" : {
             "structurizr.dsl.identifier" : "userRepositoryAdapter"
           },
           "relationships" : [ {
             "description" : "Implements",
-            "destinationId" : "34",
-            "id" : "110",
-            "sourceId" : "35",
+            "destinationId" : "35",
+            "id" : "114",
+            "sourceId" : "36",
             "tags" : "Relationship"
           }, {
             "description" : "Reads and writes",
-            "destinationId" : "63",
-            "id" : "111",
-            "sourceId" : "35",
+            "destinationId" : "64",
+            "id" : "115",
+            "sourceId" : "36",
             "tags" : "Relationship",
             "technology" : "JDBC"
           } ],
@@ -1261,8 +1291,8 @@
         },
         "relationships" : [ {
           "description" : "Reads and writes",
-          "destinationId" : "63",
-          "id" : "89",
+          "destinationId" : "64",
+          "id" : "90",
           "sourceId" : "29",
           "tags" : "Relationship",
           "technology" : "JDBC"
@@ -1273,22 +1303,22 @@
         "components" : [ {
           "description" : "Exposes the endpoints for the court catalog, opening hours, and maintenance blocks; translates HTTP requests into calls to the input port.",
           "documentation" : { },
-          "id" : "37",
+          "id" : "38",
           "name" : "CourtController",
           "properties" : {
             "structurizr.dsl.identifier" : "courtController"
           },
           "relationships" : [ {
             "description" : "Invokes. Passes X-User-Role through; it decides nothing itself",
-            "destinationId" : "39",
-            "id" : "113",
-            "sourceId" : "37",
+            "destinationId" : "40",
+            "id" : "117",
+            "sourceId" : "38",
             "tags" : "Relationship"
           }, {
             "description" : "Unhandled exceptions",
-            "destinationId" : "38",
-            "id" : "114",
-            "sourceId" : "37",
+            "destinationId" : "39",
+            "id" : "118",
+            "sourceId" : "38",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component,Adapter-In",
@@ -1296,7 +1326,7 @@
         }, {
           "description" : "Translates domain exceptions into HTTP status codes: 403 for an insufficient role (RN-07), 404 for a missing court or block, 409 for an overlapping maintenance block, 400 for a closing time that is not after the opening one.",
           "documentation" : { },
-          "id" : "38",
+          "id" : "39",
           "name" : "ErrorHandler",
           "properties" : {
             "structurizr.dsl.identifier" : "errorHandlerCourt"
@@ -1306,7 +1336,7 @@
         }, {
           "description" : "Input port: catalog, schedule, and maintenance-block operations, with no dependency on Spring MVC or JPA.",
           "documentation" : { },
-          "id" : "39",
+          "id" : "40",
           "name" : "CourtUseCase",
           "properties" : {
             "structurizr.dsl.identifier" : "courtUseCase"
@@ -1316,22 +1346,22 @@
         }, {
           "description" : "Implements the input port. Applies RN-07: only an ADMINISTRADOR may create, edit, deactivate a court or register maintenance blocks. Reads the role from X-User-Role; it never authenticates.",
           "documentation" : { },
-          "id" : "40",
+          "id" : "41",
           "name" : "CourtService",
           "properties" : {
             "structurizr.dsl.identifier" : "courtService"
           },
           "relationships" : [ {
             "description" : "Implements",
-            "destinationId" : "39",
-            "id" : "115",
-            "sourceId" : "40",
+            "destinationId" : "40",
+            "id" : "119",
+            "sourceId" : "41",
             "tags" : "Relationship"
           }, {
             "description" : "Persists and queries the catalog",
-            "destinationId" : "41",
-            "id" : "116",
-            "sourceId" : "40",
+            "destinationId" : "42",
+            "id" : "120",
+            "sourceId" : "41",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component,Application",
@@ -1339,7 +1369,7 @@
         }, {
           "description" : "Output port: persistence operations over courts, schedules, and blocks that the application core needs.",
           "documentation" : { },
-          "id" : "41",
+          "id" : "42",
           "name" : "CourtRepositoryPort",
           "properties" : {
             "structurizr.dsl.identifier" : "courtRepositoryPort"
@@ -1349,22 +1379,22 @@
         }, {
           "description" : "Implements the output port against the courts, schedules, and blocks tables.",
           "documentation" : { },
-          "id" : "42",
+          "id" : "43",
           "name" : "CourtRepositoryAdapter",
           "properties" : {
             "structurizr.dsl.identifier" : "courtRepositoryAdapter"
           },
           "relationships" : [ {
             "description" : "Implements",
-            "destinationId" : "41",
-            "id" : "117",
-            "sourceId" : "42",
+            "destinationId" : "42",
+            "id" : "121",
+            "sourceId" : "43",
             "tags" : "Relationship"
           }, {
             "description" : "Reads and writes",
-            "destinationId" : "64",
-            "id" : "118",
-            "sourceId" : "42",
+            "destinationId" : "65",
+            "id" : "122",
+            "sourceId" : "43",
             "tags" : "Relationship",
             "technology" : "JDBC"
           } ],
@@ -1373,16 +1403,16 @@
         } ],
         "description" : "Catalog of courts and sports, opening hours, and maintenance blocks.",
         "documentation" : { },
-        "id" : "36",
+        "id" : "37",
         "name" : "ms-canchas",
         "properties" : {
           "structurizr.dsl.identifier" : "msCanchas"
         },
         "relationships" : [ {
           "description" : "Reads and writes",
-          "destinationId" : "64",
-          "id" : "90",
-          "sourceId" : "36",
+          "destinationId" : "65",
+          "id" : "91",
+          "sourceId" : "37",
           "tags" : "Relationship",
           "technology" : "JDBC"
         } ],
@@ -1392,22 +1422,22 @@
         "components" : [ {
           "description" : "Exposes the REST endpoints for bookings and availability; translates HTTP requests into calls to the input port.",
           "documentation" : { },
-          "id" : "44",
+          "id" : "45",
           "name" : "BookingController",
           "properties" : {
             "structurizr.dsl.identifier" : "bookingController"
           },
           "relationships" : [ {
             "description" : "Invokes",
-            "destinationId" : "46",
-            "id" : "93",
-            "sourceId" : "44",
+            "destinationId" : "47",
+            "id" : "94",
+            "sourceId" : "45",
             "tags" : "Relationship"
           }, {
             "description" : "Unhandled exceptions",
-            "destinationId" : "45",
-            "id" : "94",
-            "sourceId" : "44",
+            "destinationId" : "46",
+            "id" : "95",
+            "sourceId" : "45",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component,Adapter-In",
@@ -1415,7 +1445,7 @@
         }, {
           "description" : "Translates business exceptions (overlap, permissions, booking not found) into HTTP status codes (409 on overlap).",
           "documentation" : { },
-          "id" : "45",
+          "id" : "46",
           "name" : "ErrorHandler",
           "properties" : {
             "structurizr.dsl.identifier" : "errorHandlerBooking"
@@ -1425,7 +1455,7 @@
         }, {
           "description" : "Input port: create, look up, and cancel bookings; calculate availability. No dependency on Spring MVC or JPA.",
           "documentation" : { },
-          "id" : "46",
+          "id" : "47",
           "name" : "BookingUseCase",
           "properties" : {
             "structurizr.dsl.identifier" : "bookingUseCase"
@@ -1435,34 +1465,34 @@
         }, {
           "description" : "Implements the input port: applies RN-01..RN-08 (availability, active-bookings limit RN-06, future-only cancellation RN-04, role-based permissions RN-03).",
           "documentation" : { },
-          "id" : "47",
+          "id" : "48",
           "name" : "BookingService",
           "properties" : {
             "structurizr.dsl.identifier" : "bookingService"
           },
           "relationships" : [ {
             "description" : "Implements",
-            "destinationId" : "46",
-            "id" : "95",
-            "sourceId" : "47",
+            "destinationId" : "47",
+            "id" : "96",
+            "sourceId" : "48",
             "tags" : "Relationship"
           }, {
             "description" : "Checks the court and gets its opening hours",
-            "destinationId" : "50",
-            "id" : "96",
-            "sourceId" : "47",
+            "destinationId" : "51",
+            "id" : "97",
+            "sourceId" : "48",
             "tags" : "Relationship"
           }, {
             "description" : "Persists, queries, and calculates availability over bookings",
-            "destinationId" : "48",
-            "id" : "97",
-            "sourceId" : "47",
+            "destinationId" : "49",
+            "id" : "98",
+            "sourceId" : "48",
             "tags" : "Relationship"
           }, {
             "description" : "Reads the maximum active bookings (RN-06)",
-            "destinationId" : "49",
-            "id" : "98",
-            "sourceId" : "47",
+            "destinationId" : "50",
+            "id" : "99",
+            "sourceId" : "48",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component,Application",
@@ -1470,7 +1500,7 @@
         }, {
           "description" : "Output port: persistence operations over bookings that the application core needs.",
           "documentation" : { },
-          "id" : "48",
+          "id" : "49",
           "name" : "BookingRepositoryPort",
           "properties" : {
             "structurizr.dsl.identifier" : "bookingRepositoryPort"
@@ -1480,7 +1510,7 @@
         }, {
           "description" : "Output port: reads configurable parameters, such as the maximum number of simultaneous active bookings.",
           "documentation" : { },
-          "id" : "49",
+          "id" : "50",
           "name" : "ConfigurationRepositoryPort",
           "properties" : {
             "structurizr.dsl.identifier" : "configurationRepositoryPort"
@@ -1490,7 +1520,7 @@
         }, {
           "description" : "Output port: checks whether a court exists, is active, and its opening hours, without depending on how that check travels over the network.",
           "documentation" : { },
-          "id" : "50",
+          "id" : "51",
           "name" : "CourtClientPort",
           "properties" : {
             "structurizr.dsl.identifier" : "courtClientPort"
@@ -1500,34 +1530,10 @@
         }, {
           "description" : "Implements the booking-persistence output port. The PostgreSQL EXCLUDE constraint prevents overlap (RN-02).",
           "documentation" : { },
-          "id" : "51",
+          "id" : "52",
           "name" : "BookingRepositoryAdapter",
           "properties" : {
             "structurizr.dsl.identifier" : "bookingRepositoryAdapter"
-          },
-          "relationships" : [ {
-            "description" : "Implements",
-            "destinationId" : "48",
-            "id" : "100",
-            "sourceId" : "51",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Reads and writes",
-            "destinationId" : "65",
-            "id" : "103",
-            "sourceId" : "51",
-            "tags" : "Relationship",
-            "technology" : "JDBC"
-          } ],
-          "tags" : "Element,Component,Adapter-Out",
-          "technology" : "Spring Data JPA"
-        }, {
-          "description" : "Implements the configuration-reading output port.",
-          "documentation" : { },
-          "id" : "52",
-          "name" : "ConfigurationRepositoryAdapter",
-          "properties" : {
-            "structurizr.dsl.identifier" : "configurationRepositoryAdapter"
           },
           "relationships" : [ {
             "description" : "Implements",
@@ -1536,8 +1542,8 @@
             "sourceId" : "52",
             "tags" : "Relationship"
           }, {
-            "description" : "Reads",
-            "destinationId" : "65",
+            "description" : "Reads and writes",
+            "destinationId" : "66",
             "id" : "104",
             "sourceId" : "52",
             "tags" : "Relationship",
@@ -1546,24 +1552,48 @@
           "tags" : "Element,Component,Adapter-Out",
           "technology" : "Spring Data JPA"
         }, {
-          "description" : "Implements the court-check output port by calling ms-canchas over REST.",
+          "description" : "Implements the configuration-reading output port.",
           "documentation" : { },
           "id" : "53",
+          "name" : "ConfigurationRepositoryAdapter",
+          "properties" : {
+            "structurizr.dsl.identifier" : "configurationRepositoryAdapter"
+          },
+          "relationships" : [ {
+            "description" : "Implements",
+            "destinationId" : "50",
+            "id" : "102",
+            "sourceId" : "53",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Reads",
+            "destinationId" : "66",
+            "id" : "105",
+            "sourceId" : "53",
+            "tags" : "Relationship",
+            "technology" : "JDBC"
+          } ],
+          "tags" : "Element,Component,Adapter-Out",
+          "technology" : "Spring Data JPA"
+        }, {
+          "description" : "Implements the court-check output port by calling ms-canchas over REST.",
+          "documentation" : { },
+          "id" : "54",
           "name" : "CourtClientAdapter",
           "properties" : {
             "structurizr.dsl.identifier" : "courtClientAdapter"
           },
           "relationships" : [ {
             "description" : "Implements",
-            "destinationId" : "50",
-            "id" : "99",
-            "sourceId" : "53",
+            "destinationId" : "51",
+            "id" : "100",
+            "sourceId" : "54",
             "tags" : "Relationship"
           }, {
             "description" : "Queries the court (schedule, active state) and its maintenance blocks, to mark blocked slots as unbookable (FR-010)",
-            "destinationId" : "36",
-            "id" : "102",
-            "sourceId" : "53",
+            "destinationId" : "37",
+            "id" : "103",
+            "sourceId" : "54",
             "tags" : "Relationship",
             "technology" : "JSON/HTTP"
           } ],
@@ -1572,23 +1602,23 @@
         } ],
         "description" : "Creation, lookup, and cancellation of bookings. Concentrates business rules RN-01 through RN-08.",
         "documentation" : { },
-        "id" : "43",
+        "id" : "44",
         "name" : "ms-reservas",
         "properties" : {
           "structurizr.dsl.identifier" : "msReservas"
         },
         "relationships" : [ {
           "description" : "Checks that the court exists, is active, and the block is within its schedule",
-          "destinationId" : "36",
-          "id" : "86",
-          "sourceId" : "43",
+          "destinationId" : "37",
+          "id" : "87",
+          "sourceId" : "44",
           "tags" : "Relationship",
           "technology" : "JSON/HTTP (synchronous)"
         }, {
           "description" : "Reads and writes",
-          "destinationId" : "65",
-          "id" : "91",
-          "sourceId" : "43",
+          "destinationId" : "66",
+          "id" : "92",
+          "sourceId" : "44",
           "tags" : "Relationship",
           "technology" : "JDBC"
         } ],
@@ -1598,22 +1628,22 @@
         "components" : [ {
           "description" : "Exposes the occupancy, bookings-by-period, cancellations, and court-demand ranking endpoints; translates HTTP requests into calls to the input port.",
           "documentation" : { },
-          "id" : "55",
+          "id" : "56",
           "name" : "ReportController",
           "properties" : {
             "structurizr.dsl.identifier" : "reportController"
           },
           "relationships" : [ {
             "description" : "Invokes",
-            "destinationId" : "57",
-            "id" : "120",
-            "sourceId" : "55",
+            "destinationId" : "58",
+            "id" : "124",
+            "sourceId" : "56",
             "tags" : "Relationship"
           }, {
             "description" : "Unhandled exceptions",
-            "destinationId" : "56",
-            "id" : "121",
-            "sourceId" : "55",
+            "destinationId" : "57",
+            "id" : "125",
+            "sourceId" : "56",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component,Adapter-In",
@@ -1621,7 +1651,7 @@
         }, {
           "description" : "Translates failures from the source services (unavailable) into HTTP status codes.",
           "documentation" : { },
-          "id" : "56",
+          "id" : "57",
           "name" : "ErrorHandler",
           "properties" : {
             "structurizr.dsl.identifier" : "errorHandlerReport"
@@ -1631,7 +1661,7 @@
         }, {
           "description" : "Input port: occupancy, bookings-by-period, cancellations, and court-demand ranking operations. No dependency on Spring MVC or the REST clients.",
           "documentation" : { },
-          "id" : "57",
+          "id" : "58",
           "name" : "ReportUseCase",
           "properties" : {
             "structurizr.dsl.identifier" : "reportUseCase"
@@ -1641,28 +1671,28 @@
         }, {
           "description" : "Implements the input port: aggregates and computes occupancy metrics and the court-demand ranking by combining bookings and catalog data.",
           "documentation" : { },
-          "id" : "58",
+          "id" : "59",
           "name" : "ReportService",
           "properties" : {
             "structurizr.dsl.identifier" : "reportService"
           },
           "relationships" : [ {
             "description" : "Implements",
-            "destinationId" : "57",
-            "id" : "122",
-            "sourceId" : "58",
+            "destinationId" : "58",
+            "id" : "126",
+            "sourceId" : "59",
             "tags" : "Relationship"
           }, {
             "description" : "Gets the period's bookings",
-            "destinationId" : "59",
-            "id" : "123",
-            "sourceId" : "58",
+            "destinationId" : "60",
+            "id" : "127",
+            "sourceId" : "59",
             "tags" : "Relationship"
           }, {
             "description" : "Gets the court catalog and schedules",
-            "destinationId" : "60",
-            "id" : "124",
-            "sourceId" : "58",
+            "destinationId" : "61",
+            "id" : "128",
+            "sourceId" : "59",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component,Application",
@@ -1670,7 +1700,7 @@
         }, {
           "description" : "Output port: gets the period's bookings, without depending on how that call travels over the network.",
           "documentation" : { },
-          "id" : "59",
+          "id" : "60",
           "name" : "BookingsClientPort",
           "properties" : {
             "structurizr.dsl.identifier" : "bookingsClientPort"
@@ -1680,7 +1710,7 @@
         }, {
           "description" : "Output port: gets the court catalog and schedules, without depending on how that call travels over the network.",
           "documentation" : { },
-          "id" : "60",
+          "id" : "61",
           "name" : "CourtsClientPort",
           "properties" : {
             "structurizr.dsl.identifier" : "courtsClientPort"
@@ -1690,22 +1720,22 @@
         }, {
           "description" : "Implements the bookings output port by calling ms-reservas over REST.",
           "documentation" : { },
-          "id" : "61",
+          "id" : "62",
           "name" : "BookingsClientAdapter",
           "properties" : {
             "structurizr.dsl.identifier" : "bookingsClientAdapter"
           },
           "relationships" : [ {
             "description" : "Implements",
-            "destinationId" : "59",
-            "id" : "125",
-            "sourceId" : "61",
+            "destinationId" : "60",
+            "id" : "129",
+            "sourceId" : "62",
             "tags" : "Relationship"
           }, {
             "description" : "Gets the period's bookings",
-            "destinationId" : "43",
-            "id" : "127",
-            "sourceId" : "61",
+            "destinationId" : "44",
+            "id" : "131",
+            "sourceId" : "62",
             "tags" : "Relationship",
             "technology" : "JSON/HTTP (synchronous)"
           } ],
@@ -1714,22 +1744,22 @@
         }, {
           "description" : "Implements the catalog output port by calling ms-canchas over REST.",
           "documentation" : { },
-          "id" : "62",
+          "id" : "63",
           "name" : "CourtsClientAdapter",
           "properties" : {
             "structurizr.dsl.identifier" : "courtsClientAdapter"
           },
           "relationships" : [ {
             "description" : "Implements",
-            "destinationId" : "60",
-            "id" : "126",
-            "sourceId" : "62",
+            "destinationId" : "61",
+            "id" : "130",
+            "sourceId" : "63",
             "tags" : "Relationship"
           }, {
             "description" : "Gets the court catalog and schedules",
-            "destinationId" : "36",
-            "id" : "128",
-            "sourceId" : "62",
+            "destinationId" : "37",
+            "id" : "132",
+            "sourceId" : "63",
             "tags" : "Relationship",
             "technology" : "JSON/HTTP (synchronous)"
           } ],
@@ -1738,23 +1768,23 @@
         } ],
         "description" : "Generates occupancy reports, bookings by period, cancellations, and the most/least demanded courts ranking. Has no database of its own: aggregates via REST.",
         "documentation" : { },
-        "id" : "54",
+        "id" : "55",
         "name" : "ms-reportes",
         "properties" : {
           "structurizr.dsl.identifier" : "msReportes"
         },
         "relationships" : [ {
           "description" : "Gets the period's bookings",
-          "destinationId" : "43",
-          "id" : "87",
-          "sourceId" : "54",
+          "destinationId" : "44",
+          "id" : "88",
+          "sourceId" : "55",
           "tags" : "Relationship",
           "technology" : "JSON/HTTP (synchronous)"
         }, {
           "description" : "Gets the court catalog and schedules",
-          "destinationId" : "36",
-          "id" : "88",
-          "sourceId" : "54",
+          "destinationId" : "37",
+          "id" : "89",
+          "sourceId" : "55",
           "tags" : "Relationship",
           "technology" : "JSON/HTTP (synchronous)"
         } ],
@@ -1763,7 +1793,7 @@
       }, {
         "description" : "Users, roles, and credentials.",
         "documentation" : { },
-        "id" : "63",
+        "id" : "64",
         "name" : "usuarios_db",
         "properties" : {
           "structurizr.dsl.identifier" : "usuariosDb"
@@ -1773,7 +1803,7 @@
       }, {
         "description" : "Courts, sports, opening hours, and maintenance blocks.",
         "documentation" : { },
-        "id" : "64",
+        "id" : "65",
         "name" : "canchas_db",
         "properties" : {
           "structurizr.dsl.identifier" : "canchasDb"
@@ -1783,7 +1813,7 @@
       }, {
         "description" : "Bookings with their status, plus configurable parameters. Hosts the exclusion constraint that implements RN-02.",
         "documentation" : { },
-        "id" : "65",
+        "id" : "66",
         "name" : "reservas_db",
         "properties" : {
           "structurizr.dsl.identifier" : "reservasDb"
@@ -1803,26 +1833,22 @@
   },
   "name" : "Sports Court Booking System",
   "properties" : {
-    "structurizr.inspection.error" : "58",
-    "structurizr.dsl" : "LyoqCiAqIFNwb3J0cyBDb3VydCBCb29raW5nIFN5c3RlbQogKiBDNCBtb2RlbCBpbiBTdHJ1Y3R1cml6ciBEU0wKICoKICogRGVzYXJyb2xsbyBkZSBBcGxpY2FjaW9uZXMgRW1wcmVzYXJpYWxlcyDigJQgTWFlc3Ryw61hIGVuIEluZ2VuaWVyw61hIGRlIFNvZnR3YXJlCiAqCiAqIFZpZXdzIGluY2x1ZGVkOgogKiAgIDAxLiBDb250ZXh0ICAgICAgICAgICAgICAg4oCUIHRoZSBzeXN0ZW0gYW5kIGl0cyB1c2VycwogKiAgIDAyLiBDb250YWluZXJzICAgICAgICAgICAgIOKAlCBtaWNyb2Zyb250ZW5kcywgZ2F0ZXdheSwgbWljcm9zZXJ2aWNlcywgYW5kIGRhdGFiYXNlcwogKiAgIDAzLiBDb21wb25lbnRzIChtcy1yZXNlcnZhcykgICDigJQgd2hlcmUgcnVsZXMgUk4tMDEuLlJOLTA4IGxpdmUKICogICAwNC4gRGVwbG95bWVudCAgICAgICAgICAgICAg4oCUIGhvdyBpdCBhbGwgbWF0ZXJpYWxpemVzIGluIERvY2tlciBDb21wb3NlCiAqICAgMDUtMDguIENvbXBvbmVudHMgKG1zLXVzdWFyaW9zLCBtcy1jYW5jaGFzLCBtcy1yZXBvcnRlcywgZ2F0ZXdheSkKICogICAwOS0xMi4gQ29tcG9uZW50cyAoc2hlbGwsIG1mLXJlc2VydmFzLCBtZi1hZG1pbmlzdHJhY2lvbiwgbWYtcmVwb3J0ZXMpCiAqCiAqIFN0YXJ0IHRoZSB2aWV3ZXI6ICBkb2NrZXIgY29tcG9zZSB1cCAtZCAgIChpbiB0aGlzIHNhbWUgZm9sZGVyKQogKi8Kd29ya3NwYWNlICJTcG9ydHMgQ291cnQgQm9va2luZyBTeXN0ZW0iICJNaWNyb2Zyb250ZW5kIGFuZCBtaWNyb3NlcnZpY2VzIGFyY2hpdGVjdHVyZSBmb3IgYm9va2luZyBwYWRlbCwgdGVubmlzLCBhbmQgYmFza2V0YmFsbCBjb3VydHMuIiB7CgogICAgbW9kZWwgewoKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgLy8gIEFjdG9ycwogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICB1c3VhcmlvRmluYWwgPSBwZXJzb24gIkVuZCBVc2VyIiAiQ2hlY2tzIGF2YWlsYWJpbGl0eSwgY3JlYXRlcyBhbmQgY2FuY2VscyB0aGVpciBvd24gYm9va2luZ3MuIgogICAgICAgIGFkbWluaXN0cmFkb3IgPSBwZXJzb24gIkFkbWluaXN0cmF0b3IiICJNYW5hZ2VzIHRoZSBjb3VydCBjYXRhbG9nLCBjYW5jZWxzIGFueSBib29raW5nLCBhbmQgdmlld3Mgb2NjdXBhbmN5IHJlcG9ydHMuIgoKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgLy8gIFN5c3RlbQogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICBzaXN0ZW1hID0gc29mdHdhcmVTeXN0ZW0gIkNvdXJ0IEJvb2tpbmcgU3lzdGVtIiAiQWxsb3dzIGJvb2tpbmcgc3BvcnRzIGNvdXJ0cyBieSB0aW1lIGJsb2Nrcywgd2l0aCBhZG1pbmlzdHJhdGl2ZSBtYW5hZ2VtZW50IGFuZCBvY2N1cGFuY3kgcmVwb3J0cy4iIHsKCiAgICAgICAgICAgIC8vIC0tLSBFbnRyeSBsYXllciAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgIGVkZ2UgPSBjb250YWluZXIgIkVkZ2UiICJTZXJ2ZXMgdGhlIHNoZWxsLCB0aGUgcmVtb3RlIG1pY3JvZnJvbnRlbmRzLCBhbmQgdGhlIEFQSSB1bmRlciBhIHNpbmdsZSBvcmlnaW4gKGh0dHA6Ly9sb2NhbGhvc3QpLiIgIm5naW54IDEuMjciIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkluZnJhc3RydWN0dXJlIgogICAgICAgICAgICB9CgogICAgICAgICAgICAvLyAtLS0gTWljcm9mcm9udGVuZHMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgc2hlbGwgPSBjb250YWluZXIgIlNoZWxsIChob3N0KSIgIk1haW4gY29udGFpbmVyOiBsYXlvdXQsIG5hdmlnYXRpb24sIHVzZXIgc2Vzc2lvbiwgYW5kIHJ1bnRpbWUgb3JjaGVzdHJhdGlvbiBvZiB0aGUgcmVtb3Rlcy4iICJSZWFjdCArIE1vZHVsZSBGZWRlcmF0aW9uIiB7CiAgICAgICAgICAgICAgICB0YWdzICJNaWNyb2Zyb250ZW5kIiAiSG9zdCIKCiAgICAgICAgICAgICAgICAvLyAtLS0gSW50ZXJuYWwgY29tcG9uZW50cyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgICAgIHJvdXRlclNoZWxsID0gY29tcG9uZW50ICJSb3V0ZXIiICJEZWZpbmVzIHRoZSB0b3AtbGV2ZWwgcm91dGVzIGFuZCByZXNvbHZlcyB3aGljaCByZW1vdGUgdG8gZGVsZWdhdGUgZWFjaCBvbmUgdG8uIiAiUmVhY3QgUm91dGVyIgogICAgICAgICAgICAgICAgbGF5b3V0U2hlbGwgPSBjb21wb25lbnQgIkxheW91dCIgIlNoYXJlZCB2aXN1YWwgc3RydWN0dXJlIChoZWFkZXIsIG5hdmlnYXRpb24pIHRoYXQgd3JhcHMgdGhlIGFjdGl2ZSByZW1vdGUuIiAiUmVhY3QiCiAgICAgICAgICAgICAgICBzZXNzaW9uQ29udGV4dCA9IGNvbXBvbmVudCAiU2Vzc2lvbkNvbnRleHQiICJIb2xkcyB0aGUgYXV0aGVudGljYXRlZCB1c2VyJ3MgaWRlbnRpdHkgYW5kIHJvbGUsIGFuZCBleHBvc2VzIHNlc3Npb24gc3RhdGUgdG8gdGhlIHNoZWxsIGFuZCB0aGUgcmVtb3Rlcy4iICJSZWFjdCBDb250ZXh0IgogICAgICAgICAgICAgICAgcmVtb3RlTG9hZGVyID0gY29tcG9uZW50ICJSZW1vdGVMb2FkZXIiICJMb2FkcyBlYWNoIG1pY3JvZnJvbnRlbmQncyByZW1vdGVFbnRyeS5qcyBhdCBydW50aW1lLiIgIk1vZHVsZSBGZWRlcmF0aW9uIgogICAgICAgICAgICB9CgogICAgICAgICAgICBtZlJlc2VydmFzID0gY29udGFpbmVyICJtZi1yZXNlcnZhcyIgIkF2YWlsYWJpbGl0eSBsb29rdXAsIGJvb2tpbmcgY3JlYXRpb24sIGFuZCBjYW5jZWxsYXRpb24gZm9yIHRoZSBlbmQgdXNlci4iICJSZWFjdCArIE1vZHVsZSBGZWRlcmF0aW9uIChyZW1vdGUpIiB7CiAgICAgICAgICAgICAgICB0YWdzICJNaWNyb2Zyb250ZW5kIgoKICAgICAgICAgICAgICAgIC8vIC0tLSBJbnRlcm5hbCBjb21wb25lbnRzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgdmlld3NSZXNlcnZhcyA9IGNvbXBvbmVudCAiVmlld3MiICJBdmFpbGFiaWxpdHksIGJvb2tpbmcgY3JlYXRpb24gYW5kIGNhbmNlbGxhdGlvbiBzY3JlZW5zLCBhbmQgdGhlIFwiTXkgQm9va2luZ3NcIiBoaXN0b3J5LiIgIlJlYWN0IFJvdXRlciAocmVtb3RlIHJvdXRlcykiCiAgICAgICAgICAgICAgICB1aUNvbXBvbmVudHNSZXNlcnZhcyA9IGNvbXBvbmVudCAiVUkgQ29tcG9uZW50cyIgIlJldXNhYmxlIHBpZWNlczogdGltZS1ibG9jayBjYWxlbmRhciwgYm9va2luZyBjYXJkLCBjb3VydCBzZWxlY3Rvci4iICJSZWFjdCIKICAgICAgICAgICAgICAgIHN0YXRlUmVzZXJ2YXMgPSBjb21wb25lbnQgIlN0YXRlIiAiSG9sZHMgdGhlIHNlbGVjdGVkIGNvdXJ0L2RhdGUgYW5kIHRoZSBhdmFpbGFiaWxpdHkgcmVzdWx0IHdoaWxlIHRoZSB1c2VyIGJ1aWxkcyBhIGJvb2tpbmcuIiAiUmVhY3QgQ29udGV4dCAvIGhvb2tzIgogICAgICAgICAgICAgICAgYXBpQ2xpZW50UmVzZXJ2YXMgPSBjb21wb25lbnQgIkFwaUNsaWVudCIgIldyYXBzIHRoZSBIVFRQIGNhbGxzIHRvIC9hcGkvcmVzZXJ2YXMgYW5kIC9hcGkvZGlzcG9uaWJpbGlkYWQuIiAiRmV0Y2ggQVBJIgogICAgICAgICAgICB9CgogICAgICAgICAgICBtZkFkbWluaXN0cmFjaW9uID0gY29udGFpbmVyICJtZi1hZG1pbmlzdHJhY2lvbiIgIk1hbmFnZW1lbnQgb2YgdGhlIGNvdXJ0IGNhdGFsb2csIHNjaGVkdWxlcywgYmxvY2tzLCB1c2VycywgYW5kIGNhbmNlbGxhdGlvbiBvZiBhbnkgYm9va2luZy4iICJSZWFjdCArIE1vZHVsZSBGZWRlcmF0aW9uIChyZW1vdGUpIiB7CiAgICAgICAgICAgICAgICB0YWdzICJNaWNyb2Zyb250ZW5kIgoKICAgICAgICAgICAgICAgIC8vIC0tLSBJbnRlcm5hbCBjb21wb25lbnRzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgdmlld3NBZG1pbmlzdHJhY2lvbiA9IGNvbXBvbmVudCAiVmlld3MiICJDb3VydCBjYXRhbG9nLCBzY2hlZHVsZXMsIG1haW50ZW5hbmNlIGJsb2NrcywgdXNlciBtYW5hZ2VtZW50IChhY3RpdmF0ZS9kZWFjdGl2YXRlKSwgYW5kIGFkbWluaXN0cmF0aXZlIGJvb2tpbmctY2FuY2VsbGF0aW9uIHNjcmVlbnMuIiAiUmVhY3QgUm91dGVyIChyZW1vdGUgcm91dGVzKSIKICAgICAgICAgICAgICAgIHVpQ29tcG9uZW50c0FkbWluaXN0cmFjaW9uID0gY29tcG9uZW50ICJVSSBDb21wb25lbnRzIiAiUmV1c2FibGUgcGllY2VzOiBjb3VydCBmb3JtLCBib29raW5ncyB0YWJsZSwgc2NoZWR1bGUgZWRpdG9yLCB1c2VycyB0YWJsZS4iICJSZWFjdCIKICAgICAgICAgICAgICAgIHN0YXRlQWRtaW5pc3RyYWNpb24gPSBjb21wb25lbnQgIlN0YXRlIiAiSG9sZHMgdGhlIGFjdGl2ZSBmb3JtIGFuZCBmaWx0ZXJzIHdoaWxlIHRoZSBhZG1pbmlzdHJhdG9yIGVkaXRzIHRoZSBjYXRhbG9nLiIgIlJlYWN0IENvbnRleHQgLyBob29rcyIKICAgICAgICAgICAgICAgIGFwaUNsaWVudEFkbWluaXN0cmFjaW9uID0gY29tcG9uZW50ICJBcGlDbGllbnQiICJXcmFwcyB0aGUgSFRUUCBjYWxscyB0byAvYXBpL2NhbmNoYXMsIC9hcGkvcmVzZXJ2YXMsIGFuZCAvYXBpL3VzdWFyaW9zLiIgIkZldGNoIEFQSSIKICAgICAgICAgICAgfQoKICAgICAgICAgICAgbWZSZXBvcnRlcyA9IGNvbnRhaW5lciAibWYtcmVwb3J0ZXMiICJEaXNwbGF5cyBvY2N1cGFuY3kgcmVwb3J0cywgYm9va2luZ3MgYnkgcGVyaW9kLCBjYW5jZWxsYXRpb25zLCBhbmQgdGhlIG1vc3QvbGVhc3QgZGVtYW5kZWQgY291cnRzLiIgIlJlYWN0ICsgTW9kdWxlIEZlZGVyYXRpb24gKHJlbW90ZSkiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIk1pY3JvZnJvbnRlbmQiCgogICAgICAgICAgICAgICAgLy8gLS0tIEludGVybmFsIGNvbXBvbmVudHMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICB2aWV3c1JlcG9ydGVzID0gY29tcG9uZW50ICJWaWV3cyIgIk9jY3VwYW5jeSwgYm9va2luZ3MtYnktcGVyaW9kLCBjYW5jZWxsYXRpb25zLCBhbmQgY291cnQtZGVtYW5kIHJhbmtpbmcgc2NyZWVucy4iICJSZWFjdCBSb3V0ZXIgKHJlbW90ZSByb3V0ZXMpIgogICAgICAgICAgICAgICAgdWlDb21wb25lbnRzUmVwb3J0ZXMgPSBjb21wb25lbnQgIlVJIENvbXBvbmVudHMiICJSZXVzYWJsZSBwaWVjZXM6IHJlcG9ydCBjaGFydHMgYW5kIHRhYmxlcywgZGF0ZS1yYW5nZSBwaWNrZXIuIiAiUmVhY3QiCiAgICAgICAgICAgICAgICBzdGF0ZVJlcG9ydGVzID0gY29tcG9uZW50ICJTdGF0ZSIgIkhvbGRzIHRoZSBkYXRlIHJhbmdlIGFuZCBmaWx0ZXJzIHNlbGVjdGVkIGJ5IHRoZSBhZG1pbmlzdHJhdG9yLiIgIlJlYWN0IENvbnRleHQgLyBob29rcyIKICAgICAgICAgICAgICAgIGFwaUNsaWVudFJlcG9ydGVzID0gY29tcG9uZW50ICJBcGlDbGllbnQiICJXcmFwcyB0aGUgSFRUUCBjYWxscyB0byAvYXBpL3JlcG9ydGVzLiIgIkZldGNoIEFQSSIKICAgICAgICAgICAgfQoKICAgICAgICAgICAgLy8gLS0tIEFQSSBHYXRld2F5IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgIGdhdGV3YXkgPSBjb250YWluZXIgIkFQSSBHYXRld2F5IiAiU2luZ2xlIGVudHJ5IHBvaW50IHRvIHRoZSBBUEkuIElkZW50aWZpZXMgdGhlIGF1dGhlbnRpY2F0ZWQgdXNlciAoUk4tMDMpIGFuZCByb3V0ZXMgZWFjaCByZXF1ZXN0IHRvIHRoZSBjb3JyZXNwb25kaW5nIG1pY3Jvc2VydmljZS4iICJTcHJpbmcgQ2xvdWQgR2F0ZXdheSAoOjgwODApIiB7CiAgICAgICAgICAgICAgICB0YWdzICJHYXRld2F5IgoKICAgICAgICAgICAgICAgIC8vIC0tLSBJbnRlcm5hbCBjb21wb25lbnRzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgLy8gQmFzaWMgcm9sZS1iYXNlZCBhdXRoZW50aWNhdGlvbiAoc2NvcGUgZG9jdW1lbnQgwqc0LjQpOiBubwogICAgICAgICAgICAgICAgLy8gYWR2YW5jZWQgbWVjaGFuaXNtIHN1Y2ggYXMgT0F1dGgyL0pXVCBpcyByZXF1aXJlZC4KICAgICAgICAgICAgICAgIGF1dGhlbnRpY2F0aW9uRmlsdGVyID0gY29tcG9uZW50ICJBdXRoZW50aWNhdGlvbkZpbHRlciIgIklkZW50aWZpZXMgdGhlIHVzZXIgbWFraW5nIHRoZSByZXF1ZXN0IGFuZCBwcm9wYWdhdGVzIHRoZWlyIGlkZW50aXR5IGFuZCByb2xlIGFzIFgtVXNlci1JZCAvIFgtVXNlci1Sb2xlIGhlYWRlcnMuIiAiR2xvYmFsRmlsdGVyIgogICAgICAgICAgICAgICAgcm91dGVDb25maWcgPSBjb21wb25lbnQgIlJvdXRlQ29uZmlnIiAiRGVmaW5lcyB0aGUgcm91dGVzIHRvIGVhY2ggbWljcm9zZXJ2aWNlIChwcmVkaWNhdGVzIGFuZCBmaWx0ZXJzKS4iICJTcHJpbmcgQ2xvdWQgR2F0ZXdheSAoUm91dGVMb2NhdG9yKSIKICAgICAgICAgICAgICAgIGVycm9ySGFuZGxlckdhdGV3YXkgPSBjb21wb25lbnQgIkVycm9ySGFuZGxlciIgIlRyYW5zbGF0ZXMgZmFpbHVyZXMgZnJvbSB0aGUgdGFyZ2V0IG1pY3Jvc2VydmljZXMgKHRpbWVvdXQsIHVuYXZhaWxhYmxlKSBvciBtaXNzaW5nL2ludmFsaWQgaWRlbnRpdHkgaW50byBIVFRQIHN0YXR1cyBjb2Rlcy4iICJFcnJvcldlYkV4Y2VwdGlvbkhhbmRsZXIiCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIC8vIC0tLSBNaWNyb3NlcnZpY2VzIChoZXhhZ29uYWw6IHBvcnRzICYgYWRhcHRlcnMpIC0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAvLyBFYWNoIG1pY3Jvc2VydmljZSdzIGNvcmUgKHVzZSBjYXNlICsgcG9ydCBpbnRlcmZhY2VzKSBoYXMgbm8KICAgICAgICAgICAgLy8gZGVwZW5kZW5jeSBvbiBTcHJpbmcgTVZDIG9yIFNwcmluZyBEYXRhOyBvbmx5IHRoZSBhZGFwdGVycyBkby4KICAgICAgICAgICAgLy8gRHJpdmluZyBhZGFwdGVycyAod2ViKSBjYWxsIHRoZSBpbnB1dCBwb3J0OyB0aGUgYXBwbGljYXRpb24KICAgICAgICAgICAgLy8gc2VydmljZSBpbXBsZW1lbnRzIGl0LiBUaGUgYXBwbGljYXRpb24gc2VydmljZSBkZXBlbmRzIG9ubHkgb24KICAgICAgICAgICAgLy8gb3V0cHV0IHBvcnRzOyBkcml2ZW4gYWRhcHRlcnMgKEpQQSwgUmVzdENsaWVudCkgaW1wbGVtZW50IHRoZW0uCiAgICAgICAgICAgIG1zVXN1YXJpb3MgPSBjb250YWluZXIgIm1zLXVzdWFyaW9zIiAiUmVnaXN0cmF0aW9uLCBhdXRoZW50aWNhdGlvbiwgYW5kIG1hbmFnZW1lbnQgb2YgdXNlcnMgYW5kIHJvbGVzLiBWYWxpZGF0ZXMgdGhlIGVuZCB1c2VyJ3Mgb3IgYWRtaW5pc3RyYXRvcidzIGNyZWRlbnRpYWxzIGFuZCBjb25maXJtcyB0aGVpciByb2xlLiIgIlNwcmluZyBCb290IDQgKDo4MDgxKSIgewogICAgICAgICAgICAgICAgdGFncyAiTWljcm9zZXJ2aWNlIgoKICAgICAgICAgICAgICAgIC8vIC0tLSBEcml2aW5nIGFkYXB0ZXIgKHdlYikgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgICAgIHVzZXJDb250cm9sbGVyID0gY29tcG9uZW50ICJBdXRoQ29udHJvbGxlciIgIkV4cG9zZXMgUE9TVCAvYXBpL2F1dGgvcmVnaXN0cm8gYW5kIFBPU1QgL2FwaS9hdXRoL2xvZ2luLCB0aGUgb25seSB0d28gcHVibGljIHJvdXRlcyBvZiB0aGUgc3lzdGVtOyB0cmFuc2xhdGVzIEhUVFAgcmVxdWVzdHMgaW50byBjYWxscyB0byB0aGUgaW5wdXQgcG9ydC4iICJTcHJpbmcgTVZDIEBSZXN0Q29udHJvbGxlciIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFkYXB0ZXItSW4iCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBlcnJvckhhbmRsZXJVc2VyID0gY29tcG9uZW50ICJFcnJvckhhbmRsZXIiICJUcmFuc2xhdGVzIGludmFsaWQgY3JlZGVudGlhbHMgYW5kIGNvbmZsaWN0cyAodXNlciBhbHJlYWR5IHJlZ2lzdGVyZWQpIGludG8gSFRUUCBzdGF0dXMgY29kZXMuIiAiQFJlc3RDb250cm9sbGVyQWR2aWNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiQWRhcHRlci1JbiIKICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAvLyAtLS0gRG9tYWluOiBpbnB1dCBwb3J0ICsgYXBwbGljYXRpb24gLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICB1c2VyVXNlQ2FzZSA9IGNvbXBvbmVudCAiVXNlclVzZUNhc2UiICJJbnB1dCBwb3J0OiByZWdpc3RyYXRpb24sIGF1dGhlbnRpY2F0aW9uLCBhbmQgcm9sZSBtYW5hZ2VtZW50IG9wZXJhdGlvbnMsIHdpdGggbm8gZGVwZW5kZW5jeSBvbiBTcHJpbmcgTVZDIG9yIEpQQS4iICJKYXZhIGludGVyZmFjZSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIlBvcnQiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICB1c2VyU2VydmljZSA9IGNvbXBvbmVudCAiVXNlclNlcnZpY2UiICJJbXBsZW1lbnRzIHRoZSBpbnB1dCBwb3J0OiB2YWxpZGF0ZXMgY3JlZGVudGlhbHMgYW5kIG1hbmFnZXMgdGhlIHVzZXIgYW5kIHJvbGUgbGlmZWN5Y2xlLiIgIlNwcmluZyBAU2VydmljZSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFwcGxpY2F0aW9uIgogICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgIC8vIC0tLSBEb21haW46IG91dHB1dCBwb3J0IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICB1c2VyUmVwb3NpdG9yeVBvcnQgPSBjb21wb25lbnQgIlVzZXJSZXBvc2l0b3J5UG9ydCIgIk91dHB1dCBwb3J0OiBwZXJzaXN0ZW5jZSBvcGVyYXRpb25zIG92ZXIgdXNlcnMgYW5kIHJvbGVzIHRoYXQgdGhlIGFwcGxpY2F0aW9uIGNvcmUgbmVlZHMuIiAiSmF2YSBpbnRlcmZhY2UiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJQb3J0IgogICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgIC8vIC0tLSBEcml2ZW4gYWRhcHRlciAocGVyc2lzdGVuY2UpIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICB1c2VyUmVwb3NpdG9yeUFkYXB0ZXIgPSBjb21wb25lbnQgIlVzZXJSZXBvc2l0b3J5QWRhcHRlciIgIkltcGxlbWVudHMgdGhlIG91dHB1dCBwb3J0IGFnYWluc3QgdGhlIHVzZXJzIGFuZCByb2xlcyB0YWJsZS4iICJTcHJpbmcgRGF0YSBKUEEiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJBZGFwdGVyLU91dCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQoKICAgICAgICAgICAgbXNDYW5jaGFzID0gY29udGFpbmVyICJtcy1jYW5jaGFzIiAiQ2F0YWxvZyBvZiBjb3VydHMgYW5kIHNwb3J0cywgb3BlbmluZyBob3VycywgYW5kIG1haW50ZW5hbmNlIGJsb2Nrcy4iICJTcHJpbmcgQm9vdCA0ICg6ODA4MikiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIk1pY3Jvc2VydmljZSIKCiAgICAgICAgICAgICAgICAvLyAtLS0gRHJpdmluZyBhZGFwdGVyICh3ZWIpIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICBjb3VydENvbnRyb2xsZXIgPSBjb21wb25lbnQgIkNvdXJ0Q29udHJvbGxlciIgIkV4cG9zZXMgdGhlIGVuZHBvaW50cyBmb3IgdGhlIGNvdXJ0IGNhdGFsb2csIG9wZW5pbmcgaG91cnMsIGFuZCBtYWludGVuYW5jZSBibG9ja3M7IHRyYW5zbGF0ZXMgSFRUUCByZXF1ZXN0cyBpbnRvIGNhbGxzIHRvIHRoZSBpbnB1dCBwb3J0LiIgIlNwcmluZyBNVkMgQFJlc3RDb250cm9sbGVyIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiQWRhcHRlci1JbiIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGVycm9ySGFuZGxlckNvdXJ0ID0gY29tcG9uZW50ICJFcnJvckhhbmRsZXIiICJUcmFuc2xhdGVzIGRvbWFpbiBleGNlcHRpb25zIGludG8gSFRUUCBzdGF0dXMgY29kZXM6IDQwMyBmb3IgYW4gaW5zdWZmaWNpZW50IHJvbGUgKFJOLTA3KSwgNDA0IGZvciBhIG1pc3NpbmcgY291cnQgb3IgYmxvY2ssIDQwOSBmb3IgYW4gb3ZlcmxhcHBpbmcgbWFpbnRlbmFuY2UgYmxvY2ssIDQwMCBmb3IgYSBjbG9zaW5nIHRpbWUgdGhhdCBpcyBub3QgYWZ0ZXIgdGhlIG9wZW5pbmcgb25lLiIgIkBSZXN0Q29udHJvbGxlckFkdmljZSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFkYXB0ZXItSW4iCiAgICAgICAgICAgICAgICB9CgogICAgICAgICAgICAgICAgLy8gLS0tIERvbWFpbjogaW5wdXQgcG9ydCArIGFwcGxpY2F0aW9uIC0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgY291cnRVc2VDYXNlID0gY29tcG9uZW50ICJDb3VydFVzZUNhc2UiICJJbnB1dCBwb3J0OiBjYXRhbG9nLCBzY2hlZHVsZSwgYW5kIG1haW50ZW5hbmNlLWJsb2NrIG9wZXJhdGlvbnMsIHdpdGggbm8gZGVwZW5kZW5jeSBvbiBTcHJpbmcgTVZDIG9yIEpQQS4iICJKYXZhIGludGVyZmFjZSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIlBvcnQiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBjb3VydFNlcnZpY2UgPSBjb21wb25lbnQgIkNvdXJ0U2VydmljZSIgIkltcGxlbWVudHMgdGhlIGlucHV0IHBvcnQuIEFwcGxpZXMgUk4tMDc6IG9ubHkgYW4gQURNSU5JU1RSQURPUiBtYXkgY3JlYXRlLCBlZGl0LCBkZWFjdGl2YXRlIGEgY291cnQgb3IgcmVnaXN0ZXIgbWFpbnRlbmFuY2UgYmxvY2tzLiBSZWFkcyB0aGUgcm9sZSBmcm9tIFgtVXNlci1Sb2xlOyBpdCBuZXZlciBhdXRoZW50aWNhdGVzLiIgIlNwcmluZyBAU2VydmljZSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFwcGxpY2F0aW9uIgogICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgIC8vIC0tLSBEb21haW46IG91dHB1dCBwb3J0IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICBjb3VydFJlcG9zaXRvcnlQb3J0ID0gY29tcG9uZW50ICJDb3VydFJlcG9zaXRvcnlQb3J0IiAiT3V0cHV0IHBvcnQ6IHBlcnNpc3RlbmNlIG9wZXJhdGlvbnMgb3ZlciBjb3VydHMsIHNjaGVkdWxlcywgYW5kIGJsb2NrcyB0aGF0IHRoZSBhcHBsaWNhdGlvbiBjb3JlIG5lZWRzLiIgIkphdmEgaW50ZXJmYWNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiUG9ydCIKICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAvLyAtLS0gRHJpdmVuIGFkYXB0ZXIgKHBlcnNpc3RlbmNlKSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgY291cnRSZXBvc2l0b3J5QWRhcHRlciA9IGNvbXBvbmVudCAiQ291cnRSZXBvc2l0b3J5QWRhcHRlciIgIkltcGxlbWVudHMgdGhlIG91dHB1dCBwb3J0IGFnYWluc3QgdGhlIGNvdXJ0cywgc2NoZWR1bGVzLCBhbmQgYmxvY2tzIHRhYmxlcy4iICJTcHJpbmcgRGF0YSBKUEEiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJBZGFwdGVyLU91dCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQoKICAgICAgICAgICAgbXNSZXNlcnZhcyA9IGNvbnRhaW5lciAibXMtcmVzZXJ2YXMiICJDcmVhdGlvbiwgbG9va3VwLCBhbmQgY2FuY2VsbGF0aW9uIG9mIGJvb2tpbmdzLiBDb25jZW50cmF0ZXMgYnVzaW5lc3MgcnVsZXMgUk4tMDEgdGhyb3VnaCBSTi0wOC4iICJTcHJpbmcgQm9vdCA0ICg6ODA4MykiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIk1pY3Jvc2VydmljZSIKCiAgICAgICAgICAgICAgICAvLyAtLS0gRHJpdmluZyBhZGFwdGVyICh3ZWIpIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICBib29raW5nQ29udHJvbGxlciA9IGNvbXBvbmVudCAiQm9va2luZ0NvbnRyb2xsZXIiICJFeHBvc2VzIHRoZSBSRVNUIGVuZHBvaW50cyBmb3IgYm9va2luZ3MgYW5kIGF2YWlsYWJpbGl0eTsgdHJhbnNsYXRlcyBIVFRQIHJlcXVlc3RzIGludG8gY2FsbHMgdG8gdGhlIGlucHV0IHBvcnQuIiAiU3ByaW5nIE1WQyBAUmVzdENvbnRyb2xsZXIiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJBZGFwdGVyLUluIgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgZXJyb3JIYW5kbGVyQm9va2luZyA9IGNvbXBvbmVudCAiRXJyb3JIYW5kbGVyIiAiVHJhbnNsYXRlcyBidXNpbmVzcyBleGNlcHRpb25zIChvdmVybGFwLCBwZXJtaXNzaW9ucywgYm9va2luZyBub3QgZm91bmQpIGludG8gSFRUUCBzdGF0dXMgY29kZXMgKDQwOSBvbiBvdmVybGFwKS4iICJAUmVzdENvbnRyb2xsZXJBZHZpY2UiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJBZGFwdGVyLUluIgogICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgIC8vIC0tLSBEb21haW46IGlucHV0IHBvcnQgKyBhcHBsaWNhdGlvbiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgICAgIGJvb2tpbmdVc2VDYXNlID0gY29tcG9uZW50ICJCb29raW5nVXNlQ2FzZSIgIklucHV0IHBvcnQ6IGNyZWF0ZSwgbG9vayB1cCwgYW5kIGNhbmNlbCBib29raW5nczsgY2FsY3VsYXRlIGF2YWlsYWJpbGl0eS4gTm8gZGVwZW5kZW5jeSBvbiBTcHJpbmcgTVZDIG9yIEpQQS4iICJKYXZhIGludGVyZmFjZSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIlBvcnQiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBib29raW5nU2VydmljZSA9IGNvbXBvbmVudCAiQm9va2luZ1NlcnZpY2UiICJJbXBsZW1lbnRzIHRoZSBpbnB1dCBwb3J0OiBhcHBsaWVzIFJOLTAxLi5STi0wOCAoYXZhaWxhYmlsaXR5LCBhY3RpdmUtYm9va2luZ3MgbGltaXQgUk4tMDYsIGZ1dHVyZS1vbmx5IGNhbmNlbGxhdGlvbiBSTi0wNCwgcm9sZS1iYXNlZCBwZXJtaXNzaW9ucyBSTi0wMykuIiAiU3ByaW5nIEBTZXJ2aWNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiQXBwbGljYXRpb24iCiAgICAgICAgICAgICAgICB9CgogICAgICAgICAgICAgICAgLy8gLS0tIERvbWFpbjogb3V0cHV0IHBvcnRzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgYm9va2luZ1JlcG9zaXRvcnlQb3J0ID0gY29tcG9uZW50ICJCb29raW5nUmVwb3NpdG9yeVBvcnQiICJPdXRwdXQgcG9ydDogcGVyc2lzdGVuY2Ugb3BlcmF0aW9ucyBvdmVyIGJvb2tpbmdzIHRoYXQgdGhlIGFwcGxpY2F0aW9uIGNvcmUgbmVlZHMuIiAiSmF2YSBpbnRlcmZhY2UiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJQb3J0IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgY29uZmlndXJhdGlvblJlcG9zaXRvcnlQb3J0ID0gY29tcG9uZW50ICJDb25maWd1cmF0aW9uUmVwb3NpdG9yeVBvcnQiICJPdXRwdXQgcG9ydDogcmVhZHMgY29uZmlndXJhYmxlIHBhcmFtZXRlcnMsIHN1Y2ggYXMgdGhlIG1heGltdW0gbnVtYmVyIG9mIHNpbXVsdGFuZW91cyBhY3RpdmUgYm9va2luZ3MuIiAiSmF2YSBpbnRlcmZhY2UiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJQb3J0IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgY291cnRDbGllbnRQb3J0ID0gY29tcG9uZW50ICJDb3VydENsaWVudFBvcnQiICJPdXRwdXQgcG9ydDogY2hlY2tzIHdoZXRoZXIgYSBjb3VydCBleGlzdHMsIGlzIGFjdGl2ZSwgYW5kIGl0cyBvcGVuaW5nIGhvdXJzLCB3aXRob3V0IGRlcGVuZGluZyBvbiBob3cgdGhhdCBjaGVjayB0cmF2ZWxzIG92ZXIgdGhlIG5ldHdvcmsuIiAiSmF2YSBpbnRlcmZhY2UiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJQb3J0IgogICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgIC8vIC0tLSBEcml2ZW4gYWRhcHRlcnMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICBib29raW5nUmVwb3NpdG9yeUFkYXB0ZXIgPSBjb21wb25lbnQgIkJvb2tpbmdSZXBvc2l0b3J5QWRhcHRlciIgIkltcGxlbWVudHMgdGhlIGJvb2tpbmctcGVyc2lzdGVuY2Ugb3V0cHV0IHBvcnQuIFRoZSBQb3N0Z3JlU1FMIEVYQ0xVREUgY29uc3RyYWludCBwcmV2ZW50cyBvdmVybGFwIChSTi0wMikuIiAiU3ByaW5nIERhdGEgSlBBIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiQWRhcHRlci1PdXQiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBjb25maWd1cmF0aW9uUmVwb3NpdG9yeUFkYXB0ZXIgPSBjb21wb25lbnQgIkNvbmZpZ3VyYXRpb25SZXBvc2l0b3J5QWRhcHRlciIgIkltcGxlbWVudHMgdGhlIGNvbmZpZ3VyYXRpb24tcmVhZGluZyBvdXRwdXQgcG9ydC4iICJTcHJpbmcgRGF0YSBKUEEiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJBZGFwdGVyLU91dCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGNvdXJ0Q2xpZW50QWRhcHRlciA9IGNvbXBvbmVudCAiQ291cnRDbGllbnRBZGFwdGVyIiAiSW1wbGVtZW50cyB0aGUgY291cnQtY2hlY2sgb3V0cHV0IHBvcnQgYnkgY2FsbGluZyBtcy1jYW5jaGFzIG92ZXIgUkVTVC4iICJTcHJpbmcgUmVzdENsaWVudCIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFkYXB0ZXItT3V0IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CgogICAgICAgICAgICBtc1JlcG9ydGVzID0gY29udGFpbmVyICJtcy1yZXBvcnRlcyIgIkdlbmVyYXRlcyBvY2N1cGFuY3kgcmVwb3J0cywgYm9va2luZ3MgYnkgcGVyaW9kLCBjYW5jZWxsYXRpb25zLCBhbmQgdGhlIG1vc3QvbGVhc3QgZGVtYW5kZWQgY291cnRzIHJhbmtpbmcuIEhhcyBubyBkYXRhYmFzZSBvZiBpdHMgb3duOiBhZ2dyZWdhdGVzIHZpYSBSRVNULiIgIlNwcmluZyBCb290IDQgKDo4MDg0KSIgewogICAgICAgICAgICAgICAgdGFncyAiTWljcm9zZXJ2aWNlIgoKICAgICAgICAgICAgICAgIC8vIC0tLSBEcml2aW5nIGFkYXB0ZXIgKHdlYikgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgICAgIHJlcG9ydENvbnRyb2xsZXIgPSBjb21wb25lbnQgIlJlcG9ydENvbnRyb2xsZXIiICJFeHBvc2VzIHRoZSBvY2N1cGFuY3ksIGJvb2tpbmdzLWJ5LXBlcmlvZCwgY2FuY2VsbGF0aW9ucywgYW5kIGNvdXJ0LWRlbWFuZCByYW5raW5nIGVuZHBvaW50czsgdHJhbnNsYXRlcyBIVFRQIHJlcXVlc3RzIGludG8gY2FsbHMgdG8gdGhlIGlucHV0IHBvcnQuIiAiU3ByaW5nIE1WQyBAUmVzdENvbnRyb2xsZXIiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJBZGFwdGVyLUluIgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgZXJyb3JIYW5kbGVyUmVwb3J0ID0gY29tcG9uZW50ICJFcnJvckhhbmRsZXIiICJUcmFuc2xhdGVzIGZhaWx1cmVzIGZyb20gdGhlIHNvdXJjZSBzZXJ2aWNlcyAodW5hdmFpbGFibGUpIGludG8gSFRUUCBzdGF0dXMgY29kZXMuIiAiQFJlc3RDb250cm9sbGVyQWR2aWNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiQWRhcHRlci1JbiIKICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAvLyAtLS0gRG9tYWluOiBpbnB1dCBwb3J0ICsgYXBwbGljYXRpb24gLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICByZXBvcnRVc2VDYXNlID0gY29tcG9uZW50ICJSZXBvcnRVc2VDYXNlIiAiSW5wdXQgcG9ydDogb2NjdXBhbmN5LCBib29raW5ncy1ieS1wZXJpb2QsIGNhbmNlbGxhdGlvbnMsIGFuZCBjb3VydC1kZW1hbmQgcmFua2luZyBvcGVyYXRpb25zLiBObyBkZXBlbmRlbmN5IG9uIFNwcmluZyBNVkMgb3IgdGhlIFJFU1QgY2xpZW50cy4iICJKYXZhIGludGVyZmFjZSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIlBvcnQiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICByZXBvcnRTZXJ2aWNlID0gY29tcG9uZW50ICJSZXBvcnRTZXJ2aWNlIiAiSW1wbGVtZW50cyB0aGUgaW5wdXQgcG9ydDogYWdncmVnYXRlcyBhbmQgY29tcHV0ZXMgb2NjdXBhbmN5IG1ldHJpY3MgYW5kIHRoZSBjb3VydC1kZW1hbmQgcmFua2luZyBieSBjb21iaW5pbmcgYm9va2luZ3MgYW5kIGNhdGFsb2cgZGF0YS4iICJTcHJpbmcgQFNlcnZpY2UiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJBcHBsaWNhdGlvbiIKICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAvLyAtLS0gRG9tYWluOiBvdXRwdXQgcG9ydHMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICBib29raW5nc0NsaWVudFBvcnQgPSBjb21wb25lbnQgIkJvb2tpbmdzQ2xpZW50UG9ydCIgIk91dHB1dCBwb3J0OiBnZXRzIHRoZSBwZXJpb2QncyBib29raW5ncywgd2l0aG91dCBkZXBlbmRpbmcgb24gaG93IHRoYXQgY2FsbCB0cmF2ZWxzIG92ZXIgdGhlIG5ldHdvcmsuIiAiSmF2YSBpbnRlcmZhY2UiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJQb3J0IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgY291cnRzQ2xpZW50UG9ydCA9IGNvbXBvbmVudCAiQ291cnRzQ2xpZW50UG9ydCIgIk91dHB1dCBwb3J0OiBnZXRzIHRoZSBjb3VydCBjYXRhbG9nIGFuZCBzY2hlZHVsZXMsIHdpdGhvdXQgZGVwZW5kaW5nIG9uIGhvdyB0aGF0IGNhbGwgdHJhdmVscyBvdmVyIHRoZSBuZXR3b3JrLiIgIkphdmEgaW50ZXJmYWNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiUG9ydCIKICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAvLyAtLS0gRHJpdmVuIGFkYXB0ZXJzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgYm9va2luZ3NDbGllbnRBZGFwdGVyID0gY29tcG9uZW50ICJCb29raW5nc0NsaWVudEFkYXB0ZXIiICJJbXBsZW1lbnRzIHRoZSBib29raW5ncyBvdXRwdXQgcG9ydCBieSBjYWxsaW5nIG1zLXJlc2VydmFzIG92ZXIgUkVTVC4iICJTcHJpbmcgUmVzdENsaWVudCIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFkYXB0ZXItT3V0IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgY291cnRzQ2xpZW50QWRhcHRlciA9IGNvbXBvbmVudCAiQ291cnRzQ2xpZW50QWRhcHRlciIgIkltcGxlbWVudHMgdGhlIGNhdGFsb2cgb3V0cHV0IHBvcnQgYnkgY2FsbGluZyBtcy1jYW5jaGFzIG92ZXIgUkVTVC4iICJTcHJpbmcgUmVzdENsaWVudCIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFkYXB0ZXItT3V0IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CgogICAgICAgICAgICAvLyAtLS0gUGVyc2lzdGVuY2UgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgIHVzdWFyaW9zRGIgPSBjb250YWluZXIgInVzdWFyaW9zX2RiIiAiVXNlcnMsIHJvbGVzLCBhbmQgY3JlZGVudGlhbHMuIiAiUG9zdGdyZVNRTCAxNiIgewogICAgICAgICAgICAgICAgdGFncyAiRGF0YWJhc2UiCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGNhbmNoYXNEYiA9IGNvbnRhaW5lciAiY2FuY2hhc19kYiIgIkNvdXJ0cywgc3BvcnRzLCBvcGVuaW5nIGhvdXJzLCBhbmQgbWFpbnRlbmFuY2UgYmxvY2tzLiIgIlBvc3RncmVTUUwgMTYiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkRhdGFiYXNlIgogICAgICAgICAgICB9CgogICAgICAgICAgICByZXNlcnZhc0RiID0gY29udGFpbmVyICJyZXNlcnZhc19kYiIgIkJvb2tpbmdzIHdpdGggdGhlaXIgc3RhdHVzLCBwbHVzIGNvbmZpZ3VyYWJsZSBwYXJhbWV0ZXJzLiBIb3N0cyB0aGUgZXhjbHVzaW9uIGNvbnN0cmFpbnQgdGhhdCBpbXBsZW1lbnRzIFJOLTAyLiIgIlBvc3RncmVTUUwgMTYiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkRhdGFiYXNlIgogICAgICAgICAgICB9CiAgICAgICAgfQoKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgLy8gIFJlbGF0aW9uc2hpcHMg4oCUIGNvbnRleHQgbGV2ZWwKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgdXN1YXJpb0ZpbmFsIC0+IHNpc3RlbWEgIkNoZWNrcyBhdmFpbGFiaWxpdHksIGJvb2tzLCBhbmQgY2FuY2VscyB0aGVpciBib29raW5ncyIKICAgICAgICBhZG1pbmlzdHJhZG9yIC0+IHNpc3RlbWEgIk1hbmFnZXMgY291cnRzIGFuZCBib29raW5ncywgYW5kIHZpZXdzIHJlcG9ydHMiCgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgUmVsYXRpb25zaGlwcyDigJQgY29udGFpbmVyIGxldmVsCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIHVzdWFyaW9GaW5hbCAtPiBlZGdlICJBY2Nlc3NlcyB0aGUgYXBwbGljYXRpb24iICJIVFRQIDo4MCIKICAgICAgICBhZG1pbmlzdHJhZG9yIC0+IGVkZ2UgIkFjY2Vzc2VzIHRoZSBhcHBsaWNhdGlvbiIgIkhUVFAgOjgwIgoKICAgICAgICBlZGdlIC0+IHNoZWxsICJTZXJ2ZXMgdGhlIGNvbnRhaW5lciBhcHBsaWNhdGlvbiIgIkhUVFAiCiAgICAgICAgZWRnZSAtPiBtZlJlc2VydmFzICJTZXJ2ZXMgL21mLXJlc2VydmFzLyIgIkhUVFAiCiAgICAgICAgZWRnZSAtPiBtZkFkbWluaXN0cmFjaW9uICJTZXJ2ZXMgL21mLWFkbWluaXN0cmFjaW9uLyIgIkhUVFAiCiAgICAgICAgZWRnZSAtPiBtZlJlcG9ydGVzICJTZXJ2ZXMgL21mLXJlcG9ydGVzLyIgIkhUVFAiCiAgICAgICAgZWRnZSAtPiBnYXRld2F5ICJSb3V0ZXMgL2FwaS8qIiAiSFRUUCIKCiAgICAgICAgc2hlbGwgLT4gbWZSZXNlcnZhcyAiTG9hZHMgdGhlIHJlbW90ZSBhdCBydW50aW1lIiAiTW9kdWxlIEZlZGVyYXRpb24gKHJlbW90ZUVudHJ5LmpzKSIKICAgICAgICBzaGVsbCAtPiBtZkFkbWluaXN0cmFjaW9uICJMb2FkcyB0aGUgcmVtb3RlIGF0IHJ1bnRpbWUiICJNb2R1bGUgRmVkZXJhdGlvbiAocmVtb3RlRW50cnkuanMpIgogICAgICAgIHNoZWxsIC0+IG1mUmVwb3J0ZXMgIkxvYWRzIHRoZSByZW1vdGUgYXQgcnVudGltZSIgIk1vZHVsZSBGZWRlcmF0aW9uIChyZW1vdGVFbnRyeS5qcykiCgogICAgICAgIHNoZWxsIC0+IGVkZ2UgIkF1dGhlbnRpY2F0ZXMgdGhlIHVzZXIiICJKU09OL0hUVFBTIMK3IC9hcGkvYXV0aCIKICAgICAgICBtZlJlc2VydmFzIC0+IGVkZ2UgIkNoZWNrcyBhdmFpbGFiaWxpdHkgYW5kIG1hbmFnZXMgYm9va2luZ3MiICJKU09OL0hUVFBTIMK3IC9hcGkiCiAgICAgICAgbWZBZG1pbmlzdHJhY2lvbiAtPiBlZGdlICJNYW5hZ2VzIGNvdXJ0cywgYm9va2luZ3MsIGFuZCB1c2VycyIgIkpTT04vSFRUUFMgwrcgL2FwaSIKICAgICAgICBtZlJlcG9ydGVzIC0+IGVkZ2UgIlJlcXVlc3RzIHRoZSByZXBvcnRzIiAiSlNPTi9IVFRQUyDCtyAvYXBpIgoKICAgICAgICBnYXRld2F5IC0+IG1zVXN1YXJpb3MgIlJvdXRlcyAvYXBpL2F1dGggYW5kIC9hcGkvdXN1YXJpb3MiICJKU09OL0hUVFAiCiAgICAgICAgZ2F0ZXdheSAtPiBtc0NhbmNoYXMgIlJvdXRlcyAvYXBpL2NhbmNoYXMiICJKU09OL0hUVFAiCiAgICAgICAgZ2F0ZXdheSAtPiBtc1Jlc2VydmFzICJSb3V0ZXMgL2FwaS9yZXNlcnZhcyBhbmQgL2FwaS9kaXNwb25pYmlsaWRhZCIgIkpTT04vSFRUUCIKICAgICAgICBnYXRld2F5IC0+IG1zUmVwb3J0ZXMgIlJvdXRlcyAvYXBpL3JlcG9ydGVzIiAiSlNPTi9IVFRQIgoKICAgICAgICBtc1Jlc2VydmFzIC0+IG1zQ2FuY2hhcyAiQ2hlY2tzIHRoYXQgdGhlIGNvdXJ0IGV4aXN0cywgaXMgYWN0aXZlLCBhbmQgdGhlIGJsb2NrIGlzIHdpdGhpbiBpdHMgc2NoZWR1bGUiICJKU09OL0hUVFAgKHN5bmNocm9ub3VzKSIKICAgICAgICBtc1JlcG9ydGVzIC0+IG1zUmVzZXJ2YXMgIkdldHMgdGhlIHBlcmlvZCdzIGJvb2tpbmdzIiAiSlNPTi9IVFRQIChzeW5jaHJvbm91cykiCiAgICAgICAgbXNSZXBvcnRlcyAtPiBtc0NhbmNoYXMgIkdldHMgdGhlIGNvdXJ0IGNhdGFsb2cgYW5kIHNjaGVkdWxlcyIgIkpTT04vSFRUUCAoc3luY2hyb25vdXMpIgoKICAgICAgICBtc1VzdWFyaW9zIC0+IHVzdWFyaW9zRGIgIlJlYWRzIGFuZCB3cml0ZXMiICJKREJDIgogICAgICAgIG1zQ2FuY2hhcyAtPiBjYW5jaGFzRGIgIlJlYWRzIGFuZCB3cml0ZXMiICJKREJDIgogICAgICAgIG1zUmVzZXJ2YXMgLT4gcmVzZXJ2YXNEYiAiUmVhZHMgYW5kIHdyaXRlcyIgIkpEQkMiCgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgUmVsYXRpb25zaGlwcyDigJQgY29tcG9uZW50IGxldmVsIChtcy1yZXNlcnZhcywgaGV4YWdvbmFsKQogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICBnYXRld2F5IC0+IGJvb2tpbmdDb250cm9sbGVyICJSb3V0ZXMgL2FwaS9yZXNlcnZhcyBhbmQgL2FwaS9kaXNwb25pYmlsaWRhZCIgIkpTT04vSFRUUCIKCiAgICAgICAgYm9va2luZ0NvbnRyb2xsZXIgLT4gYm9va2luZ1VzZUNhc2UgIkludm9rZXMiCiAgICAgICAgYm9va2luZ0NvbnRyb2xsZXIgLT4gZXJyb3JIYW5kbGVyQm9va2luZyAiVW5oYW5kbGVkIGV4Y2VwdGlvbnMiCiAgICAgICAgYm9va2luZ1NlcnZpY2UgLT4gYm9va2luZ1VzZUNhc2UgIkltcGxlbWVudHMiCgogICAgICAgIGJvb2tpbmdTZXJ2aWNlIC0+IGNvdXJ0Q2xpZW50UG9ydCAiQ2hlY2tzIHRoZSBjb3VydCBhbmQgZ2V0cyBpdHMgb3BlbmluZyBob3VycyIKICAgICAgICBib29raW5nU2VydmljZSAtPiBib29raW5nUmVwb3NpdG9yeVBvcnQgIlBlcnNpc3RzLCBxdWVyaWVzLCBhbmQgY2FsY3VsYXRlcyBhdmFpbGFiaWxpdHkgb3ZlciBib29raW5ncyIKICAgICAgICBib29raW5nU2VydmljZSAtPiBjb25maWd1cmF0aW9uUmVwb3NpdG9yeVBvcnQgIlJlYWRzIHRoZSBtYXhpbXVtIGFjdGl2ZSBib29raW5ncyAoUk4tMDYpIgoKICAgICAgICBjb3VydENsaWVudEFkYXB0ZXIgLT4gY291cnRDbGllbnRQb3J0ICJJbXBsZW1lbnRzIgogICAgICAgIGJvb2tpbmdSZXBvc2l0b3J5QWRhcHRlciAtPiBib29raW5nUmVwb3NpdG9yeVBvcnQgIkltcGxlbWVudHMiCiAgICAgICAgY29uZmlndXJhdGlvblJlcG9zaXRvcnlBZGFwdGVyIC0+IGNvbmZpZ3VyYXRpb25SZXBvc2l0b3J5UG9ydCAiSW1wbGVtZW50cyIKCiAgICAgICAgY291cnRDbGllbnRBZGFwdGVyIC0+IG1zQ2FuY2hhcyAiUXVlcmllcyB0aGUgY291cnQgKHNjaGVkdWxlLCBhY3RpdmUgc3RhdGUpIGFuZCBpdHMgbWFpbnRlbmFuY2UgYmxvY2tzLCB0byBtYXJrIGJsb2NrZWQgc2xvdHMgYXMgdW5ib29rYWJsZSAoRlItMDEwKSIgIkpTT04vSFRUUCIKICAgICAgICBib29raW5nUmVwb3NpdG9yeUFkYXB0ZXIgLT4gcmVzZXJ2YXNEYiAiUmVhZHMgYW5kIHdyaXRlcyIgIkpEQkMiCiAgICAgICAgY29uZmlndXJhdGlvblJlcG9zaXRvcnlBZGFwdGVyIC0+IHJlc2VydmFzRGIgIlJlYWRzIiAiSkRCQyIKCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIC8vICBSZWxhdGlvbnNoaXBzIOKAlCBjb21wb25lbnQgbGV2ZWwgKG1zLXVzdWFyaW9zLCBoZXhhZ29uYWwpCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIGdhdGV3YXkgLT4gdXNlckNvbnRyb2xsZXIgIlJvdXRlcyAvYXBpL2F1dGggYW5kIC9hcGkvdXN1YXJpb3MiICJKU09OL0hUVFAiCgogICAgICAgIHVzZXJDb250cm9sbGVyIC0+IHVzZXJVc2VDYXNlICJJbnZva2VzIgogICAgICAgIHVzZXJDb250cm9sbGVyIC0+IGVycm9ySGFuZGxlclVzZXIgIlVuaGFuZGxlZCBleGNlcHRpb25zIgogICAgICAgIHVzZXJTZXJ2aWNlIC0+IHVzZXJVc2VDYXNlICJJbXBsZW1lbnRzIgoKICAgICAgICB1c2VyU2VydmljZSAtPiB1c2VyUmVwb3NpdG9yeVBvcnQgIlBlcnNpc3RzIGFuZCBxdWVyaWVzIHVzZXJzIGFuZCByb2xlcyIKICAgICAgICB1c2VyUmVwb3NpdG9yeUFkYXB0ZXIgLT4gdXNlclJlcG9zaXRvcnlQb3J0ICJJbXBsZW1lbnRzIgoKICAgICAgICB1c2VyUmVwb3NpdG9yeUFkYXB0ZXIgLT4gdXN1YXJpb3NEYiAiUmVhZHMgYW5kIHdyaXRlcyIgIkpEQkMiCgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgUmVsYXRpb25zaGlwcyDigJQgY29tcG9uZW50IGxldmVsIChtcy1jYW5jaGFzLCBoZXhhZ29uYWwpCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIGdhdGV3YXkgLT4gY291cnRDb250cm9sbGVyICJSb3V0ZXMgL2FwaS9jYW5jaGFzIiAiSlNPTi9IVFRQIgoKICAgICAgICBjb3VydENvbnRyb2xsZXIgLT4gY291cnRVc2VDYXNlICJJbnZva2VzLiBQYXNzZXMgWC1Vc2VyLVJvbGUgdGhyb3VnaDsgaXQgZGVjaWRlcyBub3RoaW5nIGl0c2VsZiIKICAgICAgICBjb3VydENvbnRyb2xsZXIgLT4gZXJyb3JIYW5kbGVyQ291cnQgIlVuaGFuZGxlZCBleGNlcHRpb25zIgogICAgICAgIGNvdXJ0U2VydmljZSAtPiBjb3VydFVzZUNhc2UgIkltcGxlbWVudHMiCgogICAgICAgIGNvdXJ0U2VydmljZSAtPiBjb3VydFJlcG9zaXRvcnlQb3J0ICJQZXJzaXN0cyBhbmQgcXVlcmllcyB0aGUgY2F0YWxvZyIKICAgICAgICBjb3VydFJlcG9zaXRvcnlBZGFwdGVyIC0+IGNvdXJ0UmVwb3NpdG9yeVBvcnQgIkltcGxlbWVudHMiCgogICAgICAgIGNvdXJ0UmVwb3NpdG9yeUFkYXB0ZXIgLT4gY2FuY2hhc0RiICJSZWFkcyBhbmQgd3JpdGVzIiAiSkRCQyIKCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIC8vICBSZWxhdGlvbnNoaXBzIOKAlCBjb21wb25lbnQgbGV2ZWwgKG1zLXJlcG9ydGVzLCBoZXhhZ29uYWwpCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIGdhdGV3YXkgLT4gcmVwb3J0Q29udHJvbGxlciAiUm91dGVzIC9hcGkvcmVwb3J0ZXMiICJKU09OL0hUVFAiCgogICAgICAgIHJlcG9ydENvbnRyb2xsZXIgLT4gcmVwb3J0VXNlQ2FzZSAiSW52b2tlcyIKICAgICAgICByZXBvcnRDb250cm9sbGVyIC0+IGVycm9ySGFuZGxlclJlcG9ydCAiVW5oYW5kbGVkIGV4Y2VwdGlvbnMiCiAgICAgICAgcmVwb3J0U2VydmljZSAtPiByZXBvcnRVc2VDYXNlICJJbXBsZW1lbnRzIgoKICAgICAgICByZXBvcnRTZXJ2aWNlIC0+IGJvb2tpbmdzQ2xpZW50UG9ydCAiR2V0cyB0aGUgcGVyaW9kJ3MgYm9va2luZ3MiCiAgICAgICAgcmVwb3J0U2VydmljZSAtPiBjb3VydHNDbGllbnRQb3J0ICJHZXRzIHRoZSBjb3VydCBjYXRhbG9nIGFuZCBzY2hlZHVsZXMiCgogICAgICAgIGJvb2tpbmdzQ2xpZW50QWRhcHRlciAtPiBib29raW5nc0NsaWVudFBvcnQgIkltcGxlbWVudHMiCiAgICAgICAgY291cnRzQ2xpZW50QWRhcHRlciAtPiBjb3VydHNDbGllbnRQb3J0ICJJbXBsZW1lbnRzIgoKICAgICAgICBib29raW5nc0NsaWVudEFkYXB0ZXIgLT4gbXNSZXNlcnZhcyAiR2V0cyB0aGUgcGVyaW9kJ3MgYm9va2luZ3MiICJKU09OL0hUVFAgKHN5bmNocm9ub3VzKSIKICAgICAgICBjb3VydHNDbGllbnRBZGFwdGVyIC0+IG1zQ2FuY2hhcyAiR2V0cyB0aGUgY291cnQgY2F0YWxvZyBhbmQgc2NoZWR1bGVzIiAiSlNPTi9IVFRQIChzeW5jaHJvbm91cykiCgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgUmVsYXRpb25zaGlwcyDigJQgY29tcG9uZW50IGxldmVsIChHYXRld2F5KQogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICBlZGdlIC0+IGF1dGhlbnRpY2F0aW9uRmlsdGVyICJSb3V0ZXMgL2FwaS8qIiAiSFRUUCIKCiAgICAgICAgYXV0aGVudGljYXRpb25GaWx0ZXIgLT4gbXNVc3VhcmlvcyAiVmVyaWZpZXMgdGhlIEJhc2ljIGNyZWRlbnRpYWwgb24gZXZlcnkgcmVxdWVzdCAoUE9TVCAvYXBpL2F1dGgvbG9naW4pLiBEb2VzIG5vdCByZWFkIHVzdWFyaW9zX2RiOiBpdCBhc2tzIGl0cyBvd25lci4iICJKU09OL0hUVFAiCiAgICAgICAgYXV0aGVudGljYXRpb25GaWx0ZXIgLT4gcm91dGVDb25maWcgIklkZW50aXR5IHByb3BhZ2F0ZWQsIHJvdXRpbmcgY29udGludWVzIgogICAgICAgIGF1dGhlbnRpY2F0aW9uRmlsdGVyIC0+IGVycm9ySGFuZGxlckdhdGV3YXkgIk1pc3Npbmcgb3IgaW52YWxpZCBpZGVudGl0eSIKCiAgICAgICAgcm91dGVDb25maWcgLT4gbXNVc3VhcmlvcyAiUm91dGVzIC9hcGkvYXV0aCBhbmQgL2FwaS91c3VhcmlvcyIgIkpTT04vSFRUUCIKICAgICAgICByb3V0ZUNvbmZpZyAtPiBtc0NhbmNoYXMgIlJvdXRlcyAvYXBpL2NhbmNoYXMiICJKU09OL0hUVFAiCiAgICAgICAgcm91dGVDb25maWcgLT4gbXNSZXNlcnZhcyAiUm91dGVzIC9hcGkvcmVzZXJ2YXMgYW5kIC9hcGkvZGlzcG9uaWJpbGlkYWQiICJKU09OL0hUVFAiCiAgICAgICAgcm91dGVDb25maWcgLT4gbXNSZXBvcnRlcyAiUm91dGVzIC9hcGkvcmVwb3J0ZXMiICJKU09OL0hUVFAiCiAgICAgICAgcm91dGVDb25maWcgLT4gZXJyb3JIYW5kbGVyR2F0ZXdheSAiVGFyZ2V0IHNlcnZpY2UgdW5hdmFpbGFibGUiCgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgUmVsYXRpb25zaGlwcyDigJQgY29tcG9uZW50IGxldmVsIChTaGVsbCkKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgcm91dGVyU2hlbGwgLT4gc2Vzc2lvbkNvbnRleHQgIkNoZWNrcyB3aGV0aGVyIHRoZXJlIGlzIGFuIGFjdGl2ZSBzZXNzaW9uIGJlZm9yZSByZXNvbHZpbmcgdGhlIHJvdXRlIgogICAgICAgIHJvdXRlclNoZWxsIC0+IGxheW91dFNoZWxsICJSZW5kZXJzIHdpdGhpbiIKICAgICAgICBsYXlvdXRTaGVsbCAtPiByZW1vdGVMb2FkZXIgIk1vdW50cyB0aGUgcmVtb3RlIGZvciB0aGUgYWN0aXZlIHJvdXRlIgoKICAgICAgICBzZXNzaW9uQ29udGV4dCAtPiBlZGdlICJBdXRoZW50aWNhdGVzIHRoZSB1c2VyIiAiSlNPTi9IVFRQUyDCtyAvYXBpL2F1dGgiCiAgICAgICAgcmVtb3RlTG9hZGVyIC0+IG1mUmVzZXJ2YXMgIkxvYWRzIHRoZSByZW1vdGUgYXQgcnVudGltZSIgIk1vZHVsZSBGZWRlcmF0aW9uIChyZW1vdGVFbnRyeS5qcykiCiAgICAgICAgcmVtb3RlTG9hZGVyIC0+IG1mQWRtaW5pc3RyYWNpb24gIkxvYWRzIHRoZSByZW1vdGUgYXQgcnVudGltZSIgIk1vZHVsZSBGZWRlcmF0aW9uIChyZW1vdGVFbnRyeS5qcykiCiAgICAgICAgcmVtb3RlTG9hZGVyIC0+IG1mUmVwb3J0ZXMgIkxvYWRzIHRoZSByZW1vdGUgYXQgcnVudGltZSIgIk1vZHVsZSBGZWRlcmF0aW9uIChyZW1vdGVFbnRyeS5qcykiCgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgUmVsYXRpb25zaGlwcyDigJQgY29tcG9uZW50IGxldmVsIChtZi1yZXNlcnZhcykKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgdmlld3NSZXNlcnZhcyAtPiB1aUNvbXBvbmVudHNSZXNlcnZhcyAiQ29tcG9zZXMgdGhlIHNjcmVlbiB3aXRoIgogICAgICAgIHZpZXdzUmVzZXJ2YXMgLT4gc3RhdGVSZXNlcnZhcyAiUmVhZHMgYW5kIHVwZGF0ZXMiCiAgICAgICAgdmlld3NSZXNlcnZhcyAtPiBhcGlDbGllbnRSZXNlcnZhcyAiUmVxdWVzdHMgZGF0YSIKICAgICAgICBhcGlDbGllbnRSZXNlcnZhcyAtPiBlZGdlICJDaGVja3MgYXZhaWxhYmlsaXR5IGFuZCBtYW5hZ2VzIGJvb2tpbmdzIiAiSlNPTi9IVFRQUyDCtyAvYXBpIgoKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgLy8gIFJlbGF0aW9uc2hpcHMg4oCUIGNvbXBvbmVudCBsZXZlbCAobWYtYWRtaW5pc3RyYWNpb24pCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIHZpZXdzQWRtaW5pc3RyYWNpb24gLT4gdWlDb21wb25lbnRzQWRtaW5pc3RyYWNpb24gIkNvbXBvc2VzIHRoZSBzY3JlZW4gd2l0aCIKICAgICAgICB2aWV3c0FkbWluaXN0cmFjaW9uIC0+IHN0YXRlQWRtaW5pc3RyYWNpb24gIlJlYWRzIGFuZCB1cGRhdGVzIgogICAgICAgIHZpZXdzQWRtaW5pc3RyYWNpb24gLT4gYXBpQ2xpZW50QWRtaW5pc3RyYWNpb24gIlJlcXVlc3RzIGRhdGEiCiAgICAgICAgYXBpQ2xpZW50QWRtaW5pc3RyYWNpb24gLT4gZWRnZSAiTWFuYWdlcyBjb3VydHMsIGJvb2tpbmdzLCBhbmQgdXNlcnMiICJKU09OL0hUVFBTIMK3IC9hcGkiCgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgUmVsYXRpb25zaGlwcyDigJQgY29tcG9uZW50IGxldmVsIChtZi1yZXBvcnRlcykKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgdmlld3NSZXBvcnRlcyAtPiB1aUNvbXBvbmVudHNSZXBvcnRlcyAiQ29tcG9zZXMgdGhlIHNjcmVlbiB3aXRoIgogICAgICAgIHZpZXdzUmVwb3J0ZXMgLT4gc3RhdGVSZXBvcnRlcyAiUmVhZHMgYW5kIHVwZGF0ZXMiCiAgICAgICAgdmlld3NSZXBvcnRlcyAtPiBhcGlDbGllbnRSZXBvcnRlcyAiUmVxdWVzdHMgZGF0YSIKICAgICAgICBhcGlDbGllbnRSZXBvcnRlcyAtPiBlZGdlICJSZXF1ZXN0cyB0aGUgcmVwb3J0cyIgIkpTT04vSFRUUFMgwrcgL2FwaSIKCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIC8vICBEZXBsb3ltZW50IOKAlCBEb2NrZXIgQ29tcG9zZQogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICBkZXBsb3ltZW50RW52aXJvbm1lbnQgIkxvY2FsIChEb2NrZXIgQ29tcG9zZSkiIHsKCiAgICAgICAgICAgIGVxdWlwbyA9IGRlcGxveW1lbnROb2RlICJEZXZlbG9wZXIncyBtYWNoaW5lIiAiUHJvamVjdCBldmFsdWF0aW9uIGVudmlyb25tZW50LiIgIm1hY09TIC8gTGludXggLyBXaW5kb3dzIiB7CgogICAgICAgICAgICAgICAgZG9ja2VyID0gZGVwbG95bWVudE5vZGUgIkRvY2tlciBFbmdpbmUiICJPcmNoZXN0cmF0ZWQgd2l0aCBEb2NrZXIgQ29tcG9zZSB2Mi4iICJEb2NrZXIgMjQrIiB7CgogICAgICAgICAgICAgICAgICAgIHJlZEZyb250ZW5kID0gZGVwbG95bWVudE5vZGUgIk5ldHdvcms6IGZyb250ZW5kIiAiQnJpZGdlIG5ldHdvcmsgdGhhdCBpc29sYXRlcyB0aGUgcHJlc2VudGF0aW9uIGNvbnRhaW5lcnMuIiAiZG9ja2VyIG5ldHdvcmsgKGJyaWRnZSkiIHsKCiAgICAgICAgICAgICAgICAgICAgICAgIG5vZG9FZGdlID0gZGVwbG95bWVudE5vZGUgInJjLWVkZ2UiICJPbmx5IGNvbnRhaW5lciBjb25uZWN0ZWQgdG8gYm90aCBuZXR3b3Jrcy4iICJuZ2lueDoxLjI3LWFscGluZSDCtyBwb3J0IDgwIiB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250YWluZXJJbnN0YW5jZSBlZGdlCiAgICAgICAgICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJyYy1zaGVsbCIgIiIgIm5naW54OjEuMjctYWxwaW5lIMK3IHBvcnQgMzAwMCIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgY29udGFpbmVySW5zdGFuY2Ugc2hlbGwKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgICAgICBkZXBsb3ltZW50Tm9kZSAicmMtbWYtcmVzZXJ2YXMiICIiICJuZ2lueDoxLjI3LWFscGluZSDCtyBwb3J0IDMwMDEiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIG1mUmVzZXJ2YXMKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgICAgICBkZXBsb3ltZW50Tm9kZSAicmMtbWYtYWRtaW5pc3RyYWNpb24iICIiICJuZ2lueDoxLjI3LWFscGluZSDCtyBwb3J0IDMwMDIiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIG1mQWRtaW5pc3RyYWNpb24KICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgICAgICBkZXBsb3ltZW50Tm9kZSAicmMtbWYtcmVwb3J0ZXMiICIiICJuZ2lueDoxLjI3LWFscGluZSDCtyBwb3J0IDMwMDMiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIG1mUmVwb3J0ZXMKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAgICAgcmVkQmFja2VuZCA9IGRlcGxveW1lbnROb2RlICJOZXR3b3JrOiBiYWNrZW5kIiAiQnJpZGdlIG5ldHdvcmsgdGhhdCBpc29sYXRlcyB0aGUgQVBJIGFuZCBwZXJzaXN0ZW5jZS4iICJkb2NrZXIgbmV0d29yayAoYnJpZGdlKSIgewoKICAgICAgICAgICAgICAgICAgICAgICAgZGVwbG95bWVudE5vZGUgInJjLWdhdGV3YXkiICIiICJlY2xpcHNlLXRlbXVyaW46MjEtanJlIMK3IHBvcnQgODA4MCIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgY29udGFpbmVySW5zdGFuY2UgZ2F0ZXdheQogICAgICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJyYy1tcy11c3VhcmlvcyIgIiIgImVjbGlwc2UtdGVtdXJpbjoyMS1qcmUgwrcgcG9ydCA4MDgxIiB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250YWluZXJJbnN0YW5jZSBtc1VzdWFyaW9zCiAgICAgICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICAgICAgZGVwbG95bWVudE5vZGUgInJjLW1zLWNhbmNoYXMiICIiICJlY2xpcHNlLXRlbXVyaW46MjEtanJlIMK3IHBvcnQgODA4MiIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgY29udGFpbmVySW5zdGFuY2UgbXNDYW5jaGFzCiAgICAgICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICAgICAgZGVwbG95bWVudE5vZGUgInJjLW1zLXJlc2VydmFzIiAiIiAiZWNsaXBzZS10ZW11cmluOjIxLWpyZSDCtyBwb3J0IDgwODMiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIG1zUmVzZXJ2YXMKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgICAgICBkZXBsb3ltZW50Tm9kZSAicmMtbXMtcmVwb3J0ZXMiICIiICJlY2xpcHNlLXRlbXVyaW46MjEtanJlIMK3IHBvcnQgODA4NCIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgY29udGFpbmVySW5zdGFuY2UgbXNSZXBvcnRlcwogICAgICAgICAgICAgICAgICAgICAgICB9CgogICAgICAgICAgICAgICAgICAgICAgICBub2RvUG9zdGdyZXMgPSBkZXBsb3ltZW50Tm9kZSAicmMtcG9zdGdyZXMiICJTaW5nbGUgaW5zdGFuY2Ugd2l0aCB0aHJlZSBpbmRlcGVuZGVudCBkYXRhYmFzZXMuIEVhY2ggbWljcm9zZXJ2aWNlIGhhcyBjcmVkZW50aWFscyB0aGF0IG9ubHkgYWxsb3cgaXQgdG8gY29ubmVjdCB0byBpdHMgb3duIGRhdGFiYXNlLiIgInBvc3RncmVzOjE2LWFscGluZSDCtyBwb3J0IDU0MzIiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJ1c3Vhcmlvc19kYiIgIiIgIlBvc3RncmVTUUwgZGF0YWJhc2UiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250YWluZXJJbnN0YW5jZSB1c3Vhcmlvc0RiCiAgICAgICAgICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBkZXBsb3ltZW50Tm9kZSAiY2FuY2hhc19kYiIgIiIgIlBvc3RncmVTUUwgZGF0YWJhc2UiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250YWluZXJJbnN0YW5jZSBjYW5jaGFzRGIKICAgICAgICAgICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJyZXNlcnZhc19kYiIgIiIgIlBvc3RncmVTUUwgZGF0YWJhc2UiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250YWluZXJJbnN0YW5jZSByZXNlcnZhc0RiCiAgICAgICAgICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAgICAgICAgIHZvbHVtZW4gPSBpbmZyYXN0cnVjdHVyZU5vZGUgInBnZGF0YSB2b2x1bWUiICJEb2NrZXIgdm9sdW1lIHdpdGggdGhlIFBvc3RncmVTUUwgZGF0YS4gVGhlIGluZnJhL3Bvc3RncmVzL2luaXQgc2NyaXB0cyBydW4gb25seSB3aGVuIGl0IGlzIGVtcHR5LiIgImRvY2tlciB2b2x1bWUiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRhZ3MgIkluZnJhc3RydWN0dXJlIgogICAgICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgICAgICAvLyBSZWxhdGlvbnNoaXBzIGJldHdlZW4gY29udGFpbmVycyByZXBsaWNhdGUgYXV0b21hdGljYWxseQogICAgICAgICAgICAgICAgICAgIC8vIGJldHdlZW4gdGhlaXIgaW5zdGFuY2VzOyBoZXJlIHdlIG9ubHkgbmVlZCB0byBkZWNsYXJlCiAgICAgICAgICAgICAgICAgICAgLy8gdGhlIG9uZSBpbnZvbHZpbmcgdGhlIGluZnJhc3RydWN0dXJlIG5vZGUuCiAgICAgICAgICAgICAgICAgICAgbm9kb1Bvc3RncmVzIC0+IHZvbHVtZW4gIlBlcnNpc3RzIGRhdGEgdG8iICJmaWxlIHN5c3RlbSIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgIH0KICAgIH0KCiAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgLy8gIFZpZXdzCiAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgdmlld3MgewoKICAgICAgICAvLyBMQVlPVVQgTk9URQogICAgICAgIC8vIE5vIHZpZXcgdXNlcyBgYXV0b0xheW91dGA6IGEgdmlldyB3aXRoIGF1dG9tYXRpYyBsYXlvdXQgYXJyYW5nZXMKICAgICAgICAvLyBpdHNlbGYsIGJ1dCBTdHJ1Y3R1cml6ciB0aGVuIGJsb2NrcyBkcmFnZ2luZyBpdHMgZWxlbWVudHMuIFRoZQogICAgICAgIC8vIHN0YXJ0aW5nIHBvc2l0aW9ucyBvZiBhbGwgdHdlbHZlIHZpZXdzIGFyZSBzYXZlZCBpbgogICAgICAgIC8vIHdvcmtzcGFjZS5qc29uLCBzbyB0aGV5IG9wZW4gYWxyZWFkeSBhcnJhbmdlZCBhbmQgY2FuIGJlIG1vdmVkIGJ5CiAgICAgICAgLy8gaGFuZDsgZHJhZ2dpbmcgc2hvd3MgYSBzYXZlIGJ1dHRvbiwgYW5kIHRoZSBuZXcgcG9zaXRpb25zIGFyZQogICAgICAgIC8vIHdyaXR0ZW4gdG8gdGhhdCBzYW1lIGZpbGUuCiAgICAgICAgLy8KICAgICAgICAvLyB3b3Jrc3BhY2UuanNvbiBzaG91bGQgYmUgdmVyc2lvbmVkIGFsb25nc2lkZSB0aGlzIC5kc2wgZmlsZTogaXQgaXMKICAgICAgICAvLyB3aGF0IGtlZXBzIHRoZSBsYXlvdXQuIElmIGBhdXRvTGF5b3V0YCBpcyBhZGRlZCB0byBhIHZpZXcgYW5kIHRoZW4KICAgICAgICAvLyByZW1vdmVkLCB0aGUgImF1dG9tYXRpY0xheW91dCIga2V5IGxlZnQgYmVoaW5kIGluIHdvcmtzcGFjZS5qc29uCiAgICAgICAgLy8gbXVzdCBhbHNvIGJlIGRlbGV0ZWQsIG9yIHRoZSB2aWV3ZXIgd2lsbCBrZWVwIGFwcGx5aW5nIGl0LgoKICAgICAgICBzeXN0ZW1Db250ZXh0IHNpc3RlbWEgIjAxLUNvbnRleHRvIiAiTGV2ZWwgMSDigJQgVGhlIHN5c3RlbSBhbmQgaXRzIHVzZXJzLiIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIGNvbnRhaW5lciBzaXN0ZW1hICIwMi1Db250ZW5lZG9yZXMiICJMZXZlbCAyIOKAlCBNaWNyb2Zyb250ZW5kcywgZ2F0ZXdheSwgbWljcm9zZXJ2aWNlcywgYW5kIGRhdGFiYXNlcy4iIHsKICAgICAgICAgICAgaW5jbHVkZSAqCiAgICAgICAgfQoKICAgICAgICBjb21wb25lbnQgbXNSZXNlcnZhcyAiMDMtQ29tcG9uZW50ZXMtbXMtcmVzZXJ2YXMiICJMZXZlbCAzIOKAlCBJbnRlcmlvciBvZiBtcy1yZXNlcnZhcyAoaGV4YWdvbmFsIGFyY2hpdGVjdHVyZSksIHdoZXJlIHRoZSBidXNpbmVzcyBydWxlcyBhcmUgYXBwbGllZC4iIHsKICAgICAgICAgICAgaW5jbHVkZSAqCiAgICAgICAgfQoKICAgICAgICBkZXBsb3ltZW50IHNpc3RlbWEgIkxvY2FsIChEb2NrZXIgQ29tcG9zZSkiICIwNC1EZXNwbGllZ3VlIiAiTWF0ZXJpYWxpemF0aW9uIG9mIHRoZSBzeXN0ZW0gaW4gRG9ja2VyIGNvbnRhaW5lcnMuIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IG1zVXN1YXJpb3MgIjA1LUNvbXBvbmVudGVzLW1zLXVzdWFyaW9zIiAiTGV2ZWwgMyDigJQgSW50ZXJpb3Igb2YgbXMtdXN1YXJpb3MgKGhleGFnb25hbCBhcmNoaXRlY3R1cmUpOiByZWdpc3RyYXRpb24gYW5kIGJhc2ljIHJvbGUtYmFzZWQgYXV0aGVudGljYXRpb24uIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IG1zQ2FuY2hhcyAiMDYtQ29tcG9uZW50ZXMtbXMtY2FuY2hhcyIgIkxldmVsIDMg4oCUIEludGVyaW9yIG9mIG1zLWNhbmNoYXMgKGhleGFnb25hbCBhcmNoaXRlY3R1cmUpOiBjYXRhbG9nLCBzY2hlZHVsZXMsIGFuZCBibG9ja3MuIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IG1zUmVwb3J0ZXMgIjA3LUNvbXBvbmVudGVzLW1zLXJlcG9ydGVzIiAiTGV2ZWwgMyDigJQgSW50ZXJpb3Igb2YgbXMtcmVwb3J0ZXMgKGhleGFnb25hbCBhcmNoaXRlY3R1cmUpOiBSRVNUIGFnZ3JlZ2F0aW9uLCBubyBkYXRhYmFzZSBvZiBpdHMgb3duLiIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIGNvbXBvbmVudCBnYXRld2F5ICIwOC1Db21wb25lbnRlcy1nYXRld2F5IiAiTGV2ZWwgMyDigJQgSW50ZXJpb3Igb2YgdGhlIEFQSSBHYXRld2F5OiB1c2VyIGlkZW50aWZpY2F0aW9uIGFuZCByb3V0aW5nLiIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIGNvbXBvbmVudCBzaGVsbCAiMDktQ29tcG9uZW50ZXMtc2hlbGwiICJMZXZlbCAzIOKAlCBJbnRlcmlvciBvZiB0aGUgc2hlbGw6IGxheW91dCwgc2Vzc2lvbiwgYW5kIHJlbW90ZSBsb2FkaW5nLiIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIGNvbXBvbmVudCBtZlJlc2VydmFzICIxMC1Db21wb25lbnRlcy1tZi1yZXNlcnZhcyIgIkxldmVsIDMg4oCUIEludGVyaW9yIG9mIG1mLXJlc2VydmFzLiIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIGNvbXBvbmVudCBtZkFkbWluaXN0cmFjaW9uICIxMS1Db21wb25lbnRlcy1tZi1hZG1pbmlzdHJhY2lvbiIgIkxldmVsIDMg4oCUIEludGVyaW9yIG9mIG1mLWFkbWluaXN0cmFjaW9uLiIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIGNvbXBvbmVudCBtZlJlcG9ydGVzICIxMi1Db21wb25lbnRlcy1tZi1yZXBvcnRlcyIgIkxldmVsIDMg4oCUIEludGVyaW9yIG9mIG1mLXJlcG9ydGVzLiIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIC8vIC0tLSBTdHlsZXMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICBzdHlsZXMgewogICAgICAgICAgICBlbGVtZW50ICJQZXJzb24iIHsKICAgICAgICAgICAgICAgIHNoYXBlIFBlcnNvbgogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjMGI1Mzk0CiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgICAgICBmb250U2l6ZSAyMgogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJTb2Z0d2FyZSBTeXN0ZW0iIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzExNjhiZAogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJDb250YWluZXIiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzQzOGRkNQogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJNaWNyb2Zyb250ZW5kIiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICM2YjRmYmIKICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYKICAgICAgICAgICAgICAgIHNoYXBlIFdlYkJyb3dzZXIKICAgICAgICAgICAgfQoKICAgICAgICAgICAgZWxlbWVudCAiSG9zdCIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjNGIyZTgzCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGVsZW1lbnQgIkdhdGV3YXkiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2I1NjUxZAogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICAgICAgc2hhcGUgSGV4YWdvbgogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJNaWNyb3NlcnZpY2UiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzJlOGI1NwogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICAgICAgc2hhcGUgUm91bmRlZEJveAogICAgICAgICAgICB9CgogICAgICAgICAgICAvLyAtLS0gSGV4YWdvbmFsIGFyY2hpdGVjdHVyZSAocG9ydHMgJiBhZGFwdGVycykgLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgIGVsZW1lbnQgIkFkYXB0ZXItSW4iIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzRhN2ViYgogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJQb3J0IiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICNlOGEzM2QKICAgICAgICAgICAgICAgIGNvbG9yICMwMDAwMDAKICAgICAgICAgICAgICAgIHNoYXBlIEhleGFnb24KICAgICAgICAgICAgfQoKICAgICAgICAgICAgZWxlbWVudCAiQXBwbGljYXRpb24iIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzJlOGI1NwogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJBZGFwdGVyLU91dCIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjOGU1YjNmCiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGVsZW1lbnQgIkRhdGFiYXNlIiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICM3YTUxOTUKICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYKICAgICAgICAgICAgICAgIHNoYXBlIEN5bGluZGVyCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGVsZW1lbnQgIkluZnJhc3RydWN0dXJlIiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICM2Yzc1N2QKICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYKICAgICAgICAgICAgICAgIHNoYXBlIFBpcGUKICAgICAgICAgICAgfQoKICAgICAgICAgICAgZWxlbWVudCAiQ29tcG9uZW50IiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICM4NWJiZjAKICAgICAgICAgICAgICAgIGNvbG9yICMwMDAwMDAKICAgICAgICAgICAgfQoKICAgICAgICAgICAgZWxlbWVudCAiRGVwbG95bWVudCBOb2RlIiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICNmZmZmZmYKICAgICAgICAgICAgICAgIGNvbG9yICM0NDQ0NDQKICAgICAgICAgICAgICAgIHN0cm9rZSAjODg4ODg4CiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIHJlbGF0aW9uc2hpcCAiUmVsYXRpb25zaGlwIiB7CiAgICAgICAgICAgICAgICB0aGlja25lc3MgMgogICAgICAgICAgICAgICAgZm9udFNpemUgMjAKICAgICAgICAgICAgfQogICAgICAgIH0KICAgIH0KfQ==",
+    "structurizr.inspection.error" : "60",
+    "structurizr.dsl" : "LyoqCiAqIFNwb3J0cyBDb3VydCBCb29raW5nIFN5c3RlbQogKiBDNCBtb2RlbCBpbiBTdHJ1Y3R1cml6ciBEU0wKICoKICogRGVzYXJyb2xsbyBkZSBBcGxpY2FjaW9uZXMgRW1wcmVzYXJpYWxlcyDigJQgTWFlc3Ryw61hIGVuIEluZ2VuaWVyw61hIGRlIFNvZnR3YXJlCiAqCiAqIFZpZXdzIGluY2x1ZGVkOgogKiAgIDAxLiBDb250ZXh0ICAgICAgICAgICAgICAg4oCUIHRoZSBzeXN0ZW0gYW5kIGl0cyB1c2VycwogKiAgIDAyLiBDb250YWluZXJzICAgICAgICAgICAgIOKAlCBtaWNyb2Zyb250ZW5kcywgZ2F0ZXdheSwgbWljcm9zZXJ2aWNlcywgYW5kIGRhdGFiYXNlcwogKiAgIDAzLiBDb21wb25lbnRzIChtcy1yZXNlcnZhcykgICDigJQgd2hlcmUgcnVsZXMgUk4tMDEuLlJOLTA4IGxpdmUKICogICAwNC4gRGVwbG95bWVudCAgICAgICAgICAgICAg4oCUIGhvdyBpdCBhbGwgbWF0ZXJpYWxpemVzIGluIERvY2tlciBDb21wb3NlCiAqICAgMDUtMDguIENvbXBvbmVudHMgKG1zLXVzdWFyaW9zLCBtcy1jYW5jaGFzLCBtcy1yZXBvcnRlcywgZ2F0ZXdheSkKICogICAwOS0xMi4gQ29tcG9uZW50cyAoc2hlbGwsIG1mLXJlc2VydmFzLCBtZi1hZG1pbmlzdHJhY2lvbiwgbWYtcmVwb3J0ZXMpCiAqCiAqIFN0YXJ0IHRoZSB2aWV3ZXI6ICBkb2NrZXIgY29tcG9zZSB1cCAtZCAgIChpbiB0aGlzIHNhbWUgZm9sZGVyKQogKi8Kd29ya3NwYWNlICJTcG9ydHMgQ291cnQgQm9va2luZyBTeXN0ZW0iICJNaWNyb2Zyb250ZW5kIGFuZCBtaWNyb3NlcnZpY2VzIGFyY2hpdGVjdHVyZSBmb3IgYm9va2luZyBwYWRlbCwgdGVubmlzLCBhbmQgYmFza2V0YmFsbCBjb3VydHMuIiB7CgogICAgbW9kZWwgewoKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgLy8gIEFjdG9ycwogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICB1c3VhcmlvRmluYWwgPSBwZXJzb24gIkVuZCBVc2VyIiAiQ2hlY2tzIGF2YWlsYWJpbGl0eSwgY3JlYXRlcyBhbmQgY2FuY2VscyB0aGVpciBvd24gYm9va2luZ3MuIgogICAgICAgIGFkbWluaXN0cmFkb3IgPSBwZXJzb24gIkFkbWluaXN0cmF0b3IiICJNYW5hZ2VzIHRoZSBjb3VydCBjYXRhbG9nLCBjYW5jZWxzIGFueSBib29raW5nLCBhbmQgdmlld3Mgb2NjdXBhbmN5IHJlcG9ydHMuIgoKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgLy8gIFN5c3RlbQogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICBzaXN0ZW1hID0gc29mdHdhcmVTeXN0ZW0gIkNvdXJ0IEJvb2tpbmcgU3lzdGVtIiAiQWxsb3dzIGJvb2tpbmcgc3BvcnRzIGNvdXJ0cyBieSB0aW1lIGJsb2Nrcywgd2l0aCBhZG1pbmlzdHJhdGl2ZSBtYW5hZ2VtZW50IGFuZCBvY2N1cGFuY3kgcmVwb3J0cy4iIHsKCiAgICAgICAgICAgIC8vIC0tLSBFbnRyeSBsYXllciAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgIGVkZ2UgPSBjb250YWluZXIgIkVkZ2UiICJTZXJ2ZXMgdGhlIHNoZWxsLCB0aGUgcmVtb3RlIG1pY3JvZnJvbnRlbmRzLCBhbmQgdGhlIEFQSSB1bmRlciBhIHNpbmdsZSBvcmlnaW4gKGh0dHA6Ly9sb2NhbGhvc3QpLiIgIm5naW54IDEuMjciIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkluZnJhc3RydWN0dXJlIgogICAgICAgICAgICB9CgogICAgICAgICAgICAvLyAtLS0gTWljcm9mcm9udGVuZHMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgc2hlbGwgPSBjb250YWluZXIgIlNoZWxsIChob3N0KSIgIk1haW4gY29udGFpbmVyOiBsYXlvdXQsIG5hdmlnYXRpb24sIHVzZXIgc2Vzc2lvbiwgYW5kIHJ1bnRpbWUgb3JjaGVzdHJhdGlvbiBvZiB0aGUgcmVtb3Rlcy4iICJSZWFjdCArIE1vZHVsZSBGZWRlcmF0aW9uIiB7CiAgICAgICAgICAgICAgICB0YWdzICJNaWNyb2Zyb250ZW5kIiAiSG9zdCIKCiAgICAgICAgICAgICAgICAvLyAtLS0gSW50ZXJuYWwgY29tcG9uZW50cyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgICAgIHJvdXRlclNoZWxsID0gY29tcG9uZW50ICJSb3V0ZXIiICJEZWZpbmVzIHRoZSB0b3AtbGV2ZWwgcm91dGVzIGFuZCByZXNvbHZlcyB3aGljaCByZW1vdGUgdG8gZGVsZWdhdGUgZWFjaCBvbmUgdG8uIiAiUmVhY3QgUm91dGVyIgogICAgICAgICAgICAgICAgbGF5b3V0U2hlbGwgPSBjb21wb25lbnQgIkxheW91dCIgIlNoYXJlZCB2aXN1YWwgc3RydWN0dXJlIChoZWFkZXIsIG5hdmlnYXRpb24pIHRoYXQgd3JhcHMgdGhlIGFjdGl2ZSByZW1vdGUuIiAiUmVhY3QiCiAgICAgICAgICAgICAgICBzZXNzaW9uQ29udGV4dCA9IGNvbXBvbmVudCAiU2Vzc2lvbkNvbnRleHQiICJIb2xkcyB0aGUgYXV0aGVudGljYXRlZCB1c2VyJ3MgaWRlbnRpdHkgYW5kIHJvbGUsIGFuZCBleHBvc2VzIHNlc3Npb24gc3RhdGUgdG8gdGhlIHNoZWxsIGFuZCB0aGUgcmVtb3Rlcy4iICJSZWFjdCBDb250ZXh0IgogICAgICAgICAgICAgICAgcmVtb3RlTG9hZGVyID0gY29tcG9uZW50ICJSZW1vdGVMb2FkZXIiICJMb2FkcyBlYWNoIG1pY3JvZnJvbnRlbmQncyByZW1vdGVFbnRyeS5qcyBhdCBydW50aW1lLiIgIk1vZHVsZSBGZWRlcmF0aW9uIgogICAgICAgICAgICB9CgogICAgICAgICAgICBtZlJlc2VydmFzID0gY29udGFpbmVyICJtZi1yZXNlcnZhcyIgIkF2YWlsYWJpbGl0eSBsb29rdXAsIGJvb2tpbmcgY3JlYXRpb24sIGFuZCBjYW5jZWxsYXRpb24gZm9yIHRoZSBlbmQgdXNlci4iICJSZWFjdCArIE1vZHVsZSBGZWRlcmF0aW9uIChyZW1vdGUpIiB7CiAgICAgICAgICAgICAgICB0YWdzICJNaWNyb2Zyb250ZW5kIgoKICAgICAgICAgICAgICAgIC8vIC0tLSBJbnRlcm5hbCBjb21wb25lbnRzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgdmlld3NSZXNlcnZhcyA9IGNvbXBvbmVudCAiVmlld3MiICJBdmFpbGFiaWxpdHksIGJvb2tpbmcgY3JlYXRpb24gYW5kIGNhbmNlbGxhdGlvbiBzY3JlZW5zLCBhbmQgdGhlIFwiTXkgQm9va2luZ3NcIiBoaXN0b3J5LiIgIlJlYWN0IFJvdXRlciAocmVtb3RlIHJvdXRlcykiCiAgICAgICAgICAgICAgICB1aUNvbXBvbmVudHNSZXNlcnZhcyA9IGNvbXBvbmVudCAiVUkgQ29tcG9uZW50cyIgIlJldXNhYmxlIHBpZWNlczogdGltZS1ibG9jayBjYWxlbmRhciwgYm9va2luZyBjYXJkLCBjb3VydCBzZWxlY3Rvci4iICJSZWFjdCIKICAgICAgICAgICAgICAgIHN0YXRlUmVzZXJ2YXMgPSBjb21wb25lbnQgIlN0YXRlIiAiSG9sZHMgdGhlIHNlbGVjdGVkIGNvdXJ0L2RhdGUgYW5kIHRoZSBhdmFpbGFiaWxpdHkgcmVzdWx0IHdoaWxlIHRoZSB1c2VyIGJ1aWxkcyBhIGJvb2tpbmcuIiAiUmVhY3QgQ29udGV4dCAvIGhvb2tzIgogICAgICAgICAgICAgICAgYXBpQ2xpZW50UmVzZXJ2YXMgPSBjb21wb25lbnQgIkFwaUNsaWVudCIgIldyYXBzIHRoZSBIVFRQIGNhbGxzIHRvIC9hcGkvcmVzZXJ2YXMgYW5kIC9hcGkvZGlzcG9uaWJpbGlkYWQuIiAiRmV0Y2ggQVBJIgogICAgICAgICAgICB9CgogICAgICAgICAgICBtZkFkbWluaXN0cmFjaW9uID0gY29udGFpbmVyICJtZi1hZG1pbmlzdHJhY2lvbiIgIk1hbmFnZW1lbnQgb2YgdGhlIGNvdXJ0IGNhdGFsb2csIHNjaGVkdWxlcywgYmxvY2tzLCB1c2VycywgYW5kIGNhbmNlbGxhdGlvbiBvZiBhbnkgYm9va2luZy4iICJSZWFjdCArIE1vZHVsZSBGZWRlcmF0aW9uIChyZW1vdGUpIiB7CiAgICAgICAgICAgICAgICB0YWdzICJNaWNyb2Zyb250ZW5kIgoKICAgICAgICAgICAgICAgIC8vIC0tLSBJbnRlcm5hbCBjb21wb25lbnRzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgdmlld3NBZG1pbmlzdHJhY2lvbiA9IGNvbXBvbmVudCAiVmlld3MiICJDb3VydCBjYXRhbG9nLCBzY2hlZHVsZXMsIG1haW50ZW5hbmNlIGJsb2NrcywgdXNlciBtYW5hZ2VtZW50IChhY3RpdmF0ZS9kZWFjdGl2YXRlKSwgYW5kIGFkbWluaXN0cmF0aXZlIGJvb2tpbmctY2FuY2VsbGF0aW9uIHNjcmVlbnMuIiAiUmVhY3QgUm91dGVyIChyZW1vdGUgcm91dGVzKSIKICAgICAgICAgICAgICAgIHVpQ29tcG9uZW50c0FkbWluaXN0cmFjaW9uID0gY29tcG9uZW50ICJVSSBDb21wb25lbnRzIiAiUmV1c2FibGUgcGllY2VzOiBjb3VydCBmb3JtLCBib29raW5ncyB0YWJsZSwgc2NoZWR1bGUgZWRpdG9yLCB1c2VycyB0YWJsZS4iICJSZWFjdCIKICAgICAgICAgICAgICAgIHN0YXRlQWRtaW5pc3RyYWNpb24gPSBjb21wb25lbnQgIlN0YXRlIiAiSG9sZHMgdGhlIGFjdGl2ZSBmb3JtIGFuZCBmaWx0ZXJzIHdoaWxlIHRoZSBhZG1pbmlzdHJhdG9yIGVkaXRzIHRoZSBjYXRhbG9nLiIgIlJlYWN0IENvbnRleHQgLyBob29rcyIKICAgICAgICAgICAgICAgIGFwaUNsaWVudEFkbWluaXN0cmFjaW9uID0gY29tcG9uZW50ICJBcGlDbGllbnQiICJXcmFwcyB0aGUgSFRUUCBjYWxscyB0byAvYXBpL2NhbmNoYXMsIC9hcGkvcmVzZXJ2YXMsIGFuZCAvYXBpL3VzdWFyaW9zLiIgIkZldGNoIEFQSSIKICAgICAgICAgICAgfQoKICAgICAgICAgICAgbWZSZXBvcnRlcyA9IGNvbnRhaW5lciAibWYtcmVwb3J0ZXMiICJEaXNwbGF5cyBvY2N1cGFuY3kgcmVwb3J0cywgYm9va2luZ3MgYnkgcGVyaW9kLCBjYW5jZWxsYXRpb25zLCBhbmQgdGhlIG1vc3QvbGVhc3QgZGVtYW5kZWQgY291cnRzLiIgIlJlYWN0ICsgTW9kdWxlIEZlZGVyYXRpb24gKHJlbW90ZSkiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIk1pY3JvZnJvbnRlbmQiCgogICAgICAgICAgICAgICAgLy8gLS0tIEludGVybmFsIGNvbXBvbmVudHMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICB2aWV3c1JlcG9ydGVzID0gY29tcG9uZW50ICJWaWV3cyIgIk9jY3VwYW5jeSwgYm9va2luZ3MtYnktcGVyaW9kLCBjYW5jZWxsYXRpb25zLCBhbmQgY291cnQtZGVtYW5kIHJhbmtpbmcgc2NyZWVucy4iICJSZWFjdCBSb3V0ZXIgKHJlbW90ZSByb3V0ZXMpIgogICAgICAgICAgICAgICAgdWlDb21wb25lbnRzUmVwb3J0ZXMgPSBjb21wb25lbnQgIlVJIENvbXBvbmVudHMiICJSZXVzYWJsZSBwaWVjZXM6IHJlcG9ydCBjaGFydHMgYW5kIHRhYmxlcywgZGF0ZS1yYW5nZSBwaWNrZXIuIiAiUmVhY3QiCiAgICAgICAgICAgICAgICBzdGF0ZVJlcG9ydGVzID0gY29tcG9uZW50ICJTdGF0ZSIgIkhvbGRzIHRoZSBkYXRlIHJhbmdlIGFuZCBmaWx0ZXJzIHNlbGVjdGVkIGJ5IHRoZSBhZG1pbmlzdHJhdG9yLiIgIlJlYWN0IENvbnRleHQgLyBob29rcyIKICAgICAgICAgICAgICAgIGFwaUNsaWVudFJlcG9ydGVzID0gY29tcG9uZW50ICJBcGlDbGllbnQiICJXcmFwcyB0aGUgSFRUUCBjYWxscyB0byAvYXBpL3JlcG9ydGVzLiIgIkZldGNoIEFQSSIKICAgICAgICAgICAgfQoKICAgICAgICAgICAgLy8gLS0tIEFQSSBHYXRld2F5IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgIGdhdGV3YXkgPSBjb250YWluZXIgIkFQSSBHYXRld2F5IiAiU2luZ2xlIGVudHJ5IHBvaW50IHRvIHRoZSBBUEkuIElkZW50aWZpZXMgdGhlIGF1dGhlbnRpY2F0ZWQgdXNlciAoUk4tMDMpIGFuZCByb3V0ZXMgZWFjaCByZXF1ZXN0IHRvIHRoZSBjb3JyZXNwb25kaW5nIG1pY3Jvc2VydmljZS4iICJTcHJpbmcgQ2xvdWQgR2F0ZXdheSAoOjgwODApIiB7CiAgICAgICAgICAgICAgICB0YWdzICJHYXRld2F5IgoKICAgICAgICAgICAgICAgIC8vIC0tLSBJbnRlcm5hbCBjb21wb25lbnRzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgLy8gQmFzaWMgcm9sZS1iYXNlZCBhdXRoZW50aWNhdGlvbiAoc2NvcGUgZG9jdW1lbnQgwqc0LjQpOiBubwogICAgICAgICAgICAgICAgLy8gYWR2YW5jZWQgbWVjaGFuaXNtIHN1Y2ggYXMgT0F1dGgyL0pXVCBpcyByZXF1aXJlZC4KICAgICAgICAgICAgICAgIGF1dGhlbnRpY2F0aW9uRmlsdGVyID0gY29tcG9uZW50ICJBdXRoZW50aWNhdGlvbkZpbHRlciIgIklkZW50aWZpZXMgdGhlIHVzZXIgbWFraW5nIHRoZSByZXF1ZXN0IGFuZCBwcm9wYWdhdGVzIHRoZWlyIGlkZW50aXR5IGFuZCByb2xlIGFzIFgtVXNlci1JZCAvIFgtVXNlci1Sb2xlIGhlYWRlcnMuIiAiR2xvYmFsRmlsdGVyIgogICAgICAgICAgICAgICAgcm91dGVDb25maWcgPSBjb21wb25lbnQgIlJvdXRlQ29uZmlnIiAiRGVmaW5lcyB0aGUgcm91dGVzIHRvIGVhY2ggbWljcm9zZXJ2aWNlIChwcmVkaWNhdGVzIGFuZCBmaWx0ZXJzKS4iICJTcHJpbmcgQ2xvdWQgR2F0ZXdheSAoUm91dGVMb2NhdG9yKSIKICAgICAgICAgICAgICAgIGVycm9ySGFuZGxlckdhdGV3YXkgPSBjb21wb25lbnQgIkVycm9ySGFuZGxlciIgIlRyYW5zbGF0ZXMgZmFpbHVyZXMgZnJvbSB0aGUgdGFyZ2V0IG1pY3Jvc2VydmljZXMgKHRpbWVvdXQsIHVuYXZhaWxhYmxlKSBvciBtaXNzaW5nL2ludmFsaWQgaWRlbnRpdHkgaW50byBIVFRQIHN0YXR1cyBjb2Rlcy4iICJFcnJvcldlYkV4Y2VwdGlvbkhhbmRsZXIiCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIC8vIC0tLSBNaWNyb3NlcnZpY2VzIChoZXhhZ29uYWw6IHBvcnRzICYgYWRhcHRlcnMpIC0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAvLyBFYWNoIG1pY3Jvc2VydmljZSdzIGNvcmUgKHVzZSBjYXNlICsgcG9ydCBpbnRlcmZhY2VzKSBoYXMgbm8KICAgICAgICAgICAgLy8gZGVwZW5kZW5jeSBvbiBTcHJpbmcgTVZDIG9yIFNwcmluZyBEYXRhOyBvbmx5IHRoZSBhZGFwdGVycyBkby4KICAgICAgICAgICAgLy8gRHJpdmluZyBhZGFwdGVycyAod2ViKSBjYWxsIHRoZSBpbnB1dCBwb3J0OyB0aGUgYXBwbGljYXRpb24KICAgICAgICAgICAgLy8gc2VydmljZSBpbXBsZW1lbnRzIGl0LiBUaGUgYXBwbGljYXRpb24gc2VydmljZSBkZXBlbmRzIG9ubHkgb24KICAgICAgICAgICAgLy8gb3V0cHV0IHBvcnRzOyBkcml2ZW4gYWRhcHRlcnMgKEpQQSwgUmVzdENsaWVudCkgaW1wbGVtZW50IHRoZW0uCiAgICAgICAgICAgIG1zVXN1YXJpb3MgPSBjb250YWluZXIgIm1zLXVzdWFyaW9zIiAiUmVnaXN0cmF0aW9uLCBhdXRoZW50aWNhdGlvbiwgYW5kIG1hbmFnZW1lbnQgb2YgdXNlcnMgYW5kIHJvbGVzLiBWYWxpZGF0ZXMgdGhlIGVuZCB1c2VyJ3Mgb3IgYWRtaW5pc3RyYXRvcidzIGNyZWRlbnRpYWxzIGFuZCBjb25maXJtcyB0aGVpciByb2xlLiIgIlNwcmluZyBCb290IDQgKDo4MDgxKSIgewogICAgICAgICAgICAgICAgdGFncyAiTWljcm9zZXJ2aWNlIgoKICAgICAgICAgICAgICAgIC8vIC0tLSBEcml2aW5nIGFkYXB0ZXIgKHdlYikgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgICAgIGF1dGhDb250cm9sbGVyID0gY29tcG9uZW50ICJBdXRoQ29udHJvbGxlciIgIkV4cG9zZXMgUE9TVCAvYXBpL2F1dGgvcmVnaXN0cm8gYW5kIFBPU1QgL2FwaS9hdXRoL2xvZ2luLCB0aGUgb25seSB0d28gcHVibGljIHJvdXRlcyBvZiB0aGUgc3lzdGVtOyB0cmFuc2xhdGVzIEhUVFAgcmVxdWVzdHMgaW50byBjYWxscyB0byB0aGUgaW5wdXQgcG9ydC4iICJTcHJpbmcgTVZDIEBSZXN0Q29udHJvbGxlciIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFkYXB0ZXItSW4iCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICB1c2VyQ29udHJvbGxlciA9IGNvbXBvbmVudCAiVXNlckNvbnRyb2xsZXIiICJFeHBvc2VzIEdFVCAvYXBpL3VzdWFyaW9zLCBHRVQgL2FwaS91c3Vhcmlvcy97aWR9IGFuZCBQQVRDSCAvYXBpL3VzdWFyaW9zL3tpZH0vZXN0YWRvLiBTZXBhcmF0ZSBmcm9tIEF1dGhDb250cm9sbGVyIGJlY2F1c2UgdGhvc2UgYXJlIHRoZSBvbmx5IHR3byBwdWJsaWMgcm91dGVzIG9mIHRoZSBzeXN0ZW0gYW5kIHRoZXNlIHJlcXVpcmUgQURNSU5JU1RSQURPUi4iICJTcHJpbmcgTVZDIEBSZXN0Q29udHJvbGxlciIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFkYXB0ZXItSW4iCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBlcnJvckhhbmRsZXJVc2VyID0gY29tcG9uZW50ICJFcnJvckhhbmRsZXIiICJUcmFuc2xhdGVzIGludmFsaWQgY3JlZGVudGlhbHMgYW5kIGNvbmZsaWN0cyAodXNlciBhbHJlYWR5IHJlZ2lzdGVyZWQpIGludG8gSFRUUCBzdGF0dXMgY29kZXMuIiAiQFJlc3RDb250cm9sbGVyQWR2aWNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiQWRhcHRlci1JbiIKICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAvLyAtLS0gRG9tYWluOiBpbnB1dCBwb3J0ICsgYXBwbGljYXRpb24gLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICB1c2VyVXNlQ2FzZSA9IGNvbXBvbmVudCAiVXNlclVzZUNhc2UiICJJbnB1dCBwb3J0OiByZWdpc3RyYXRpb24sIGF1dGhlbnRpY2F0aW9uLCBhbmQgcm9sZSBtYW5hZ2VtZW50IG9wZXJhdGlvbnMsIHdpdGggbm8gZGVwZW5kZW5jeSBvbiBTcHJpbmcgTVZDIG9yIEpQQS4iICJKYXZhIGludGVyZmFjZSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIlBvcnQiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICB1c2VyU2VydmljZSA9IGNvbXBvbmVudCAiVXNlclNlcnZpY2UiICJJbXBsZW1lbnRzIHRoZSBpbnB1dCBwb3J0OiB2YWxpZGF0ZXMgY3JlZGVudGlhbHMgKEZSLTAwMywgRlItMDA1KSBhbmQgbWFuYWdlcyB0aGUgdXNlciBsaWZlY3ljbGUuIEFwcGxpZXMgRlItMDQ4OiBvbmx5IGFuIEFETUlOSVNUUkFET1IgbGlzdHMgdXNlcnMgb3IgY2hhbmdlcyB0aGVpciBzdGF0ZS4iICJTcHJpbmcgQFNlcnZpY2UiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJBcHBsaWNhdGlvbiIKICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAvLyAtLS0gRG9tYWluOiBvdXRwdXQgcG9ydCAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgdXNlclJlcG9zaXRvcnlQb3J0ID0gY29tcG9uZW50ICJVc2VyUmVwb3NpdG9yeVBvcnQiICJPdXRwdXQgcG9ydDogcGVyc2lzdGVuY2Ugb3BlcmF0aW9ucyBvdmVyIHVzZXJzIGFuZCByb2xlcyB0aGF0IHRoZSBhcHBsaWNhdGlvbiBjb3JlIG5lZWRzLiIgIkphdmEgaW50ZXJmYWNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiUG9ydCIKICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAvLyAtLS0gRHJpdmVuIGFkYXB0ZXIgKHBlcnNpc3RlbmNlKSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgdXNlclJlcG9zaXRvcnlBZGFwdGVyID0gY29tcG9uZW50ICJVc2VyUmVwb3NpdG9yeUFkYXB0ZXIiICJJbXBsZW1lbnRzIHRoZSBvdXRwdXQgcG9ydCBhZ2FpbnN0IHRoZSB1c2VycyBhbmQgcm9sZXMgdGFibGUuIiAiU3ByaW5nIERhdGEgSlBBIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiQWRhcHRlci1PdXQiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIG1zQ2FuY2hhcyA9IGNvbnRhaW5lciAibXMtY2FuY2hhcyIgIkNhdGFsb2cgb2YgY291cnRzIGFuZCBzcG9ydHMsIG9wZW5pbmcgaG91cnMsIGFuZCBtYWludGVuYW5jZSBibG9ja3MuIiAiU3ByaW5nIEJvb3QgNCAoOjgwODIpIiB7CiAgICAgICAgICAgICAgICB0YWdzICJNaWNyb3NlcnZpY2UiCgogICAgICAgICAgICAgICAgLy8gLS0tIERyaXZpbmcgYWRhcHRlciAod2ViKSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgY291cnRDb250cm9sbGVyID0gY29tcG9uZW50ICJDb3VydENvbnRyb2xsZXIiICJFeHBvc2VzIHRoZSBlbmRwb2ludHMgZm9yIHRoZSBjb3VydCBjYXRhbG9nLCBvcGVuaW5nIGhvdXJzLCBhbmQgbWFpbnRlbmFuY2UgYmxvY2tzOyB0cmFuc2xhdGVzIEhUVFAgcmVxdWVzdHMgaW50byBjYWxscyB0byB0aGUgaW5wdXQgcG9ydC4iICJTcHJpbmcgTVZDIEBSZXN0Q29udHJvbGxlciIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFkYXB0ZXItSW4iCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBlcnJvckhhbmRsZXJDb3VydCA9IGNvbXBvbmVudCAiRXJyb3JIYW5kbGVyIiAiVHJhbnNsYXRlcyBkb21haW4gZXhjZXB0aW9ucyBpbnRvIEhUVFAgc3RhdHVzIGNvZGVzOiA0MDMgZm9yIGFuIGluc3VmZmljaWVudCByb2xlIChSTi0wNyksIDQwNCBmb3IgYSBtaXNzaW5nIGNvdXJ0IG9yIGJsb2NrLCA0MDkgZm9yIGFuIG92ZXJsYXBwaW5nIG1haW50ZW5hbmNlIGJsb2NrLCA0MDAgZm9yIGEgY2xvc2luZyB0aW1lIHRoYXQgaXMgbm90IGFmdGVyIHRoZSBvcGVuaW5nIG9uZS4iICJAUmVzdENvbnRyb2xsZXJBZHZpY2UiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJBZGFwdGVyLUluIgogICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgIC8vIC0tLSBEb21haW46IGlucHV0IHBvcnQgKyBhcHBsaWNhdGlvbiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgICAgIGNvdXJ0VXNlQ2FzZSA9IGNvbXBvbmVudCAiQ291cnRVc2VDYXNlIiAiSW5wdXQgcG9ydDogY2F0YWxvZywgc2NoZWR1bGUsIGFuZCBtYWludGVuYW5jZS1ibG9jayBvcGVyYXRpb25zLCB3aXRoIG5vIGRlcGVuZGVuY3kgb24gU3ByaW5nIE1WQyBvciBKUEEuIiAiSmF2YSBpbnRlcmZhY2UiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJQb3J0IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgY291cnRTZXJ2aWNlID0gY29tcG9uZW50ICJDb3VydFNlcnZpY2UiICJJbXBsZW1lbnRzIHRoZSBpbnB1dCBwb3J0LiBBcHBsaWVzIFJOLTA3OiBvbmx5IGFuIEFETUlOSVNUUkFET1IgbWF5IGNyZWF0ZSwgZWRpdCwgZGVhY3RpdmF0ZSBhIGNvdXJ0IG9yIHJlZ2lzdGVyIG1haW50ZW5hbmNlIGJsb2Nrcy4gUmVhZHMgdGhlIHJvbGUgZnJvbSBYLVVzZXItUm9sZTsgaXQgbmV2ZXIgYXV0aGVudGljYXRlcy4iICJTcHJpbmcgQFNlcnZpY2UiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJBcHBsaWNhdGlvbiIKICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAvLyAtLS0gRG9tYWluOiBvdXRwdXQgcG9ydCAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgY291cnRSZXBvc2l0b3J5UG9ydCA9IGNvbXBvbmVudCAiQ291cnRSZXBvc2l0b3J5UG9ydCIgIk91dHB1dCBwb3J0OiBwZXJzaXN0ZW5jZSBvcGVyYXRpb25zIG92ZXIgY291cnRzLCBzY2hlZHVsZXMsIGFuZCBibG9ja3MgdGhhdCB0aGUgYXBwbGljYXRpb24gY29yZSBuZWVkcy4iICJKYXZhIGludGVyZmFjZSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIlBvcnQiCiAgICAgICAgICAgICAgICB9CgogICAgICAgICAgICAgICAgLy8gLS0tIERyaXZlbiBhZGFwdGVyIChwZXJzaXN0ZW5jZSkgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgICAgIGNvdXJ0UmVwb3NpdG9yeUFkYXB0ZXIgPSBjb21wb25lbnQgIkNvdXJ0UmVwb3NpdG9yeUFkYXB0ZXIiICJJbXBsZW1lbnRzIHRoZSBvdXRwdXQgcG9ydCBhZ2FpbnN0IHRoZSBjb3VydHMsIHNjaGVkdWxlcywgYW5kIGJsb2NrcyB0YWJsZXMuIiAiU3ByaW5nIERhdGEgSlBBIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiQWRhcHRlci1PdXQiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIG1zUmVzZXJ2YXMgPSBjb250YWluZXIgIm1zLXJlc2VydmFzIiAiQ3JlYXRpb24sIGxvb2t1cCwgYW5kIGNhbmNlbGxhdGlvbiBvZiBib29raW5ncy4gQ29uY2VudHJhdGVzIGJ1c2luZXNzIHJ1bGVzIFJOLTAxIHRocm91Z2ggUk4tMDguIiAiU3ByaW5nIEJvb3QgNCAoOjgwODMpIiB7CiAgICAgICAgICAgICAgICB0YWdzICJNaWNyb3NlcnZpY2UiCgogICAgICAgICAgICAgICAgLy8gLS0tIERyaXZpbmcgYWRhcHRlciAod2ViKSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgYm9va2luZ0NvbnRyb2xsZXIgPSBjb21wb25lbnQgIkJvb2tpbmdDb250cm9sbGVyIiAiRXhwb3NlcyB0aGUgUkVTVCBlbmRwb2ludHMgZm9yIGJvb2tpbmdzIGFuZCBhdmFpbGFiaWxpdHk7IHRyYW5zbGF0ZXMgSFRUUCByZXF1ZXN0cyBpbnRvIGNhbGxzIHRvIHRoZSBpbnB1dCBwb3J0LiIgIlNwcmluZyBNVkMgQFJlc3RDb250cm9sbGVyIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiQWRhcHRlci1JbiIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGVycm9ySGFuZGxlckJvb2tpbmcgPSBjb21wb25lbnQgIkVycm9ySGFuZGxlciIgIlRyYW5zbGF0ZXMgYnVzaW5lc3MgZXhjZXB0aW9ucyAob3ZlcmxhcCwgcGVybWlzc2lvbnMsIGJvb2tpbmcgbm90IGZvdW5kKSBpbnRvIEhUVFAgc3RhdHVzIGNvZGVzICg0MDkgb24gb3ZlcmxhcCkuIiAiQFJlc3RDb250cm9sbGVyQWR2aWNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiQWRhcHRlci1JbiIKICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAvLyAtLS0gRG9tYWluOiBpbnB1dCBwb3J0ICsgYXBwbGljYXRpb24gLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICBib29raW5nVXNlQ2FzZSA9IGNvbXBvbmVudCAiQm9va2luZ1VzZUNhc2UiICJJbnB1dCBwb3J0OiBjcmVhdGUsIGxvb2sgdXAsIGFuZCBjYW5jZWwgYm9va2luZ3M7IGNhbGN1bGF0ZSBhdmFpbGFiaWxpdHkuIE5vIGRlcGVuZGVuY3kgb24gU3ByaW5nIE1WQyBvciBKUEEuIiAiSmF2YSBpbnRlcmZhY2UiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJQb3J0IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgYm9va2luZ1NlcnZpY2UgPSBjb21wb25lbnQgIkJvb2tpbmdTZXJ2aWNlIiAiSW1wbGVtZW50cyB0aGUgaW5wdXQgcG9ydDogYXBwbGllcyBSTi0wMS4uUk4tMDggKGF2YWlsYWJpbGl0eSwgYWN0aXZlLWJvb2tpbmdzIGxpbWl0IFJOLTA2LCBmdXR1cmUtb25seSBjYW5jZWxsYXRpb24gUk4tMDQsIHJvbGUtYmFzZWQgcGVybWlzc2lvbnMgUk4tMDMpLiIgIlNwcmluZyBAU2VydmljZSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFwcGxpY2F0aW9uIgogICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgIC8vIC0tLSBEb21haW46IG91dHB1dCBwb3J0cyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgICAgIGJvb2tpbmdSZXBvc2l0b3J5UG9ydCA9IGNvbXBvbmVudCAiQm9va2luZ1JlcG9zaXRvcnlQb3J0IiAiT3V0cHV0IHBvcnQ6IHBlcnNpc3RlbmNlIG9wZXJhdGlvbnMgb3ZlciBib29raW5ncyB0aGF0IHRoZSBhcHBsaWNhdGlvbiBjb3JlIG5lZWRzLiIgIkphdmEgaW50ZXJmYWNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiUG9ydCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGNvbmZpZ3VyYXRpb25SZXBvc2l0b3J5UG9ydCA9IGNvbXBvbmVudCAiQ29uZmlndXJhdGlvblJlcG9zaXRvcnlQb3J0IiAiT3V0cHV0IHBvcnQ6IHJlYWRzIGNvbmZpZ3VyYWJsZSBwYXJhbWV0ZXJzLCBzdWNoIGFzIHRoZSBtYXhpbXVtIG51bWJlciBvZiBzaW11bHRhbmVvdXMgYWN0aXZlIGJvb2tpbmdzLiIgIkphdmEgaW50ZXJmYWNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiUG9ydCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGNvdXJ0Q2xpZW50UG9ydCA9IGNvbXBvbmVudCAiQ291cnRDbGllbnRQb3J0IiAiT3V0cHV0IHBvcnQ6IGNoZWNrcyB3aGV0aGVyIGEgY291cnQgZXhpc3RzLCBpcyBhY3RpdmUsIGFuZCBpdHMgb3BlbmluZyBob3Vycywgd2l0aG91dCBkZXBlbmRpbmcgb24gaG93IHRoYXQgY2hlY2sgdHJhdmVscyBvdmVyIHRoZSBuZXR3b3JrLiIgIkphdmEgaW50ZXJmYWNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiUG9ydCIKICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAvLyAtLS0gRHJpdmVuIGFkYXB0ZXJzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgYm9va2luZ1JlcG9zaXRvcnlBZGFwdGVyID0gY29tcG9uZW50ICJCb29raW5nUmVwb3NpdG9yeUFkYXB0ZXIiICJJbXBsZW1lbnRzIHRoZSBib29raW5nLXBlcnNpc3RlbmNlIG91dHB1dCBwb3J0LiBUaGUgUG9zdGdyZVNRTCBFWENMVURFIGNvbnN0cmFpbnQgcHJldmVudHMgb3ZlcmxhcCAoUk4tMDIpLiIgIlNwcmluZyBEYXRhIEpQQSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFkYXB0ZXItT3V0IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgY29uZmlndXJhdGlvblJlcG9zaXRvcnlBZGFwdGVyID0gY29tcG9uZW50ICJDb25maWd1cmF0aW9uUmVwb3NpdG9yeUFkYXB0ZXIiICJJbXBsZW1lbnRzIHRoZSBjb25maWd1cmF0aW9uLXJlYWRpbmcgb3V0cHV0IHBvcnQuIiAiU3ByaW5nIERhdGEgSlBBIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiQWRhcHRlci1PdXQiCiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBjb3VydENsaWVudEFkYXB0ZXIgPSBjb21wb25lbnQgIkNvdXJ0Q2xpZW50QWRhcHRlciIgIkltcGxlbWVudHMgdGhlIGNvdXJ0LWNoZWNrIG91dHB1dCBwb3J0IGJ5IGNhbGxpbmcgbXMtY2FuY2hhcyBvdmVyIFJFU1QuIiAiU3ByaW5nIFJlc3RDbGllbnQiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJBZGFwdGVyLU91dCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQoKICAgICAgICAgICAgbXNSZXBvcnRlcyA9IGNvbnRhaW5lciAibXMtcmVwb3J0ZXMiICJHZW5lcmF0ZXMgb2NjdXBhbmN5IHJlcG9ydHMsIGJvb2tpbmdzIGJ5IHBlcmlvZCwgY2FuY2VsbGF0aW9ucywgYW5kIHRoZSBtb3N0L2xlYXN0IGRlbWFuZGVkIGNvdXJ0cyByYW5raW5nLiBIYXMgbm8gZGF0YWJhc2Ugb2YgaXRzIG93bjogYWdncmVnYXRlcyB2aWEgUkVTVC4iICJTcHJpbmcgQm9vdCA0ICg6ODA4NCkiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIk1pY3Jvc2VydmljZSIKCiAgICAgICAgICAgICAgICAvLyAtLS0gRHJpdmluZyBhZGFwdGVyICh3ZWIpIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAgICAgICAgICAgICAgICByZXBvcnRDb250cm9sbGVyID0gY29tcG9uZW50ICJSZXBvcnRDb250cm9sbGVyIiAiRXhwb3NlcyB0aGUgb2NjdXBhbmN5LCBib29raW5ncy1ieS1wZXJpb2QsIGNhbmNlbGxhdGlvbnMsIGFuZCBjb3VydC1kZW1hbmQgcmFua2luZyBlbmRwb2ludHM7IHRyYW5zbGF0ZXMgSFRUUCByZXF1ZXN0cyBpbnRvIGNhbGxzIHRvIHRoZSBpbnB1dCBwb3J0LiIgIlNwcmluZyBNVkMgQFJlc3RDb250cm9sbGVyIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiQWRhcHRlci1JbiIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGVycm9ySGFuZGxlclJlcG9ydCA9IGNvbXBvbmVudCAiRXJyb3JIYW5kbGVyIiAiVHJhbnNsYXRlcyBmYWlsdXJlcyBmcm9tIHRoZSBzb3VyY2Ugc2VydmljZXMgKHVuYXZhaWxhYmxlKSBpbnRvIEhUVFAgc3RhdHVzIGNvZGVzLiIgIkBSZXN0Q29udHJvbGxlckFkdmljZSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIkFkYXB0ZXItSW4iCiAgICAgICAgICAgICAgICB9CgogICAgICAgICAgICAgICAgLy8gLS0tIERvbWFpbjogaW5wdXQgcG9ydCArIGFwcGxpY2F0aW9uIC0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgcmVwb3J0VXNlQ2FzZSA9IGNvbXBvbmVudCAiUmVwb3J0VXNlQ2FzZSIgIklucHV0IHBvcnQ6IG9jY3VwYW5jeSwgYm9va2luZ3MtYnktcGVyaW9kLCBjYW5jZWxsYXRpb25zLCBhbmQgY291cnQtZGVtYW5kIHJhbmtpbmcgb3BlcmF0aW9ucy4gTm8gZGVwZW5kZW5jeSBvbiBTcHJpbmcgTVZDIG9yIHRoZSBSRVNUIGNsaWVudHMuIiAiSmF2YSBpbnRlcmZhY2UiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJQb3J0IgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgcmVwb3J0U2VydmljZSA9IGNvbXBvbmVudCAiUmVwb3J0U2VydmljZSIgIkltcGxlbWVudHMgdGhlIGlucHV0IHBvcnQ6IGFnZ3JlZ2F0ZXMgYW5kIGNvbXB1dGVzIG9jY3VwYW5jeSBtZXRyaWNzIGFuZCB0aGUgY291cnQtZGVtYW5kIHJhbmtpbmcgYnkgY29tYmluaW5nIGJvb2tpbmdzIGFuZCBjYXRhbG9nIGRhdGEuIiAiU3ByaW5nIEBTZXJ2aWNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiQXBwbGljYXRpb24iCiAgICAgICAgICAgICAgICB9CgogICAgICAgICAgICAgICAgLy8gLS0tIERvbWFpbjogb3V0cHV0IHBvcnRzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICAgICAgYm9va2luZ3NDbGllbnRQb3J0ID0gY29tcG9uZW50ICJCb29raW5nc0NsaWVudFBvcnQiICJPdXRwdXQgcG9ydDogZ2V0cyB0aGUgcGVyaW9kJ3MgYm9va2luZ3MsIHdpdGhvdXQgZGVwZW5kaW5nIG9uIGhvdyB0aGF0IGNhbGwgdHJhdmVscyBvdmVyIHRoZSBuZXR3b3JrLiIgIkphdmEgaW50ZXJmYWNlIiB7CiAgICAgICAgICAgICAgICAgICAgdGFncyAiUG9ydCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGNvdXJ0c0NsaWVudFBvcnQgPSBjb21wb25lbnQgIkNvdXJ0c0NsaWVudFBvcnQiICJPdXRwdXQgcG9ydDogZ2V0cyB0aGUgY291cnQgY2F0YWxvZyBhbmQgc2NoZWR1bGVzLCB3aXRob3V0IGRlcGVuZGluZyBvbiBob3cgdGhhdCBjYWxsIHRyYXZlbHMgb3ZlciB0aGUgbmV0d29yay4iICJKYXZhIGludGVyZmFjZSIgewogICAgICAgICAgICAgICAgICAgIHRhZ3MgIlBvcnQiCiAgICAgICAgICAgICAgICB9CgogICAgICAgICAgICAgICAgLy8gLS0tIERyaXZlbiBhZGFwdGVycyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgICAgIGJvb2tpbmdzQ2xpZW50QWRhcHRlciA9IGNvbXBvbmVudCAiQm9va2luZ3NDbGllbnRBZGFwdGVyIiAiSW1wbGVtZW50cyB0aGUgYm9va2luZ3Mgb3V0cHV0IHBvcnQgYnkgY2FsbGluZyBtcy1yZXNlcnZhcyBvdmVyIFJFU1QuIiAiU3ByaW5nIFJlc3RDbGllbnQiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJBZGFwdGVyLU91dCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIGNvdXJ0c0NsaWVudEFkYXB0ZXIgPSBjb21wb25lbnQgIkNvdXJ0c0NsaWVudEFkYXB0ZXIiICJJbXBsZW1lbnRzIHRoZSBjYXRhbG9nIG91dHB1dCBwb3J0IGJ5IGNhbGxpbmcgbXMtY2FuY2hhcyBvdmVyIFJFU1QuIiAiU3ByaW5nIFJlc3RDbGllbnQiIHsKICAgICAgICAgICAgICAgICAgICB0YWdzICJBZGFwdGVyLU91dCIKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQoKICAgICAgICAgICAgLy8gLS0tIFBlcnNpc3RlbmNlIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgICAgICB1c3Vhcmlvc0RiID0gY29udGFpbmVyICJ1c3Vhcmlvc19kYiIgIlVzZXJzLCByb2xlcywgYW5kIGNyZWRlbnRpYWxzLiIgIlBvc3RncmVTUUwgMTYiIHsKICAgICAgICAgICAgICAgIHRhZ3MgIkRhdGFiYXNlIgogICAgICAgICAgICB9CgogICAgICAgICAgICBjYW5jaGFzRGIgPSBjb250YWluZXIgImNhbmNoYXNfZGIiICJDb3VydHMsIHNwb3J0cywgb3BlbmluZyBob3VycywgYW5kIG1haW50ZW5hbmNlIGJsb2Nrcy4iICJQb3N0Z3JlU1FMIDE2IiB7CiAgICAgICAgICAgICAgICB0YWdzICJEYXRhYmFzZSIKICAgICAgICAgICAgfQoKICAgICAgICAgICAgcmVzZXJ2YXNEYiA9IGNvbnRhaW5lciAicmVzZXJ2YXNfZGIiICJCb29raW5ncyB3aXRoIHRoZWlyIHN0YXR1cywgcGx1cyBjb25maWd1cmFibGUgcGFyYW1ldGVycy4gSG9zdHMgdGhlIGV4Y2x1c2lvbiBjb25zdHJhaW50IHRoYXQgaW1wbGVtZW50cyBSTi0wMi4iICJQb3N0Z3JlU1FMIDE2IiB7CiAgICAgICAgICAgICAgICB0YWdzICJEYXRhYmFzZSIKICAgICAgICAgICAgfQogICAgICAgIH0KCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIC8vICBSZWxhdGlvbnNoaXBzIOKAlCBjb250ZXh0IGxldmVsCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIHVzdWFyaW9GaW5hbCAtPiBzaXN0ZW1hICJDaGVja3MgYXZhaWxhYmlsaXR5LCBib29rcywgYW5kIGNhbmNlbHMgdGhlaXIgYm9va2luZ3MiCiAgICAgICAgYWRtaW5pc3RyYWRvciAtPiBzaXN0ZW1hICJNYW5hZ2VzIGNvdXJ0cyBhbmQgYm9va2luZ3MsIGFuZCB2aWV3cyByZXBvcnRzIgoKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgLy8gIFJlbGF0aW9uc2hpcHMg4oCUIGNvbnRhaW5lciBsZXZlbAogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICB1c3VhcmlvRmluYWwgLT4gZWRnZSAiQWNjZXNzZXMgdGhlIGFwcGxpY2F0aW9uIiAiSFRUUCA6ODAiCiAgICAgICAgYWRtaW5pc3RyYWRvciAtPiBlZGdlICJBY2Nlc3NlcyB0aGUgYXBwbGljYXRpb24iICJIVFRQIDo4MCIKCiAgICAgICAgZWRnZSAtPiBzaGVsbCAiU2VydmVzIHRoZSBjb250YWluZXIgYXBwbGljYXRpb24iICJIVFRQIgogICAgICAgIGVkZ2UgLT4gbWZSZXNlcnZhcyAiU2VydmVzIC9tZi1yZXNlcnZhcy8iICJIVFRQIgogICAgICAgIGVkZ2UgLT4gbWZBZG1pbmlzdHJhY2lvbiAiU2VydmVzIC9tZi1hZG1pbmlzdHJhY2lvbi8iICJIVFRQIgogICAgICAgIGVkZ2UgLT4gbWZSZXBvcnRlcyAiU2VydmVzIC9tZi1yZXBvcnRlcy8iICJIVFRQIgogICAgICAgIGVkZ2UgLT4gZ2F0ZXdheSAiUm91dGVzIC9hcGkvKiIgIkhUVFAiCgogICAgICAgIHNoZWxsIC0+IG1mUmVzZXJ2YXMgIkxvYWRzIHRoZSByZW1vdGUgYXQgcnVudGltZSIgIk1vZHVsZSBGZWRlcmF0aW9uIChyZW1vdGVFbnRyeS5qcykiCiAgICAgICAgc2hlbGwgLT4gbWZBZG1pbmlzdHJhY2lvbiAiTG9hZHMgdGhlIHJlbW90ZSBhdCBydW50aW1lIiAiTW9kdWxlIEZlZGVyYXRpb24gKHJlbW90ZUVudHJ5LmpzKSIKICAgICAgICBzaGVsbCAtPiBtZlJlcG9ydGVzICJMb2FkcyB0aGUgcmVtb3RlIGF0IHJ1bnRpbWUiICJNb2R1bGUgRmVkZXJhdGlvbiAocmVtb3RlRW50cnkuanMpIgoKICAgICAgICBzaGVsbCAtPiBlZGdlICJBdXRoZW50aWNhdGVzIHRoZSB1c2VyIiAiSlNPTi9IVFRQUyDCtyAvYXBpL2F1dGgiCiAgICAgICAgbWZSZXNlcnZhcyAtPiBlZGdlICJDaGVja3MgYXZhaWxhYmlsaXR5IGFuZCBtYW5hZ2VzIGJvb2tpbmdzIiAiSlNPTi9IVFRQUyDCtyAvYXBpIgogICAgICAgIG1mQWRtaW5pc3RyYWNpb24gLT4gZWRnZSAiTWFuYWdlcyBjb3VydHMsIGJvb2tpbmdzLCBhbmQgdXNlcnMiICJKU09OL0hUVFBTIMK3IC9hcGkiCiAgICAgICAgbWZSZXBvcnRlcyAtPiBlZGdlICJSZXF1ZXN0cyB0aGUgcmVwb3J0cyIgIkpTT04vSFRUUFMgwrcgL2FwaSIKCiAgICAgICAgZ2F0ZXdheSAtPiBtc1VzdWFyaW9zICJSb3V0ZXMgL2FwaS9hdXRoIGFuZCAvYXBpL3VzdWFyaW9zIiAiSlNPTi9IVFRQIgogICAgICAgIGdhdGV3YXkgLT4gbXNDYW5jaGFzICJSb3V0ZXMgL2FwaS9jYW5jaGFzIiAiSlNPTi9IVFRQIgogICAgICAgIGdhdGV3YXkgLT4gbXNSZXNlcnZhcyAiUm91dGVzIC9hcGkvcmVzZXJ2YXMgYW5kIC9hcGkvZGlzcG9uaWJpbGlkYWQiICJKU09OL0hUVFAiCiAgICAgICAgZ2F0ZXdheSAtPiBtc1JlcG9ydGVzICJSb3V0ZXMgL2FwaS9yZXBvcnRlcyIgIkpTT04vSFRUUCIKCiAgICAgICAgbXNSZXNlcnZhcyAtPiBtc0NhbmNoYXMgIkNoZWNrcyB0aGF0IHRoZSBjb3VydCBleGlzdHMsIGlzIGFjdGl2ZSwgYW5kIHRoZSBibG9jayBpcyB3aXRoaW4gaXRzIHNjaGVkdWxlIiAiSlNPTi9IVFRQIChzeW5jaHJvbm91cykiCiAgICAgICAgbXNSZXBvcnRlcyAtPiBtc1Jlc2VydmFzICJHZXRzIHRoZSBwZXJpb2QncyBib29raW5ncyIgIkpTT04vSFRUUCAoc3luY2hyb25vdXMpIgogICAgICAgIG1zUmVwb3J0ZXMgLT4gbXNDYW5jaGFzICJHZXRzIHRoZSBjb3VydCBjYXRhbG9nIGFuZCBzY2hlZHVsZXMiICJKU09OL0hUVFAgKHN5bmNocm9ub3VzKSIKCiAgICAgICAgbXNVc3VhcmlvcyAtPiB1c3Vhcmlvc0RiICJSZWFkcyBhbmQgd3JpdGVzIiAiSkRCQyIKICAgICAgICBtc0NhbmNoYXMgLT4gY2FuY2hhc0RiICJSZWFkcyBhbmQgd3JpdGVzIiAiSkRCQyIKICAgICAgICBtc1Jlc2VydmFzIC0+IHJlc2VydmFzRGIgIlJlYWRzIGFuZCB3cml0ZXMiICJKREJDIgoKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgLy8gIFJlbGF0aW9uc2hpcHMg4oCUIGNvbXBvbmVudCBsZXZlbCAobXMtcmVzZXJ2YXMsIGhleGFnb25hbCkKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgZ2F0ZXdheSAtPiBib29raW5nQ29udHJvbGxlciAiUm91dGVzIC9hcGkvcmVzZXJ2YXMgYW5kIC9hcGkvZGlzcG9uaWJpbGlkYWQiICJKU09OL0hUVFAiCgogICAgICAgIGJvb2tpbmdDb250cm9sbGVyIC0+IGJvb2tpbmdVc2VDYXNlICJJbnZva2VzIgogICAgICAgIGJvb2tpbmdDb250cm9sbGVyIC0+IGVycm9ySGFuZGxlckJvb2tpbmcgIlVuaGFuZGxlZCBleGNlcHRpb25zIgogICAgICAgIGJvb2tpbmdTZXJ2aWNlIC0+IGJvb2tpbmdVc2VDYXNlICJJbXBsZW1lbnRzIgoKICAgICAgICBib29raW5nU2VydmljZSAtPiBjb3VydENsaWVudFBvcnQgIkNoZWNrcyB0aGUgY291cnQgYW5kIGdldHMgaXRzIG9wZW5pbmcgaG91cnMiCiAgICAgICAgYm9va2luZ1NlcnZpY2UgLT4gYm9va2luZ1JlcG9zaXRvcnlQb3J0ICJQZXJzaXN0cywgcXVlcmllcywgYW5kIGNhbGN1bGF0ZXMgYXZhaWxhYmlsaXR5IG92ZXIgYm9va2luZ3MiCiAgICAgICAgYm9va2luZ1NlcnZpY2UgLT4gY29uZmlndXJhdGlvblJlcG9zaXRvcnlQb3J0ICJSZWFkcyB0aGUgbWF4aW11bSBhY3RpdmUgYm9va2luZ3MgKFJOLTA2KSIKCiAgICAgICAgY291cnRDbGllbnRBZGFwdGVyIC0+IGNvdXJ0Q2xpZW50UG9ydCAiSW1wbGVtZW50cyIKICAgICAgICBib29raW5nUmVwb3NpdG9yeUFkYXB0ZXIgLT4gYm9va2luZ1JlcG9zaXRvcnlQb3J0ICJJbXBsZW1lbnRzIgogICAgICAgIGNvbmZpZ3VyYXRpb25SZXBvc2l0b3J5QWRhcHRlciAtPiBjb25maWd1cmF0aW9uUmVwb3NpdG9yeVBvcnQgIkltcGxlbWVudHMiCgogICAgICAgIGNvdXJ0Q2xpZW50QWRhcHRlciAtPiBtc0NhbmNoYXMgIlF1ZXJpZXMgdGhlIGNvdXJ0IChzY2hlZHVsZSwgYWN0aXZlIHN0YXRlKSBhbmQgaXRzIG1haW50ZW5hbmNlIGJsb2NrcywgdG8gbWFyayBibG9ja2VkIHNsb3RzIGFzIHVuYm9va2FibGUgKEZSLTAxMCkiICJKU09OL0hUVFAiCiAgICAgICAgYm9va2luZ1JlcG9zaXRvcnlBZGFwdGVyIC0+IHJlc2VydmFzRGIgIlJlYWRzIGFuZCB3cml0ZXMiICJKREJDIgogICAgICAgIGNvbmZpZ3VyYXRpb25SZXBvc2l0b3J5QWRhcHRlciAtPiByZXNlcnZhc0RiICJSZWFkcyIgIkpEQkMiCgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgUmVsYXRpb25zaGlwcyDigJQgY29tcG9uZW50IGxldmVsIChtcy11c3VhcmlvcywgaGV4YWdvbmFsKQogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICBnYXRld2F5IC0+IGF1dGhDb250cm9sbGVyICJSb3V0ZXMgL2FwaS9hdXRoIChwdWJsaWMpIiAiSlNPTi9IVFRQIgogICAgICAgIGdhdGV3YXkgLT4gdXNlckNvbnRyb2xsZXIgIlJvdXRlcyAvYXBpL3VzdWFyaW9zIChBRE1JTklTVFJBRE9SIG9ubHkpIiAiSlNPTi9IVFRQIgoKICAgICAgICBhdXRoQ29udHJvbGxlciAtPiB1c2VyVXNlQ2FzZSAiSW52b2tlcyIKICAgICAgICBhdXRoQ29udHJvbGxlciAtPiBlcnJvckhhbmRsZXJVc2VyICJVbmhhbmRsZWQgZXhjZXB0aW9ucyIKICAgICAgICB1c2VyQ29udHJvbGxlciAtPiB1c2VyVXNlQ2FzZSAiSW52b2tlcy4gUGFzc2VzIFgtVXNlci1Sb2xlIHRocm91Z2g7IGl0IGRlY2lkZXMgbm90aGluZyBpdHNlbGYiCiAgICAgICAgdXNlckNvbnRyb2xsZXIgLT4gZXJyb3JIYW5kbGVyVXNlciAiVW5oYW5kbGVkIGV4Y2VwdGlvbnMiCiAgICAgICAgdXNlclNlcnZpY2UgLT4gdXNlclVzZUNhc2UgIkltcGxlbWVudHMiCgogICAgICAgIHVzZXJTZXJ2aWNlIC0+IHVzZXJSZXBvc2l0b3J5UG9ydCAiUGVyc2lzdHMgYW5kIHF1ZXJpZXMgdXNlcnMgYW5kIHJvbGVzIgogICAgICAgIHVzZXJSZXBvc2l0b3J5QWRhcHRlciAtPiB1c2VyUmVwb3NpdG9yeVBvcnQgIkltcGxlbWVudHMiCgogICAgICAgIHVzZXJSZXBvc2l0b3J5QWRhcHRlciAtPiB1c3Vhcmlvc0RiICJSZWFkcyBhbmQgd3JpdGVzIiAiSkRCQyIKCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIC8vICBSZWxhdGlvbnNoaXBzIOKAlCBjb21wb25lbnQgbGV2ZWwgKG1zLWNhbmNoYXMsIGhleGFnb25hbCkKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgZ2F0ZXdheSAtPiBjb3VydENvbnRyb2xsZXIgIlJvdXRlcyAvYXBpL2NhbmNoYXMiICJKU09OL0hUVFAiCgogICAgICAgIGNvdXJ0Q29udHJvbGxlciAtPiBjb3VydFVzZUNhc2UgIkludm9rZXMuIFBhc3NlcyBYLVVzZXItUm9sZSB0aHJvdWdoOyBpdCBkZWNpZGVzIG5vdGhpbmcgaXRzZWxmIgogICAgICAgIGNvdXJ0Q29udHJvbGxlciAtPiBlcnJvckhhbmRsZXJDb3VydCAiVW5oYW5kbGVkIGV4Y2VwdGlvbnMiCiAgICAgICAgY291cnRTZXJ2aWNlIC0+IGNvdXJ0VXNlQ2FzZSAiSW1wbGVtZW50cyIKCiAgICAgICAgY291cnRTZXJ2aWNlIC0+IGNvdXJ0UmVwb3NpdG9yeVBvcnQgIlBlcnNpc3RzIGFuZCBxdWVyaWVzIHRoZSBjYXRhbG9nIgogICAgICAgIGNvdXJ0UmVwb3NpdG9yeUFkYXB0ZXIgLT4gY291cnRSZXBvc2l0b3J5UG9ydCAiSW1wbGVtZW50cyIKCiAgICAgICAgY291cnRSZXBvc2l0b3J5QWRhcHRlciAtPiBjYW5jaGFzRGIgIlJlYWRzIGFuZCB3cml0ZXMiICJKREJDIgoKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgLy8gIFJlbGF0aW9uc2hpcHMg4oCUIGNvbXBvbmVudCBsZXZlbCAobXMtcmVwb3J0ZXMsIGhleGFnb25hbCkKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgZ2F0ZXdheSAtPiByZXBvcnRDb250cm9sbGVyICJSb3V0ZXMgL2FwaS9yZXBvcnRlcyIgIkpTT04vSFRUUCIKCiAgICAgICAgcmVwb3J0Q29udHJvbGxlciAtPiByZXBvcnRVc2VDYXNlICJJbnZva2VzIgogICAgICAgIHJlcG9ydENvbnRyb2xsZXIgLT4gZXJyb3JIYW5kbGVyUmVwb3J0ICJVbmhhbmRsZWQgZXhjZXB0aW9ucyIKICAgICAgICByZXBvcnRTZXJ2aWNlIC0+IHJlcG9ydFVzZUNhc2UgIkltcGxlbWVudHMiCgogICAgICAgIHJlcG9ydFNlcnZpY2UgLT4gYm9va2luZ3NDbGllbnRQb3J0ICJHZXRzIHRoZSBwZXJpb2QncyBib29raW5ncyIKICAgICAgICByZXBvcnRTZXJ2aWNlIC0+IGNvdXJ0c0NsaWVudFBvcnQgIkdldHMgdGhlIGNvdXJ0IGNhdGFsb2cgYW5kIHNjaGVkdWxlcyIKCiAgICAgICAgYm9va2luZ3NDbGllbnRBZGFwdGVyIC0+IGJvb2tpbmdzQ2xpZW50UG9ydCAiSW1wbGVtZW50cyIKICAgICAgICBjb3VydHNDbGllbnRBZGFwdGVyIC0+IGNvdXJ0c0NsaWVudFBvcnQgIkltcGxlbWVudHMiCgogICAgICAgIGJvb2tpbmdzQ2xpZW50QWRhcHRlciAtPiBtc1Jlc2VydmFzICJHZXRzIHRoZSBwZXJpb2QncyBib29raW5ncyIgIkpTT04vSFRUUCAoc3luY2hyb25vdXMpIgogICAgICAgIGNvdXJ0c0NsaWVudEFkYXB0ZXIgLT4gbXNDYW5jaGFzICJHZXRzIHRoZSBjb3VydCBjYXRhbG9nIGFuZCBzY2hlZHVsZXMiICJKU09OL0hUVFAgKHN5bmNocm9ub3VzKSIKCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIC8vICBSZWxhdGlvbnNoaXBzIOKAlCBjb21wb25lbnQgbGV2ZWwgKEdhdGV3YXkpCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIGVkZ2UgLT4gYXV0aGVudGljYXRpb25GaWx0ZXIgIlJvdXRlcyAvYXBpLyoiICJIVFRQIgoKICAgICAgICBhdXRoZW50aWNhdGlvbkZpbHRlciAtPiBtc1VzdWFyaW9zICJWZXJpZmllcyB0aGUgQmFzaWMgY3JlZGVudGlhbCBvbiBldmVyeSByZXF1ZXN0IChQT1NUIC9hcGkvYXV0aC9sb2dpbikuIERvZXMgbm90IHJlYWQgdXN1YXJpb3NfZGI6IGl0IGFza3MgaXRzIG93bmVyLiIgIkpTT04vSFRUUCIKICAgICAgICBhdXRoZW50aWNhdGlvbkZpbHRlciAtPiByb3V0ZUNvbmZpZyAiSWRlbnRpdHkgcHJvcGFnYXRlZCwgcm91dGluZyBjb250aW51ZXMiCiAgICAgICAgYXV0aGVudGljYXRpb25GaWx0ZXIgLT4gZXJyb3JIYW5kbGVyR2F0ZXdheSAiTWlzc2luZyBvciBpbnZhbGlkIGlkZW50aXR5IgoKICAgICAgICByb3V0ZUNvbmZpZyAtPiBtc1VzdWFyaW9zICJSb3V0ZXMgL2FwaS9hdXRoIGFuZCAvYXBpL3VzdWFyaW9zIiAiSlNPTi9IVFRQIgogICAgICAgIHJvdXRlQ29uZmlnIC0+IG1zQ2FuY2hhcyAiUm91dGVzIC9hcGkvY2FuY2hhcyIgIkpTT04vSFRUUCIKICAgICAgICByb3V0ZUNvbmZpZyAtPiBtc1Jlc2VydmFzICJSb3V0ZXMgL2FwaS9yZXNlcnZhcyBhbmQgL2FwaS9kaXNwb25pYmlsaWRhZCIgIkpTT04vSFRUUCIKICAgICAgICByb3V0ZUNvbmZpZyAtPiBtc1JlcG9ydGVzICJSb3V0ZXMgL2FwaS9yZXBvcnRlcyIgIkpTT04vSFRUUCIKICAgICAgICByb3V0ZUNvbmZpZyAtPiBlcnJvckhhbmRsZXJHYXRld2F5ICJUYXJnZXQgc2VydmljZSB1bmF2YWlsYWJsZSIKCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIC8vICBSZWxhdGlvbnNoaXBzIOKAlCBjb21wb25lbnQgbGV2ZWwgKFNoZWxsKQogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICByb3V0ZXJTaGVsbCAtPiBzZXNzaW9uQ29udGV4dCAiQ2hlY2tzIHdoZXRoZXIgdGhlcmUgaXMgYW4gYWN0aXZlIHNlc3Npb24gYmVmb3JlIHJlc29sdmluZyB0aGUgcm91dGUiCiAgICAgICAgcm91dGVyU2hlbGwgLT4gbGF5b3V0U2hlbGwgIlJlbmRlcnMgd2l0aGluIgogICAgICAgIGxheW91dFNoZWxsIC0+IHJlbW90ZUxvYWRlciAiTW91bnRzIHRoZSByZW1vdGUgZm9yIHRoZSBhY3RpdmUgcm91dGUiCgogICAgICAgIHNlc3Npb25Db250ZXh0IC0+IGVkZ2UgIkF1dGhlbnRpY2F0ZXMgdGhlIHVzZXIiICJKU09OL0hUVFBTIMK3IC9hcGkvYXV0aCIKICAgICAgICByZW1vdGVMb2FkZXIgLT4gbWZSZXNlcnZhcyAiTG9hZHMgdGhlIHJlbW90ZSBhdCBydW50aW1lIiAiTW9kdWxlIEZlZGVyYXRpb24gKHJlbW90ZUVudHJ5LmpzKSIKICAgICAgICByZW1vdGVMb2FkZXIgLT4gbWZBZG1pbmlzdHJhY2lvbiAiTG9hZHMgdGhlIHJlbW90ZSBhdCBydW50aW1lIiAiTW9kdWxlIEZlZGVyYXRpb24gKHJlbW90ZUVudHJ5LmpzKSIKICAgICAgICByZW1vdGVMb2FkZXIgLT4gbWZSZXBvcnRlcyAiTG9hZHMgdGhlIHJlbW90ZSBhdCBydW50aW1lIiAiTW9kdWxlIEZlZGVyYXRpb24gKHJlbW90ZUVudHJ5LmpzKSIKCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIC8vICBSZWxhdGlvbnNoaXBzIOKAlCBjb21wb25lbnQgbGV2ZWwgKG1mLXJlc2VydmFzKQogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICB2aWV3c1Jlc2VydmFzIC0+IHVpQ29tcG9uZW50c1Jlc2VydmFzICJDb21wb3NlcyB0aGUgc2NyZWVuIHdpdGgiCiAgICAgICAgdmlld3NSZXNlcnZhcyAtPiBzdGF0ZVJlc2VydmFzICJSZWFkcyBhbmQgdXBkYXRlcyIKICAgICAgICB2aWV3c1Jlc2VydmFzIC0+IGFwaUNsaWVudFJlc2VydmFzICJSZXF1ZXN0cyBkYXRhIgogICAgICAgIGFwaUNsaWVudFJlc2VydmFzIC0+IGVkZ2UgIkNoZWNrcyBhdmFpbGFiaWxpdHkgYW5kIG1hbmFnZXMgYm9va2luZ3MiICJKU09OL0hUVFBTIMK3IC9hcGkiCgogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICAvLyAgUmVsYXRpb25zaGlwcyDigJQgY29tcG9uZW50IGxldmVsIChtZi1hZG1pbmlzdHJhY2lvbikKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgdmlld3NBZG1pbmlzdHJhY2lvbiAtPiB1aUNvbXBvbmVudHNBZG1pbmlzdHJhY2lvbiAiQ29tcG9zZXMgdGhlIHNjcmVlbiB3aXRoIgogICAgICAgIHZpZXdzQWRtaW5pc3RyYWNpb24gLT4gc3RhdGVBZG1pbmlzdHJhY2lvbiAiUmVhZHMgYW5kIHVwZGF0ZXMiCiAgICAgICAgdmlld3NBZG1pbmlzdHJhY2lvbiAtPiBhcGlDbGllbnRBZG1pbmlzdHJhY2lvbiAiUmVxdWVzdHMgZGF0YSIKICAgICAgICBhcGlDbGllbnRBZG1pbmlzdHJhY2lvbiAtPiBlZGdlICJNYW5hZ2VzIGNvdXJ0cywgYm9va2luZ3MsIGFuZCB1c2VycyIgIkpTT04vSFRUUFMgwrcgL2FwaSIKCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIC8vICBSZWxhdGlvbnNoaXBzIOKAlCBjb21wb25lbnQgbGV2ZWwgKG1mLXJlcG9ydGVzKQogICAgICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KICAgICAgICB2aWV3c1JlcG9ydGVzIC0+IHVpQ29tcG9uZW50c1JlcG9ydGVzICJDb21wb3NlcyB0aGUgc2NyZWVuIHdpdGgiCiAgICAgICAgdmlld3NSZXBvcnRlcyAtPiBzdGF0ZVJlcG9ydGVzICJSZWFkcyBhbmQgdXBkYXRlcyIKICAgICAgICB2aWV3c1JlcG9ydGVzIC0+IGFwaUNsaWVudFJlcG9ydGVzICJSZXF1ZXN0cyBkYXRhIgogICAgICAgIGFwaUNsaWVudFJlcG9ydGVzIC0+IGVkZ2UgIlJlcXVlc3RzIHRoZSByZXBvcnRzIiAiSlNPTi9IVFRQUyDCtyAvYXBpIgoKICAgICAgICAvLyA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAgICAgLy8gIERlcGxveW1lbnQg4oCUIERvY2tlciBDb21wb3NlCiAgICAgICAgLy8gPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogICAgICAgIGRlcGxveW1lbnRFbnZpcm9ubWVudCAiTG9jYWwgKERvY2tlciBDb21wb3NlKSIgewoKICAgICAgICAgICAgZXF1aXBvID0gZGVwbG95bWVudE5vZGUgIkRldmVsb3BlcidzIG1hY2hpbmUiICJQcm9qZWN0IGV2YWx1YXRpb24gZW52aXJvbm1lbnQuIiAibWFjT1MgLyBMaW51eCAvIFdpbmRvd3MiIHsKCiAgICAgICAgICAgICAgICBkb2NrZXIgPSBkZXBsb3ltZW50Tm9kZSAiRG9ja2VyIEVuZ2luZSIgIk9yY2hlc3RyYXRlZCB3aXRoIERvY2tlciBDb21wb3NlIHYyLiIgIkRvY2tlciAyNCsiIHsKCiAgICAgICAgICAgICAgICAgICAgcmVkRnJvbnRlbmQgPSBkZXBsb3ltZW50Tm9kZSAiTmV0d29yazogZnJvbnRlbmQiICJCcmlkZ2UgbmV0d29yayB0aGF0IGlzb2xhdGVzIHRoZSBwcmVzZW50YXRpb24gY29udGFpbmVycy4iICJkb2NrZXIgbmV0d29yayAoYnJpZGdlKSIgewoKICAgICAgICAgICAgICAgICAgICAgICAgbm9kb0VkZ2UgPSBkZXBsb3ltZW50Tm9kZSAicmMtZWRnZSIgIk9ubHkgY29udGFpbmVyIGNvbm5lY3RlZCB0byBib3RoIG5ldHdvcmtzLiIgIm5naW54OjEuMjctYWxwaW5lIMK3IHBvcnQgODAiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIGVkZ2UKICAgICAgICAgICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgICAgICAgICAgZGVwbG95bWVudE5vZGUgInJjLXNoZWxsIiAiIiAibmdpbng6MS4yNy1hbHBpbmUgwrcgcG9ydCAzMDAwIiB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250YWluZXJJbnN0YW5jZSBzaGVsbAogICAgICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJyYy1tZi1yZXNlcnZhcyIgIiIgIm5naW54OjEuMjctYWxwaW5lIMK3IHBvcnQgMzAwMSIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgY29udGFpbmVySW5zdGFuY2UgbWZSZXNlcnZhcwogICAgICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJyYy1tZi1hZG1pbmlzdHJhY2lvbiIgIiIgIm5naW54OjEuMjctYWxwaW5lIMK3IHBvcnQgMzAwMiIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgY29udGFpbmVySW5zdGFuY2UgbWZBZG1pbmlzdHJhY2lvbgogICAgICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJyYy1tZi1yZXBvcnRlcyIgIiIgIm5naW54OjEuMjctYWxwaW5lIMK3IHBvcnQgMzAwMyIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgY29udGFpbmVySW5zdGFuY2UgbWZSZXBvcnRlcwogICAgICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgICAgICByZWRCYWNrZW5kID0gZGVwbG95bWVudE5vZGUgIk5ldHdvcms6IGJhY2tlbmQiICJCcmlkZ2UgbmV0d29yayB0aGF0IGlzb2xhdGVzIHRoZSBBUEkgYW5kIHBlcnNpc3RlbmNlLiIgImRvY2tlciBuZXR3b3JrIChicmlkZ2UpIiB7CgogICAgICAgICAgICAgICAgICAgICAgICBkZXBsb3ltZW50Tm9kZSAicmMtZ2F0ZXdheSIgIiIgImVjbGlwc2UtdGVtdXJpbjoyMS1qcmUgwrcgcG9ydCA4MDgwIiB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250YWluZXJJbnN0YW5jZSBnYXRld2F5CiAgICAgICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICAgICAgZGVwbG95bWVudE5vZGUgInJjLW1zLXVzdWFyaW9zIiAiIiAiZWNsaXBzZS10ZW11cmluOjIxLWpyZSDCtyBwb3J0IDgwODEiIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIG1zVXN1YXJpb3MKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgICAgICBkZXBsb3ltZW50Tm9kZSAicmMtbXMtY2FuY2hhcyIgIiIgImVjbGlwc2UtdGVtdXJpbjoyMS1qcmUgwrcgcG9ydCA4MDgyIiB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250YWluZXJJbnN0YW5jZSBtc0NhbmNoYXMKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgICAgICBkZXBsb3ltZW50Tm9kZSAicmMtbXMtcmVzZXJ2YXMiICIiICJlY2xpcHNlLXRlbXVyaW46MjEtanJlIMK3IHBvcnQgODA4MyIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgY29udGFpbmVySW5zdGFuY2UgbXNSZXNlcnZhcwogICAgICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJyYy1tcy1yZXBvcnRlcyIgIiIgImVjbGlwc2UtdGVtdXJpbjoyMS1qcmUgwrcgcG9ydCA4MDg0IiB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250YWluZXJJbnN0YW5jZSBtc1JlcG9ydGVzCiAgICAgICAgICAgICAgICAgICAgICAgIH0KCiAgICAgICAgICAgICAgICAgICAgICAgIG5vZG9Qb3N0Z3JlcyA9IGRlcGxveW1lbnROb2RlICJyYy1wb3N0Z3JlcyIgIlNpbmdsZSBpbnN0YW5jZSB3aXRoIHRocmVlIGluZGVwZW5kZW50IGRhdGFiYXNlcy4gRWFjaCBtaWNyb3NlcnZpY2UgaGFzIGNyZWRlbnRpYWxzIHRoYXQgb25seSBhbGxvdyBpdCB0byBjb25uZWN0IHRvIGl0cyBvd24gZGF0YWJhc2UuIiAicG9zdGdyZXM6MTYtYWxwaW5lIMK3IHBvcnQgNTQzMiIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgZGVwbG95bWVudE5vZGUgInVzdWFyaW9zX2RiIiAiIiAiUG9zdGdyZVNRTCBkYXRhYmFzZSIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIHVzdWFyaW9zRGIKICAgICAgICAgICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRlcGxveW1lbnROb2RlICJjYW5jaGFzX2RiIiAiIiAiUG9zdGdyZVNRTCBkYXRhYmFzZSIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIGNhbmNoYXNEYgogICAgICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgICAgICAgICAgZGVwbG95bWVudE5vZGUgInJlc2VydmFzX2RiIiAiIiAiUG9zdGdyZVNRTCBkYXRhYmFzZSIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lckluc3RhbmNlIHJlc2VydmFzRGIKICAgICAgICAgICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICAgICAgfQoKICAgICAgICAgICAgICAgICAgICAgICAgdm9sdW1lbiA9IGluZnJhc3RydWN0dXJlTm9kZSAicGdkYXRhIHZvbHVtZSIgIkRvY2tlciB2b2x1bWUgd2l0aCB0aGUgUG9zdGdyZVNRTCBkYXRhLiBUaGUgaW5mcmEvcG9zdGdyZXMvaW5pdCBzY3JpcHRzIHJ1biBvbmx5IHdoZW4gaXQgaXMgZW1wdHkuIiAiZG9ja2VyIHZvbHVtZSIgewogICAgICAgICAgICAgICAgICAgICAgICAgICAgdGFncyAiSW5mcmFzdHJ1Y3R1cmUiCiAgICAgICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICB9CgogICAgICAgICAgICAgICAgICAgIC8vIFJlbGF0aW9uc2hpcHMgYmV0d2VlbiBjb250YWluZXJzIHJlcGxpY2F0ZSBhdXRvbWF0aWNhbGx5CiAgICAgICAgICAgICAgICAgICAgLy8gYmV0d2VlbiB0aGVpciBpbnN0YW5jZXM7IGhlcmUgd2Ugb25seSBuZWVkIHRvIGRlY2xhcmUKICAgICAgICAgICAgICAgICAgICAvLyB0aGUgb25lIGludm9sdmluZyB0aGUgaW5mcmFzdHJ1Y3R1cmUgbm9kZS4KICAgICAgICAgICAgICAgICAgICBub2RvUG9zdGdyZXMgLT4gdm9sdW1lbiAiUGVyc2lzdHMgZGF0YSB0byIgImZpbGUgc3lzdGVtIgogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9CiAgICAgICAgfQogICAgfQoKICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICAvLyAgVmlld3MKICAgIC8vID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CiAgICB2aWV3cyB7CgogICAgICAgIC8vIExBWU9VVCBOT1RFCiAgICAgICAgLy8gTm8gdmlldyB1c2VzIGBhdXRvTGF5b3V0YDogYSB2aWV3IHdpdGggYXV0b21hdGljIGxheW91dCBhcnJhbmdlcwogICAgICAgIC8vIGl0c2VsZiwgYnV0IFN0cnVjdHVyaXpyIHRoZW4gYmxvY2tzIGRyYWdnaW5nIGl0cyBlbGVtZW50cy4gVGhlCiAgICAgICAgLy8gc3RhcnRpbmcgcG9zaXRpb25zIG9mIGFsbCB0d2VsdmUgdmlld3MgYXJlIHNhdmVkIGluCiAgICAgICAgLy8gd29ya3NwYWNlLmpzb24sIHNvIHRoZXkgb3BlbiBhbHJlYWR5IGFycmFuZ2VkIGFuZCBjYW4gYmUgbW92ZWQgYnkKICAgICAgICAvLyBoYW5kOyBkcmFnZ2luZyBzaG93cyBhIHNhdmUgYnV0dG9uLCBhbmQgdGhlIG5ldyBwb3NpdGlvbnMgYXJlCiAgICAgICAgLy8gd3JpdHRlbiB0byB0aGF0IHNhbWUgZmlsZS4KICAgICAgICAvLwogICAgICAgIC8vIHdvcmtzcGFjZS5qc29uIHNob3VsZCBiZSB2ZXJzaW9uZWQgYWxvbmdzaWRlIHRoaXMgLmRzbCBmaWxlOiBpdCBpcwogICAgICAgIC8vIHdoYXQga2VlcHMgdGhlIGxheW91dC4gSWYgYGF1dG9MYXlvdXRgIGlzIGFkZGVkIHRvIGEgdmlldyBhbmQgdGhlbgogICAgICAgIC8vIHJlbW92ZWQsIHRoZSAiYXV0b21hdGljTGF5b3V0IiBrZXkgbGVmdCBiZWhpbmQgaW4gd29ya3NwYWNlLmpzb24KICAgICAgICAvLyBtdXN0IGFsc28gYmUgZGVsZXRlZCwgb3IgdGhlIHZpZXdlciB3aWxsIGtlZXAgYXBwbHlpbmcgaXQuCgogICAgICAgIHN5c3RlbUNvbnRleHQgc2lzdGVtYSAiMDEtQ29udGV4dG8iICJMZXZlbCAxIOKAlCBUaGUgc3lzdGVtIGFuZCBpdHMgdXNlcnMuIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29udGFpbmVyIHNpc3RlbWEgIjAyLUNvbnRlbmVkb3JlcyIgIkxldmVsIDIg4oCUIE1pY3JvZnJvbnRlbmRzLCBnYXRld2F5LCBtaWNyb3NlcnZpY2VzLCBhbmQgZGF0YWJhc2VzLiIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIGNvbXBvbmVudCBtc1Jlc2VydmFzICIwMy1Db21wb25lbnRlcy1tcy1yZXNlcnZhcyIgIkxldmVsIDMg4oCUIEludGVyaW9yIG9mIG1zLXJlc2VydmFzIChoZXhhZ29uYWwgYXJjaGl0ZWN0dXJlKSwgd2hlcmUgdGhlIGJ1c2luZXNzIHJ1bGVzIGFyZSBhcHBsaWVkLiIgewogICAgICAgICAgICBpbmNsdWRlICoKICAgICAgICB9CgogICAgICAgIGRlcGxveW1lbnQgc2lzdGVtYSAiTG9jYWwgKERvY2tlciBDb21wb3NlKSIgIjA0LURlc3BsaWVndWUiICJNYXRlcmlhbGl6YXRpb24gb2YgdGhlIHN5c3RlbSBpbiBEb2NrZXIgY29udGFpbmVycy4iIHsKICAgICAgICAgICAgaW5jbHVkZSAqCiAgICAgICAgfQoKICAgICAgICBjb21wb25lbnQgbXNVc3VhcmlvcyAiMDUtQ29tcG9uZW50ZXMtbXMtdXN1YXJpb3MiICJMZXZlbCAzIOKAlCBJbnRlcmlvciBvZiBtcy11c3VhcmlvcyAoaGV4YWdvbmFsIGFyY2hpdGVjdHVyZSk6IHJlZ2lzdHJhdGlvbiBhbmQgYmFzaWMgcm9sZS1iYXNlZCBhdXRoZW50aWNhdGlvbi4iIHsKICAgICAgICAgICAgaW5jbHVkZSAqCiAgICAgICAgfQoKICAgICAgICBjb21wb25lbnQgbXNDYW5jaGFzICIwNi1Db21wb25lbnRlcy1tcy1jYW5jaGFzIiAiTGV2ZWwgMyDigJQgSW50ZXJpb3Igb2YgbXMtY2FuY2hhcyAoaGV4YWdvbmFsIGFyY2hpdGVjdHVyZSk6IGNhdGFsb2csIHNjaGVkdWxlcywgYW5kIGJsb2Nrcy4iIHsKICAgICAgICAgICAgaW5jbHVkZSAqCiAgICAgICAgfQoKICAgICAgICBjb21wb25lbnQgbXNSZXBvcnRlcyAiMDctQ29tcG9uZW50ZXMtbXMtcmVwb3J0ZXMiICJMZXZlbCAzIOKAlCBJbnRlcmlvciBvZiBtcy1yZXBvcnRlcyAoaGV4YWdvbmFsIGFyY2hpdGVjdHVyZSk6IFJFU1QgYWdncmVnYXRpb24sIG5vIGRhdGFiYXNlIG9mIGl0cyBvd24uIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IGdhdGV3YXkgIjA4LUNvbXBvbmVudGVzLWdhdGV3YXkiICJMZXZlbCAzIOKAlCBJbnRlcmlvciBvZiB0aGUgQVBJIEdhdGV3YXk6IHVzZXIgaWRlbnRpZmljYXRpb24gYW5kIHJvdXRpbmcuIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IHNoZWxsICIwOS1Db21wb25lbnRlcy1zaGVsbCIgIkxldmVsIDMg4oCUIEludGVyaW9yIG9mIHRoZSBzaGVsbDogbGF5b3V0LCBzZXNzaW9uLCBhbmQgcmVtb3RlIGxvYWRpbmcuIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IG1mUmVzZXJ2YXMgIjEwLUNvbXBvbmVudGVzLW1mLXJlc2VydmFzIiAiTGV2ZWwgMyDigJQgSW50ZXJpb3Igb2YgbWYtcmVzZXJ2YXMuIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IG1mQWRtaW5pc3RyYWNpb24gIjExLUNvbXBvbmVudGVzLW1mLWFkbWluaXN0cmFjaW9uIiAiTGV2ZWwgMyDigJQgSW50ZXJpb3Igb2YgbWYtYWRtaW5pc3RyYWNpb24uIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgY29tcG9uZW50IG1mUmVwb3J0ZXMgIjEyLUNvbXBvbmVudGVzLW1mLXJlcG9ydGVzIiAiTGV2ZWwgMyDigJQgSW50ZXJpb3Igb2YgbWYtcmVwb3J0ZXMuIiB7CiAgICAgICAgICAgIGluY2x1ZGUgKgogICAgICAgIH0KCiAgICAgICAgLy8gLS0tIFN0eWxlcyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQogICAgICAgIHN0eWxlcyB7CiAgICAgICAgICAgIGVsZW1lbnQgIlBlcnNvbiIgewogICAgICAgICAgICAgICAgc2hhcGUgUGVyc29uCiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICMwYjUzOTQKICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYKICAgICAgICAgICAgICAgIGZvbnRTaXplIDIyCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGVsZW1lbnQgIlNvZnR3YXJlIFN5c3RlbSIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjMTE2OGJkCiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGVsZW1lbnQgIkNvbnRhaW5lciIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjNDM4ZGQ1CiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGVsZW1lbnQgIk1pY3JvZnJvbnRlbmQiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzZiNGZiYgogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICAgICAgc2hhcGUgV2ViQnJvd3NlcgogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJIb3N0IiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICM0YjJlODMKICAgICAgICAgICAgfQoKICAgICAgICAgICAgZWxlbWVudCAiR2F0ZXdheSIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjYjU2NTFkCiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgICAgICBzaGFwZSBIZXhhZ29uCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGVsZW1lbnQgIk1pY3Jvc2VydmljZSIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjMmU4YjU3CiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgICAgICBzaGFwZSBSb3VuZGVkQm94CiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIC8vIC0tLSBIZXhhZ29uYWwgYXJjaGl0ZWN0dXJlIChwb3J0cyAmIGFkYXB0ZXJzKSAtLS0tLS0tLS0tLS0tLS0tLS0KICAgICAgICAgICAgZWxlbWVudCAiQWRhcHRlci1JbiIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjNGE3ZWJiCiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGVsZW1lbnQgIlBvcnQiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2U4YTMzZAogICAgICAgICAgICAgICAgY29sb3IgIzAwMDAwMAogICAgICAgICAgICAgICAgc2hhcGUgSGV4YWdvbgogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJBcHBsaWNhdGlvbiIgewogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjMmU4YjU3CiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmCiAgICAgICAgICAgIH0KCiAgICAgICAgICAgIGVsZW1lbnQgIkFkYXB0ZXItT3V0IiB7CiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICM4ZTViM2YKICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYKICAgICAgICAgICAgfQoKICAgICAgICAgICAgZWxlbWVudCAiRGF0YWJhc2UiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzdhNTE5NQogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICAgICAgc2hhcGUgQ3lsaW5kZXIKICAgICAgICAgICAgfQoKICAgICAgICAgICAgZWxlbWVudCAiSW5mcmFzdHJ1Y3R1cmUiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzZjNzU3ZAogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZgogICAgICAgICAgICAgICAgc2hhcGUgUGlwZQogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJDb21wb25lbnQiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzg1YmJmMAogICAgICAgICAgICAgICAgY29sb3IgIzAwMDAwMAogICAgICAgICAgICB9CgogICAgICAgICAgICBlbGVtZW50ICJEZXBsb3ltZW50IE5vZGUiIHsKICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2ZmZmZmZgogICAgICAgICAgICAgICAgY29sb3IgIzQ0NDQ0NAogICAgICAgICAgICAgICAgc3Ryb2tlICM4ODg4ODgKICAgICAgICAgICAgfQoKICAgICAgICAgICAgcmVsYXRpb25zaGlwICJSZWxhdGlvbnNoaXAiIHsKICAgICAgICAgICAgICAgIHRoaWNrbmVzcyAyCiAgICAgICAgICAgICAgICBmb250U2l6ZSAyMAogICAgICAgICAgICB9CiAgICAgICAgfQogICAgfQp9",
     "structurizr.inspection.info" : "0",
     "structurizr.inspection.ignore" : "0",
     "structurizr.inspection.warning" : "0"
   },
   "views" : {
     "componentViews" : [ {
-      "containerId" : "43",
+      "containerId" : "44",
       "description" : "Level 3 — Interior of ms-reservas (hexagonal architecture), where the business rules are applied.",
       "elements" : [ {
         "id" : "25",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "36",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "44",
+        "id" : "37",
         "x" : 0,
         "y" : 0
       }, {
@@ -1862,7 +1888,11 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "65",
+        "id" : "54",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "66",
         "x" : 0,
         "y" : 0
       } ],
@@ -1881,9 +1911,9 @@
       }, {
         "id" : "104"
       }, {
-        "id" : "83"
+        "id" : "105"
       }, {
-        "id" : "92"
+        "id" : "84"
       }, {
         "id" : "93"
       }, {
@@ -1931,7 +1961,11 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "63",
+        "id" : "36",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "64",
         "x" : 0,
         "y" : 0
       } ],
@@ -1940,8 +1974,6 @@
       "name" : "Component View: Court Booking System - ms-usuarios",
       "order" : 5,
       "relationships" : [ {
-        "id" : "105"
-      }, {
         "id" : "106"
       }, {
         "id" : "107"
@@ -1953,16 +1985,20 @@
         "id" : "110"
       }, {
         "id" : "111"
+      }, {
+        "id" : "112"
+      }, {
+        "id" : "113"
+      }, {
+        "id" : "114"
+      }, {
+        "id" : "115"
       } ]
     }, {
-      "containerId" : "36",
+      "containerId" : "37",
       "description" : "Level 3 — Interior of ms-canchas (hexagonal architecture): catalog, schedules, and blocks.",
       "elements" : [ {
         "id" : "25",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "37",
         "x" : 0,
         "y" : 0
       }, {
@@ -1986,7 +2022,11 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "64",
+        "id" : "43",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "65",
         "x" : 0,
         "y" : 0
       } ],
@@ -1995,37 +2035,33 @@
       "name" : "Component View: Court Booking System - ms-canchas",
       "order" : 6,
       "relationships" : [ {
-        "id" : "112"
-      }, {
-        "id" : "113"
-      }, {
-        "id" : "114"
-      }, {
-        "id" : "115"
-      }, {
         "id" : "116"
       }, {
         "id" : "117"
       }, {
         "id" : "118"
+      }, {
+        "id" : "119"
+      }, {
+        "id" : "120"
+      }, {
+        "id" : "121"
+      }, {
+        "id" : "122"
       } ]
     }, {
-      "containerId" : "54",
+      "containerId" : "55",
       "description" : "Level 3 — Interior of ms-reportes (hexagonal architecture): REST aggregation, no database of its own.",
       "elements" : [ {
         "id" : "25",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "36",
+        "id" : "37",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "43",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "55",
+        "id" : "44",
         "x" : 0,
         "y" : 0
       }, {
@@ -2056,20 +2092,16 @@
         "id" : "62",
         "x" : 0,
         "y" : 0
+      }, {
+        "id" : "63",
+        "x" : 0,
+        "y" : 0
       } ],
       "externalContainerBoundariesVisible" : false,
       "key" : "07-Componentes-ms-reportes",
       "name" : "Component View: Court Booking System - ms-reportes",
       "order" : 7,
       "relationships" : [ {
-        "id" : "119"
-      }, {
-        "id" : "120"
-      }, {
-        "id" : "121"
-      }, {
-        "id" : "122"
-      }, {
         "id" : "123"
       }, {
         "id" : "124"
@@ -2082,11 +2114,19 @@
       }, {
         "id" : "128"
       }, {
-        "id" : "83"
+        "id" : "129"
+      }, {
+        "id" : "130"
+      }, {
+        "id" : "131"
+      }, {
+        "id" : "132"
       }, {
         "id" : "84"
       }, {
-        "id" : "86"
+        "id" : "85"
+      }, {
+        "id" : "87"
       } ]
     }, {
       "containerId" : "25",
@@ -2112,15 +2152,15 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "36",
+        "id" : "37",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "43",
+        "id" : "44",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "54",
+        "id" : "55",
         "x" : 0,
         "y" : 0
       } ],
@@ -2129,14 +2169,6 @@
       "name" : "Component View: Court Booking System - API Gateway",
       "order" : 8,
       "relationships" : [ {
-        "id" : "129"
-      }, {
-        "id" : "130"
-      }, {
-        "id" : "131"
-      }, {
-        "id" : "132"
-      }, {
         "id" : "133"
       }, {
         "id" : "134"
@@ -2147,11 +2179,19 @@
       }, {
         "id" : "137"
       }, {
-        "id" : "86"
+        "id" : "138"
+      }, {
+        "id" : "139"
+      }, {
+        "id" : "140"
+      }, {
+        "id" : "141"
       }, {
         "id" : "87"
       }, {
         "id" : "88"
+      }, {
+        "id" : "89"
       } ]
     }, {
       "containerId" : "5",
@@ -2194,31 +2234,31 @@
       "name" : "Component View: Court Booking System - Shell (host)",
       "order" : 9,
       "relationships" : [ {
-        "id" : "138"
-      }, {
-        "id" : "139"
-      }, {
-        "id" : "140"
-      }, {
-        "id" : "141"
-      }, {
         "id" : "142"
       }, {
         "id" : "143"
       }, {
         "id" : "144"
       }, {
-        "id" : "71"
+        "id" : "145"
+      }, {
+        "id" : "146"
+      }, {
+        "id" : "147"
+      }, {
+        "id" : "148"
       }, {
         "id" : "72"
       }, {
         "id" : "73"
       }, {
-        "id" : "79"
+        "id" : "74"
       }, {
         "id" : "80"
       }, {
         "id" : "81"
+      }, {
+        "id" : "82"
       } ]
     }, {
       "containerId" : "10",
@@ -2249,13 +2289,13 @@
       "name" : "Component View: Court Booking System - mf-reservas",
       "order" : 10,
       "relationships" : [ {
-        "id" : "145"
+        "id" : "149"
       }, {
-        "id" : "146"
+        "id" : "150"
       }, {
-        "id" : "147"
+        "id" : "151"
       }, {
-        "id" : "148"
+        "id" : "152"
       } ]
     }, {
       "containerId" : "15",
@@ -2286,13 +2326,13 @@
       "name" : "Component View: Court Booking System - mf-administracion",
       "order" : 11,
       "relationships" : [ {
-        "id" : "149"
+        "id" : "153"
       }, {
-        "id" : "150"
+        "id" : "154"
       }, {
-        "id" : "151"
+        "id" : "155"
       }, {
-        "id" : "152"
+        "id" : "156"
       } ]
     }, {
       "containerId" : "20",
@@ -2323,13 +2363,13 @@
       "name" : "Component View: Court Booking System - mf-reportes",
       "order" : 12,
       "relationships" : [ {
-        "id" : "153"
+        "id" : "157"
       }, {
-        "id" : "154"
+        "id" : "158"
       }, {
-        "id" : "155"
+        "id" : "159"
       }, {
-        "id" : "156"
+        "id" : "160"
       } ]
     } ],
     "configuration" : {
@@ -2450,19 +2490,15 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "36",
+        "id" : "37",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "43",
+        "id" : "44",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "54",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "63",
+        "id" : "55",
         "x" : 0,
         "y" : 0
       }, {
@@ -2473,14 +2509,16 @@
         "id" : "65",
         "x" : 0,
         "y" : 0
+      }, {
+        "id" : "66",
+        "x" : 0,
+        "y" : 0
       } ],
       "externalSoftwareSystemBoundariesVisible" : false,
       "key" : "02-Contenedores",
       "name" : "Container View: Court Booking System",
       "order" : 2,
       "relationships" : [ {
-        "id" : "68"
-      }, {
         "id" : "69"
       }, {
         "id" : "70"
@@ -2526,28 +2564,14 @@
         "id" : "90"
       }, {
         "id" : "91"
+      }, {
+        "id" : "92"
       } ],
       "softwareSystemId" : "3"
     } ],
     "deploymentViews" : [ {
       "description" : "Materialization of the system in Docker containers.",
       "elements" : [ {
-        "id" : "157",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "158",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "159",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "160",
-        "x" : 0,
-        "y" : 0
-      }, {
         "id" : "161",
         "x" : 0,
         "y" : 0
@@ -2560,6 +2584,14 @@
         "x" : 0,
         "y" : 0
       }, {
+        "id" : "164",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "165",
+        "x" : 0,
+        "y" : 0
+      }, {
         "id" : "166",
         "x" : 0,
         "y" : 0
@@ -2568,11 +2600,15 @@
         "x" : 0,
         "y" : 0
       }, {
+        "id" : "170",
+        "x" : 0,
+        "y" : 0
+      }, {
         "id" : "171",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "172",
+        "id" : "175",
         "x" : 0,
         "y" : 0
       }, {
@@ -2580,19 +2616,11 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "177",
+        "id" : "180",
         "x" : 0,
         "y" : 0
       }, {
         "id" : "181",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "182",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "183",
         "x" : 0,
         "y" : 0
       }, {
@@ -2604,7 +2632,7 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "188",
+        "id" : "187",
         "x" : 0,
         "y" : 0
       }, {
@@ -2612,11 +2640,15 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "191",
+        "id" : "190",
         "x" : 0,
         "y" : 0
       }, {
         "id" : "192",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "193",
         "x" : 0,
         "y" : 0
       }, {
@@ -2628,15 +2660,11 @@
         "x" : 0,
         "y" : 0
       }, {
+        "id" : "199",
+        "x" : 0,
+        "y" : 0
+      }, {
         "id" : "200",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "201",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "202",
         "x" : 0,
         "y" : 0
       }, {
@@ -2648,7 +2676,7 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "207",
+        "id" : "206",
         "x" : 0,
         "y" : 0
       }, {
@@ -2656,7 +2684,19 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "210",
+        "id" : "209",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "211",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "212",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "214",
         "x" : 0,
         "y" : 0
       } ],
@@ -2665,35 +2705,31 @@
       "name" : "Deployment View: Court Booking System - Local (Docker Compose)",
       "order" : 4,
       "relationships" : [ {
-        "id" : "164"
-      }, {
-        "id" : "165"
-      }, {
         "id" : "168"
       }, {
         "id" : "169"
       }, {
-        "id" : "170"
+        "id" : "172"
       }, {
         "id" : "173"
       }, {
         "id" : "174"
       }, {
-        "id" : "175"
+        "id" : "177"
       }, {
         "id" : "178"
       }, {
         "id" : "179"
       }, {
-        "id" : "180"
+        "id" : "182"
+      }, {
+        "id" : "183"
       }, {
         "id" : "184"
       }, {
-        "id" : "187"
+        "id" : "188"
       }, {
-        "id" : "190"
-      }, {
-        "id" : "193"
+        "id" : "191"
       }, {
         "id" : "194"
       }, {
@@ -2701,15 +2737,19 @@
       }, {
         "id" : "198"
       }, {
-        "id" : "199"
+        "id" : "201"
+      }, {
+        "id" : "202"
       }, {
         "id" : "203"
       }, {
-        "id" : "206"
+        "id" : "207"
       }, {
-        "id" : "209"
+        "id" : "210"
       }, {
-        "id" : "211"
+        "id" : "213"
+      }, {
+        "id" : "215"
       } ],
       "softwareSystemId" : "3"
     } ],
@@ -2733,9 +2773,9 @@
       "name" : "System Context View: Court Booking System",
       "order" : 1,
       "relationships" : [ {
-        "id" : "66"
-      }, {
         "id" : "67"
+      }, {
+        "id" : "68"
       } ],
       "softwareSystemId" : "3"
     } ]

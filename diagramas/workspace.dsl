@@ -97,7 +97,10 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 tags "Microservice"
 
                 // --- Driving adapter (web) --------------------------------
-                userController = component "AuthController" "Exposes POST /api/auth/registro and POST /api/auth/login, the only two public routes of the system; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                authController = component "AuthController" "Exposes POST /api/auth/registro and POST /api/auth/login, the only two public routes of the system; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                    tags "Adapter-In"
+                }
+                userController = component "UserController" "Exposes GET /api/usuarios, GET /api/usuarios/{id} and PATCH /api/usuarios/{id}/estado. Separate from AuthController because those are the only two public routes of the system and these require ADMINISTRADOR." "Spring MVC @RestController" {
                     tags "Adapter-In"
                 }
                 errorHandlerUser = component "ErrorHandler" "Translates invalid credentials and conflicts (user already registered) into HTTP status codes." "@RestControllerAdvice" {
@@ -108,7 +111,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 userUseCase = component "UserUseCase" "Input port: registration, authentication, and role management operations, with no dependency on Spring MVC or JPA." "Java interface" {
                     tags "Port"
                 }
-                userService = component "UserService" "Implements the input port: validates credentials and manages the user and role lifecycle." "Spring @Service" {
+                userService = component "UserService" "Implements the input port: validates credentials (FR-003, FR-005) and manages the user lifecycle. Applies FR-048: only an ADMINISTRADOR lists users or changes their state." "Spring @Service" {
                     tags "Application"
                 }
 
@@ -309,9 +312,12 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
         // ===================================================================
         //  Relationships — component level (ms-usuarios, hexagonal)
         // ===================================================================
-        gateway -> userController "Routes /api/auth and /api/usuarios" "JSON/HTTP"
+        gateway -> authController "Routes /api/auth (public)" "JSON/HTTP"
+        gateway -> userController "Routes /api/usuarios (ADMINISTRADOR only)" "JSON/HTTP"
 
-        userController -> userUseCase "Invokes"
+        authController -> userUseCase "Invokes"
+        authController -> errorHandlerUser "Unhandled exceptions"
+        userController -> userUseCase "Invokes. Passes X-User-Role through; it decides nothing itself"
         userController -> errorHandlerUser "Unhandled exceptions"
         userService -> userUseCase "Implements"
 

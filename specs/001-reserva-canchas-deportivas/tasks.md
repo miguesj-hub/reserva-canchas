@@ -268,15 +268,15 @@ y entrar con éxito, comprobando que sus reservas siguen ahí. Es el escenario V
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
-- [ ] T126 Ejecutar los cinco escenarios de `specs/001-reserva-canchas-deportivas/quickstart.md` desde cero (`docker compose down -v && docker compose up`) y verificar los cinco escenarios V1 a V5
-- [ ] T127 Verificar SC-004 con el escenario V2 de `specs/001-reserva-canchas-deportivas/quickstart.md`, 10 repeticiones del escenario de concurrencia de RN-02: 10 veces exactamente un 201 y un 409
-- [ ] T128 Verificar SC-008 sobre `GET /api/reservas/disponibilidad`: la respuesta responde en menos de 2 s con al menos 500 reservas cargadas; si no, aplicar la caché de credencial verificada en el gateway prevista en R-003
-- [ ] T129 [P] Revisar la regla de dependencia en los cuatro microservicios: ningún import de `adapter/` dentro de `application/service/`, ningún `@Entity` en `domain/`, ningún `HttpStatus` en `domain/exception/` (compuerta 4)
-- [ ] T130 [P] Revisar la independencia de datos: cada `application.yml` apunta solo a su base, y `ms-reportes` no tiene datasource (compuerta 5)
-- [ ] T131 [P] Verificar que los cuatro Swagger UI publican los contratos y coinciden con `contracts/` (compuerta 6)
-- [ ] T132 [P] Verificar que `frontend/mf-reservas`, `frontend/mf-administracion` y `frontend/mf-reportes` compilan cada uno con `npm run build` sin compilar `frontend/shell` (Principio V)
-- [ ] T133 Escribir el manual de despliegue (E5) a partir de `quickstart.md`, con la tabla de usuarios de prueba
-- [ ] T134 Cierre de la compuerta 8: `diagramas/workspace.dsl` y todas las secciones de `informe/secciones/` reflejan el sistema construido, con las figuras regeneradas
+- [X] T126 Ejecutar los cinco escenarios de `specs/001-reserva-canchas-deportivas/quickstart.md` desde cero (`docker compose down -v && docker compose up`) y verificar los cinco escenarios V1 a V5
+- [X] T127 Verificar SC-004 con el escenario V2 de `specs/001-reserva-canchas-deportivas/quickstart.md`, 10 repeticiones del escenario de concurrencia de RN-02: 10 veces exactamente un 201 y un 409
+- [X] T128 Verificar SC-008 sobre `GET /api/reservas/disponibilidad`: la respuesta responde en menos de 2 s con al menos 500 reservas cargadas; si no, aplicar la caché de credencial verificada en el gateway prevista en R-003
+- [X] T129 [P] Revisar la regla de dependencia en los cuatro microservicios: ningún import de `adapter/` dentro de `application/service/`, ningún `@Entity` en `domain/`, ningún `HttpStatus` en `domain/exception/` (compuerta 4)
+- [X] T130 [P] Revisar la independencia de datos: cada `application.yml` apunta solo a su base, y `ms-reportes` no tiene datasource (compuerta 5)
+- [X] T131 [P] Verificar que los cuatro Swagger UI publican los contratos y coinciden con `contracts/` (compuerta 6)
+- [X] T132 [P] Verificar que `frontend/mf-reservas`, `frontend/mf-administracion` y `frontend/mf-reportes` compilan cada uno con `npm run build` sin compilar `frontend/shell` (Principio V)
+- [X] T133 Escribir el manual de despliegue (E5) a partir de `quickstart.md`, con la tabla de usuarios de prueba
+- [X] T134 Cierre de la compuerta 8: `diagramas/workspace.dsl` y todas las secciones de `informe/secciones/` reflejan el sistema construido, con las figuras regeneradas
 
 ---
 

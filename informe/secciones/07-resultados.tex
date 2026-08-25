@@ -17,7 +17,7 @@
 Dos o tres capturas bien elegidas valen más que ocho: la consulta de
 disponibilidad, la reserva y los reportes.}
 
-A la fecha de este informe están construidas y demostrables tres de las cuatro
+A la fecha de este informe están construidas y demostrables las cuatro
 historias del alcance:
 
 \begin{itemize}
@@ -31,9 +31,16 @@ historias del alcance:
         administrador elija, más un panel acotado al día en curso.
 \end{itemize}
 
-Queda pendiente la gestión de usuarios —activar e inactivar cuentas desde la
-pantalla de administración—, cuyo respaldo en \id{ms-usuarios} sí existe: el
-rechazo de una cuenta inactiva al iniciar sesión está operativo y probado.
+\begin{itemize}
+  \item[] \textbf{Gestión de usuarios.} El administrador lista las cuentas y las
+        activa o inactiva. Una cuenta inactivada deja de entrar de inmediato,
+        incluso si tenía la sesión abierta: el gateway verifica la credencial en
+        cada petición, y el frontend la devuelve al inicio de sesión con el
+        motivo.
+\end{itemize}
+
+Las cuatro historias del alcance están, por tanto, construidas y son
+demostrables por separado.
 
 Toda la infraestructura está en pie: \id{docker compose up} levanta once
 contenedores —edge, cuatro microfrontends, gateway, cuatro microservicios y
@@ -61,7 +68,7 @@ cumplido que luego falla en la demo cuesta más que uno declarado pendiente.}
     \textsf{CA-3}\label{ca:3} & El sistema impide reservar un bloque ocupado & Cumplido & Escenario V2, diez repeticiones: siempre un 201 y un 409. \id{ConcurrenciaReservaIT} contra PostgreSQL real (\cref{sec:solapamiento}). \\
     \textsf{CA-4}\label{ca:4} & Los reportes muestran ocupación y reservas por período & Cumplido & Escenario V4: los cuatro indicadores contrastados contra un conteo manual del listado global del mismo rango. \\
     \textsf{CA-5}\label{ca:5} & Shell y al menos dos remotes integrados con Module Federation & Cumplido & Tres remotes —reservas, administración y reportes— cargados de forma perezosa por el shell (\cref{v:02}). \\
-    \textsf{CA-6}\label{ca:6} & Al menos dos microservicios independientes sobre PostgreSQL & Cumplido & Tres con base propia y aislada por credenciales, más \id{ms-reportes} sin base (\cref{sec:estrategia-datos}). \\
+    \textsf{CA-6}\label{ca:6} & Al menos dos microservicios independientes sobre PostgreSQL & Cumplido & Tres con base propia y aislada por credenciales, más \id{ms-reportes} sin base (\cref{sec:estrategia-datos}). Las 70 pruebas de los cinco servicios pasan. \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -103,18 +110,15 @@ conoce el propio sistema. Omitir una limitación que el evaluador descubre en
 la demo resta el doble.}
 
 \begin{itemize}
-  \item \textbf{La gestión de usuarios no está conectada a la pantalla.} El
-        backend distingue cuentas activas e inactivas y rechaza el acceso de
-        estas últimas, pero \id{mf-administracion} todavía no consume
-        \id{/api/usuarios}.
   \item \textbf{No hay paginación en ningún listado.} A escala de un club los
         conjuntos son pequeños, y añadirla sería complejidad sin criterio de la
         rúbrica que la respalde.
   \item \textbf{\id{ms-reportes} agrega en memoria}, no con consultas agregadas.
         Es el precio de no leer la base de otro servicio
         (\cref{sec:estrategia-datos}), y es un precio consciente.
-  \item \textbf{Las pruebas de contexto de Spring necesitan una base real} y por
-        eso no se ejecutan en un entorno sin PostgreSQL. Las pruebas de las
-        reglas de negocio, que son las que el Principio~II exige, corren siempre:
-        no levantan Spring ni base de datos.
+  \item \textbf{Las pruebas de arranque necesitan Docker}, porque levantan un
+        PostgreSQL efímero con Testcontainers. No es una carencia frente a la
+        alternativa —una base instalada en la máquina—, pero sí una dependencia
+        que conviene declarar. Las pruebas de las reglas de negocio, que son las
+        que el Principio~II exige, no necesitan ni Docker ni Spring.
 \end{itemize}
