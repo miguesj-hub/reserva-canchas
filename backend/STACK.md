@@ -76,19 +76,34 @@ Gestionadas por el BOM de Spring Boot 4.0.8 y por Spring Cloud 2025.1.2.
 
 ## 5. Convenciones adoptadas
 
-Estructura interna común a los cinco proyectos, siguiendo el taller de la materia:
+Estructura interna común a los cinco proyectos: arquitectura hexagonal
+(puertos y adaptadores), según `template-backend/ARQUITECTURA.md`. El paquete
+base se mantiene en `com.ups.reservacanchas.<dominio>`; los subpaquetes y los
+nombres de clase van en inglés, para que correspondan 1:1 con las cajas de los
+diagramas de componentes.
 
 ```
 src/main/java/com/ups/reservacanchas/<dominio>/
-├── domain/       @Entity, @Table
-├── repository/   interfaces JpaRepository
-├── service/      @Service, inyección por constructor
-└── web/          @RestController
-    └── dto/      records de Request / Response
+├── domain/                    modelo de negocio, sin anotaciones de framework
+│   └── exception/             excepciones de negocio, sin saber de HTTP
+├── application/
+│   ├── port/in/               interfaz de caso de uso (*UseCase)
+│   ├── port/out/              interfaces que el dominio necesita (*Port)
+│   └── service/               @Service, implementa el puerto de entrada
+├── adapter/
+│   ├── in/web/                @RestController y @RestControllerAdvice
+│   ├── out/persistence/       @Entity y JpaRepository (package-private)
+│   └── out/client/            RestClient hacia otro microservicio
+├── config/                    @Configuration, cableado
+└── dto/                       records de Request / Response
 ```
 
+- Regla de dependencia: `application/service/` nunca importa nada de `adapter/`,
+  y `domain/` no conoce JPA, HTTP ni el framework.
 - Inyección por constructor con campos `final`; sin `@Autowired` en campos.
 - DTOs como `record`; nunca se exponen entidades JPA en la API.
+- Ningún microservicio lee la base de datos de otro: si necesita datos de otro
+  dominio, es una llamada HTTP vía puerto de salida + adaptador (§4.3 del alcance).
 - `spring.jpa.hibernate.ddl-auto: validate` — el esquema lo versiona Flyway.
 - Credenciales y URLs externalizadas por variable de entorno, con valor por
   defecto para ejecución local.

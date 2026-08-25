@@ -39,9 +39,12 @@ con el puerto de salida mockeado, sin levantar Spring ni una base de datos.
 
 ## Convención de nombres
 
-Paquete base: `ec.edu.master.<servicio-corto>` (p. ej. `ec.edu.master.booking`
-para ms-reservas, `ec.edu.master.court` para ms-canchas) — todo en inglés,
-sin mezclar con palabras en español como el `ec.edu.maestria` original.
+Paquete base: `com.ups.reservacanchas.<dominio>`, el que ya usan los cinco
+proyectos de `backend/` (`usuarios`, `canchas`, `reservas`, `reportes`,
+`gateway`). No se renombra: la decisión del equipo es conservarlo. Lo que sí
+va en inglés son los subpaquetes hexagonales (`domain/`, `application/`,
+`adapter/`) y los nombres de clase, para que correspondan 1:1 con las cajas
+de los diagramas.
 Las clases siguen el mismo patrón que usan los diagramas: `<Recurso>UseCase`,
 `<Recurso>Service`, `<Recurso>RepositoryPort`, `<Recurso>RepositoryAdapter`,
 `<Recurso>Controller`, `ErrorHandler`.
@@ -118,34 +121,31 @@ sincronizados es lo que hace que el diagrama sirva para algo.
 ## Cómo aplicar esto a un microservicio que ya existe
 
 `ms-usuarios`, `ms-canchas`, `ms-reservas`, `ms-reportes` y el `gateway`
-tienen hoy un paquete `api/` que mezcla controller, un único `Dtos.java` con
-todos los records, y un `service/` que depende directo de
-`JpaRepository`/`RestClient`, en paquete base `ec.edu.maestria.<servicio>`.
-Para llevar uno de ellos a esta arquitectura, sigue el mismo proceso que se
-usó para construir `backend/microservice-template/` (ver los pasos 1 a 7 de
-su `README.md`), en este orden:
+tienen hoy únicamente su clase `*Application.java` y su `application.yml`,
+bajo el paquete base `com.ups.reservacanchas.<dominio>`. Ese paquete base se
+conserva tal cual; lo que se construye encima es la estructura hexagonal.
+Sigue el mismo proceso que se usó para construir el template (ver los pasos 1
+a 7 de su `README.md`), en este orden:
 
-1. Renombrar el paquete base de `ec.edu.maestria.<servicio>` a
-   `ec.edu.master.<servicio>` (todo en inglés desde la raíz).
-2. Crear `domain/`, `domain/exception/`, `application/port/in/`,
+1. Crear `domain/`, `domain/exception/`, `application/port/in/`,
    `application/port/out/`, `application/service/`,
    `adapter/in/web/`, `adapter/out/persistence/` (y `adapter/out/client/`
    si aplica).
-3. Mover la entidad JPA actual a `adapter/out/persistence/` como clase
+2. Mover la entidad JPA actual a `adapter/out/persistence/` como clase
    package-private, y crear un modelo de dominio nuevo (sin anotaciones) en
    `domain/`.
-4. Definir la interfaz del puerto de entrada en `application/port/in/` con
+3. Definir la interfaz del puerto de entrada en `application/port/in/` con
    la firma que ya tiene el `*Service` actual; mover el `*Service` a
    `application/service/` para que la implemente.
-5. Definir la interfaz del puerto de salida en `application/port/out/` con
+4. Definir la interfaz del puerto de salida en `application/port/out/` con
    la firma que necesita `application/service/`; crear el adaptador en
    `adapter/out/persistence/` que la implemente contra Spring Data JPA
    (traduciendo entidad ↔ dominio).
-6. Mover el `*Controller.java` a `adapter/in/web/`, y cambiarlo para que
+5. Mover el `*Controller.java` a `adapter/in/web/`, y cambiarlo para que
    dependa del puerto de entrada, no del `*Service`.
-7. Mover el manejador de errores y las excepciones de negocio a
+6. Mover el manejador de errores y las excepciones de negocio a
    `adapter/in/web/ErrorHandler.java` y `domain/exception/` respectivamente,
    traduciendo los nombres al inglés (`ReglaDeNegocioException` →
    `BusinessRuleException`, `NoEncontradoException` → `NotFoundException`).
-8. Actualizar los `package` y los `import` de cada archivo afectado.
-9. `./mvnw test` para confirmar que no se rompió nada.
+7. Actualizar los `package` y los `import` de cada archivo afectado.
+8. `./mvnw test` para confirmar que no se rompió nada.
