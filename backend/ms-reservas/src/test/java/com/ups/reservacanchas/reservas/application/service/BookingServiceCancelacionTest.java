@@ -171,6 +171,26 @@ class BookingServiceCancelacionTest {
         assertThat(activas).isEqualTo(1);
     }
 
+    // --- Consulta puntual: RN-03 aplicada a la lectura -----------------------
+
+    @Test
+    void un_usuario_final_no_consulta_una_reserva_ajena_RN03() {
+        when(bookings.findById(50L)).thenReturn(Optional.of(futuraDe(OTRO_CLIENTE)));
+
+        assertThatThrownBy(() -> service.consultar(50L, CLIENTE, "USUARIO_FINAL"))
+                .isInstanceOf(ForbiddenOperationException.class);
+
+        // 403 y no 404, igual que al cancelar: fingir que no existe ocultaría
+        // el motivo real y complicaría depurar.
+    }
+
+    @Test
+    void el_administrador_consulta_cualquier_reserva_RN03() {
+        when(bookings.findById(50L)).thenReturn(Optional.of(futuraDe(OTRO_CLIENTE)));
+
+        assertThat(service.consultar(50L, ADMIN, "ADMINISTRADOR").usuarioId()).isEqualTo(OTRO_CLIENTE);
+    }
+
     // --- FR-023, 404 --------------------------------------------------------
 
     @Test

@@ -98,6 +98,20 @@ public class BookingController {
     }
 
     @Operation(
+            summary = "Consultar una reserva",
+            description = "Un USUARIO_FINAL solo puede consultar las suyas; el ADMINISTRADOR, cualquiera (RN-03).")
+    @ApiResponse(responseCode = "200", description = "La reserva")
+    @ApiResponse(responseCode = "403", description = "Un USUARIO_FINAL consulta una reserva ajena")
+    @ApiResponse(responseCode = "404", description = "La reserva no existe")
+    @GetMapping("/{id}")
+    public ReservaResponse consultar(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Id") Long usuarioId,
+            @RequestHeader("X-User-Role") String rol) {
+        return useCase.consultar(id, usuarioId, rol);
+    }
+
+    @Operation(
             summary = "Cancelar una reserva",
             description = """
                     Una sola operación para ambos roles; la diferencia la aplica BookingService

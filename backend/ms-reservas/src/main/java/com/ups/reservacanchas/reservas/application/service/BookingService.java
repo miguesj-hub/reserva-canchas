@@ -270,6 +270,20 @@ public class BookingService implements BookingUseCase {
                 .toList();
     }
 
+    @Override
+    public ReservaResponse consultar(Long reservaId, Long usuarioId, String rol) {
+        LocalDateTime ahora = LocalDateTime.now(clock);
+        Booking reserva = bookings.findById(reservaId)
+                .orElseThrow(() -> new BookingNotFoundException("La reserva " + reservaId + " no existe."));
+
+        // La misma regla que al cancelar, y por el mismo motivo: el
+        // administrador ve cualquiera, el usuario final solo las suyas.
+        if (!ROL_ADMINISTRADOR.equals(rol) && !reserva.perteneceA(usuarioId)) {
+            throw new ForbiddenOperationException("Solo puedes consultar tus propias reservas.");
+        }
+        return toResponse(reserva, canchas.buscar(reserva.getCanchaId()).orElse(null), ahora);
+    }
+
     // --------------------------------------------------------------- cancelar
 
     @Override

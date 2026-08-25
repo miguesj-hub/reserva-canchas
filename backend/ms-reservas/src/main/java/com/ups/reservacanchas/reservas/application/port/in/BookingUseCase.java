@@ -33,6 +33,13 @@ public interface BookingUseCase {
     List<ReservaResponse> listarTodas(
             String rol, LocalDate desde, LocalDate hasta, Long canchaId, BookingStatus estado);
 
+    /**
+     * Consulta puntual. RN-03 aplicada a la lectura: un USUARIO_FINAL solo ve
+     * las suyas, y sobre una ajena recibe 403 —no 404—, por lo mismo que al
+     * cancelar: fingir que no existe oculta el motivo real.
+     */
+    ReservaResponse consultar(Long reservaId, Long usuarioId, String rol);
+
     /** RN-03, RN-04, RN-05. */
     ReservaResponse cancelar(Long reservaId, Long usuarioId, String rol);
 }
