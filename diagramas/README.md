@@ -30,10 +30,10 @@ se vuelve a parsear en cada petición.
 | `02-Contenedores` | 2 | Edge, microfrontends, gateway, microservicios y bases de datos |
 | `03-Componentes-ms-reservas` | 3 | Interior de `ms-reservas`, donde se aplican las reglas RN-01..RN-08 |
 | `04-Despliegue` | — | Materialización en Docker Compose: redes, contenedores y volumen |
-| `05-Componentes-ms-usuarios` | 3 | Interior de `ms-usuarios`: registro, autenticación y emisión del JWT |
+| `05-Componentes-ms-usuarios` | 3 | Interior de `ms-usuarios`: registro, autenticación y gestión de usuarios y roles |
 | `06-Componentes-ms-canchas` | 3 | Interior de `ms-canchas`: catálogo, horarios y bloqueos |
 | `07-Componentes-ms-reportes` | 3 | Interior de `ms-reportes`: agregación vía REST, sin base propia |
-| `08-Componentes-gateway` | 3 | Interior del API Gateway: validación de JWT y enrutamiento |
+| `08-Componentes-gateway` | 3 | Interior del API Gateway: identificación del usuario y enrutamiento |
 | `09-Componentes-shell` | 3 | Interior del shell: layout, sesión y carga de remotes |
 | `10-Componentes-mf-reservas` | 3 | Interior de `mf-reservas`: vistas, estado y cliente de API |
 | `11-Componentes-mf-administracion` | 3 | Interior de `mf-administracion`: vistas, estado y cliente de API |

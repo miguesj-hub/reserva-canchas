@@ -55,21 +55,21 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 apiClientReservas = component "ApiClient" "Wraps the HTTP calls to /api/reservas and /api/disponibilidad." "Fetch API"
             }
 
-            mfAdministracion = container "mf-administracion" "Management of the court catalog, schedules, blocks, and cancellation of any booking." "React + Module Federation (remote)" {
+            mfAdministracion = container "mf-administracion" "Management of the court catalog, schedules, blocks, users, and cancellation of any booking." "React + Module Federation (remote)" {
                 tags "Microfrontend"
 
                 // --- Internal components ---------------------------------
-                viewsAdministracion = component "Views" "Court catalog, schedules, maintenance blocks, and administrative booking-cancellation screens." "React Router (remote routes)"
-                uiComponentsAdministracion = component "UI Components" "Reusable pieces: court form, bookings table, schedule editor." "React"
+                viewsAdministracion = component "Views" "Court catalog, schedules, maintenance blocks, user management (activate/deactivate), and administrative booking-cancellation screens." "React Router (remote routes)"
+                uiComponentsAdministracion = component "UI Components" "Reusable pieces: court form, bookings table, schedule editor, users table." "React"
                 stateAdministracion = component "State" "Holds the active form and filters while the administrator edits the catalog." "React Context / hooks"
-                apiClientAdministracion = component "ApiClient" "Wraps the HTTP calls to /api/canchas and /api/reservas." "Fetch API"
+                apiClientAdministracion = component "ApiClient" "Wraps the HTTP calls to /api/canchas, /api/reservas, and /api/usuarios." "Fetch API"
             }
 
-            mfReportes = container "mf-reportes" "Displays occupancy reports, bookings by period, and cancellations." "React + Module Federation (remote)" {
+            mfReportes = container "mf-reportes" "Displays occupancy reports, bookings by period, cancellations, and the most/least demanded courts." "React + Module Federation (remote)" {
                 tags "Microfrontend"
 
                 // --- Internal components ---------------------------------
-                viewsReportes = component "Views" "Occupancy, bookings-by-period, and cancellations screens." "React Router (remote routes)"
+                viewsReportes = component "Views" "Occupancy, bookings-by-period, cancellations, and court-demand ranking screens." "React Router (remote routes)"
                 uiComponentsReportes = component "UI Components" "Reusable pieces: report charts and tables, date-range picker." "React"
                 stateReportes = component "State" "Holds the date range and filters selected by the administrator." "React Context / hooks"
                 apiClientReportes = component "ApiClient" "Wraps the HTTP calls to /api/reportes." "Fetch API"
@@ -82,7 +82,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 // --- Internal components ---------------------------------
                 // Basic role-based authentication (scope document §4.4): no
                 // advanced mechanism such as OAuth2/JWT is required.
-                authenticationFilter = component "AuthenticationFilter" "Identifies the user making the request and propagates their identity and role as X-Usuario-Id / X-Usuario-Rol headers." "GlobalFilter"
+                authenticationFilter = component "AuthenticationFilter" "Identifies the user making the request and propagates their identity and role as X-User-Id / X-User-Role headers." "GlobalFilter"
                 routeConfig = component "RouteConfig" "Defines the routes to each microservice (predicates and filters)." "Spring Cloud Gateway (RouteLocator)"
                 errorHandlerGateway = component "ErrorHandler" "Translates failures from the target microservices (timeout, unavailable) or missing/invalid identity into HTTP status codes." "ErrorWebExceptionHandler"
             }
@@ -195,11 +195,11 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 }
             }
 
-            msReportes = container "ms-reportes" "Generates occupancy reports, bookings by period, and cancellations. Has no database of its own: aggregates via REST." "Spring Boot 4 (:8084)" {
+            msReportes = container "ms-reportes" "Generates occupancy reports, bookings by period, cancellations, and the most/least demanded courts ranking. Has no database of its own: aggregates via REST." "Spring Boot 4 (:8084)" {
                 tags "Microservice"
 
                 // --- Driving adapter (web) --------------------------------
-                reportController = component "ReportController" "Exposes the occupancy, bookings-by-period, and cancellations endpoints; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                reportController = component "ReportController" "Exposes the occupancy, bookings-by-period, cancellations, and court-demand ranking endpoints; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
                     tags "Adapter-In"
                 }
                 errorHandlerReport = component "ErrorHandler" "Translates failures from the source services (unavailable) into HTTP status codes." "@RestControllerAdvice" {
@@ -207,10 +207,10 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 }
 
                 // --- Domain: input port + application ---------------------
-                reportUseCase = component "ReportUseCase" "Input port: occupancy, bookings-by-period, and cancellations operations. No dependency on Spring MVC or the REST clients." "Java interface" {
+                reportUseCase = component "ReportUseCase" "Input port: occupancy, bookings-by-period, cancellations, and court-demand ranking operations. No dependency on Spring MVC or the REST clients." "Java interface" {
                     tags "Port"
                 }
-                reportService = component "ReportService" "Implements the input port: aggregates and computes occupancy metrics by combining bookings and catalog data." "Spring @Service" {
+                reportService = component "ReportService" "Implements the input port: aggregates and computes occupancy metrics and the court-demand ranking by combining bookings and catalog data." "Spring @Service" {
                     tags "Application"
                 }
 
@@ -269,7 +269,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
 
         shell -> edge "Authenticates the user" "JSON/HTTPS · /api/auth"
         mfReservas -> edge "Checks availability and manages bookings" "JSON/HTTPS · /api"
-        mfAdministracion -> edge "Manages courts and bookings" "JSON/HTTPS · /api"
+        mfAdministracion -> edge "Manages courts, bookings, and users" "JSON/HTTPS · /api"
         mfReportes -> edge "Requests the reports" "JSON/HTTPS · /api"
 
         gateway -> msUsuarios "Routes /api/auth and /api/usuarios" "JSON/HTTP"
@@ -392,7 +392,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
         viewsAdministracion -> uiComponentsAdministracion "Composes the screen with"
         viewsAdministracion -> stateAdministracion "Reads and updates"
         viewsAdministracion -> apiClientAdministracion "Requests data"
-        apiClientAdministracion -> edge "Manages courts and bookings" "JSON/HTTPS · /api"
+        apiClientAdministracion -> edge "Manages courts, bookings, and users" "JSON/HTTPS · /api"
 
         // ===================================================================
         //  Relationships — component level (mf-reportes)
