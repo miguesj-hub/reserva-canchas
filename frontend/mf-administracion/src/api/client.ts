@@ -178,3 +178,17 @@ export function listarReservas(filtros: {
 export function cancelarReserva(id: number): Promise<Reserva> {
   return api<Reserva>(`/reservas/${id}/cancelacion`, { method: 'POST' });
 }
+
+// --- Reportes (solo lo que el panel necesita) -------------------------------
+
+export type ResumenReportes = {
+  reservas: { total: number };
+  ocupacion: { canchaId: number; canchaNombre: string; porcentaje: number }[];
+  cancelaciones: { total: number };
+  demanda: { mayorDemanda: { canchaNombre: string; reservas: number } | null };
+};
+
+/** Los cuatro indicadores del día en curso, para el panel (R-005). */
+export function resumenDelDia(dia: string): Promise<ResumenReportes> {
+  return api<ResumenReportes>(`/reportes/resumen?desde=${dia}&hasta=${dia}`);
+}

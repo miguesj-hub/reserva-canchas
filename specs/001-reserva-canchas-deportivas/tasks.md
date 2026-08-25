@@ -225,23 +225,23 @@ datos consistentes con las reservas registradas. Cubre §7.4.
 **Independent Test**: Elegir un rango, verificar los cuatro indicadores contra un conteo manual del
 listado global, cancelar una reserva del rango y ver reflejarse el cambio. Es el escenario V4.
 
-- [ ] T103 [P] [US3] Crear el modelo de dominio en `backend/ms-reportes/src/main/java/com/ups/reservacanchas/reportes/domain/`: `PeriodSummary`, `OccupancyReport`, `DemandRanking` y `CancellationReport`, sin anotaciones
-- [ ] T104 [P] [US3] Crear `domain/exception/UpstreamUnavailableException.java` e `InvalidDateRangeException.java`
-- [ ] T105 [P] [US3] Crear los `record` de `dto/` de `ms-reportes` según `contracts/reportes.yaml`: `ReservasPorPeriodo`, `OcupacionCancha`, `Cancelaciones`, `RankingDemanda`, `Resumen`, `ErrorResponse`
-- [ ] T106 [US3] Crear `application/port/in/ReportUseCase.java` y los puertos de salida `application/port/out/BookingsClientPort.java` y `CourtsClientPort.java`
-- [ ] T107 [US3] Implementar en `application/service/ReportService.java` los indicadores 1 y 3: reservas por cancha y por deporte contando `CONFIRMADA` y `FINALIZADA` (FR-038), y cancelaciones por fecha de cancelación (FR-040)
-- [ ] T108 [US3] Implementar en `backend/ms-reportes/src/main/java/com/ups/reservacanchas/reportes/application/service/ReportService.java` el indicador 2: ocupación por cancha como horas reservadas sobre horas del horario de atención en los días del rango, incluyendo las canchas sin reservas con 0% (FR-039)
-- [ ] T109 [US3] Implementar en `backend/ms-reportes/src/main/java/com/ups/reservacanchas/reportes/application/service/ReportService.java` el indicador 4: **ranking de demanda** con todas las canchas ordenadas de mayor a menor, incluidas las de cero, señalando los extremos de mayor y menor demanda (FR-041)
-- [ ] T110 [P] [US3] Escribir `ReportServiceTest.java` con ambos puertos mockeados: los cuatro indicadores sobre un conjunto conocido, el rango sin datos (FR-044) y la exclusión de las canceladas del conteo de reservas
-- [ ] T111 [US3] Implementar `adapter/out/client/BookingsClientAdapter.java` y `CourtsClientAdapter.java` con `RestClient` hacia `ms-reservas` y `ms-canchas` — **sin base de datos, sin JPA, sin Flyway** (Principio IV)
-- [ ] T112 [US3] Implementar `adapter/in/web/ReportController.java` con las cinco rutas de `contracts/reportes.yaml`, restringidas a `ADMINISTRADOR` (FR-043)
-- [ ] T113 [P] [US3] Implementar `adapter/in/web/ErrorHandler.java` de `ms-reportes`: 400 para rango invertido, 403 para rol insuficiente y 503 para servicio origen caído
-- [ ] T114 [US3] Añadir el servicio `ms-reportes` a `docker-compose.yml` **sin credencial de base**, con las URLs de `ms-reservas` y `ms-canchas` y `depends_on` de ambos
-- [ ] T115 [US3] Conectar `frontend/mf-reportes/src/pages/ReportesYEstadisticas.tsx`: eliminar los cuatro arreglos fijos `metricas`, `reservasPorDeporte`, `ocupacionPorCancha` y `rankingDemanda`, y cargarlos de `/api/reportes/**` con el rango elegido
-- [ ] T116 [US3] Añadir a `ReportesYEstadisticas.tsx` el selector de rango de fechas y el estado vacío cuando el rango no tiene datos (FR-044)
-- [ ] T117 [US3] Aceptar la prop `sesion` en `frontend/mf-reportes/src/App.tsx`
-- [ ] T118 [US3] Reconducir `frontend/mf-administracion/src/pages/Panel.tsx`: alimentar las cuatro tarjetas de `GET /api/reportes/resumen` acotado al día en curso, y **retirar las comparaciones inventadas** `'+12% vs ayer'`, `'+2% vs promedio'` y `'Horario Pico'`, que no son ninguno de los cuatro indicadores (R-005)
-- [ ] T119 [P] [US3] Actualizar `informe/secciones/07-resultados.tex` con los indicadores ya demostrables (compuerta 8)
+- [X] T103 [P] [US3] Crear el modelo de dominio en `backend/ms-reportes/src/main/java/com/ups/reservacanchas/reportes/domain/`: `PeriodSummary`, `OccupancyReport`, `DemandRanking` y `CancellationReport`, sin anotaciones
+- [X] T104 [P] [US3] Crear `domain/exception/UpstreamUnavailableException.java` e `InvalidDateRangeException.java`
+- [X] T105 [P] [US3] Crear los `record` de `dto/` de `ms-reportes` según `contracts/reportes.yaml`: `ReservasPorPeriodo`, `OcupacionCancha`, `Cancelaciones`, `RankingDemanda`, `Resumen`, `ErrorResponse`
+- [X] T106 [US3] Crear `application/port/in/ReportUseCase.java` y los puertos de salida `application/port/out/BookingsClientPort.java` y `CourtsClientPort.java`
+- [X] T107 [US3] Implementar en `application/service/ReportService.java` los indicadores 1 y 3: reservas por cancha y por deporte contando `CONFIRMADA` y `FINALIZADA` (FR-038), y cancelaciones por fecha de cancelación (FR-040)
+- [X] T108 [US3] Implementar en `backend/ms-reportes/src/main/java/com/ups/reservacanchas/reportes/application/service/ReportService.java` el indicador 2: ocupación por cancha como horas reservadas sobre horas del horario de atención en los días del rango, incluyendo las canchas sin reservas con 0% (FR-039)
+- [X] T109 [US3] Implementar en `backend/ms-reportes/src/main/java/com/ups/reservacanchas/reportes/application/service/ReportService.java` el indicador 4: **ranking de demanda** con todas las canchas ordenadas de mayor a menor, incluidas las de cero, señalando los extremos de mayor y menor demanda (FR-041)
+- [X] T110 [P] [US3] Escribir `ReportServiceTest.java` con ambos puertos mockeados: los cuatro indicadores sobre un conjunto conocido, el rango sin datos (FR-044) y la exclusión de las canceladas del conteo de reservas
+- [X] T111 [US3] Implementar `adapter/out/client/BookingsClientAdapter.java` y `CourtsClientAdapter.java` con `RestClient` hacia `ms-reservas` y `ms-canchas` — **sin base de datos, sin JPA, sin Flyway** (Principio IV)
+- [X] T112 [US3] Implementar `adapter/in/web/ReportController.java` con las cinco rutas de `contracts/reportes.yaml`, restringidas a `ADMINISTRADOR` (FR-043)
+- [X] T113 [P] [US3] Implementar `adapter/in/web/ErrorHandler.java` de `ms-reportes`: 400 para rango invertido, 403 para rol insuficiente y 503 para servicio origen caído
+- [X] T114 [US3] Añadir el servicio `ms-reportes` a `docker-compose.yml` **sin credencial de base**, con las URLs de `ms-reservas` y `ms-canchas` y `depends_on` de ambos
+- [X] T115 [US3] Conectar `frontend/mf-reportes/src/pages/ReportesYEstadisticas.tsx`: eliminar los cuatro arreglos fijos `metricas`, `reservasPorDeporte`, `ocupacionPorCancha` y `rankingDemanda`, y cargarlos de `/api/reportes/**` con el rango elegido
+- [X] T116 [US3] Añadir a `ReportesYEstadisticas.tsx` el selector de rango de fechas y el estado vacío cuando el rango no tiene datos (FR-044)
+- [X] T117 [US3] Aceptar la prop `sesion` en `frontend/mf-reportes/src/App.tsx`
+- [X] T118 [US3] Reconducir `frontend/mf-administracion/src/pages/Panel.tsx`: alimentar las cuatro tarjetas de `GET /api/reportes/resumen` acotado al día en curso, y **retirar las comparaciones inventadas** `'+12% vs ayer'`, `'+2% vs promedio'` y `'Horario Pico'`, que no son ninguno de los cuatro indicadores (R-005)
+- [X] T119 [P] [US3] Actualizar `informe/secciones/07-resultados.tex` con los indicadores ya demostrables (compuerta 8)
 
 **Checkpoint**: US1, US2 y US3 funcionan de forma independiente. Escenario V4 del quickstart en verde.
 

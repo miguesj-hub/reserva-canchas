@@ -137,6 +137,33 @@ services:
       retries: 12
       start_period: 45s
 
+  ms-reportes:
+    container_name: rc-ms-reportes
+    build: ./backend/ms-reportes
+    restart: unless-stopped
+    networks: [backend]
+    environment:
+      # SIN credencial de base, y sin DB_URL: este servicio no tiene base. Su
+      # pom.xml no trae JPA, ni Flyway, ni el driver de PostgreSQL, así que no
+      # podría conectarse aunque alguien le pasara una credencial (Principio IV).
+      MS_RESERVAS_URL: http://ms-reservas:8083
+      MS_CANCHAS_URL: http://ms-canchas:8082
+    ports:
+      - "${MS_REPORTES_PORT:-8084}:8084"
+    depends_on:
+      # Sin sus dos orígenes no puede calcular nada; arrancar antes solo
+      # adelantaría el momento de devolver 503.
+      ms-reservas:
+        condition: service_healthy
+      ms-canchas:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8084/actuator/health | grep -q UP"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 45s
+
   gateway:
     container_name: rc-gateway
     build: ./backend/api-gateway
@@ -155,6 +182,8 @@ services:
       ms-canchas:
         condition: service_healthy
       ms-reservas:
+        condition: service_healthy
+      ms-reportes:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/actuator/health | grep -q UP"]
