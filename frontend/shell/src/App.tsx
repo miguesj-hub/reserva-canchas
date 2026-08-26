@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ErrorBoundary } from './ErrorBoundary';
 import { AuthProvider, useAuth } from './auth/AuthContext';
+import { InactivityGuard } from './auth/InactivityGuard';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 import { RoleRoute, HOME_BY_ROLE } from './auth/RoleRoute';
 import Login from './pages/Login';
@@ -40,6 +41,7 @@ function AppLayout() {
 
   return (
     <main>
+      <InactivityGuard />
       <Routes>
         <Route
           path="/"

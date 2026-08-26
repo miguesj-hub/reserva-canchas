@@ -1,39 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 import type { Sesion } from '../tipos';
-import { CurtainTransition } from './CurtainTransition';
 
-/** Debe coincidir con --curtain-duration / DURACION_MS de CurtainTransition. */
-const DURACION_ENTRADA_MS = 800;
+/** Debe coincidir con la duración total del keyframe curtain-sweep en App.css. */
+const DURACION_MS = 800;
 
-/**
- * Cortina de entrada: cuando se llega aquí desde otro remote (mf-reservas o
- * mf-reportes, vía el swap de Module Federation del shell), CurtainTransition
- * no tiene "contenido anterior" que animar — nace ya en la ruta de destino.
- * Este overlay reproduce el mismo gesto una vez, al montar, para que la
- * transición se sienta igual sin importar de qué sección se venga.
- */
-function CortinaDeEntrada() {
-  const [activa, setActiva] = useState(true);
-
-  useEffect(() => {
-    const t = setTimeout(() => setActiva(false), DURACION_ENTRADA_MS);
-    return () => clearTimeout(t);
-  }, []);
-
-  if (!activa) return null;
-
-  return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 z-[60]">
-      <div className="curtain-panel" />
-    </div>
-  );
-}
-
-// Rutas absolutas a propósito: este remote siempre se monta bajo
-// /administracion (lo fija el shell). Con rutas relativas como "reservas",
-// al hacer clic estando ya en /administracion/reservas, React Router las
-// resuelve contra la ruta actual y genera /administracion/reservas/reservas.
+// Rutas absolutas a propósito: este remote siempre se monta bajo /reportes
+// (lo fija el shell), y estos enlaces vuelven a las páginas de
+// mf-administracion. Mismo menú que ese remote, con "Reportes" activo aquí.
 const navItems = [
   { to: '/administracion', label: 'Dashboard', icon: 'dashboard', end: true },
   { to: '/administracion/reservas', label: 'Reservas', icon: 'event_available', end: false },
@@ -66,6 +40,7 @@ function NavItems({ onNavigate }: { onNavigate?: () => void }) {
       <li>
         <NavLink
           to="/reportes"
+          onClick={onNavigate}
           className={({ isActive }) =>
             `flex items-center gap-3 px-4 py-3 rounded-lg font-label-md text-label-md transition-all ${
               isActive
@@ -73,7 +48,6 @@ function NavItems({ onNavigate }: { onNavigate?: () => void }) {
                 : 'text-on-primary-container/70 hover:bg-secondary-container/20 hover:text-on-primary-container'
             }`
           }
-          onClick={onNavigate}
         >
           <span className="material-symbols-outlined">assessment</span>
           Reportes
@@ -83,8 +57,8 @@ function NavItems({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-// Mismas clases que el bloque inferior de mf-reservas (vista Usuario), para
-// que Perfil + Cerrar Sesión se vean idénticos en los tres microfrontends.
+// Mismas clases que en mf-administracion y mf-reservas, para que Perfil +
+// Cerrar Sesión se vean idénticos en los tres microfrontends.
 const bottomLinkClasses = ({ isActive }: { isActive: boolean }) =>
   `flex items-center space-x-3 px-4 py-3 rounded-lg font-label-md text-label-md transition-all duration-150 ${
     isActive
@@ -121,16 +95,38 @@ function BottomMenu({
   );
 }
 
+/**
+ * Cortina de entrada: mf-reportes es un remote aparte que el shell carga vía
+ * Module Federation (no una navegación interna con Outlet, como en
+ * mf-reservas/mf-administracion), así que no hay location.pathname que
+ * observar aquí — el gesto se reproduce una vez, al montar, para que llegar
+ * a Reportes se sienta igual que moverse entre las demás secciones del menú.
+ */
+function CortinaDeEntrada() {
+  const [activa, setActiva] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setActiva(false), DURACION_MS);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (!activa) return null;
+
+  return (
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-[60]">
+      <div className="curtain-panel" />
+    </div>
+  );
+}
+
 export function Layout({
-  sesion,
   onLogout,
+  children,
 }: {
   sesion?: Sesion | null;
   onLogout?: () => void;
+  children: ReactNode;
 }) {
-  // No se muestra: la etiqueta del sidebar es el rol ("Administración"), no
-  // el nombre de la persona — igual en los tres remotes del panel de admin.
-  void sesion;
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -205,8 +201,10 @@ export function Layout({
           </div>
         </header>
 
-        <CurtainTransition />
-        <CortinaDeEntrada />
+        <div className="relative min-h-full">
+          {children}
+          <CortinaDeEntrada />
+        </div>
       </div>
     </div>
   );

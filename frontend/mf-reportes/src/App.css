@@ -136,3 +136,24 @@ body {
   direction: ltr;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Cortina de entrada al llegar a Reportes (Layout.tsx, CortinaDeEntrada). Un
+   panel sólido sube desde abajo, cubre toda la pantalla y sigue subiendo
+   hasta salir por arriba — el mismo gesto que en mf-reservas y
+   mf-administracion, para que la transición se vea igual sin importar el rol. */
+:root {
+  --curtain-duration: 800ms;
+}
+
+.curtain-panel {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--color-primary-container), var(--color-secondary));
+  animation: curtain-sweep var(--curtain-duration) ease-in-out both;
+}
+
+@keyframes curtain-sweep {
+  0%   { transform: translateY(100%); }
+  50%  { transform: translateY(0%); }
+  100% { transform: translateY(-100%); }
+}
