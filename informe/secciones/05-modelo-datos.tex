@@ -14,12 +14,25 @@
 \subsection{Estrategia de persistencia}
 \label{sec:estrategia-datos}
 
-\instruccion{Explica el reparto: qué base pertenece a qué servicio y qué
-principio se sigue. Si se optó por una sola instancia de PostgreSQL con
-varias bases en lugar de varias instancias, dilo aquí y justifícalo — es una
-pregunta previsible en la defensa.}
+La persistencia se organiza según la responsabilidad de cada microservicio.
+ms-usuarios administra usuarios\_db, ms-canchas administra canchas\_db y
+ms-reservas administra reservas\_db. Cada servicio accede únicamente a la base
+de datos que le corresponde y no consulta directamente las tablas administradas
+por otros microservicios.
 
-\ph{Una base por microservicio: qué implica y cómo se garantiza.}
+Las tres bases de datos se alojan en una misma instancia de PostgreSQL, pero se
+mantienen separadas mediante bases independientes y credenciales propias para cada
+servicio. De esta manera, se conserva la separación de los datos sin utilizar una
+instancia distinta de PostgreSQL por microservicio, lo que simplifica la
+infraestructura necesaria para el entorno del proyecto. Como consecuencia, una
+falla en la instancia de PostgreSQL puede afectar a los tres servicios que dependen
+de ella.
+
+Los esquemas de usuarios\_db, canchas\_db y reservas\_db se gestionan mediante
+Flyway dentro de sus respectivos microservicios. Esto permite que cada servicio
+mantenga sus propias migraciones y cambios de estructura. ms-reportes no dispone
+de una base de datos, ya que obtiene la información necesaria mediante las APIs de
+ms-reservas y ms-canchas.
 
 \begin{table}[H]
   \centering
@@ -29,9 +42,12 @@ pregunta previsible en la defensa.}
     \toprule
     \textbf{Base} & \textbf{Servicio dueño} & \textbf{Contenido} \\
     \midrule
-    \id{usuarios\_db} & \id{ms-usuarios} & \ph{...} \\
-    \id{canchas\_db}  & \id{ms-canchas}  & \ph{...} \\
-    \id{reservas\_db} & \id{ms-reservas} & \ph{...} \\
+
+    usuarios\_db & ms-usuarios & Usuarios, credenciales, roles y estado de las cuentas. \\
+    canchas\_db & ms-canchas & Canchas, deportes, horarios de atención y bloqueos de mantenimiento. \\
+    reservas\_db & ms-reservas & Reservas, estados y parámetros de configuración relacionados con 
+    el proceso de reserva. \\
+
     \bottomrule
   \end{tabular}
 \end{table}
@@ -53,19 +69,118 @@ evalúa.}
 \subsection{Diccionario de datos}
 \label{sec:diccionario}
 
-\instruccion{Una tabla por entidad. No hace falta repetir todos los tipos
-SQL: basta el campo, su tipo lógico y qué significa. Los tipos exactos están
-en los scripts del anexo.}
+El diccionario de datos se organiza según las entidades que forman parte de cada
+base de datos. En usuarios\_db se encuentra la entidad usuario; canchas\_db
+contiene cancha y bloqueo\_mantenimiento; y reservas\_db contiene reserva y
+configuracion. Para cada entidad se muestran sus campos, el tipo lógico del dato
+y la información que representa. Los tipos SQL y las restricciones específicas
+se encuentran definidos en las migraciones de Flyway de cada microservicio.
+
+\paragraph{Base usuarios\_db.}
 
 \begin{table}[H]
   \centering
-  \caption{Entidad \id{reservas}.}
-  \label{tab:dic-reservas}
+  \caption{Entidad usuario.}
+  \label{tab:dic-usuario}
   \begin{tabular}{L{3.4cm} L{3.2cm} L{6.6cm}}
     \toprule
-    \textbf{Campo} & \textbf{Tipo} & \textbf{Descripción} \\
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Descripción} \\
     \midrule
-    \ph{...} & \ph{...} & \ph{...} \\
+
+    id & Identificador & Identificador único del usuario. \\
+    username & Texto & Nombre utilizado para identificar la cuenta del usuario. \\
+    nombre & Texto & Nombre del usuario registrado en el sistema. \\
+    password\_hash & Texto & Hash de la contraseña utilizada para autenticar al usuario. \\
+    rol & Enumeración & Rol asignado al usuario: USUARIO\_FINAL o ADMINISTRADOR. \\
+    activo & Booleano & Indica si la cuenta del usuario se encuentra activa. \\
+    creado\_en & Fecha y hora & Fecha y hora en la que se creó la cuenta. \\
+
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\paragraph{Base canchas\_db.}
+
+\begin{table}[H]
+  \centering
+  \caption{Entidad cancha.}
+  \label{tab:dic-cancha}
+  \begin{tabular}{L{3.4cm} L{3.2cm} L{6.6cm}}
+    \toprule
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Descripción} \\
+    \midrule
+
+    id & Identificador & Identificador único de la cancha. \\
+    nombre & Texto & Nombre asignado a la cancha. \\
+    deporte & Enumeración & Tipo de deporte asociado a la cancha: PADEL, TENIS o BASQUET. \\
+    hora\_apertura & Hora & Hora desde la que la cancha se encuentra disponible para su uso. \\
+    hora\_cierre & Hora & Hora hasta la que la cancha se encuentra disponible para su uso. \\
+    activa & Booleano & Indica si la cancha se encuentra activa dentro del sistema. \\
+
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+  \centering
+  \caption{Entidad bloqueo\_mantenimiento.}
+  \label{tab:dic-bloqueo}
+  \begin{tabular}{L{3.4cm} L{3.2cm} L{6.6cm}}
+    \toprule
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Descripción} \\
+    \midrule
+
+    id & Identificador & Identificador único del bloqueo de mantenimiento. \\
+    cancha\_id & Identificador & Identifica la cancha sobre la que se aplica el bloqueo. \\
+    desde & Fecha y hora & Fecha y hora en la que inicia el bloqueo. \\
+    hasta & Fecha y hora & Fecha y hora en la que finaliza el bloqueo. \\
+    motivo & Texto opcional & Motivo asociado al bloqueo de mantenimiento. \\
+
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\paragraph{Base reservas\_db.}
+
+\begin{table}[H]
+  \centering
+  \caption{Entidad reserva.}
+  \label{tab:dic-reserva}
+  \begin{tabular}{L{3.4cm} L{3.2cm} L{6.6cm}}
+    \toprule
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Descripción} \\
+    \midrule
+
+    id & Identificador & Identificador único de la reserva. \\
+    cancha\_id & Identificador & Identifica la cancha asociada a la reserva. \\
+    usuario\_id & Identificador & Identifica al usuario que realiza la reserva. \\
+    fecha & Fecha & Fecha para la que se realiza la reserva. \\
+    hora\_inicio & Hora & Hora de inicio del bloque reservado. \\
+    hora\_fin & Hora & Hora de finalización del bloque reservado. \\
+    estado & Enumeración & Estado de la reserva: CONFIRMADA, CANCELADA o FINALIZADA. \\
+    creada\_en & Fecha y hora & Fecha y hora en la que se registró la reserva. \\
+    cancelada\_en & Fecha y hora opcional & Fecha y hora en la que se canceló la reserva, cuando corresponde. \\
+
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+  \centering
+  \caption{Entidad configuracion.}
+  \label{tab:dic-configuracion}
+  \begin{tabular}{L{3.4cm} L{3.2cm} L{6.6cm}}
+    \toprule
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Descripción} \\
+    \midrule
+
+    clave & Texto & Nombre del parámetro de configuración. \\
+    valor & Texto & Valor asociado al parámetro de configuración. \\
+
     \bottomrule
   \end{tabular}
 \end{table}
