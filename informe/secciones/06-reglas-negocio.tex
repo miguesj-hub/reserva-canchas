@@ -28,14 +28,14 @@ no. Esta tabla es la que se mira para puntuar este criterio.}
     \toprule
     \textbf{ID} & \textbf{Descripción} & \textbf{Implementación} \\
     \midrule
-    \textbf{RN-01}\label{rn:01} & \ph{Bloques horarios predefinidos} & \ph{...} \\
-    \textbf{RN-02}\label{rn:02} & \ph{No se permite solapamiento}    & \ph{...} \\
-    \textbf{RN-03}\label{rn:03} & \ph{Permisos de cancelación}       & \ph{...} \\
-    \textbf{RN-04}\label{rn:04} & \ph{No se cancelan reservas pasadas} & \ph{...} \\
-    \textbf{RN-05}\label{rn:05} & \ph{Cancelar libera el bloque}     & \ph{...} \\
-    \textbf{RN-06}\label{rn:06} & \ph{Límite de reservas activas}    & \ph{...} \\
-    \textbf{RN-07}\label{rn:07} & \ph{Solo el administrador gestiona canchas} & \ph{...} \\
-    \textbf{RN-08}\label{rn:08} & \ph{Estados de una reserva}        & \ph{...} \\
+    \textbf{RN-01}\label{rn:01} & Una reserva se hace sobre una cancha, una fecha y un bloque horario predefinido de una hora. & \id{ms-reservas}: \id{BookingService.crear}, sobre el objeto de valor \id{TimeSlot}. Prueba: \id{BookingServiceCreacionTest}. \\
+    \textbf{RN-02}\label{rn:02} & No pueden existir dos reservas confirmadas solapadas sobre la misma cancha, ni siquiera bajo peticiones concurrentes. & Doble mecanismo: comprobación previa en \id{BookingService.crear} y restricción \id{EXCLUDE} en \id{reservas\_db} (\cref{sec:solapamiento}). Pruebas: \id{BookingServiceCreacionTest} y \id{ConcurrenciaReservaIT}. \\
+    \textbf{RN-03}\label{rn:03} & El usuario final cancela solo sus reservas; el administrador, cualquiera. & \id{ms-reservas}: \id{BookingService.cancelar}, sobre el rol recibido en \id{X-User-Role}. Prueba: \id{BookingServiceCancelacionTest}. \\
+    \textbf{RN-04}\label{rn:04} & No se cancela una reserva cuya hora de inicio ya ocurrió, tampoco siendo administrador. & \id{ms-reservas}: \id{Booking.sePuedeCancelarEn}, invocado desde \id{BookingService.cancelar}. Prueba: \id{BookingServiceCancelacionTest}. \\
+    \textbf{RN-05}\label{rn:05} & Cancelar pasa la reserva a \id{CANCELADA} y libera su bloque, sin borrar la fila. & \id{ms-reservas}: \id{Booking.cancelar}. El bloque se libera porque la restricción \id{EXCLUDE} solo alcanza a las confirmadas. Prueba: \id{BookingServiceCancelacionTest}. \\
+    \textbf{RN-06}\label{rn:06} & Un usuario final no supera un tope configurable de reservas activas (3 por defecto). & \id{ms-reservas}: \id{BookingService.verificarTope}, con el valor leído de la tabla \id{configuracion} por \id{ConfigurationRepositoryPort}. Prueba: \id{BookingServiceCreacionTest}. \\
+    \textbf{RN-07}\label{rn:07} & Solo el administrador gestiona el catálogo de canchas y sus horarios. & \id{ms-canchas}: \id{CourtService}. En esta iteración solo está construido el lado de lectura, abierto a ambos roles; la escritura restringida llega con la historia US2. \\
+    \textbf{RN-08}\label{rn:08} & Una reserva está \id{CONFIRMADA}, \id{CANCELADA} o \id{FINALIZADA} (\cref{sec:estados-reserva}). & \id{ms-reservas}: el constructor de \id{Booking} fija \id{CONFIRMADA} al nacer y \id{Booking.estadoVigente} deriva \id{FINALIZADA}. Prueba: ambos \id{BookingService*Test}. \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -49,14 +49,94 @@ se resuelve y por qué ahí. Si la validación está en la base de datos y no en
 el servicio, explica el razonamiento: es un argumento de concurrencia, no de
 comodidad.}
 
-\ph{Mecanismo elegido para \rn{02} y por qué resiste peticiones
-concurrentes sobre el mismo bloque.}
+El problema no es detectar un solapamiento, que es trivial, sino detectarlo
+cuando dos personas reservan \emph{a la vez}. Una comprobación en el servicio
+—leer las reservas de esa cancha y ese día, ver que el bloque está libre,
+insertar— tiene una ventana entre la lectura y la escritura. Si dos peticiones
+la atraviesan simultáneamente, ambas leen un bloque libre y ambas insertan: la
+regla se viola sin que ningún \id{if} haya fallado.
+
+Por eso \rn{02} se sostiene sobre \textbf{dos} mecanismos, y no por
+redundancia:
+
+\begin{enumerate}
+  \item \textbf{Comprobación previa en \id{BookingService}}, que cubre el caso
+        normal y es la que produce un mensaje útil: «el bloque 19:00--20:00 de
+        la cancha 3 ya está reservado».
+  \item \textbf{Una restricción de exclusión en PostgreSQL}, que cubre el caso
+        que la primera no puede cubrir. Es el motor quien serializa, y lo hace
+        sobre el índice, no sobre el código de la aplicación.
+\end{enumerate}
+
+\begin{lstlisting}[language=SQL,caption={Restricción que implementa \rn{02}, en \id{V1\_\_reservas.sql}.},label={lst:exclude}]
+ALTER TABLE reserva ADD CONSTRAINT reserva_sin_solape
+    EXCLUDE USING gist (
+        cancha_id WITH =,
+        tsrange(fecha + hora_inicio, fecha + hora_fin, '[)') WITH &&
+    ) WHERE (estado = 'CONFIRMADA');
+\end{lstlisting}
+
+Tres detalles de esa definición no son negociables:
+
+\begin{itemize}
+  \item \id{WHERE (estado = 'CONFIRMADA')} hace que solo las confirmadas
+        compitan por el bloque. Es lo que permite que cancelar libere el
+        horario (\rn{05}) sin borrar la fila, conservando la traza que pide
+        \rn{08} y el dato que necesita el reporte de cancelaciones.
+  \item \id{'[)'} —inicio incluido, fin excluido— evita que una reserva de
+        10:00--11:00 bloquee la de 11:00--12:00. Sin esto, los bloques
+        contiguos dejarían de poder reservarse.
+  \item El \id{tsrange} se construye sobre \id{fecha + hora\_inicio} porque esa
+        expresión es inmutable y por tanto indexable; con una variante con zona
+        horaria, la creación del índice falla.
+\end{itemize}
+
+La restricción exige la extensión \id{btree\_gist}, que se instala en
+\id{reservas\_db} al inicializar el volumen: un índice GiST no sabe comparar un
+\id{bigint} con \id{=} sin ella.
+
+Cuando la restricción salta, PostgreSQL devuelve una violación de integridad.
+\id{BookingRepositoryAdapter} la captura y la traduce a
+\id{SlotAlreadyBookedException}, la misma excepción que lanza la comprobación
+previa. El dominio nunca ve una excepción de base de datos —lo que violaría la
+regla de dependencia hexagonal— y el cliente recibe el mismo \textbf{409} con
+el mismo cuerpo por los dos caminos, sin poder distinguirlos.
+
+La prueba \id{ConcurrenciaReservaIT} lanza dos hilos retenidos en una barrera
+que reservan el mismo bloque al soltarse, contra PostgreSQL real, y comprueba
+que exactamente uno confirma. Se repite diez veces, que es lo que pide el
+criterio \textsf{SC-004}.
 
 \subsection{Estados de una reserva}
 \label{sec:estados-reserva}
 
-\ph{Los tres estados de \rn{08} y las transiciones permitidas entre ellos.
-Un diagrama de estados pequeño comunica esto mejor que un párrafo.}
+Una reserva nace \id{CONFIRMADA} y no hay forma de crearla en otro estado: el
+constructor de \id{Booking} que usa el caso de uso no admite el estado como
+parámetro. Desde ahí solo salen dos caminos, y ambos son terminales:
+
+\begin{center}
+\begin{tabular}{L{3.4cm} C{1cm} L{3.4cm} L{5cm}}
+  \toprule
+  \textbf{Desde} & & \textbf{Hasta} & \textbf{Qué la provoca} \\
+  \midrule
+  \id{CONFIRMADA} & $\rightarrow$ & \id{CANCELADA}  & Una acción del dueño o del administrador, sujeta a \rn{03} y \rn{04}. \\
+  \id{CONFIRMADA} & $\rightarrow$ & \id{FINALIZADA} & El paso del tiempo: la hora de fin del bloque ya ocurrió. \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+La segunda transición merece una explicación, porque no la produce ninguna
+acción de usuario. \id{FINALIZADA} \textbf{no se persiste nunca}: se deriva al
+leer, comparando la hora de fin con el instante actual
+(\id{Booking.estadoVigente}). La alternativa —un proceso periódico que recorra
+la tabla marcando filas— tiene un modo de fallo que esta no tiene: si el
+proceso no corre, el estado queda desactualizado y una reserva terminada sigue
+contando como activa para \rn{06}. Derivándolo, eso es imposible por
+construcción.
+
+De ahí se siguen dos consecuencias que las pruebas fijan: una reserva ya
+terminada no cuenta como activa para el tope de \rn{06}, y no se puede
+cancelar (\textsf{FR-028}).
 
 \subsection{Traducción de reglas a respuestas HTTP}
 \label{sec:errores}
@@ -66,15 +146,35 @@ más de lo que parece: un 500 genérico ante una reserva duplicada es un
 defecto, y un 409 con un mensaje claro es lo que permite que la interfaz
 reaccione bien.}
 
+La traducción ocurre en un único punto por servicio, la clase \id{ErrorHandler}
+de \id{adapter/in/web/}. Las excepciones de \id{domain/exception/} no conocen
+\id{HttpStatus} ni nada de \id{org.springframework.web}: si lo conocieran, el
+núcleo de negocio dependería del protocolo por el que se le habla, que es justo
+lo que la regla de dependencia hexagonal prohíbe.
+
+La distinción entre \textbf{409} y \textbf{422} es deliberada y no cosmética.
+Un 409 es un conflicto con el estado actual que \emph{puede desaparecer solo}:
+el bloque puede liberarse si alguien cancela. Un 422 es una petición que no va
+a funcionar por reintentarla: la cancha está inactiva o el bloque no existe en
+su horario. La pantalla reacciona distinto a cada uno —el primero invita a
+reintentar, el segundo a elegir otra cosa— y por eso no puede recibir el mismo
+código.
+
 \begin{table}[H]
   \centering
   \caption{Correspondencia entre violación de regla y respuesta HTTP.}
   \label{tab:errores}
   \begin{tabular}{C{1.6cm} C{2.4cm} L{8.6cm}}
     \toprule
-    \textbf{Regla} & \textbf{HTTP} & \textbf{Código de error y significado} \\
+    \textbf{Regla} & \textbf{HTTP} & \textbf{Excepción de dominio y significado} \\
     \midrule
-    \ph{...} & \ph{...} & \ph{...} \\
+    \rn{02} & \textbf{409} & \id{SlotAlreadyBookedException} — el bloque ya tiene una reserva confirmada. Llega por la comprobación previa o por la restricción \id{EXCLUDE}, con idéntico cuerpo. \\
+    \rn{06} & \textbf{409} & \id{ActiveBookingLimitExceededException} — el usuario alcanzó el tope de reservas activas. \\
+    \rn{04} & \textbf{409} & \id{PastBookingCancellationException} — la hora de inicio ya ocurrió. \\
+    \rn{03} & \textbf{403} & \id{ForbiddenOperationException} — un usuario final intenta cancelar una reserva ajena, o un administrador intenta crear una reserva (\textsf{FR-018}). \\
+    --      & \textbf{404} & \id{BookingNotFoundException} o \id{CourtNotFoundException} — el recurso no existe. \\
+    --      & \textbf{422} & \id{CourtNotBookableException} — la cancha existe pero no admite la reserva: está inactiva, el bloque cae fuera de su horario, o la fecha ya pasó. \\
+    --      & \textbf{400} & Violación de \id{jakarta.validation} o valor fuera de una enumeración cerrada. \\
     \bottomrule
   \end{tabular}
 \end{table}

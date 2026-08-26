@@ -1,133 +1,45 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import {
+  ApiError,
+  cargarResumen,
+  type Deporte,
+  type OcupacionCancha,
+  type Resumen,
+} from '../api/client';
+import type { PropsDeRemote } from '../tipos';
 
-type Metrica = {
-  titulo: string;
-  valor: string;
-  variacion: string;
-  icono: string;
-  colorFondo: string;
-  colorTexto: string;
+const ETIQUETA_DEPORTE: Record<Deporte, string> = {
+  PADEL: 'Pádel',
+  TENIS: 'Tenis',
+  BASQUET: 'Básquet',
 };
 
-const metricas: Metrica[] = [
-  {
-    titulo: 'Total Reservas',
-    valor: '1,248',
-    variacion: '+12.5% vs mes anterior',
-    icono: 'event_note',
-    colorFondo: 'bg-secondary-container/20',
-    colorTexto: 'text-secondary',
-  },
-  {
-    titulo: 'Ocupación Promedio',
-    valor: '78%',
-    variacion: '+5.2% vs mes anterior',
-    icono: 'pie_chart',
-    colorFondo: 'bg-success/20',
-    colorTexto: 'text-success',
-  },
-  {
-    titulo: 'Cancelaciones',
-    valor: '42',
-    variacion: '+2.1% vs mes anterior',
-    icono: 'cancel',
-    colorFondo: 'bg-error/20',
-    colorTexto: 'text-error',
-  },
-];
-
-type BarraDeporte = {
-  deporte: string;
-  reservas: number;
-  alturaPct: number;
-  color: string;
+const ICONO_DEPORTE: Record<Deporte, string> = {
+  PADEL: 'sports_tennis',
+  TENIS: 'sports_tennis',
+  BASQUET: 'sports_basketball',
 };
 
-const reservasPorDeporte: BarraDeporte[] = [
-  { deporte: 'Pádel', reservas: 425, alturaPct: 85, color: 'bg-secondary' },
-  { deporte: 'Tenis', reservas: 300, alturaPct: 60, color: 'bg-secondary-container' },
-  { deporte: 'Fútbol', reservas: 200, alturaPct: 40, color: 'bg-inverse-primary' },
-  { deporte: 'Básquet', reservas: 125, alturaPct: 25, color: 'bg-outline-variant' },
-];
-
-type OcupacionCancha = {
-  cancha: string;
-  porcentaje: number;
-  color: string;
+/** Colores de barra por deporte, para que las tres vistas se lean igual. */
+const COLOR_DEPORTE: Record<Deporte, string> = {
+  PADEL: 'bg-secondary',
+  TENIS: 'bg-secondary-container',
+  BASQUET: 'bg-inverse-primary',
 };
 
-const ocupacionPorCancha: OcupacionCancha[] = [
-  { cancha: 'Cancha Pádel 1 (Cristal)', porcentaje: 92, color: 'bg-secondary' },
-  { cancha: 'Cancha Pádel 2', porcentaje: 85, color: 'bg-secondary' },
-  { cancha: 'Cancha Tenis Principal', porcentaje: 78, color: 'bg-secondary-container' },
-  { cancha: 'Cancha Fútbol 5', porcentaje: 65, color: 'bg-inverse-primary' },
-  { cancha: 'Cancha Tenis 2', porcentaje: 45, color: 'bg-outline-variant' },
-];
+function iso(fecha: Date): string {
+  // A mano y no con toISOString(): esa convierte a UTC y en husos al oeste
+  // devuelve el día anterior.
+  return `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${String(
+    fecha.getDate(),
+  ).padStart(2, '0')}`;
+}
 
-type FilaRanking = {
-  cancha: string;
-  deporte: string;
-  icono: string;
-  colorIcono: string;
-  colorFondoIcono: string;
-  reservas: number;
-  ingresos: string;
-  estado: 'Alta Demanda' | 'Estable';
-};
-
-const rankingDemanda: FilaRanking[] = [
-  {
-    cancha: 'Pádel 1 (Cristal)',
-    deporte: 'Pádel',
-    icono: 'sports_tennis',
-    colorIcono: 'text-secondary',
-    colorFondoIcono: 'bg-secondary/10',
-    reservas: 185,
-    ingresos: '$3,700',
-    estado: 'Alta Demanda',
-  },
-  {
-    cancha: 'Pádel 2',
-    deporte: 'Pádel',
-    icono: 'sports_tennis',
-    colorIcono: 'text-secondary',
-    colorFondoIcono: 'bg-secondary/10',
-    reservas: 162,
-    ingresos: '$3,240',
-    estado: 'Alta Demanda',
-  },
-  {
-    cancha: 'Tenis Principal',
-    deporte: 'Tenis',
-    icono: 'sports_tennis',
-    colorIcono: 'text-secondary-container',
-    colorFondoIcono: 'bg-secondary-container/10',
-    reservas: 145,
-    ingresos: '$2,900',
-    estado: 'Estable',
-  },
-  {
-    cancha: 'Fútbol 5 (Sintética)',
-    deporte: 'Fútbol',
-    icono: 'sports_soccer',
-    colorIcono: 'text-on-surface-variant',
-    colorFondoIcono: 'bg-inverse-primary/20',
-    reservas: 98,
-    ingresos: '$3,920',
-    estado: 'Estable',
-  },
-];
-
-function EstadoBadge({ estado }: { estado: FilaRanking['estado'] }) {
-  const clases =
-    estado === 'Alta Demanda' ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning';
-  return (
-    <span
-      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ${clases}`}
-    >
-      {estado}
-    </span>
-  );
+function haceDias(dias: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() - dias);
+  return iso(d);
 }
 
 function SideNavBar({ onLogout }: { onLogout?: () => void }) {
@@ -256,214 +168,312 @@ function TopNavBar() {
     </header>
   );
 }
+/** Una tarjeta de indicador. Sin "variación vs mes anterior": no es ninguno de
+ *  los cuatro indicadores de §3.3.5 y no hay dato con el que calcularla. */
+function Metrica({
+  titulo,
+  valor,
+  sufijo,
+  detalle,
+  icono,
+  colorFondo,
+  colorTexto,
+}: {
+  titulo: string;
+  valor: string | number;
+  sufijo?: string;
+  detalle?: string;
+  icono: string;
+  colorFondo: string;
+  colorTexto: string;
+}) {
+  return (
+    <div className="bg-surface rounded-xl p-6 shadow-sm border border-border-subtle/50">
+      <div className="flex justify-between items-start mb-3">
+        <p className="font-label-sm text-label-sm text-text-muted uppercase tracking-wider">
+          {titulo}
+        </p>
+        <div className={`p-2 rounded-lg ${colorFondo} ${colorTexto}`}>
+          <span className="material-symbols-outlined text-[22px]">{icono}</span>
+        </div>
+      </div>
+      <h3 className="font-display text-[32px] font-extrabold text-text-primary leading-none">
+        {valor}
+        {sufijo && <span className="text-xl text-text-muted ml-1">{sufijo}</span>}
+      </h3>
+      {detalle && <p className="font-label-sm text-label-sm text-text-muted mt-2">{detalle}</p>}
+    </div>
+  );
+}
 
-export default function ReportesYEstadisticas({ onLogout }: { onLogout?: () => void }) {
+export default function ReportesYEstadisticas({ sesion, onLogout }: PropsDeRemote) {
+  void sesion;
+  const [desde, setDesde] = useState(haceDias(30));
+  const [hasta, setHasta] = useState(iso(new Date()));
+  const [datos, setDatos] = useState<Resumen | null>(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const cargar = useCallback(() => {
+    setCargando(true);
+    setError(null);
+    cargarResumen(desde, hasta)
+      .then(setDatos)
+      .catch((e) => {
+        setDatos(null);
+        // El 400 del rango invertido y el 503 del origen caído llegan con su
+        // motivo: se muestran tal cual, no se sustituyen por ceros que
+        // parecerían datos reales.
+        setError(e instanceof ApiError ? e.message : 'No se pudieron cargar los indicadores.');
+      })
+      .finally(() => setCargando(false));
+  }, [desde, hasta]);
+
+  useEffect(cargar, [cargar]);
+
+  const ocupacionMedia = useMemo(() => {
+    if (!datos || datos.ocupacion.length === 0) return 0;
+    const suma = datos.ocupacion.reduce((acc, o) => acc + o.porcentaje, 0);
+    return Math.round((suma / datos.ocupacion.length) * 10) / 10;
+  }, [datos]);
+
+  const maxReservasDeporte = useMemo(
+    () => Math.max(1, ...(datos?.reservas.porDeporte.map((d) => d.reservas) ?? [1])),
+    [datos],
+  );
+
+  const ocupacionOrdenada: OcupacionCancha[] = useMemo(
+    () => [...(datos?.ocupacion ?? [])].sort((a, b) => b.porcentaje - a.porcentaje),
+    [datos],
+  );
+
+  // FR-044: un rango sin datos no es un error, es una respuesta. Se distingue
+  // de "no pude preguntar", que llega como error y se muestra aparte.
+  const sinDatos =
+    datos !== null && datos.reservas.total === 0 && datos.cancelaciones.total === 0;
+
   return (
     <div className="bg-background text-text-primary font-body-md antialiased flex">
       <SideNavBar onLogout={onLogout} />
-      <TopNavBar />
 
-      <main className="flex-1 w-full md:ml-64 min-h-screen p-4 md:p-8 lg:p-container-margin max-w-[1200px] mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+      <main className="flex-1 md:ml-64 min-h-screen">
+        <TopNavBar />
+        <div className="p-container-margin space-y-section-gap">
+        <header className="flex flex-col lg:flex-row justify-between lg:items-end gap-4">
           <div>
-            <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">
-              Reportes de Actividad
-            </h1>
-            <p className="text-text-muted font-body-md text-body-md mt-1">
-              Análisis de rendimiento y ocupación del club.
+            <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-1">
+              Reportes y Estadísticas
+            </h2>
+            <p className="font-body-md text-body-md text-text-muted">
+              Los cuatro indicadores de uso del club, sobre el rango que elijas.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 bg-surface p-1 rounded-lg border border-border-subtle shadow-sm w-full md:w-auto overflow-x-auto">
+          <div className="flex flex-wrap items-end gap-3 bg-surface p-3 rounded-xl border border-border-subtle shadow-sm">
+            <label className="block">
+              <span className="font-label-sm text-label-sm text-text-muted">Desde</span>
+              <input
+                type="date"
+                value={desde}
+                max={hasta}
+                onChange={(e) => setDesde(e.target.value)}
+                className="mt-1 block px-3 py-2 border border-border-subtle rounded-lg font-body-md text-sm"
+              />
+            </label>
+            <label className="block">
+              <span className="font-label-sm text-label-sm text-text-muted">Hasta</span>
+              <input
+                type="date"
+                value={hasta}
+                min={desde}
+                onChange={(e) => setHasta(e.target.value)}
+                className="mt-1 block px-3 py-2 border border-border-subtle rounded-lg font-body-md text-sm"
+              />
+            </label>
             <button
               type="button"
-              className="px-4 py-2 rounded-md font-label-md text-label-md text-text-muted hover:bg-surface-container transition-colors whitespace-nowrap"
+              onClick={cargar}
+              className="px-4 py-2 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md"
             >
-              Hoy
-            </button>
-            <button
-              type="button"
-              className="px-4 py-2 rounded-md font-label-md text-label-md text-text-muted hover:bg-surface-container transition-colors whitespace-nowrap"
-            >
-              Esta Semana
-            </button>
-            <button
-              type="button"
-              className="px-4 py-2 rounded-md font-label-md text-label-md bg-primary-container text-on-primary-container shadow-sm whitespace-nowrap"
-            >
-              Este Mes
-            </button>
-            <div className="w-px h-6 bg-border-subtle mx-2 hidden md:block" />
-            <button
-              type="button"
-              className="flex items-center gap-2 px-4 py-2 rounded-md font-label-md text-label-md border border-border-subtle hover:bg-surface-container transition-colors whitespace-nowrap"
-            >
-              <span className="material-symbols-outlined text-[18px]">calendar_month</span>
-              Personalizado
+              Actualizar
             </button>
           </div>
-        </div>
+        </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-section-gap">
-          {metricas.map((metrica) => (
-            <div
-              key={metrica.titulo}
-              className="bg-surface rounded-xl p-6 border border-border-subtle shadow-[0px_4px_20px_rgba(15,23,42,0.05)] relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300"
-            >
-              <div className="flex justify-between items-start mb-4 relative z-10">
-                <div>
-                  <p className="text-text-muted font-label-md text-label-md uppercase tracking-wider">
-                    {metrica.titulo}
-                  </p>
-                  <h3 className="font-display text-display text-primary mt-1">{metrica.valor}</h3>
-                </div>
-                <div
-                  className={`w-12 h-12 rounded-full flex items-center justify-center ${metrica.colorFondo} ${metrica.colorTexto}`}
-                >
-                  <span className="material-symbols-outlined">{metrica.icono}</span>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 text-success font-label-sm text-label-sm relative z-10">
-                <span className="material-symbols-outlined text-[16px]">trending_up</span>
-                <span>{metrica.variacion}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+        {error && (
+          <p
+            role="alert"
+            className="font-label-md text-label-md text-error bg-error/10 border border-error rounded-lg px-4 py-3"
+          >
+            {error}
+          </p>
+        )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-section-gap">
-          <div className="bg-surface rounded-xl p-6 border border-border-subtle shadow-[0px_4px_20px_rgba(15,23,42,0.05)]">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="font-headline-sm text-headline-sm text-primary">
-                Reservas por Deporte
-              </h3>
-              <button type="button" className="text-text-muted hover:text-primary transition-colors">
-                <span className="material-symbols-outlined">more_vert</span>
-              </button>
-            </div>
+        {cargando && (
+          <p className="font-body-md text-body-md text-text-muted py-16 text-center">
+            Calculando indicadores…
+          </p>
+        )}
 
-            <div className="h-64 flex items-end justify-between gap-2 md:gap-4 relative pt-4">
-              <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-8 z-0 border-b border-border-subtle">
-                <div className="w-full border-t border-dashed border-border-subtle h-0" />
-                <div className="w-full border-t border-dashed border-border-subtle h-0" />
-                <div className="w-full border-t border-dashed border-border-subtle h-0" />
-                <div className="w-full border-t border-dashed border-border-subtle h-0" />
-              </div>
-              <div className="absolute left-0 inset-y-0 flex flex-col justify-between text-label-sm text-text-muted pb-8 -ml-2 text-right pointer-events-none">
-                <span>500</span>
-                <span>375</span>
-                <span>250</span>
-                <span>125</span>
-                <span>0</span>
-              </div>
+        {!cargando && datos && sinDatos && (
+          <section className="flex flex-col items-center justify-center py-20 px-4 text-center border-2 border-dashed border-border-subtle rounded-xl bg-surface-container-low/50">
+            <span className="material-symbols-outlined text-[64px] text-text-muted mb-4">
+              query_stats
+            </span>
+            <h3 className="font-headline-md text-headline-md text-primary mb-2">
+              Sin actividad en este rango
+            </h3>
+            <p className="font-body-md text-body-md text-text-muted max-w-md">
+              No hubo reservas ni cancelaciones entre el {datos.reservas.desde} y el{' '}
+              {datos.reservas.hasta}. Prueba con un rango más amplio.
+            </p>
+          </section>
+        )}
 
-              {reservasPorDeporte.map((barra, i) => (
-                <div
-                  key={barra.deporte}
-                  className={`flex flex-col items-center flex-1 z-10 group ${i === 0 ? 'pl-8' : ''}`}
-                >
-                  <div
-                    className={`w-full ${barra.color} rounded-t-md relative overflow-hidden hover:brightness-110 transition-all cursor-pointer`}
-                    style={{ height: `${barra.alturaPct}%` }}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                    <div className="opacity-0 group-hover:opacity-100 absolute -top-10 left-1/2 -translate-x-1/2 bg-inverse-surface text-on-tertiary text-label-sm px-2 py-1 rounded shadow-lg transition-opacity whitespace-nowrap pointer-events-none z-20">
-                      {barra.reservas} Reservas
+        {!cargando && datos && !sinDatos && (
+          <>
+            {/* --- Indicadores 1, 2 y 3 en tarjetas --- */}
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <Metrica
+                titulo="Total reservas"
+                valor={datos.reservas.total}
+                detalle="Confirmadas y finalizadas del rango"
+                icono="event_note"
+                colorFondo="bg-secondary-container/20"
+                colorTexto="text-secondary"
+              />
+              <Metrica
+                titulo="Ocupación media"
+                valor={ocupacionMedia}
+                sufijo="%"
+                detalle="Horas reservadas sobre horario de atención"
+                icono="pie_chart"
+                colorFondo="bg-success/20"
+                colorTexto="text-success"
+              />
+              <Metrica
+                titulo="Cancelaciones"
+                valor={datos.cancelaciones.total}
+                detalle="Por fecha de cancelación"
+                icono="event_busy"
+                colorFondo="bg-error/20"
+                colorTexto="text-error"
+              />
+              <Metrica
+                titulo="Mayor demanda"
+                valor={datos.demanda.mayorDemanda?.canchaNombre ?? '—'}
+                detalle={
+                  datos.demanda.mayorDemanda
+                    ? `${datos.demanda.mayorDemanda.reservas} reservas en el rango`
+                    : undefined
+                }
+                icono="trophy"
+                colorFondo="bg-secondary/10"
+                colorTexto="text-secondary"
+              />
+            </section>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* --- Indicador 1: reservas por deporte --- */}
+              <section className="bg-surface rounded-xl p-6 shadow-sm border border-border-subtle/50">
+                <h3 className="font-headline-sm text-headline-sm text-primary mb-6">
+                  Reservas por deporte
+                </h3>
+                <div className="flex items-end justify-around h-56 gap-4">
+                  {datos.reservas.porDeporte.map((d) => (
+                    <div key={d.deporte} className="flex flex-col items-center flex-1 h-full justify-end">
+                      <span className="font-label-md text-label-md text-text-primary mb-1">
+                        {d.reservas}
+                      </span>
+                      <div
+                        className={`w-full rounded-t-lg ${COLOR_DEPORTE[d.deporte]}`}
+                        style={{ height: `${(d.reservas / maxReservasDeporte) * 100}%`, minHeight: '4px' }}
+                      />
+                      <span className="font-label-sm text-label-sm text-text-muted mt-2">
+                        {ETIQUETA_DEPORTE[d.deporte]}
+                      </span>
                     </div>
-                  </div>
-                  <span className="mt-2 font-label-sm text-label-sm text-text-muted">
-                    {barra.deporte}
-                  </span>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </section>
 
-          <div className="bg-surface rounded-xl p-6 border border-border-subtle shadow-[0px_4px_20px_rgba(15,23,42,0.05)]">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="font-headline-sm text-headline-sm text-primary">
-                Ocupación por Cancha
-              </h3>
-              <button type="button" className="text-text-muted hover:text-primary transition-colors">
-                <span className="material-symbols-outlined">more_vert</span>
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              {ocupacionPorCancha.map((item) => (
-                <div key={item.cancha}>
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="font-label-md text-label-md text-primary">{item.cancha}</span>
-                    <span className="font-label-md text-label-md text-primary">
-                      {item.porcentaje}%
-                    </span>
-                  </div>
-                  <div className="w-full bg-surface-container rounded-full h-2.5">
-                    <div
-                      className={`${item.color} h-2.5 rounded-full`}
-                      style={{ width: `${item.porcentaje}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-surface rounded-xl border border-border-subtle shadow-[0px_4px_20px_rgba(15,23,42,0.05)] overflow-hidden mb-section-gap">
-          <div className="p-6 border-b border-border-subtle flex justify-between items-center bg-surface-bright/50">
-            <h3 className="font-headline-sm text-headline-sm text-primary">Ranking de Demanda</h3>
-            <button
-              type="button"
-              className="flex items-center gap-2 text-secondary font-label-md text-label-md hover:underline"
-            >
-              Ver todos
-              <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-            </button>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-surface-container-low text-text-muted font-label-sm text-label-sm uppercase tracking-wider">
-                  <th className="p-4 font-semibold border-b border-border-subtle">Cancha</th>
-                  <th className="p-4 font-semibold border-b border-border-subtle">Deporte</th>
-                  <th className="p-4 font-semibold border-b border-border-subtle text-right">
-                    Reservas
-                  </th>
-                  <th className="p-4 font-semibold border-b border-border-subtle text-right">
-                    Ingresos Estimados
-                  </th>
-                  <th className="p-4 font-semibold border-b border-border-subtle text-center">
-                    Estado
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border-subtle">
-                {rankingDemanda.map((fila) => (
-                  <tr key={fila.cancha} className="hover:bg-surface-container-low/50 transition-colors">
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-10 h-10 rounded-md flex items-center justify-center ${fila.colorFondoIcono} ${fila.colorIcono}`}
-                        >
-                          <span className="material-symbols-outlined">{fila.icono}</span>
-                        </div>
-                        <span className="font-label-md text-label-md text-primary">
-                          {fila.cancha}
+              {/* --- Indicador 2: ocupación por cancha --- */}
+              <section className="bg-surface rounded-xl p-6 shadow-sm border border-border-subtle/50">
+                <h3 className="font-headline-sm text-headline-sm text-primary mb-6">
+                  Ocupación por cancha
+                </h3>
+                <div className="space-y-4">
+                  {ocupacionOrdenada.map((o) => (
+                    <div key={o.canchaId}>
+                      <div className="flex justify-between font-label-md text-label-md mb-1">
+                        <span className="text-text-primary">{o.canchaNombre}</span>
+                        <span className="text-text-muted">
+                          {o.porcentaje}% · {o.horasReservadas} de {o.horasDisponibles} h
                         </span>
                       </div>
-                    </td>
-                    <td className="p-4 text-text-muted">{fila.deporte}</td>
-                    <td className="p-4 text-right font-label-md text-label-md">{fila.reservas}</td>
-                    <td className="p-4 text-right font-body-md text-body-md">{fila.ingresos}</td>
-                    <td className="p-4 text-center">
-                      <EstadoBadge estado={fila.estado} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      <div className="w-full bg-surface-container-high rounded-full h-2">
+                        <div
+                          className={`h-2 rounded-full ${COLOR_DEPORTE[o.deporte]}`}
+                          style={{ width: `${Math.min(100, o.porcentaje)}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </div>
+
+            {/* --- Indicador 4: ranking de demanda --- */}
+            <section className="bg-surface rounded-xl shadow-sm border border-border-subtle/50 overflow-hidden">
+              <div className="p-6 border-b border-border-subtle flex flex-wrap justify-between items-center gap-2">
+                <h3 className="font-headline-sm text-headline-sm text-primary">
+                  Ranking de demanda
+                </h3>
+                {datos.demanda.menorDemanda && (
+                  <p className="font-label-sm text-label-sm text-text-muted">
+                    Menor demanda: <strong>{datos.demanda.menorDemanda.canchaNombre}</strong> (
+                    {datos.demanda.menorDemanda.reservas} reservas)
+                  </p>
+                )}
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-surface-container-low border-b border-border-subtle">
+                      <th className="p-4 font-label-md text-label-md text-text-muted">#</th>
+                      <th className="p-4 font-label-md text-label-md text-text-muted">Cancha</th>
+                      <th className="p-4 font-label-md text-label-md text-text-muted">Deporte</th>
+                      <th className="p-4 font-label-md text-label-md text-text-muted text-right">
+                        Reservas
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border-subtle">
+                    {datos.demanda.ranking.map((fila) => (
+                      <tr key={fila.canchaId} className="hover:bg-surface-container-low/50">
+                        <td className="p-4 font-label-md text-label-md text-text-muted">
+                          {fila.posicion}
+                        </td>
+                        <td className="p-4 font-body-md text-body-md text-text-primary flex items-center gap-2">
+                          <span className="material-symbols-outlined text-[20px] text-secondary">
+                            {ICONO_DEPORTE[fila.deporte]}
+                          </span>
+                          {fila.canchaNombre}
+                        </td>
+                        <td className="p-4 font-body-md text-body-md text-text-muted">
+                          {ETIQUETA_DEPORTE[fila.deporte]}
+                        </td>
+                        <td className="p-4 font-body-md text-body-md text-text-primary text-right">
+                          {fila.reservas}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </>
+        )}
         </div>
       </main>
     </div>

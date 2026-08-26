@@ -1,9 +1,9 @@
 import './App.css';
 import ReportesYEstadisticas from './pages/ReportesYEstadisticas';
+import type { PropsDeRemote } from './tipos';
 
-const App = ({ token, onLogout }: { token?: string; onLogout?: () => void }) => {
-  void token;
-  return <ReportesYEstadisticas onLogout={onLogout} />;
-};
+const App = ({ sesion, onLogout }: PropsDeRemote) => (
+  <ReportesYEstadisticas sesion={sesion} onLogout={onLogout} />
+);
 
 export default App;

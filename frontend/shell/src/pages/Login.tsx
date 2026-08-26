@@ -1,27 +1,56 @@
 import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { HOME_BY_ROLE } from '../auth/RoleRoute';
-import { useAuth, type Role } from '../auth/AuthContext';
+import { useAuth } from '../auth/AuthContext';
+import { ApiError } from '../api/client';
+
+type Modo = 'login' | 'registro';
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, registrar } = useAuth();
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const [modo, setModo] = useState<Modo>('login');
   const [username, setUsername] = useState('');
+  const [nombre, setNombre] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  // Si el cliente HTTP cerró la sesión por un 401 —cuenta inactivada mientras
+  // el usuario la tenía abierta— llega aquí el motivo, para no devolverlo a una
+  // pantalla de login sin explicación.
+  const [error, setError] = useState<string | null>(params.get('motivo'));
+  const [enviando, setEnviando] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const ok = login(username, password);
-    if (!ok) {
-      setError('Usuario o contraseña incorrectos.');
-      return;
-    }
+  const esRegistro = modo === 'registro';
+
+  function cambiarModo(nuevo: Modo) {
+    setModo(nuevo);
     setError(null);
-    // El rol recién autenticado no está en el estado de React todavía en
-    // este mismo tick; se relee de localStorage para decidir a dónde ir.
-    const role = localStorage.getItem('reservasport_role') as Role | null;
-    navigate(role ? HOME_BY_ROLE[role] : '/reservas', { replace: true });
+    setPassword('');
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setEnviando(true);
+    setError(null);
+    try {
+      // La sesión que devuelve el backend trae el rol, así que no hace falta
+      // releer localStorage para saber a dónde ir.
+      const sesion = esRegistro
+        ? await registrar(username, nombre, password)
+        : await login(username, password);
+      navigate(HOME_BY_ROLE[sesion.rol], { replace: true });
+    } catch (e) {
+      // El motivo lo dice el servidor: "usuario o contraseña incorrectos",
+      // "la cuenta está inactiva" (FR-005) o "ese usuario ya está registrado"
+      // (FR-002). Repetirlo aquí lo dejaría desincronizado con las reglas.
+      setError(
+        e instanceof ApiError
+          ? e.message
+          : 'No se pudo contactar con el servidor. Inténtalo de nuevo.',
+      );
+    } finally {
+      setEnviando(false);
+    }
   }
 
   return (
@@ -56,6 +85,31 @@ export default function Login() {
         <div className="bg-surface rounded-xl p-8 shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-border-subtle relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1 bg-secondary-container" />
 
+          <div className="flex gap-1 mb-6 p-1 bg-surface-container-low rounded-lg">
+            <button
+              className={`flex-1 py-2 rounded-md font-label-md text-label-md transition-colors ${
+                esRegistro
+                  ? 'text-text-muted hover:text-text-primary'
+                  : 'bg-surface text-primary-container shadow-sm'
+              }`}
+              onClick={() => cambiarModo('login')}
+              type="button"
+            >
+              Iniciar sesión
+            </button>
+            <button
+              className={`flex-1 py-2 rounded-md font-label-md text-label-md transition-colors ${
+                esRegistro
+                  ? 'bg-surface text-primary-container shadow-sm'
+                  : 'text-text-muted hover:text-text-primary'
+              }`}
+              onClick={() => cambiarModo('registro')}
+              type="button"
+            >
+              Crear cuenta
+            </button>
+          </div>
+
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label
@@ -72,8 +126,10 @@ export default function Login() {
                   className="block w-full pl-10 pr-3 py-3 border border-border-subtle rounded-lg font-body-md text-body-md text-text-primary placeholder-text-muted/70 focus:ring-2 focus:ring-secondary-container focus:border-secondary-container transition-colors bg-surface-bright"
                   id="username"
                   name="username"
-                  placeholder="admin o cliente"
+                  placeholder="Tu nombre de usuario"
                   required
+                  minLength={esRegistro ? 3 : undefined}
+                  maxLength={60}
                   type="text"
                   autoComplete="username"
                   value={username}
@@ -81,6 +137,34 @@ export default function Login() {
                 />
               </div>
             </div>
+
+            {esRegistro && (
+              <div>
+                <label
+                  className="block font-label-md text-label-md text-primary-container mb-2"
+                  htmlFor="nombre"
+                >
+                  Nombre completo
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-text-muted">
+                    <span className="material-symbols-outlined text-lg">badge</span>
+                  </div>
+                  <input
+                    className="block w-full pl-10 pr-3 py-3 border border-border-subtle rounded-lg font-body-md text-body-md text-text-primary placeholder-text-muted/70 focus:ring-2 focus:ring-secondary-container focus:border-secondary-container transition-colors bg-surface-bright"
+                    id="nombre"
+                    name="nombre"
+                    placeholder="Cómo quieres que te llamemos"
+                    required
+                    maxLength={120}
+                    type="text"
+                    autoComplete="name"
+                    value={nombre}
+                    onChange={(e) => setNombre(e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
 
             <div>
               <label
@@ -99,34 +183,19 @@ export default function Login() {
                   name="password"
                   placeholder="••••••••"
                   required
+                  minLength={esRegistro ? 6 : undefined}
+                  maxLength={72}
                   type="password"
+                  autoComplete={esRegistro ? 'new-password' : 'current-password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              <div className="flex justify-end mt-2">
-                <a
-                  className="font-label-sm text-label-sm text-secondary-container hover:text-secondary-fixed-variant transition-colors"
-                  href="#"
-                >
-                  ¿Olvidaste tu contraseña?
-                </a>
-              </div>
-            </div>
-
-            <div className="flex items-center">
-              <input
-                className="h-4 w-4 text-secondary-container focus:ring-secondary-container border-border-subtle rounded-sm cursor-pointer"
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-              />
-              <label
-                className="ml-2 block font-body-md text-body-md text-text-primary cursor-pointer"
-                htmlFor="remember-me"
-              >
-                Recordarme
-              </label>
+              {esRegistro && (
+                <p className="font-label-sm text-label-sm text-text-muted mt-2">
+                  Mínimo 6 caracteres.
+                </p>
+              )}
             </div>
 
             {error && (
@@ -139,25 +208,27 @@ export default function Login() {
             )}
 
             <button
-              className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm font-label-md text-label-md text-on-primary bg-primary-container hover:bg-on-primary-fixed-variant focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container transition-all active:scale-[0.98]"
+              className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm font-label-md text-label-md text-on-primary bg-primary-container hover:bg-on-primary-fixed-variant focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
               type="submit"
+              disabled={enviando}
             >
-              Iniciar Sesión
-              <span className="material-symbols-outlined ml-2 text-sm">login</span>
+              {enviando
+                ? 'Enviando…'
+                : esRegistro
+                  ? 'Crear cuenta'
+                  : 'Iniciar Sesión'}
+              <span className="material-symbols-outlined ml-2 text-sm">
+                {esRegistro ? 'person_add' : 'login'}
+              </span>
             </button>
           </form>
 
-          <div className="mt-8 pt-6 border-t border-border-subtle text-center space-y-1">
-            <p className="font-label-sm text-label-sm text-text-muted">
-              Credenciales de prueba
+          {esRegistro && (
+            <p className="mt-6 pt-6 border-t border-border-subtle font-label-sm text-label-sm text-text-muted text-center">
+              Las cuentas nuevas se crean como usuario final. Los administradores
+              los da de alta el club.
             </p>
-            <p className="font-body-md text-body-md text-text-primary">
-              Administrador: <span className="font-semibold">admin / admin</span>
-            </p>
-            <p className="font-body-md text-body-md text-text-primary">
-              Cliente: <span className="font-semibold">cliente / cliente</span>
-            </p>
-          </div>
+          )}
         </div>
       </div>
     </main>

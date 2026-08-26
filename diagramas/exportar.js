@@ -37,18 +37,32 @@ function buscarChrome() {
   return encontrado;
 }
 
-(async () => {
-  // Aviso temprano y claro: sin Lite escuchando, el resto no tiene sentido.
-  try {
-    const r = await fetch(url + '/workspace/diagrams', { redirect: 'follow' });
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-  } catch (e) {
-    throw new Error(
-      'No hay un Structurizr Lite respondiendo en ' + url + ' (' + e.message + ').\n' +
-      'Levántalo apuntando a este directorio, por ejemplo:\n' +
-      '  STRUCTURIZR_WORKSPACE_FILENAME=transitlink \\\n' +
-      '    java -jar structurizr-lite.war ' + path.resolve(outDir) + ' --server.port=8081');
+// La ruta del visor cambió entre versiones: structurizr/structurizr:local
+// sirve en /workspace/1/diagrams, mientras que el structurizr-lite.war antiguo
+// lo hacía en /workspace/diagrams. Se prueban las dos en vez de fijar una, para
+// que el script funcione con cualquiera de los dos visores.
+const RUTAS_VISOR = ['/workspace/1/diagrams', '/workspace/diagrams'];
+
+async function rutaDelVisor() {
+  const fallos = [];
+  for (const ruta of RUTAS_VISOR) {
+    try {
+      const r = await fetch(url + ruta, { redirect: 'follow' });
+      if (r.ok) return ruta;
+      fallos.push(ruta + ' -> HTTP ' + r.status);
+    } catch (e) {
+      fallos.push(ruta + ' -> ' + e.message);
+    }
   }
+  throw new Error(
+    'No hay un Structurizr respondiendo en ' + url + ':\n  ' + fallos.join('\n  ') + '\n' +
+    'Levántalo apuntando a este directorio, por ejemplo:\n' +
+    '  docker run -d -p 8099:8080 -v "$PWD:/usr/local/structurizr" structurizr/structurizr local');
+}
+
+(async () => {
+  // Aviso temprano y claro: sin visor escuchando, el resto no tiene sentido.
+  const rutaVisor = await rutaDelVisor();
 
   const browser = await puppeteer.launch({
     executablePath: buscarChrome(),
@@ -68,14 +82,21 @@ function buscarChrome() {
     const listo = 'typeof structurizr !== "undefined" && structurizr.scripting ' +
                   '&& structurizr.scripting.isDiagramRendered() === true';
 
-    await page.goto(url + '/workspace/diagrams', { waitUntil: 'networkidle0', timeout: 60000 });
+    await page.goto(url + rutaVisor, { waitUntil: 'networkidle0', timeout: 60000 });
     await page.waitForFunction(listo, { timeout: 60000 });
 
     const vistas = await page.evaluate(() => structurizr.scripting.getViews());
     console.log(vistas.length + ' vistas: ' + vistas.map(v => v.key).join(', '));
 
-    for (const vista of vistas) {
-      await page.goto(url + '/workspace/diagrams#' + vista.key, { waitUntil: 'networkidle0', timeout: 60000 });
+    for (const [i, vista] of vistas.entries()) {
+      // El parámetro de consulta fuerza una carga completa del documento. Sin
+      // él, cambiar solo el #hash es una navegación dentro de la misma página:
+      // page.goto vuelve enseguida, isDiagramRendered() sigue siendo cierto
+      // PARA EL DIAGRAMA ANTERIOR, y se guarda ese bajo el nombre del nuevo.
+      // El fallo es silencioso —el archivo se escribe igual— y solo se nota al
+      // mirar el SVG.
+      await page.goto(url + rutaVisor + '?v=' + i + '#' + vista.key,
+                      { waitUntil: 'networkidle0', timeout: 60000 });
       await page.waitForFunction(listo, { timeout: 60000 });
 
       const svg = await page.evaluate(() => structurizr.scripting.exportCurrentDiagramToSVG({ includeMetadata: true }));

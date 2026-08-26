@@ -19,3 +19,40 @@ material-curso/
 # Credenciales locales — nunca versionar (taller §6.2)
 */.env
 material-curso/
+
+# Red de seguridad a nivel de raíz. Cada proyecto Maven y cada paquete npm
+# tiene además su propio .gitignore.
+target/
+**/target/
+*.class
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+
+# Credenciales locales — tampoco en la raíz
+.env
+.env.*
+!.env.example
+
+# Material de referencia del curso — se queda en local, no se versiona.
+Alcance_Funcional_Reserva_Canchas_v2.md
+Spring_Boot_Microservicios.md
+
+# Configuración del IDE, propia de cada máquina.
+.idea/
+
+# Intermedios de LaTeX. El PDF sí se versiona; estos no.
+*.aux
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.tdo
+*.toc
+informe/*.bbl

@@ -1,0 +1,150 @@
+% ---------------------------------------------------------------------------
+%  Diagrama entidad-relación, con la frontera de cada base marcada.
+%
+%  Un solo DER global y no uno por base, a propósito: lo que se evalúa en la
+%  sección 5 es la independencia de datos, y eso solo se ve cuando las tres
+%  bases aparecen juntas y se distingue qué referencias cruzan la frontera y
+%  cuáles no.
+%
+%  Compilar:  pdflatex -output-directory=../figuras modelo-datos.tex
+%  (el PDF resultante es informe/figuras/modelo-datos.pdf)
+% ---------------------------------------------------------------------------
+\documentclass[border=6pt]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{lmodern}
+\usepackage{tikz}
+\usetikzlibrary{positioning, fit, backgrounds, calc}
+
+\definecolor{bordeBase}{HTML}{9AA3AF}
+\definecolor{fondoBase}{HTML}{F3F4F6}
+\definecolor{cabecera}{HTML}{1F3A5F}
+\definecolor{tablaFondo}{HTML}{FFFFFF}
+\definecolor{acento}{HTML}{B45309}
+\definecolor{textoTenue}{HTML}{4B5563}
+
+\begin{document}
+\begin{tikzpicture}[
+    font=\sffamily\footnotesize,
+    tabla/.style={
+      rectangle, draw=cabecera!60, thick, fill=tablaFondo,
+      inner sep=0pt, align=left, text width=52mm, rounded corners=1.5pt},
+    titulo/.style={font=\sffamily\bfseries\small, text=white},
+    fk/.style={-latex, draw=cabecera, thick},
+    logica/.style={-latex, draw=acento, thick, dashed},
+    nota/.style={font=\sffamily\scriptsize\itshape, text=textoTenue, align=center},
+  ]
+
+  % --- Macro para dibujar una tabla: cabecera de color + lista de columnas ---
+  \newcommand{\entidad}[4]{% #1 nodo, #2 posición, #3 nombre, #4 columnas
+    \node[tabla] (#1) #2 {%
+      \begin{minipage}{52mm}
+        \colorbox{cabecera}{\makebox[52mm][l]{\hspace{2mm}\titulostyle{#3}}}\\[1mm]
+        \hspace*{2mm}\begin{minipage}{48mm}#4\end{minipage}\\[1mm]
+      \end{minipage}};}
+  \newcommand{\titulostyle}[1]{\textcolor{white}{\sffamily\bfseries\small #1}}
+  \newcommand{\pk}[1]{\textbf{#1}\,\textcolor{cabecera}{\scriptsize PK}}
+  \newcommand{\uk}[1]{#1\,\textcolor{cabecera}{\scriptsize UQ}}
+  \newcommand{\rf}[1]{#1\,\textcolor{acento}{\scriptsize ref}}
+
+  % ======================= usuarios_db =======================
+  \entidad{usuario}{at (0,0)}{usuario}{%
+    \pk{id} : bigint\\
+    \uk{username} : varchar(60)\\
+    nombre : varchar(120)\\
+    password\_hash : varchar(72)\\
+    rol : varchar(20) \textsc{check}\\
+    activo : boolean\\
+    creado\_en : timestamp}
+
+  % ======================= canchas_db ========================
+  \entidad{cancha}{at (7.4,0)}{cancha}{%
+    \pk{id} : bigint\\
+    nombre : varchar(120)\\
+    deporte : varchar(20) \textsc{check}\\
+    hora\_apertura : time\\
+    hora\_cierre : time \textsc{check}\\
+    activa : boolean}
+
+  \entidad{bloqueo}{at (7.4,-4.6)}{bloqueo\_mantenimiento}{%
+    \pk{id} : bigint\\
+    cancha\_id : bigint \textcolor{cabecera}{\scriptsize FK}\\
+    desde : timestamp\\
+    hasta : timestamp \textsc{check}\\
+    motivo : varchar(200)}
+
+  % ======================= reservas_db =======================
+  \entidad{reserva}{at (14.8,0)}{reserva}{%
+    \pk{id} : bigint\\
+    \rf{cancha\_id} : bigint\\
+    \rf{usuario\_id} : bigint\\
+    fecha : date\\
+    hora\_inicio : time\\
+    hora\_fin : time \textsc{check}\\
+    estado : varchar(20) \textsc{check}\\
+    creada\_en : timestamp\\
+    cancelada\_en : timestamp}
+
+  \entidad{configuracion}{at (14.8,-5.6)}{configuracion}{%
+    \pk{clave} : varchar(60)\\
+    valor : varchar(120)}
+
+  % --------- Fronteras de base de datos ---------
+  \begin{scope}[on background layer]
+    \node[draw=bordeBase, dashed, thick, fill=fondoBase, rounded corners=3pt,
+          fit=(usuario), inner sep=7mm] (bd1) {};
+    \node[draw=bordeBase, dashed, thick, fill=fondoBase, rounded corners=3pt,
+          fit=(cancha)(bloqueo), inner sep=7mm] (bd2) {};
+    \node[draw=bordeBase, dashed, thick, fill=fondoBase, rounded corners=3pt,
+          fit=(reserva)(configuracion), inner sep=7mm] (bd3) {};
+  \end{scope}
+
+  \node[font=\sffamily\bfseries\small, text=textoTenue, above=1mm of bd1.north] {usuarios\_db · ms-usuarios};
+  \node[font=\sffamily\bfseries\small, text=textoTenue, above=1mm of bd2.north] {canchas\_db · ms-canchas};
+  \node[font=\sffamily\bfseries\small, text=textoTenue, above=1mm of bd3.north] {reservas\_db · ms-reservas};
+
+  % --------- Relaciones ---------
+  % Dentro de una base: clave foránea de verdad.
+  \draw[fk] (bloqueo.north) -- node[right=1mm, font=\sffamily\scriptsize] {FK} (cancha.south);
+
+  % Cruzando la frontera: referencia lógica, SIN clave foránea posible.
+  \draw[logica] (reserva.west) to[out=180, in=0]
+    node[above, font=\sffamily\scriptsize, pos=0.5] {cancha\_id}
+    node[below, font=\sffamily\scriptsize, pos=0.5] {(sin FK)} (cancha.east);
+
+  % usuario_id va por debajo de todo, a una altura fija: si se enrutara en
+  % curva libre cruzaría la caja de bloqueos y taparía sus columnas.
+  \coordinate (bajo) at (0, -11.2);
+  \draw[logica] (bd3.south west) -- (bd3.south west |- bajo)
+    -- node[above, font=\sffamily\scriptsize, pos=0.5]
+         {usuario\_id · referencia lógica, sin clave foránea: cruza la frontera de base}
+       (usuario.south |- bajo)
+    -- (usuario.south);
+
+  % --------- Nota de la restricción EXCLUDE ---------
+  \node[nota, align=left, text width=62mm, below=5mm of bd3.south east, anchor=north east] (excl) {%
+    \textcolor{acento}{\textbf{reserva\_sin\_solape}} · \textsc{exclude using gist}\\
+    sobre (cancha\_id, tsrange(fecha + hora, '[)'))\\
+    \textsc{where} estado = 'CONFIRMADA'.\\[0.6mm]
+    Implementa RN-02 también ante peticiones concurrentes:\\
+    es lo que ninguna comprobación previa puede garantizar.};
+  \draw[acento, thick, dotted] (excl.north) -- (excl.north |- bd3.south);
+
+  % --------- Leyenda ---------
+  % Las muestras de línea se dibujan, no se simulan con \rule: así la de
+  % referencia lógica se ve discontinua, que es justo lo que la distingue.
+  \node[anchor=north west, font=\sffamily\scriptsize, text=textoTenue, align=left]
+        at ($(bd1.west |- bajo) + (0,-1.2)$) {%
+    \tikz[baseline=-0.5ex]{\draw[fk] (0,0) -- (0.7,0);}\; clave foránea, dentro de una misma base\\[1mm]
+    \tikz[baseline=-0.5ex]{\draw[logica] (0,0) -- (0.7,0);}\; referencia lógica, cruza la frontera entre bases\\[2mm]
+    \begin{minipage}{112mm}\itshape
+      Las referencias que cruzan la frontera no pueden ser claves foráneas: apuntan a
+      tablas de otra base, a la que esa conexión ni siquiera llega. Las valida
+      \textsc{BookingService} llamando a \textsc{ms-canchas} antes de persistir, y por
+      eso una reserva sobre una cancha inexistente se rechaza con 404 en lugar de
+      quedar registrada.
+    \end{minipage}};
+
+\end{tikzpicture}
+\end{document}

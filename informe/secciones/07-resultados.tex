@@ -17,7 +17,35 @@
 Dos o tres capturas bien elegidas valen más que ocho: la consulta de
 disponibilidad, la reserva y los reportes.}
 
-\ph{Resumen de lo implementado.}
+A la fecha de este informe están construidas y demostrables las cuatro
+historias del alcance:
+
+\begin{itemize}
+  \item \textbf{Reservar y cancelar como usuario final.} Consulta de
+        disponibilidad por cancha y fecha, creación de reserva sobre un bloque
+        libre, listado propio y cancelación que libera el horario.
+  \item \textbf{Gestión del catálogo y cancelación administrativa.} Alta,
+        edición, activación e inactivación de canchas, bloqueos de
+        mantenimiento, listado global de reservas y cancelación de cualquiera.
+  \item \textbf{Los cuatro indicadores de §3.3.5}, sobre el rango que el
+        administrador elija, más un panel acotado al día en curso.
+\end{itemize}
+
+\begin{itemize}
+  \item[] \textbf{Gestión de usuarios.} El administrador lista las cuentas y las
+        activa o inactiva. Una cuenta inactivada deja de entrar de inmediato,
+        incluso si tenía la sesión abierta: el gateway verifica la credencial en
+        cada petición, y el frontend la devuelve al inicio de sesión con el
+        motivo.
+\end{itemize}
+
+Las cuatro historias del alcance están, por tanto, construidas y son
+demostrables por separado.
+
+Toda la infraestructura está en pie: \id{docker compose up} levanta once
+contenedores —edge, cuatro microfrontends, gateway, cuatro microservicios y
+PostgreSQL con sus tres bases aisladas— con datos de prueba y sin ningún paso
+manual.
 
 \subsection{Cumplimiento de los criterios de aceptación}
 \label{sec:cumplimiento}
@@ -35,12 +63,12 @@ cumplido que luego falla en la demo cuesta más que uno declarado pendiente.}
     \toprule
     \textbf{\#} & \textbf{Criterio} & \textbf{Estado} & \textbf{Evidencia} \\
     \midrule
-    \textsf{CA-1}\label{ca:1} & \ph{Consultar, crear y cancelar reservas de las tres canchas} & \ph{...} & \ph{...} \\
-    \textsf{CA-2}\label{ca:2} & \ph{El administrador gestiona el catálogo y cancela cualquier reserva} & \ph{...} & \ph{...} \\
-    \textsf{CA-3}\label{ca:3} & \ph{El sistema impide reservar un bloque ocupado} & \ph{...} & \ph{...} \\
-    \textsf{CA-4}\label{ca:4} & \ph{Los reportes muestran ocupación y reservas por período} & \ph{...} & \ph{...} \\
-    \textsf{CA-5}\label{ca:5} & \ph{Shell y al menos dos remotes integrados con Module Federation} & \ph{...} & \ph{...} \\
-    \textsf{CA-6}\label{ca:6} & \ph{Al menos dos microservicios independientes sobre PostgreSQL} & \ph{...} & \ph{...} \\
+    \textsf{CA-1}\label{ca:1} & Consultar, crear y cancelar reservas de las tres canchas & Cumplido & Escenario V1 del \id{quickstart}; 24 pruebas de \id{BookingService}. \\
+    \textsf{CA-2}\label{ca:2} & El administrador gestiona el catálogo y cancela cualquier reserva & Cumplido & Escenario V3; 13 pruebas de \id{CourtService} y la rama de administrador en \id{BookingServiceCancelacionTest}. \\
+    \textsf{CA-3}\label{ca:3} & El sistema impide reservar un bloque ocupado & Cumplido & Escenario V2, diez repeticiones: siempre un 201 y un 409. \id{ConcurrenciaReservaIT} contra PostgreSQL real (\cref{sec:solapamiento}). \\
+    \textsf{CA-4}\label{ca:4} & Los reportes muestran ocupación y reservas por período & Cumplido & Escenario V4: los cuatro indicadores contrastados contra un conteo manual del listado global del mismo rango. \\
+    \textsf{CA-5}\label{ca:5} & Shell y al menos dos remotes integrados con Module Federation & Cumplido & Tres remotes —reservas, administración y reportes— cargados de forma perezosa por el shell (\cref{v:02}). \\
+    \textsf{CA-6}\label{ca:6} & Al menos dos microservicios independientes sobre PostgreSQL & Cumplido & Tres con base propia y aislada por credenciales, más \id{ms-reportes} sin base (\cref{sec:estrategia-datos}). Las 70 pruebas de los cinco servicios pasan. \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -61,7 +89,15 @@ peticiones va al anexo.}
     \toprule
     \textbf{Regla} & \textbf{Escenario} & \textbf{Resultado} \\
     \midrule
-    \ph{...} & \ph{...} & \ph{...} \\
+    \rn{01} & Reservar cancha 1, mañana, bloque 18:00. & 201, bloque 18:00--19:00 confirmado. \\
+    \rn{02} & Un segundo usuario pide el mismo bloque. & 409 con el motivo en pantalla. \\
+    \rn{02} & Dos peticiones simultáneas, diez repeticiones. & Siempre un 201 y un 409; nunca dos. \\
+    \rn{03} & \id{cliente1} cancela una reserva de \id{cliente2}. & 403. El administrador sobre la misma: 200. \\
+    \rn{04} & Cancelar una reserva ya iniciada. & 409, también siendo administrador. \\
+    \rn{05} & Cancelar una reserva futura y reconsultar. & El bloque vuelve a figurar libre. \\
+    \rn{06} & Crear una cuarta reserva activa con el tope en 3. & 409 indicando el máximo. \\
+    \rn{07} & \id{cliente1} intenta crear una cancha. & 403; el administrador, 201. \\
+    \rn{08} & Listar las reservas propias. & Los tres estados, con \id{FINALIZADA} derivada al leer. \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -73,4 +109,16 @@ peticiones va al anexo.}
 conoce el propio sistema. Omitir una limitación que el evaluador descubre en
 la demo resta el doble.}
 
-\ph{Limitaciones conocidas.}
+\begin{itemize}
+  \item \textbf{No hay paginación en ningún listado.} A escala de un club los
+        conjuntos son pequeños, y añadirla sería complejidad sin criterio de la
+        rúbrica que la respalde.
+  \item \textbf{\id{ms-reportes} agrega en memoria}, no con consultas agregadas.
+        Es el precio de no leer la base de otro servicio
+        (\cref{sec:estrategia-datos}), y es un precio consciente.
+  \item \textbf{Las pruebas de arranque necesitan Docker}, porque levantan un
+        PostgreSQL efímero con Testcontainers. No es una carencia frente a la
+        alternativa —una base instalada en la máquina—, pero sí una dependencia
+        que conviene declarar. Las pruebas de las reglas de negocio, que son las
+        que el Principio~II exige, no necesitan ni Docker ni Spring.
+\end{itemize}

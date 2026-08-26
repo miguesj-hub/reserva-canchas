@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
+import type { Sesion } from '../tipos';
 
 // Rutas absolutas a propósito: este remote siempre se monta bajo
 // /administracion (lo fija el shell). Con rutas relativas como "reservas",
@@ -92,7 +93,13 @@ function BottomMenu({
   );
 }
 
-export function Layout({ onLogout }: { onLogout?: () => void }) {
+export function Layout({
+  sesion,
+  onLogout,
+}: {
+  sesion?: Sesion | null;
+  onLogout?: () => void;
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -103,7 +110,9 @@ export function Layout({ onLogout }: { onLogout?: () => void }) {
           <span className="material-symbols-outlined text-3xl text-secondary-container">sports_tennis</span>
           <div>
             <h1 className="font-headline-md text-headline-md font-bold text-on-primary">ReservaSport</h1>
-            <p className="font-label-sm text-label-sm text-on-primary-container/70">Administración</p>
+            <p className="font-label-sm text-label-sm text-on-primary-container/70">
+              {sesion?.nombre ?? 'Administración'}
+            </p>
           </div>
         </div>
 

@@ -51,8 +51,14 @@ paths:
       summary: Indicador 2 — porcentaje de ocupación por cancha
       description: |
         Implementa FR-039. Horas reservadas sobre horas disponibles del horario
-        de atención de cada cancha en los días del rango. Una cancha inactivada
-        durante parte del rango aporta solo los días en que estuvo activa.
+        de atención de cada cancha en los días del rango.
+
+        El denominador son TODOS los días del rango, sin descontar aquellos en
+        que la cancha estuviera inactiva. Una versión anterior de este contrato
+        pedía descontarlos, pero ni FR-039 ni §3.3.5 lo piden: hacerlo exigiría
+        un histórico de activación que `canchas_db` no guarda, y guardarlo sería
+        alcance nuevo (Principio I). Una cancha inactiva aparece igualmente, con
+        la ocupación que tuvo.
 
         Una cancha sin reservas aparece con 0%, no se omite: es la que el
         ranking necesita en el extremo de menor demanda.

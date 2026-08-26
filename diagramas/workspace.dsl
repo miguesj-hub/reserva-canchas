@@ -97,7 +97,10 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 tags "Microservice"
 
                 // --- Driving adapter (web) --------------------------------
-                userController = component "UserController" "Exposes the registration, login, and user/role management endpoints; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                authController = component "AuthController" "Exposes POST /api/auth/registro and POST /api/auth/login, the only two public routes of the system; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                    tags "Adapter-In"
+                }
+                userController = component "UserController" "Exposes GET /api/usuarios, GET /api/usuarios/{id} and PATCH /api/usuarios/{id}/estado. Separate from AuthController because those are the only two public routes of the system and these require ADMINISTRADOR." "Spring MVC @RestController" {
                     tags "Adapter-In"
                 }
                 errorHandlerUser = component "ErrorHandler" "Translates invalid credentials and conflicts (user already registered) into HTTP status codes." "@RestControllerAdvice" {
@@ -108,7 +111,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 userUseCase = component "UserUseCase" "Input port: registration, authentication, and role management operations, with no dependency on Spring MVC or JPA." "Java interface" {
                     tags "Port"
                 }
-                userService = component "UserService" "Implements the input port: validates credentials and manages the user and role lifecycle." "Spring @Service" {
+                userService = component "UserService" "Implements the input port: validates credentials (FR-003, FR-005) and manages the user lifecycle. Applies FR-048: only an ADMINISTRADOR lists users or changes their state." "Spring @Service" {
                     tags "Application"
                 }
 
@@ -130,7 +133,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 courtController = component "CourtController" "Exposes the endpoints for the court catalog, opening hours, and maintenance blocks; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
                     tags "Adapter-In"
                 }
-                errorHandlerCourt = component "ErrorHandler" "Translates non-existent or inactive courts into HTTP status codes." "@RestControllerAdvice" {
+                errorHandlerCourt = component "ErrorHandler" "Translates domain exceptions into HTTP status codes: 403 for an insufficient role (RN-07), 404 for a missing court or block, 409 for an overlapping maintenance block, 400 for a closing time that is not after the opening one." "@RestControllerAdvice" {
                     tags "Adapter-In"
                 }
 
@@ -138,7 +141,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 courtUseCase = component "CourtUseCase" "Input port: catalog, schedule, and maintenance-block operations, with no dependency on Spring MVC or JPA." "Java interface" {
                     tags "Port"
                 }
-                courtService = component "CourtService" "Implements the input port: applies the catalog rules (court activation, schedule and block validation)." "Spring @Service" {
+                courtService = component "CourtService" "Implements the input port. Applies RN-07: only an ADMINISTRADOR may create, edit, deactivate a court or register maintenance blocks. Reads the role from X-User-Role; it never authenticates." "Spring @Service" {
                     tags "Application"
                 }
 
@@ -302,16 +305,19 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
         bookingRepositoryAdapter -> bookingRepositoryPort "Implements"
         configurationRepositoryAdapter -> configurationRepositoryPort "Implements"
 
-        courtClientAdapter -> msCanchas "Queries the catalog" "JSON/HTTP"
+        courtClientAdapter -> msCanchas "Queries the court (schedule, active state) and its maintenance blocks, to mark blocked slots as unbookable (FR-010)" "JSON/HTTP"
         bookingRepositoryAdapter -> reservasDb "Reads and writes" "JDBC"
         configurationRepositoryAdapter -> reservasDb "Reads" "JDBC"
 
         // ===================================================================
         //  Relationships — component level (ms-usuarios, hexagonal)
         // ===================================================================
-        gateway -> userController "Routes /api/auth and /api/usuarios" "JSON/HTTP"
+        gateway -> authController "Routes /api/auth (public)" "JSON/HTTP"
+        gateway -> userController "Routes /api/usuarios (ADMINISTRADOR only)" "JSON/HTTP"
 
-        userController -> userUseCase "Invokes"
+        authController -> userUseCase "Invokes"
+        authController -> errorHandlerUser "Unhandled exceptions"
+        userController -> userUseCase "Invokes. Passes X-User-Role through; it decides nothing itself"
         userController -> errorHandlerUser "Unhandled exceptions"
         userService -> userUseCase "Implements"
 
@@ -325,7 +331,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
         // ===================================================================
         gateway -> courtController "Routes /api/canchas" "JSON/HTTP"
 
-        courtController -> courtUseCase "Invokes"
+        courtController -> courtUseCase "Invokes. Passes X-User-Role through; it decides nothing itself"
         courtController -> errorHandlerCourt "Unhandled exceptions"
         courtService -> courtUseCase "Implements"
 
@@ -357,6 +363,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
         // ===================================================================
         edge -> authenticationFilter "Routes /api/*" "HTTP"
 
+        authenticationFilter -> msUsuarios "Verifies the Basic credential on every request (POST /api/auth/login). Does not read usuarios_db: it asks its owner." "JSON/HTTP"
         authenticationFilter -> routeConfig "Identity propagated, routing continues"
         authenticationFilter -> errorHandlerGateway "Missing or invalid identity"
 
