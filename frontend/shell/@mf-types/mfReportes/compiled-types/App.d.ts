@@ -1,6 +1,4 @@
 import './App.css';
-declare const App: ({ token, onLogout }: {
-    token?: string;
-    onLogout?: () => void;
-}) => import("react").JSX.Element;
+import type { PropsDeRemote } from './tipos';
+declare const App: ({ sesion, onLogout }: PropsDeRemote) => import("react").JSX.Element;
 export default App;

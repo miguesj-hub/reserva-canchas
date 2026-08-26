@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { NavLink } from 'react-router-dom';
 import {
   ApiError,
   cargarResumen,
@@ -42,132 +41,6 @@ function haceDias(dias: number): string {
   return iso(d);
 }
 
-function SideNavBar({ onLogout }: { onLogout?: () => void }) {
-  // Este remote se muestra dentro de la sección de administración: sus
-  // enlaces apuntan de vuelta a las rutas absolutas de mf-administracion.
-  const items = [
-    { icono: 'dashboard', label: 'Dashboard', to: '/administracion' },
-    { icono: 'event_available', label: 'Reservas', to: '/administracion/reservas' },
-    { icono: 'sports_tennis', label: 'Canchas', to: '/administracion/canchas' },
-    { icono: 'group', label: 'Usuarios', to: '/administracion/usuarios' },
-  ];
-
-  return (
-    <nav className="hidden md:flex bg-primary-container text-on-primary-container font-label-md text-label-md fixed left-0 top-0 h-screen w-64 shadow-lg flex-col p-base space-y-4 z-40">
-      <div className="flex items-center space-x-3 px-4 py-6 border-b border-outline-variant/20 mb-2">
-        <span className="material-symbols-outlined text-3xl text-secondary-container">
-          sports_tennis
-        </span>
-        <div>
-          <h1 className="font-headline-md text-headline-md font-bold text-on-primary">
-            ReservaSport
-          </h1>
-          <p className="font-label-sm text-label-sm text-on-primary-container/70">Administración</p>
-        </div>
-      </div>
-
-      <div className="flex-1 flex flex-col space-y-1 overflow-y-auto px-2">
-        {items.map((item) => (
-          <NavLink
-            key={item.label}
-            to={item.to}
-            end={item.to === '/administracion'}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-lg transition-all group ${
-                isActive
-                  ? 'bg-secondary text-on-secondary font-bold'
-                  : 'text-on-primary-container/70 hover:text-on-primary-container hover:bg-secondary-container/20'
-              }`
-            }
-          >
-            <span className="material-symbols-outlined group-hover:text-secondary transition-colors">
-              {item.icono}
-            </span>
-            {item.label}
-          </NavLink>
-        ))}
-        <NavLink
-          to="/reportes"
-          className={({ isActive }) =>
-            `flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-              isActive
-                ? 'bg-secondary text-on-secondary font-bold'
-                : 'text-on-primary-container/70 hover:text-on-primary-container hover:bg-secondary-container/20'
-            }`
-          }
-        >
-          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
-            assessment
-          </span>
-          Reportes
-        </NavLink>
-      </div>
-
-      <div className="mt-auto px-2 pt-2 border-t border-outline-variant/20 space-y-1">
-        <NavLink
-          to="/perfil"
-          className={({ isActive }) =>
-            `flex items-center space-x-3 px-4 py-3 rounded-lg font-label-md text-label-md transition-all duration-150 ${
-              isActive
-                ? 'bg-secondary text-on-secondary font-bold shadow-sm'
-                : 'text-on-primary-container/70 hover:text-on-primary-container hover:bg-secondary-container/20'
-            }`
-          }
-        >
-          <span className="material-symbols-outlined">person</span>
-          <span>Perfil</span>
-        </NavLink>
-        <button
-          type="button"
-          onClick={onLogout}
-          className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg font-label-md text-label-md text-on-primary-container/70 hover:text-error hover:bg-error/10 transition-all"
-        >
-          <span className="material-symbols-outlined">logout</span>
-          <span>Cerrar Sesión</span>
-        </button>
-      </div>
-    </nav>
-  );
-}
-
-function TopNavBar() {
-  return (
-    <header className="md:hidden bg-surface text-primary font-headline-sm text-headline-sm border-b border-border-subtle shadow-sm sticky top-0 z-50 flex justify-between items-center px-container-margin h-16 w-full">
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          className="text-text-muted hover:bg-surface-container-low transition-colors p-2 rounded-full cursor-pointer active:scale-95 duration-200"
-        >
-          <span className="material-symbols-outlined">menu</span>
-        </button>
-        <span className="font-display text-headline-md font-extrabold text-primary">
-          ReservaSport
-        </span>
-      </div>
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          className="text-text-muted hover:bg-surface-container-low transition-colors p-2 rounded-full cursor-pointer active:scale-95 duration-200"
-        >
-          <span className="material-symbols-outlined">notifications</span>
-        </button>
-        <button
-          type="button"
-          className="text-text-muted hover:bg-surface-container-low transition-colors p-2 rounded-full cursor-pointer active:scale-95 duration-200"
-        >
-          <span className="material-symbols-outlined">settings</span>
-        </button>
-        <div className="w-8 h-8 rounded-full bg-surface-container overflow-hidden ml-2 border border-border-subtle cursor-pointer active:scale-95 duration-200">
-          <img
-            alt="Avatar del usuario"
-            className="w-full h-full object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkNtVLNXKKrGFTeJqvqTQYMxw3vyEjiyvKBhb3JNm3Vb3pqRLDKHaxYDfhgMtezADBmS1e5ZQWE7cBFJubCVJZUFL5mPnug4I4Z9aIBMMPRq0cRtBO7ZYXX1bkGX7-irvi7RMjpPjMtW6HmGm030L0MVAa8GplveJxbUr1_Ork4khEqioNjQPiKJneWupeNZ2R7Al482W1omYHy-iuS4LtV6rqiBMDLDrMXdP-3YtO3s8ZrPTAz-rp"
-          />
-        </div>
-      </div>
-    </header>
-  );
-}
 /** Una tarjeta de indicador. Sin "variación vs mes anterior": no es ninguno de
  *  los cuatro indicadores de §3.3.5 y no hay dato con el que calcularla. */
 function Metrica({
@@ -207,7 +80,10 @@ function Metrica({
 }
 
 export default function ReportesYEstadisticas({ sesion, onLogout }: PropsDeRemote) {
+  // Ninguno de los dos se usa aquí: el Layout que envuelve esta página ya
+  // resuelve el sidebar (con su etiqueta de rol fija) y "Cerrar Sesión".
   void sesion;
+  void onLogout;
   const [desde, setDesde] = useState(haceDias(30));
   const [hasta, setHasta] = useState(iso(new Date()));
   const [datos, setDatos] = useState<Resumen | null>(null);
@@ -253,13 +129,8 @@ export default function ReportesYEstadisticas({ sesion, onLogout }: PropsDeRemot
     datos !== null && datos.reservas.total === 0 && datos.cancelaciones.total === 0;
 
   return (
-    <div className="bg-background text-text-primary font-body-md antialiased flex">
-      <SideNavBar onLogout={onLogout} />
-
-      <main className="flex-1 md:ml-64 min-h-screen">
-        <TopNavBar />
-        <div className="p-container-margin space-y-section-gap">
-        <header className="flex flex-col lg:flex-row justify-between lg:items-end gap-4">
+    <div className="p-container-margin space-y-section-gap">
+      <header className="flex flex-col lg:flex-row justify-between lg:items-end gap-4">
           <div>
             <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-1">
               Reportes y Estadísticas
@@ -474,8 +345,6 @@ export default function ReportesYEstadisticas({ sesion, onLogout }: PropsDeRemot
             </section>
           </>
         )}
-        </div>
-      </main>
     </div>
   );
 }

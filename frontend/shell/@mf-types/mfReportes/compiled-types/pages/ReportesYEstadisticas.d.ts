@@ -1,3 +1,2 @@
-export default function ReportesYEstadisticas({ onLogout }: {
-    onLogout?: () => void;
-}): import("react").JSX.Element;
+import type { PropsDeRemote } from '../tipos';
+export default function ReportesYEstadisticas({ sesion, onLogout }: PropsDeRemote): import("react").JSX.Element;

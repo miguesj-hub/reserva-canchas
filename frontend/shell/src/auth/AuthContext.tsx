@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from 'react';
+import { createContext, useContext, useState, type ReactNode } from 'react';
 import {
   api,
   borrarCredencial,
@@ -50,21 +44,36 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [sesion, setSesion] = useState<Sesion | null>(null);
+/**
+ * Al recargar la página, la sesión se recupera de localStorage de forma
+ * síncrona, en el propio inicializador de useState: ProtectedRoute lee
+ * isAuthenticated en el primer render, antes de que corra ningún efecto, así
+ * que restaurarla en un useEffect llegaría tarde y redirigiría a /login por
+ * una fracción de segundo aunque la sesión sí existiera (visto en producción
+ * como "se cierra sesión sola al refrescar").
+ *
+ * Se exige que estén las dos piezas —identidad y credencial—: sin la
+ * credencial, cada llamada a /api daría 401 y el usuario vería una sesión que
+ * no sirve.
+ */
+function sesionGuardada(): Sesion | null {
+  const guardada = localStorage.getItem(SESION_KEY);
+  if (!guardada || !hayCredencial()) {
+    borrarCredencial();
+    localStorage.removeItem(SESION_KEY);
+    return null;
+  }
+  try {
+    return JSON.parse(guardada) as Sesion;
+  } catch {
+    borrarCredencial();
+    localStorage.removeItem(SESION_KEY);
+    return null;
+  }
+}
 
-  // Al recargar la página, la sesión se recupera de localStorage. Se exige que
-  // estén las dos piezas —identidad y credencial—: sin la credencial, cada
-  // llamada a /api daría 401 y el usuario vería una sesión que no sirve.
-  useEffect(() => {
-    const guardada = localStorage.getItem(SESION_KEY);
-    if (guardada && hayCredencial()) {
-      setSesion(JSON.parse(guardada) as Sesion);
-    } else {
-      borrarCredencial();
-      localStorage.removeItem(SESION_KEY);
-    }
-  }, []);
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [sesion, setSesion] = useState<Sesion | null>(sesionGuardada);
 
   function abrirSesion(usuario: UsuarioResponse, username: string, password: string): Sesion {
     const nueva: Sesion = {

@@ -1,1 +1,2 @@
-export default function NuevaReserva(): import("react").JSX.Element;
+import type { PropsDeRemote } from '../tipos';
+export default function NuevaReserva({ sesion }: PropsDeRemote): import("react").JSX.Element;

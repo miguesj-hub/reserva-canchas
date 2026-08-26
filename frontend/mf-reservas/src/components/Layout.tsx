@@ -1,5 +1,34 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import type { Sesion } from '../tipos';
+import { CurtainTransition } from './CurtainTransition';
+
+/** Debe coincidir con --curtain-duration / DURACION_MS de CurtainTransition. */
+const DURACION_ENTRADA_MS = 800;
+
+/**
+ * Cortina de entrada: cuando se llega aquí desde otro remote (mf-administracion
+ * o mf-reportes, vía el swap de Module Federation del shell), CurtainTransition
+ * no tiene "contenido anterior" que animar — nace ya en la ruta de destino.
+ * Este overlay reproduce el mismo gesto una vez, al montar, para que la
+ * transición se sienta igual sin importar de qué sección se venga.
+ */
+function CortinaDeEntrada() {
+  const [activa, setActiva] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setActiva(false), DURACION_ENTRADA_MS);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (!activa) return null;
+
+  return (
+    <div aria-hidden className="pointer-events-none fixed inset-0 z-[60]">
+      <div className="curtain-panel" />
+    </div>
+  );
+}
 
 // Rutas absolutas a propósito: este remote siempre se monta bajo /reservas
 // (lo fija el shell). Con rutas relativas como "disponibilidad", al hacer
@@ -25,8 +54,11 @@ export function Layout({
   onLogout?: () => void;
 }) {
   return (
-    <div className="bg-background text-text-primary min-h-screen flex">
-      {/* TopNavBar (solo mobile) */}
+    <div className="bg-background text-text-primary min-h-screen flex flex-col md:flex-row">
+      {/* TopNavBar (solo mobile). El contenedor necesita flex-col en mobile:
+          sin esto, este nav (en el flujo normal por ser sticky, no fixed)
+          queda al lado de <main> en fila en vez de apilarse arriba — el
+          sidebar y la barra inferior no sufren porque son fixed. */}
       <nav className="md:hidden sticky top-0 z-50 flex justify-between items-center px-container-margin h-16 w-full bg-surface shadow-sm border-b border-border-subtle">
         <div className="font-display text-headline-md font-extrabold text-primary">ReservaSport</div>
         <NavLink to="/perfil" className="flex items-center">
@@ -45,13 +77,6 @@ export function Layout({
             </p>
           </div>
         </div>
-
-        <NavLink
-          to="/reservas/nueva"
-          className="mx-2 my-2 py-3 bg-secondary text-on-secondary rounded-lg font-bold font-label-md text-center hover:bg-secondary/90 transition-colors shadow-sm"
-        >
-          Nueva Reserva
-        </NavLink>
 
         <div className="flex-grow space-y-1 px-2 mt-2">
           {navItems.map((item) => (
@@ -111,7 +136,8 @@ export function Layout({
 
       {/* Contenido */}
       <main className="flex-1 md:ml-64 overflow-y-auto p-container-margin pb-24 md:pb-container-margin w-full">
-        <Outlet />
+        <CurtainTransition />
+        <CortinaDeEntrada />
       </main>
     </div>
   );

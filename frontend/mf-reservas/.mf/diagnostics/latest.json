@@ -1,0 +1,10 @@
+{
+  "latestErrorEvent": {
+    "code": "TYPE-001",
+    "message": "Failed to generate type declaration. Execute the below cmd to reproduce and fix the error. #TYPE-001\nargs: {\"cmd\":\"/usr/local/bin/node \\\"/Users/pablojara/Documents/UPS/Desarrollo de Aplicaciones Empresariales/Trabajo Final/reserva-canchas/frontend/mf-reservas/node_modules/typescript/bin/tsc\\\" --project \\\"/Users/pablojara/Documents/UPS/Desarrollo de Aplicaciones Empresariales/Trabajo Final/reserva-canchas/frontend/mf-reservas/node_modules/.federation/tsconfig.0e5ff00e422896e80740b7c8b6f3e7d2.json\\\"\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/type#type-001",
+    "args": {
+      "cmd": "/usr/local/bin/node \"/Users/pablojara/Documents/UPS/Desarrollo de Aplicaciones Empresariales/Trabajo Final/reserva-canchas/frontend/mf-reservas/node_modules/typescript/bin/tsc\" --project \"/Users/pablojara/Documents/UPS/Desarrollo de Aplicaciones Empresariales/Trabajo Final/reserva-canchas/frontend/mf-reservas/node_modules/.federation/tsconfig.0e5ff00e422896e80740b7c8b6f3e7d2.json\""
+    },
+    "timestamp": 1787714010656
+  }
+}

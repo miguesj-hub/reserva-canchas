@@ -1,0 +1,339 @@
+{
+  "info": {
+    "name": "Reserva Canchas — API",
+    "description": "Colección generada a partir de los contratos en specs/001-reserva-canchas-deportivas/contracts/. Todas las peticiones pasan por el api-gateway (localhost:8080/api/**), igual que el frontend. Autenticación HTTP Basic salvo /auth/login y /auth/registro.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "basic",
+    "basic": [
+      { "key": "username", "value": "{{username}}", "type": "string" },
+      { "key": "password", "value": "{{password}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api" },
+    { "key": "username", "value": "admin" },
+    { "key": "password", "value": "admin" },
+    { "key": "canchaId", "value": "1" },
+    { "key": "reservaId", "value": "1" },
+    { "key": "usuarioId", "value": "1" },
+    { "key": "bloqueoId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "Registrar usuario",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"nuevo.cliente\",\n  \"nombre\": \"Nuevo Cliente\",\n  \"password\": \"clave123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/registro", "host": ["{{baseUrl}}"], "path": ["auth", "registro"] }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "usuarios",
+      "item": [
+        {
+          "name": "Listar usuarios",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/usuarios", "host": ["{{baseUrl}}"], "path": ["usuarios"] }
+          }
+        },
+        {
+          "name": "Consultar usuario por id",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/usuarios/{{usuarioId}}", "host": ["{{baseUrl}}"], "path": ["usuarios", "{{usuarioId}}"] }
+          }
+        },
+        {
+          "name": "Activar/inactivar usuario",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activo\": false\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/usuarios/{{usuarioId}}/estado", "host": ["{{baseUrl}}"], "path": ["usuarios", "{{usuarioId}}", "estado"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "canchas",
+      "item": [
+        {
+          "name": "Listar canchas (activas)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/canchas?activa=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["canchas"],
+              "query": [
+                { "key": "activa", "value": "true" },
+                { "key": "deporte", "value": "PADEL", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear cancha",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cancha Pádel 3\",\n  \"deporte\": \"PADEL\",\n  \"horaApertura\": \"07:00\",\n  \"horaCierre\": \"22:00\",\n  \"activa\": true\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/canchas", "host": ["{{baseUrl}}"], "path": ["canchas"] }
+          }
+        },
+        {
+          "name": "Consultar cancha por id",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/canchas/{{canchaId}}", "host": ["{{baseUrl}}"], "path": ["canchas", "{{canchaId}}"] }
+          }
+        },
+        {
+          "name": "Editar cancha",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cancha Pádel 3 — Renovada\",\n  \"deporte\": \"PADEL\",\n  \"horaApertura\": \"08:00\",\n  \"horaCierre\": \"23:00\",\n  \"activa\": true\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/canchas/{{canchaId}}", "host": ["{{baseUrl}}"], "path": ["canchas", "{{canchaId}}"] }
+          }
+        },
+        {
+          "name": "Activar/inactivar cancha",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activa\": false\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/canchas/{{canchaId}}/estado", "host": ["{{baseUrl}}"], "path": ["canchas", "{{canchaId}}", "estado"] }
+          }
+        },
+        {
+          "name": "Listar bloqueos de mantenimiento",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/canchas/{{canchaId}}/bloqueos?desde=2026-09-01&hasta=2026-09-30",
+              "host": ["{{baseUrl}}"],
+              "path": ["canchas", "{{canchaId}}", "bloqueos"],
+              "query": [
+                { "key": "desde", "value": "2026-09-01" },
+                { "key": "hasta", "value": "2026-09-30" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Registrar bloqueo de mantenimiento",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"desde\": \"2026-09-15T08:00:00\",\n  \"hasta\": \"2026-09-15T12:00:00\",\n  \"motivo\": \"Mantenimiento de red\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/canchas/{{canchaId}}/bloqueos", "host": ["{{baseUrl}}"], "path": ["canchas", "{{canchaId}}", "bloqueos"] }
+          }
+        },
+        {
+          "name": "Retirar bloqueo de mantenimiento",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/canchas/{{canchaId}}/bloqueos/{{bloqueoId}}", "host": ["{{baseUrl}}"], "path": ["canchas", "{{canchaId}}", "bloqueos", "{{bloqueoId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "reservas",
+      "item": [
+        {
+          "name": "Consultar disponibilidad",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reservas/disponibilidad?canchaId={{canchaId}}&fecha=2026-09-15",
+              "host": ["{{baseUrl}}"],
+              "path": ["reservas", "disponibilidad"],
+              "query": [
+                { "key": "canchaId", "value": "{{canchaId}}" },
+                { "key": "fecha", "value": "2026-09-15" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear reserva",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"canchaId\": {{canchaId}},\n  \"fecha\": \"2026-09-15\",\n  \"horaInicio\": \"19:00\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/reservas", "host": ["{{baseUrl}}"], "path": ["reservas"] }
+          }
+        },
+        {
+          "name": "Listar todas las reservas (admin)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reservas?desde=2026-09-01&hasta=2026-09-30",
+              "host": ["{{baseUrl}}"],
+              "path": ["reservas"],
+              "query": [
+                { "key": "desde", "value": "2026-09-01" },
+                { "key": "hasta", "value": "2026-09-30" },
+                { "key": "canchaId", "value": "", "disabled": true },
+                { "key": "estado", "value": "CONFIRMADA", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mis reservas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reservas/mias",
+              "host": ["{{baseUrl}}"],
+              "path": ["reservas", "mias"],
+              "query": [{ "key": "estado", "value": "CONFIRMADA", "disabled": true }]
+            }
+          }
+        },
+        {
+          "name": "Consultar reserva por id",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/reservas/{{reservaId}}", "host": ["{{baseUrl}}"], "path": ["reservas", "{{reservaId}}"] }
+          }
+        },
+        {
+          "name": "Cancelar reserva",
+          "request": {
+            "method": "POST",
+            "url": { "raw": "{{baseUrl}}/reservas/{{reservaId}}/cancelacion", "host": ["{{baseUrl}}"], "path": ["reservas", "{{reservaId}}", "cancelacion"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "reportes",
+      "item": [
+        {
+          "name": "Reservas por período",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reportes/reservas?desde=2026-09-01&hasta=2026-09-30",
+              "host": ["{{baseUrl}}"],
+              "path": ["reportes", "reservas"],
+              "query": [
+                { "key": "desde", "value": "2026-09-01" },
+                { "key": "hasta", "value": "2026-09-30" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ocupación por cancha",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reportes/ocupacion?desde=2026-09-01&hasta=2026-09-30",
+              "host": ["{{baseUrl}}"],
+              "path": ["reportes", "ocupacion"],
+              "query": [
+                { "key": "desde", "value": "2026-09-01" },
+                { "key": "hasta", "value": "2026-09-30" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cancelaciones por período",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reportes/cancelaciones?desde=2026-09-01&hasta=2026-09-30",
+              "host": ["{{baseUrl}}"],
+              "path": ["reportes", "cancelaciones"],
+              "query": [
+                { "key": "desde", "value": "2026-09-01" },
+                { "key": "hasta", "value": "2026-09-30" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ranking de demanda",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reportes/demanda?desde=2026-09-01&hasta=2026-09-30",
+              "host": ["{{baseUrl}}"],
+              "path": ["reportes", "demanda"],
+              "query": [
+                { "key": "desde", "value": "2026-09-01" },
+                { "key": "hasta", "value": "2026-09-30" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Resumen (los 4 indicadores)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/reportes/resumen?desde=2026-08-25&hasta=2026-08-25",
+              "host": ["{{baseUrl}}"],
+              "path": ["reportes", "resumen"],
+              "query": [
+                { "key": "desde", "value": "2026-08-25" },
+                { "key": "hasta", "value": "2026-08-25" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
