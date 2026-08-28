@@ -16,55 +16,210 @@
 \subsection{Catálogo de reglas}
 \label{sec:catalogo-reglas}
 
-\instruccion{Una fila por regla, con la columna de implementación rellenada
-de verdad: «ms-reservas, ReservaService» dice algo; «se valida en el backend»
-no. Esta tabla es la que se mira para puntuar este criterio.}
-
-\begin{table}[H]
-  \centering
+\small
+\begin{xltabular}{\textwidth}{C{1.6cm} Y Y}
   \caption{Reglas de negocio y dónde se implementa cada una.}
-  \label{tab:reglas}
-  \begin{tabular}{C{1.6cm} L{7.2cm} L{4.4cm}}
+  \label{tab:reglas}\\
     \toprule
     \textbf{ID} & \textbf{Descripción} & \textbf{Implementación} \\
     \midrule
-    \textbf{RN-01}\label{rn:01} & \ph{Bloques horarios predefinidos} & \ph{...} \\
-    \textbf{RN-02}\label{rn:02} & \ph{No se permite solapamiento}    & \ph{...} \\
-    \textbf{RN-03}\label{rn:03} & \ph{Permisos de cancelación}       & \ph{...} \\
-    \textbf{RN-04}\label{rn:04} & \ph{No se cancelan reservas pasadas} & \ph{...} \\
-    \textbf{RN-05}\label{rn:05} & \ph{Cancelar libera el bloque}     & \ph{...} \\
-    \textbf{RN-06}\label{rn:06} & \ph{Límite de reservas activas}    & \ph{...} \\
-    \textbf{RN-07}\label{rn:07} & \ph{Solo el administrador gestiona canchas} & \ph{...} \\
-    \textbf{RN-08}\label{rn:08} & \ph{Estados de una reserva}        & \ph{...} \\
+  \endfirsthead
+
+    \multicolumn{3}{r}{\small\itshape Continuación de la Tabla \ref{tab:reglas}}\\
+    \toprule
+    \textbf{ID} & \textbf{Descripción} & \textbf{Implementación} \\
+    \midrule
+  \endhead
+
+    \midrule
+    \multicolumn{3}{r}{\small\itshape Continúa en la siguiente página}\\
+  \endfoot
+
     \bottomrule
-  \end{tabular}
-\end{table}
+  \endlastfoot
+
+    \textbf{RN-01}\label{rn:01} &
+    Una reserva se realiza sobre una cancha, una fecha y un bloque horario
+    predefinido de una hora. &
+    \id{ms-reservas}: \id{BookingService.crear} crea el bloque mediante
+    \id{TimeSlot.deUnaHoraDesde}. Prueba: \id{BookingServiceCreacionTest}. \\
+
+    \textbf{RN-02}\label{rn:02} &
+    No pueden existir dos reservas confirmadas que se solapen para la misma
+    cancha. &
+    \id{ms-reservas}: \id{BookingService.crear} realiza la comprobación previa
+    y \id{BookingRepositoryAdapter} maneja el conflicto al persistir.
+    \id{reservas_db}: restricción \id{reserva_sin_solape}.
+    Pruebas: \id{BookingServiceCreacionTest} y \id{ConcurrenciaReservaIT}. \\
+
+    \textbf{RN-03}\label{rn:03} &
+    El usuario final solo puede cancelar sus propias reservas; el administrador
+    puede cancelar cualquiera. &
+    \id{ms-reservas}: \id{BookingService.cancelar} utiliza
+    \id{X-User-Id} para comprobar el dueño de la reserva y
+    \id{X-User-Role} para identificar al administrador.
+    Prueba: \id{BookingServiceCancelacionTest}. \\
+
+    \textbf{RN-04}\label{rn:04} &
+    Una reserva no puede cancelarse cuando su fecha y hora de inicio ya
+    ocurrieron, incluso si la operación la realiza un administrador. &
+    \id{ms-reservas}: \id{BookingService.cancelar} utiliza
+    \id{Booking.sePuedeCancelarEn}.
+    Prueba: \id{BookingServiceCancelacionTest}. \\
+
+    \textbf{RN-05}\label{rn:05} &
+    Al cancelar una reserva, su estado cambia a \id{CANCELADA} y el bloque
+    vuelve a quedar disponible sin eliminar el registro. &
+    \id{ms-reservas}: \id{BookingService.cancelar} invoca
+    \id{Booking.cancelar}. La restricción \id{reserva_sin_solape} solo
+    considera reservas confirmadas.
+    Prueba: \id{BookingServiceCancelacionTest}. \\
+
+    \textbf{RN-06}\label{rn:06} &
+    Un usuario final tiene un límite configurable de reservas activas
+    simultáneas, con un valor de 3 por defecto. &
+    \id{ms-reservas}: \id{BookingService.verificarTope} obtiene el valor
+    mediante \id{ConfigurationRepositoryPort}.
+    Prueba: \id{BookingServiceCreacionTest}. \\
+
+    \textbf{RN-07}\label{rn:07} &
+    Solo el administrador puede crear, editar o inactivar canchas y gestionar
+    sus horarios y bloqueos de mantenimiento. &
+    \id{ms-canchas}: \id{CourtService} aplica
+    \id{exigirAdministrador} en las operaciones de gestión.
+    Prueba: \id{CourtServiceTest}. \\
+
+    \textbf{RN-08}\label{rn:08} &
+    Una reserva puede encontrarse en estado \id{CONFIRMADA},
+    \id{CANCELADA} o \id{FINALIZADA}. &
+    \id{ms-reservas}: \id{Booking} nace como \id{CONFIRMADA},
+    \id{Booking.cancelar} cambia el estado a \id{CANCELADA} y
+    \id{Booking.estadoVigente} determina cuándo corresponde
+    \id{FINALIZADA}. Pruebas: \id{BookingServiceCreacionTest} y
+    \id{BookingServiceCancelacionTest}. \\
+
+\end{xltabular}
+\normalsize
 
 \subsection{Validación de solapamiento de horarios}
 \label{sec:solapamiento}
 
-\instruccion{La regla que el documento de alcance destaca sobre las demás.
-Dedícale espacio: qué problema hay si dos personas reservan a la vez, dónde
-se resuelve y por qué ahí. Si la validación está en la base de datos y no en
-el servicio, explica el razonamiento: es un argumento de concurrencia, no de
-comodidad.}
+La \rn{02} establece que una misma cancha no puede tener dos reservas confirmadas
+que se solapen en el mismo horario. El principal problema aparece cuando dos
+usuarios intentan reservar el mismo bloque casi al mismo tiempo. En ese caso,
+ambas solicitudes podrían comprobar la disponibilidad antes de que alguna de las
+dos haya sido guardada y las dos podrían encontrar el horario libre.
 
-\ph{Mecanismo elegido para \rn{02} y por qué resiste peticiones
-concurrentes sobre el mismo bloque.}
+Para evitar esta situación, la regla se controla en dos momentos. Primero,
+\id{BookingService.crear} comprueba si el bloque solicitado se solapa con una
+reserva confirmada existente. Para realizar esta comparación se utiliza
+\id{TimeSlot.seSolapaCon}. Esta validación permite detectar el conflicto antes
+de intentar guardar la reserva en los casos normales.
+
+Sin embargo, esta comprobación no es suficiente cuando dos solicitudes se
+procesan de forma concurrente. Las dos podrían realizar la validación al mismo
+tiempo y obtener como resultado que el bloque está disponible. Por esta razón,
+la comprobación final se mantiene también en PostgreSQL mediante la restricción
+\id{reserva_sin_solape}.
+
+\begin{lstlisting}[
+  language=SQL,
+  caption={Restricción que protege la \rn{02} en V1\_\_reservas.sql.},
+  label={lst:exclude}
+]
+ALTER TABLE reserva ADD CONSTRAINT reserva_sin_solape
+    EXCLUDE USING gist (
+        cancha_id WITH =,
+        tsrange(fecha + hora_inicio, fecha + hora_fin, '[)') WITH &&
+    ) WHERE (estado = 'CONFIRMADA');
+\end{lstlisting}
+
+La restricción compara el identificador de la cancha y el rango horario de la
+reserva. Si ya existe una reserva confirmada para la misma cancha cuyo horario
+se solapa con el nuevo, PostgreSQL rechaza la operación. Así se evita que dos
+solicitudes concurrentes terminen reservando el mismo bloque aunque ambas hayan
+superado la comprobación previa de \id{BookingService}.
+
+La definición también incluye dos condiciones importantes para el funcionamiento
+de las reservas:
+
+\begin{itemize}
+    \item \id{WHERE (estado = 'CONFIRMADA')} hace que únicamente las reservas
+    confirmadas ocupen un bloque. Cuando una reserva cambia a
+    \id{CANCELADA}, deja de participar en esta restricción y el horario vuelve
+    a quedar disponible sin eliminar el registro.
+
+    \item El rango \id{'[)'} incluye la hora de inicio y excluye la hora de
+    finalización. Esto permite, por ejemplo, registrar una reserva de
+    10:00 a 11:00 y otra de 11:00 a 12:00 para la misma cancha, ya que son
+    bloques consecutivos y no existe solapamiento entre ellos.
+\end{itemize}
+
+La restricción requiere la extensión \id{btree_gist}, ya que
+\id{cancha_id} debe compararse por igualdad dentro del índice GiST. Este
+requisito se prepara en \texttt{infra/postgres/init/02-extensiones.sql},
+antes de aplicar la migración \id{V1__reservas.sql}.
+
+Si el conflicto se detecta al momento de guardar, \id{BookingRepositoryAdapter}
+traduce el error de persistencia a \id{SlotAlreadyBookedException}. La misma
+excepción se utiliza cuando el solapamiento se detecta previamente en
+\id{BookingService}. De esta forma, el conflicto se maneja de la misma manera
+sin importar en cuál de las dos validaciones haya sido detectado, y la API
+responde con HTTP 409.
+
+Este caso también se comprueba mediante \id{ConcurrenciaReservaIT}, donde se
+intentan registrar dos reservas sobre el mismo bloque de forma concurrente. La
+prueba verifica que solamente una de las operaciones consiga registrar la
+reserva y que la otra sea rechazada por solapamiento.
 
 \subsection{Estados de una reserva}
 \label{sec:estados-reserva}
 
-\ph{Los tres estados de \rn{08} y las transiciones permitidas entre ellos.
-Un diagrama de estados pequeño comunica esto mejor que un párrafo.}
+La \rn{08} establece tres estados para una reserva: \id{CONFIRMADA},
+\id{CANCELADA} y \id{FINALIZADA}. Toda reserva se crea inicialmente en estado
+\id{CONFIRMADA}.
+
+Una reserva confirmada puede cambiar a \id{CANCELADA} cuando se realiza una
+cancelación antes de la hora de inicio. Esta operación se realiza mediante
+\id{Booking.cancelar}, que modifica el estado y registra la fecha y hora en que
+se produjo la cancelación. Una vez cancelada, la reserva permanece en ese estado.
+
+El estado \id{FINALIZADA} se obtiene de una forma diferente. La reserva no se
+actualiza en la base de datos cuando termina su horario. Al consultarla,
+\id{Booking.estadoVigente} comprueba si continúa confirmada y si la hora de
+finalización del bloque ya ocurrió. Cuando esto sucede, la reserva se presenta
+como \id{FINALIZADA}.
+
+Mientras una reserva ya comenzó pero todavía no termina, continúa apareciendo
+como \id{CONFIRMADA}. Sin embargo, ya no puede cancelarse debido a la
+\rn{04}.
+
+Por lo tanto, las transiciones que maneja la aplicación son las siguientes:
+
+\begin{itemize}
+    \item \id{CONFIRMADA} $\rightarrow$ \id{CANCELADA}, cuando se cancela antes
+    de la hora de inicio.
+    \item \id{CONFIRMADA} $\rightarrow$ \id{FINALIZADA}, cuando el bloque ya
+    terminó y el estado se calcula al consultar la reserva.
+\end{itemize}
+
+No existen transiciones desde \id{CANCELADA} ni desde \id{FINALIZADA} hacia
+otro estado.
 
 \subsection{Traducción de reglas a respuestas HTTP}
 \label{sec:errores}
 
-\instruccion{Qué código devuelve la API cuando se viola cada regla. Importa
-más de lo que parece: un 500 genérico ante una reserva duplicada es un
-defecto, y un 409 con un mensaje claro es lo que permite que la interfaz
-reaccione bien.}
+Las reglas de negocio se mantienen separadas de los códigos HTTP. Cuando una
+operación no puede realizarse, la lógica de la aplicación genera una excepción
+y el \id{ErrorHandler} del microservicio correspondiente se encarga de
+convertirla en una respuesta HTTP. De esta manera, las clases del dominio no
+necesitan conocer detalles propios de la capa web.
+
+En \id{ms-reservas}, los conflictos relacionados con el estado actual de una
+reserva se responden principalmente con \id{409 Conflict}. En cambio, cuando
+una cancha existe pero no puede aceptar la reserva solicitada, se utiliza
+\id{422 Unprocessable Entity}. Los permisos se manejan mediante
+\id{403 Forbidden} y la ausencia de un recurso mediante \id{404 Not Found}.
 
 \begin{table}[H]
   \centering
@@ -72,9 +227,61 @@ reaccione bien.}
   \label{tab:errores}
   \begin{tabular}{C{1.6cm} C{2.4cm} L{8.6cm}}
     \toprule
-    \textbf{Regla} & \textbf{HTTP} & \textbf{Código de error y significado} \\
+    \textbf{Regla} & \textbf{HTTP} & \textbf{Excepción y significado} \\
     \midrule
-    \ph{...} & \ph{...} & \ph{...} \\
+
+    \rn{02} &
+    \textbf{409} &
+    \id{SlotAlreadyBookedException}. El bloque solicitado ya se encuentra
+    ocupado por una reserva confirmada. Se utiliza tanto cuando el conflicto
+    se detecta en \id{BookingService} como cuando se detecta al guardar por
+    medio de la restricción \id{reserva_sin_solape}. \\
+
+    \rn{03} &
+    \textbf{403} &
+    \id{ForbiddenOperationException}. Un usuario final intenta cancelar una
+    reserva que pertenece a otro usuario. \\
+
+    \rn{04} &
+    \textbf{409} &
+    \id{PastBookingCancellationException}. La fecha y hora de inicio de la
+    reserva ya ocurrieron y, por lo tanto, ya no puede cancelarse. \\
+
+    \rn{06} &
+    \textbf{409} &
+    \id{ActiveBookingLimitExceededException}. El usuario alcanzó el tope de 
+    reservas activas configurado para el sistema. \\
+
+    \rn{07} &
+    \textbf{403} &
+    \id{ForbiddenOperationException}. Un usuario que no es administrador
+    intenta realizar una operación de gestión sobre las canchas, horarios o
+    bloqueos de mantenimiento. \\
+
+    \midrule
+
+    -- &
+    \textbf{404} &
+    \id{NotFoundException}. La reserva, la cancha o el usuario solicitado no existe. \\
+
+    -- &
+    \textbf{422} &
+    \id{CourtNotBookableException}. La cancha existe, pero no admite la reserva
+    porque está inactiva, el bloque ya pasó, se encuentra fuera del horario de
+    atención o coincide con un bloqueo de mantenimiento. \\
+
+    -- &
+    \textbf{400} &
+    La petición contiene datos inválidos, no cumple las validaciones definidas
+    para la entrada o contiene un valor que no corresponde con el tipo
+    esperado. \\
+
     \bottomrule
   \end{tabular}
 \end{table}
+
+Las \rn{01}, \rn{05} y \rn{08} no generan una respuesta de error propia.
+La \rn{01} se controla al construir el bloque horario y mediante las
+validaciones de entrada. Por su parte, la \rn{05} y la \rn{08} describen el
+comportamiento y los estados de una reserva, por lo que no representan por sí
+mismas una operación inválida que deba traducirse a un código HTTP.
