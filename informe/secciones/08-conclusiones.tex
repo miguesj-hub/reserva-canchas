@@ -8,12 +8,82 @@
 \section{Conclusiones}
 \label{sec:conclusiones}
 
-% [Conclusiones respecto de los objetivos]
+El objetivo general del proyecto se cumplió mediante la implementación de un
+sistema web que permite consultar disponibilidad, crear y cancelar reservas,
+gestionar canchas y usuarios, y consultar reportes básicos. Estas
+funcionalidades se encuentran distribuidas entre los distintos módulos del
+frontend y los servicios del backend, y los seis criterios de aceptación
+definidos para el proyecto cuentan con evidencia dentro de la implementación.
+
+La separación del frontend mediante un \id{shell} y tres microfrontends permitió
+organizar las funcionalidades de reservas, administración y reportes en módulos
+diferenciados, manteniendo su integración mediante Module Federation. De forma
+similar, el backend se dividió en \id{ms-usuarios}, \id{ms-canchas},
+\id{ms-reservas} y \id{ms-reportes}, de manera que cada servicio concentra las
+responsabilidades relacionadas con su área funcional.
+
+La estrategia de persistencia permitió mantener separados los datos
+administrados por cada microservicio. \id{ms-usuarios}, \id{ms-canchas} y
+\id{ms-reservas} trabajan con bases de datos independientes dentro de una misma
+instancia de PostgreSQL y no acceden directamente a las tablas pertenecientes
+a otros servicios. Cuando se necesita información de otro dominio, esta se
+obtiene mediante la API del microservicio responsable.
+
+Las reglas de negocio definidas para el proceso de reserva también fueron
+implementadas y verificadas. En particular, el control de solapamiento permitió
+comprobar que una validación realizada únicamente antes de guardar una reserva
+no es suficiente cuando existen solicitudes concurrentes. Por esta razón, la
+comprobación realizada en \id{ms-reservas} se complementó con una restricción
+en PostgreSQL, evitando que se persistan dos reservas confirmadas sobre el mismo
+horario.
+
+Finalmente, las decisiones arquitectónicas permitieron mantener una separación
+clara entre la lógica de negocio, la comunicación, la persistencia y la capa de
+presentación. La implementación también permitió identificar límites del diseño
+actual, como la ausencia de paginación, el procesamiento en memoria de parte de
+los reportes y la falta de un historial de activación de las canchas. Estas
+limitaciones no impiden cumplir el alcance definido, pero permiten reconocer
+aspectos que deberían revisarse si el sistema necesitara manejar un escenario
+de mayor tamaño.
 
 \subsection{Lecciones aprendidas}
 \label{sec:lecciones}
 
-% [Qué se haría distinto con lo aprendido]
+Uno de los principales aprendizajes que deja el proyecto está relacionado con
+el control de reglas de negocio cuando existen operaciones concurrentes. En el
+caso del solapamiento de reservas, la comprobación realizada por
+\id{BookingService} antes de guardar no cubre por sí sola el escenario en el
+que dos solicitudes intentan reservar el mismo bloque al mismo tiempo. Por esta
+razón, la validación se complementa con la restricción
+\id{reserva_sin_solape} en PostgreSQL. Si el diseño se planteara nuevamente,
+este tipo de condiciones de concurrencia se consideraría desde el inicio junto
+con las reglas de negocio y el modelo de persistencia.
+
+Otro aprendizaje se relaciona con la separación de datos entre microservicios.
+Mantener una base de datos independiente para cada servicio evita el acceso
+directo a información administrada por otro dominio, pero también hace
+necesario definir las comunicaciones entre servicios. Esto ocurre en
+\id{ms-reservas}, que consulta información de las canchas mediante
+\id{ms-canchas}, y en \id{ms-reportes}, que necesita información de
+\id{ms-reservas} y \id{ms-canchas}. En un nuevo diseño, estas necesidades de
+información y los contratos entre servicios se definirían desde etapas
+tempranas de la arquitectura.
+
+En el frontend, el uso de microfrontends permite mantener separadas las
+funcionalidades de reservas, administración y reportes, aunque también requiere
+coordinar la integración entre el \id{shell} y los remotes, así como la
+configuración de Module Federation y las dependencias compartidas. Si se
+volviera a desarrollar la aplicación, estas configuraciones y convenciones
+comunes se definirían desde el inicio para mantener una misma estructura entre
+los distintos microfrontends.
+
+Finalmente, el módulo de reportes permitió identificar una necesidad que el
+modelo actual no cubre: conservar información histórica sobre los cambios de
+estado de las canchas. Actualmente se mantiene únicamente su estado presente,
+por lo que no es posible determinar si una cancha estuvo inactiva durante una
+parte de un período consultado. Si se necesitara mayor precisión en los
+reportes históricos, este comportamiento debería considerarse desde el diseño
+del modelo de datos y almacenar los cambios de estado necesarios.
 
 \subsection{Trabajo futuro}
 \label{sec:trabajo-futuro}
