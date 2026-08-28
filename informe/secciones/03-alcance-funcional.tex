@@ -11,12 +11,17 @@
 \section{Alcance funcional}
 \label{sec:alcance}
 
+El sistema contempla las funcionalidades necesarias para consultar la disponibilidad
+de las canchas, crear y cancelar reservas, administrar canchas, horarios y usuarios,
+y visualizar reportes básicos relacionados con su utilización. El alcance se organiza
+a partir de dos roles principales: usuario final y administrador, cada uno con permisos
+diferenciados dentro de la aplicación.
+
 \subsection{Roles y permisos}
 \label{sec:roles}
 
-\instruccion{Una matriz de funcionalidad por rol se lee de un vistazo y
-evita párrafos repetitivos. Marca con «Sí» y «No»; si algún permiso depende
-de una condición (cancelar solo las propias), dilo en la celda.}
+La \cref{tab:roles} presenta las funcionalidades disponibles para cada rol y las
+restricciones aplicadas en aquellas operaciones que dependen del usuario autenticado.
 
 \begin{table}[H]
   \centering
@@ -26,16 +31,18 @@ de una condición (cancelar solo las propias), dilo en la celda.}
     \toprule
     \textbf{Funcionalidad} & \textbf{Usuario final} & \textbf{Administrador} \\
     \midrule
-    Registro e inicio de sesión                     & Sí & Sí \\
-    Consultar disponibilidad de canchas             & Sí & Sí \\
-    Crear una reserva                               & Sí & No \\
-    Cancelar una reserva                            & Solo las propias & Cualquiera \\
-    Consultar el historial de reservas propias      & Sí & No \\
-    Consultar el listado global de reservas         & No & Sí \\
-    Gestionar el catálogo de canchas                & No & Sí \\
-    Gestionar horarios y bloqueos de mantenimiento  & No & Sí \\
-    Gestionar usuarios (activar / inactivar)        & No & Sí \\
-    Visualizar los reportes de ocupación            & No & Sí \\
+
+    Registro e inicio de sesión & Sí & Sí \\
+    Consultar disponibilidad de canchas & Sí & Sí \\
+    Crear una reserva & Sí & No \\
+    Cancelar una reserva propia & Sí & No \\
+    Cancelar cualquier reserva & No & Sí \\
+    Consultar historial de reservas propias & Sí & No \\
+    Gestionar catálogo de canchas (crear/editar/inactivar) & No & Sí \\
+    Gestionar horarios y bloqueos de mantenimiento & No & Sí \\
+    Gestionar usuarios (activar/inactivar) & No & Sí \\
+    Visualizar reportes básicos de ocupación & No & Sí \\
+
     \bottomrule
   \end{tabular}
 \end{table}
@@ -43,10 +50,10 @@ de una condición (cancelar solo las propias), dilo en la celda.}
 \subsection{Módulos y pantallas}
 \label{sec:modulos}
 
-\instruccion{Los módulos funcionales con sus pantallas. Conviene que esta
-tabla case con los microfrontends de la \cref{tab:microfrontends}: si un
-módulo no corresponde a ningún remote, o al revés, es señal de que la
-descomposición no está clara.}
+Las funcionalidades se agrupan en cuatro módulos principales: seguridad, reservas,
+administración y reportes. Esta organización permite agrupar las operaciones según
+su responsabilidad funcional y mantener una separación clara entre autenticación,
+gestión de reservas, administración del sistema y consulta de información.
 
 \begin{table}[H]
   \centering
@@ -56,14 +63,15 @@ descomposición no está clara.}
     \toprule
     \textbf{Módulo} & \textbf{Pantalla} & \textbf{Descripción} \\
     \midrule
-    Seguridad      & Inicio de sesión / Registro & Autenticación de ambos roles y alta de cuentas nuevas. \\
-    Reservas       & Consulta de disponibilidad  & Rejilla de bloques por cancha y fecha, libres y ocupados. \\
-    Reservas       & Nueva reserva               & Confirmación del bloque elegido. \\
-    Reservas       & Mis reservas                & Listado propio, con la opción de cancelar. \\
-    Administración & Gestión de canchas          & Alta, edición, horario, bloqueos y estado de cada cancha. \\
-    Administración & Gestión de reservas         & Listado global, con la opción de cancelar cualquiera. \\
-    Administración & Gestión de usuarios         & Activar e inactivar cuentas. \\
-    Reportes       & Reportes y estadísticas     & Los cuatro indicadores de ocupación y demanda. \\
+
+    Seguridad & Inicio de sesión / Registro & Autenticación de usuario final y administrador. \\
+    Reservas & Consulta de disponibilidad & Calendario o grilla de horarios disponibles por cancha y deporte. \\
+    Reservas & Nueva reserva & Formulario para reservar una cancha, fecha y bloque horario. \\
+    Reservas & Mis reservas & Listado de reservas del usuario con opción de cancelar. \\
+    Administración & Gestión de canchas & Administración de canchas: nombre, deporte, horario de atención y estado. \\
+    Administración & Gestión de reservas & Listado global de reservas con opción de cancelar cualquiera. \\
+    Reportes & Reportes básicos & Ocupación por cancha y deporte, reservas por período y cancelaciones. \\
+
     \bottomrule
   \end{tabular}
 \end{table}
@@ -71,30 +79,15 @@ descomposición no está clara.}
 \subsection{Fuera de alcance}
 \label{sec:fuera-alcance}
 
-\instruccion{Enumera lo excluido. No es una disculpa: delimitar el alcance
-es una decisión de diseño, y declararla evita que se lea como una carencia.}
-
-Queda fuera del alcance, por decisión explícita y no por olvido:
+Se excluyen las siguientes funcionalidades por decisión explicita:
 
 \begin{itemize}
-  \item \textbf{Pasarela de pagos o cobro en línea.} El club cobra por sus
-        medios; la reserva no es una transacción económica en este sistema.
-  \item \textbf{Notificaciones por correo, SMS o push.} Las confirmaciones y
-        los rechazos se comunican \emph{en pantalla}, en el momento. Añadir un
-        canal asíncrono traería una infraestructura —cola, reintentos,
-        plantillas— que ningún criterio de la rúbrica evalúa.
-  \item \textbf{Reservas recurrentes.} Cada reserva es un bloque concreto en
-        una fecha concreta.
-  \item \textbf{Torneos, ligas e inscripciones grupales.} La unidad reservable
-        es un bloque para un usuario, no un evento con participantes.
-  \item \textbf{Aplicación móvil nativa.} El sistema es web y responsive; se
-        usa desde el navegador del teléfono.
-  \item \textbf{Reportes analíticos o de inteligencia de negocio.} Los cuatro
-        indicadores de §\ref{sec:alcance} se calculan sobre los datos vivos y se
-        muestran en pantalla; no hay exportación a formatos analíticos.
-\end{itemize}
 
-Esta lista importa tanto como la de funcionalidades incluidas. Delimitar el
-alcance es lo que permite que lo que sí está construido esté \emph{terminado}:
-el tiempo que se gastara en cualquiera de estos seis puntos saldría del que
-sostiene las ocho reglas de negocio y sus pruebas.
+    \item Pasarela de pagos o cobro en línea de las reservas.
+    \item Notificaciones automáticas por correo electrónico, SMS o push.
+    \item Reservas recurrentes o recurrencia de horarios, por ejemplo, ``todos los lunes''.
+    \item Gestión de torneos, ligas o inscripciones grupales.
+    \item Aplicación móvil nativa, manteniéndose el sistema como una aplicación web responsive.
+    \item Reportes avanzados con inteligencia de negocio (BI) o exportación a formatos analíticos.
+
+\end{itemize}

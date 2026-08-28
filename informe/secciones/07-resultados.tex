@@ -13,47 +13,60 @@
 \subsection{Funcionalidades implementadas}
 \label{sec:funcionalidades}
 
-\instruccion{Qué quedó operativo, con capturas de las pantallas principales.
-Dos o tres capturas bien elegidas valen más que ocho: la consulta de
-disponibilidad, la reserva y los reportes.}
-
-A la fecha de este informe están construidas y demostrables las cuatro
-historias del alcance:
+En la versión actual del proyecto se encuentran implementadas las funcionalidades
+principales definidas para el usuario final y el administrador. Los recorridos
+pueden realizarse desde los microfrontends y utilizan los servicios del backend
+correspondientes para completar cada operación.
 
 \begin{itemize}
-  \item \textbf{Reservar y cancelar como usuario final.} Consulta de
-        disponibilidad por cancha y fecha, creación de reserva sobre un bloque
-        libre, listado propio y cancelación que libera el horario.
-  \item \textbf{Gestión del catálogo y cancelación administrativa.} Alta,
-        edición, activación e inactivación de canchas, bloqueos de
-        mantenimiento, listado global de reservas y cancelación de cualquiera.
-  \item \textbf{Los cuatro indicadores de §3.3.5}, sobre el rango que el
-        administrador elija, más un panel acotado al día en curso.
+    \item \textbf{Reserva y cancelación por parte del usuario final.}
+    Se permite el registro e inicio de sesión, la consulta de disponibilidad
+    por deporte, cancha y fecha, y la selección de un bloque horario libre.
+    Una vez creada la reserva, esta aparece en la sección de reservas del
+    usuario y puede cancelarse mientras todavía no haya comenzado. Al cancelar,
+    el bloque vuelve a mostrarse como disponible.
+
+    \item \textbf{Administración de canchas y reservas.}
+    El administrador puede crear y editar canchas, cambiar su estado entre
+    activa e inactiva y gestionar bloqueos de mantenimiento. También dispone
+    de un listado global de reservas desde el cual puede cancelar reservas de
+    cualquier usuario, siempre que todavía cumplan las condiciones de
+    cancelación establecidas por las reglas de negocio.
+
+    \item \textbf{Reportes de uso.}
+    El módulo de reportes permite seleccionar un rango de fechas y consultar
+    los cuatro indicadores definidos para el proyecto: número de reservas por
+    cancha y deporte, porcentaje de ocupación por cancha, número de
+    cancelaciones y ranking de canchas según su demanda. El panel de
+    administración utiliza estos mismos datos para mostrar un resumen
+    correspondiente al día actual.
+
+    \item \textbf{Gestión de usuarios.}
+    El administrador puede consultar las cuentas registradas y cambiar su
+    estado entre activo e inactivo. Cuando una cuenta se inactiva, sus reservas
+    se conservan. Si el usuario mantenía una sesión abierta, la siguiente
+    petición autenticada es rechazada, debido a que el API Gateway vuelve a
+    validar las credenciales en cada solicitud. Ante este caso, la interfaz
+    elimina la sesión almacenada y devuelve al usuario a la pantalla de inicio
+    de sesión.
 \end{itemize}
 
-\begin{itemize}
-  \item[] \textbf{Gestión de usuarios.} El administrador lista las cuentas y las
-        activa o inactiva. Una cuenta inactivada deja de entrar de inmediato,
-        incluso si tenía la sesión abierta: el gateway verifica la credencial en
-        cada petición, y el frontend la devuelve al inicio de sesión con el
-        motivo.
-\end{itemize}
-
-Las cuatro historias del alcance están, por tanto, construidas y son
-demostrables por separado.
-
-Toda la infraestructura está en pie: \id{docker compose up} levanta once
-contenedores —edge, cuatro microfrontends, gateway, cuatro microservicios y
-PostgreSQL con sus tres bases aisladas— con datos de prueba y sin ningún paso
-manual.
+El proyecto también incluye la infraestructura necesaria para ejecutar estas
+funcionalidades de forma conjunta. El archivo \id{docker-compose.yml} define
+once servicios: el edge, el shell, los tres microfrontends remotos, el API
+Gateway, los cuatro microservicios y PostgreSQL. El sistema puede levantarse
+mediante \id{docker compose up}, y las migraciones cargan los datos de
+demostración utilizados por usuarios, canchas y reservas durante el primer
+arranque.
 
 \subsection{Cumplimiento de los criterios de aceptación}
 \label{sec:cumplimiento}
 
-\instruccion{Los seis criterios del documento de alcance, uno por fila, con
-la evidencia que respalda cada «Sí». Es la tabla que un evaluador busca
-primero. Si alguno no se cumple, decláralo: un criterio marcado como
-cumplido que luego falla en la demo cuesta más que uno declarado pendiente.}
+Los criterios de aceptación permiten comprobar si la implementación alcanzó
+el mínimo funcional y técnico definido para el proyecto. Para esta
+verificación se consideran las funcionalidades disponibles en los
+microfrontends, los casos de uso implementados en el backend, las pruebas
+existentes y la configuración de despliegue.
 
 \begin{table}[H]
   \centering
@@ -63,23 +76,76 @@ cumplido que luego falla en la demo cuesta más que uno declarado pendiente.}
     \toprule
     \textbf{\#} & \textbf{Criterio} & \textbf{Estado} & \textbf{Evidencia} \\
     \midrule
-    \textsf{CA-1}\label{ca:1} & Consultar, crear y cancelar reservas de las tres canchas & Cumplido & Escenario V1 del \id{quickstart}; 24 pruebas de \id{BookingService}. \\
-    \textsf{CA-2}\label{ca:2} & El administrador gestiona el catálogo y cancela cualquier reserva & Cumplido & Escenario V3; 13 pruebas de \id{CourtService} y la rama de administrador en \id{BookingServiceCancelacionTest}. \\
-    \textsf{CA-3}\label{ca:3} & El sistema impide reservar un bloque ocupado & Cumplido & Escenario V2, diez repeticiones: siempre un 201 y un 409. \id{ConcurrenciaReservaIT} contra PostgreSQL real (\cref{sec:solapamiento}). \\
-    \textsf{CA-4}\label{ca:4} & Los reportes muestran ocupación y reservas por período & Cumplido & Escenario V4: los cuatro indicadores contrastados contra un conteo manual del listado global del mismo rango. \\
-    \textsf{CA-5}\label{ca:5} & Shell y al menos dos remotes integrados con Module Federation & Cumplido & Tres remotes —reservas, administración y reportes— cargados de forma perezosa por el shell (\cref{v:02}). \\
-    \textsf{CA-6}\label{ca:6} & Al menos dos microservicios independientes sobre PostgreSQL & Cumplido & Tres con base propia y aislada por credenciales, más \id{ms-reportes} sin base (\cref{sec:estrategia-datos}). Las 70 pruebas de los cinco servicios pasan. \\
+
+    \textsf{CA-1}\label{ca:1} &
+    El usuario final puede consultar disponibilidad, crear y cancelar reservas
+    de pádel, tenis y básquet. &
+    \textbf{Sí} &
+    \id{mf-reservas} implementa las pantallas de disponibilidad, nueva reserva
+    y reservas propias. La creación y cancelación se comprueban en
+    \id{BookingServiceCreacionTest} y \id{BookingServiceCancelacionTest}.
+    El catálogo inicial incluye canchas activas de los tres deportes. \\
+
+    \textsf{CA-2}\label{ca:2} &
+    El administrador puede gestionar el catálogo de canchas y cancelar
+    reservas del sistema. &
+    \textbf{Sí} &
+    \id{mf-administracion} incluye la gestión de canchas y el listado global
+    de reservas. \id{CourtServiceTest} comprueba las operaciones
+    administrativas y \id{BookingServiceCancelacionTest} la cancelación
+    realizada por el administrador. \\
+
+    \textsf{CA-3}\label{ca:3} &
+    El sistema impide crear una reserva sobre un bloque horario ya ocupado. &
+    \textbf{Sí} &
+    La validación se realiza en \id{BookingService} y se refuerza en PostgreSQL
+    con la restricción \id{reserva_sin_solape}. Las pruebas
+    \id{BookingServiceCreacionTest} y \id{ConcurrenciaReservaIT} cubren el
+    conflicto y el caso concurrente. \\
+
+    \textsf{CA-4}\label{ca:4} &
+    El módulo de reportes muestra al menos la ocupación por cancha y el número
+    de reservas por período. &
+    \textbf{Sí} &
+    \id{mf-reportes} presenta los indicadores por rango de fechas y el panel de
+    administración reutiliza estos mismos datos para mostrar un resumen del día
+    actual. \id{ms-reportes} implementa los cuatro indicadores definidos para el
+    proyecto: reservas por período, ocupación por cancha, cancelaciones y ranking
+    de demanda, los cuales también se verifican en \id{ReportServiceTest}. \\
+
+    \textsf{CA-5}\label{ca:5} &
+    El frontend está compuesto por un shell y al menos dos microfrontends
+    remotos integrados mediante Module Federation. &
+    \textbf{Sí} &
+    El \id{shell} integra mediante Module Federation a
+    \id{mf-reservas}, \id{mf-administracion} y \id{mf-reportes}, cada uno
+    publicado como un remote independiente. \\
+
+    \textsf{CA-6}\label{ca:6} &
+    El backend está compuesto por al menos dos microservicios Spring Boot
+    independientes, persistiendo en PostgreSQL. &
+    \textbf{Sí} &
+    El despliegue contiene \id{ms-usuarios}, \id{ms-canchas},
+    \id{ms-reservas} y \id{ms-reportes}. Los tres primeros administran
+    respectivamente \id{usuarios_db}, \id{canchas_db} y
+    \id{reservas_db} en PostgreSQL, mientras que \id{ms-reportes}
+    obtiene la información por HTTP sin mantener una base propia. \\
+
     \bottomrule
   \end{tabularx}
 \end{table}
 
+De acuerdo con estas evidencias, los seis criterios de aceptación definidos
+para el proyecto se encuentran cubiertos por la implementación actual.
+
 \subsection{Verificación de las reglas de negocio}
 \label{sec:verificacion-reglas}
 
-\instruccion{Cómo se comprobó que cada regla funciona. No hace falta un
-capítulo de pruebas: una tabla con el escenario, el resultado esperado y el
-obtenido es suficiente y se lee en treinta segundos. La colección de
-peticiones va al anexo.}
+La verificación de las reglas de negocio se apoya principalmente en
+pruebas automatizadas sobre los servicios de aplicación y se complementa
+con los recorridos funcionales del sistema. De esta manera, se comprueban
+tanto los casos válidos como las situaciones que deben ser rechazadas,
+sin depender únicamente de la interfaz gráfica.
 
 \begin{table}[H]
   \centering
@@ -89,36 +155,108 @@ peticiones va al anexo.}
     \toprule
     \textbf{Regla} & \textbf{Escenario} & \textbf{Resultado} \\
     \midrule
-    \rn{01} & Reservar cancha 1, mañana, bloque 18:00. & 201, bloque 18:00--19:00 confirmado. \\
-    \rn{02} & Un segundo usuario pide el mismo bloque. & 409 con el motivo en pantalla. \\
-    \rn{02} & Dos peticiones simultáneas, diez repeticiones. & Siempre un 201 y un 409; nunca dos. \\
-    \rn{03} & \id{cliente1} cancela una reserva de \id{cliente2}. & 403. El administrador sobre la misma: 200. \\
-    \rn{04} & Cancelar una reserva ya iniciada. & 409, también siendo administrador. \\
-    \rn{05} & Cancelar una reserva futura y reconsultar. & El bloque vuelve a figurar libre. \\
-    \rn{06} & Crear una cuarta reserva activa con el tope en 3. & 409 indicando el máximo. \\
-    \rn{07} & \id{cliente1} intenta crear una cancha. & 403; el administrador, 201. \\
-    \rn{08} & Listar las reservas propias. & Los tres estados, con \id{FINALIZADA} derivada al leer. \\
+
+    \rn{01} &
+    Crear una reserva para una cancha, una fecha futura y un bloque que inicia
+    a las 19:00. &
+    \id{BookingServiceCreacionTest} comprueba que la reserva conserve la cancha
+    y la fecha seleccionadas, y que el bloque generado sea de 19:00 a 20:00. \\
+
+    \rn{02} &
+    Intentar crear una reserva sobre un bloque que ya tiene una reserva
+    confirmada para la misma cancha. &
+    \id{BookingServiceCreacionTest} comprueba que la operación sea rechazada
+    con \id{SlotAlreadyBookedException} y que la nueva reserva no se guarde. \\
+
+    \rn{02} &
+    Intentar guardar de forma concurrente dos reservas para la misma cancha,
+    fecha y bloque horario. &
+    \id{ConcurrenciaReservaIT} comprueba que solo una operación consiga guardar
+    la reserva y que la otra sea rechazada con
+    \id{SlotAlreadyBookedException}. La prueba está configurada con diez
+    repeticiones. \\
+
+    \rn{03} &
+    Un usuario final intenta cancelar una reserva perteneciente a otro usuario
+    y un administrador intenta cancelar esa misma reserva. &
+    \id{BookingServiceCancelacionTest} comprueba que el usuario final sea
+    rechazado con \id{ForbiddenOperationException} y que el administrador
+    pueda cambiar la reserva a \id{CANCELADA}. \\
+
+    \rn{04} &
+    Intentar cancelar una reserva cuya hora de inicio ya ocurrió. &
+    \id{BookingServiceCancelacionTest} comprueba que la cancelación sea
+    rechazada con \id{PastBookingCancellationException}, tanto para un usuario
+    final como para un administrador. \\
+
+    \rn{05} &
+    Cancelar una reserva confirmada que todavía no ha comenzado. &
+    \id{BookingServiceCancelacionTest} comprueba que la reserva se guarde como
+    \id{CANCELADA} y que se registre la fecha y hora de cancelación. Al dejar
+    de estar confirmada, deja de ocupar el bloque horario. \\
+
+    \rn{06} &
+    Intentar crear una nueva reserva cuando el usuario ya tiene tres reservas
+    activas y el límite configurado es 3. &
+    \id{BookingServiceCreacionTest} comprueba que la operación sea rechazada
+    con \id{ActiveBookingLimitExceededException} y que no se guarde una nueva
+    reserva. \\
+
+    \rn{07} &
+    Un usuario final intenta crear o modificar una cancha, mientras que un
+    administrador realiza una operación de creación. &
+    \id{CourtServiceTest} comprueba que las operaciones de gestión sean
+    rechazadas para el usuario final y permitidas para el administrador. \\
+
+    \rn{08} &
+    Crear, cancelar y consultar reservas cuyo bloque ya terminó. &
+    Las pruebas comprueban que una reserva nueva sea \id{CONFIRMADA}, que una
+    cancelación la deje en \id{CANCELADA} y que las reservas cuyo bloque ya
+    terminó dejen de contarse como activas al obtener su estado vigente. \\
+
     \bottomrule
   \end{tabular}
 \end{table}
 
+Para el caso concurrente de la \rn{02}, la comprobación se realiza contra
+PostgreSQL y no únicamente con dependencias simuladas. La prueba
+\id{ConcurrenciaReservaIT} se habilita cuando se proporciona la conexión
+mediante \id{RESERVAS\_IT\_DB\_URL}, ya que necesita utilizar la restricción
+real de la base de datos.
+
 \subsection{Limitaciones}
 \label{sec:limitaciones}
 
-\instruccion{Qué no se alcanzó y por qué. Declararlo suma: demuestra que se
-conoce el propio sistema. Omitir una limitación que el evaluador descubre en
-la demo resta el doble.}
+Aunque las funcionalidades definidas en el alcance están implementadas, la
+versión actual del sistema todavía presenta algunas limitaciones:
 
 \begin{itemize}
-  \item \textbf{No hay paginación en ningún listado.} A escala de un club los
-        conjuntos son pequeños, y añadirla sería complejidad sin criterio de la
-        rúbrica que la respalde.
-  \item \textbf{\id{ms-reportes} agrega en memoria}, no con consultas agregadas.
-        Es el precio de no leer la base de otro servicio
-        (\cref{sec:estrategia-datos}), y es un precio consciente.
-  \item \textbf{Las pruebas de arranque necesitan Docker}, porque levantan un
-        PostgreSQL efímero con Testcontainers. No es una carencia frente a la
-        alternativa —una base instalada en la máquina—, pero sí una dependencia
-        que conviene declarar. Las pruebas de las reglas de negocio, que son las
-        que el Principio~II exige, no necesitan ni Docker ni Spring.
+
+    \item \textbf{Los listados no tienen paginación.}
+    Los endpoints de usuarios, canchas y reservas devuelven las colecciones
+    completas. Para el volumen de datos utilizado en el proyecto esto no genera
+    problemas, pero si la cantidad de registros aumenta sería necesario
+    incorporar paginación.
+
+    \item \textbf{Parte de los reportes se calcula en memoria.}
+    \id{ms-reportes} obtiene la información desde \id{ms-reservas} y
+    \id{ms-canchas} mediante sus APIs y realiza los conteos y agrupaciones en
+    \id{ReportService}. Con este enfoque se mantiene la separación de datos
+    entre los microservicios, aunque el servicio debe obtener y procesar los
+    registros necesarios para cada consulta.
+
+    \item \textbf{No se mantiene un historial de activación de las canchas.}
+    Para calcular la ocupación de un período se utiliza el horario actual de
+    cada cancha. Si una cancha estuvo inactiva durante una parte del rango
+    consultado, esos días no pueden identificarse de forma independiente,
+    porque \id{canchas_db} conserva únicamente su estado actual.
+
+    \item \textbf{Algunas pruebas necesitan PostgreSQL disponible.}
+    Las pruebas de arranque de \id{ms-usuarios}, \id{ms-canchas} y
+    \id{ms-reservas} utilizan Testcontainers, por lo que requieren Docker para
+    ejecutar PostgreSQL durante la prueba. Además, \id{ConcurrenciaReservaIT}
+    necesita una instancia de PostgreSQL configurada mediante
+    \id{RESERVAS\_IT\_DB\_URL}. Las pruebas unitarias de los servicios de
+    aplicación pueden ejecutarse sin levantar esta infraestructura.
+
 \end{itemize}
