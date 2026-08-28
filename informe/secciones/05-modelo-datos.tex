@@ -69,12 +69,10 @@ evalúa.}
 \subsection{Diccionario de datos}
 \label{sec:diccionario}
 
-El diccionario de datos se organiza según las entidades que forman parte de cada
-base de datos. En usuarios\_db se encuentra la entidad usuario; canchas\_db
-contiene cancha y bloqueo\_mantenimiento; y reservas\_db contiene reserva y
-configuracion. Para cada entidad se muestran sus campos, el tipo lógico del dato
-y la información que representa. Los tipos SQL y las restricciones específicas
-se encuentran definidos en las migraciones de Flyway de cada microservicio.
+El diccionario de datos se organiza según las tablas que forman parte de cada
+base de datos. usuarios\_db contiene la tabla usuario; canchas\_db contiene
+cancha y bloqueo\_mantenimiento; mientras que reservas\_db contiene reserva y
+\id{configuracion}.
 
 \paragraph{Base usuarios\_db.}
 
@@ -82,18 +80,18 @@ se encuentran definidos en las migraciones de Flyway de cada microservicio.
   \centering
   \caption{Entidad usuario.}
   \label{tab:dic-usuario}
-  \begin{tabular}{L{3.4cm} L{3.2cm} L{6.6cm}}
+  \begin{tabular}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
     \toprule
-    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Descripción} \\
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
     \midrule
 
-    id & Identificador & Identificador único del usuario. \\
-    username & Texto & Nombre utilizado para identificar la cuenta del usuario. \\
-    nombre & Texto & Nombre del usuario registrado en el sistema. \\
-    password\_hash & Texto & Hash de la contraseña utilizada para autenticar al usuario. \\
-    rol & Enumeración & Rol asignado al usuario: USUARIO\_FINAL o ADMINISTRADOR. \\
-    activo & Booleano & Indica si la cuenta del usuario se encuentra activa. \\
-    creado\_en & Fecha y hora & Fecha y hora en la que se creó la cuenta. \\
+    \id{id} & Identificador & \id{bigint} & Identificador de cuenta de usuario. \\
+    \id{username} & Texto & \id{varchar(60)} & Nombre con el que el usuario es reconocido en el sistema. \\
+    \id{nombre} & Texto & \id{varchar(120)} & Nombre visible que identifica a la persona dueña de la cuenta. \\
+    \id{password_hash} & Texto & \id{varchar(72)} & Hash BCrypt de la contraseña del usuario. \\
+    \id{rol} & Enumeración & \id{varchar(20)} & Determina los permisos y las secciones que puede visualizar en el sistema. \\
+    \id{activo} & Booleano & \id{boolean} & Indica si la cuenta puede acceder a la aplicación. \\
+    \id{creado_en} & Fecha y hora & \id{timestamp} & Fecha y hora en que se registró la cuenta. \\
 
     \bottomrule
   \end{tabular}
@@ -106,17 +104,17 @@ se encuentran definidos en las migraciones de Flyway de cada microservicio.
   \centering
   \caption{Entidad cancha.}
   \label{tab:dic-cancha}
-  \begin{tabular}{L{3.4cm} L{3.2cm} L{6.6cm}}
+  \begin{tabular}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
     \toprule
-    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Descripción} \\
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
     \midrule
 
-    id & Identificador & Identificador único de la cancha. \\
-    nombre & Texto & Nombre asignado a la cancha. \\
-    deporte & Enumeración & Tipo de deporte asociado a la cancha: PADEL, TENIS o BASQUET. \\
-    hora\_apertura & Hora & Hora desde la que la cancha se encuentra disponible para su uso. \\
-    hora\_cierre & Hora & Hora hasta la que la cancha se encuentra disponible para su uso. \\
-    activa & Booleano & Indica si la cancha se encuentra activa dentro del sistema. \\
+    \id{id} & Identificador & \id{bigint} & Identificador de la cancha dentro del catálogo. \\
+    \id{nombre} & Texto & \id{varchar(120)} & Nombre con el que la cancha se muestra al usuario. \\
+    \id{deporte} & Enumeración & \id{varchar(20)} & Deporte que se practica en la cancha y con el que se clasifica en el catálogo. \\
+    \id{hora_apertura} & Hora & \id{time} & Hora desde la cual la cancha puede ofrecer bloques de reserva. \\
+    \id{hora_cierre} & Hora & \id{time} & Hora hasta la cual la cancha puede ofrecer bloques de reserva. \\
+    \id{activa} & Booleano & \id{boolean} & Indica si la cancha se encuentra disponible para las reservas. \\
 
     \bottomrule
   \end{tabular}
@@ -127,16 +125,16 @@ se encuentran definidos en las migraciones de Flyway de cada microservicio.
   \centering
   \caption{Entidad bloqueo\_mantenimiento.}
   \label{tab:dic-bloqueo}
-  \begin{tabular}{L{3.4cm} L{3.2cm} L{6.6cm}}
+  \begin{tabular}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
     \toprule
-    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Descripción} \\
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
     \midrule
 
-    id & Identificador & Identificador único del bloqueo de mantenimiento. \\
-    cancha\_id & Identificador & Identifica la cancha sobre la que se aplica el bloqueo. \\
-    desde & Fecha y hora & Fecha y hora en la que inicia el bloqueo. \\
-    hasta & Fecha y hora & Fecha y hora en la que finaliza el bloqueo. \\
-    motivo & Texto opcional & Motivo asociado al bloqueo de mantenimiento. \\
+    \id{id} & Identificador & \id{bigint} & Identificador del período de mantenimiento. \\
+    \id{cancha_id} & Referencia a cancha & \id{bigint} & Cancha a la que pertenece el período de mantenimiento. \\
+    \id{desde} & Fecha y hora & \id{timestamp} & Fecha y hora de inicio del mantenimiento. \\
+    \id{hasta} & Fecha y hora & \id{timestamp} & Fecha y hora de finalización del mantenimiento. \\
+    \id{motivo} & Texto & \id{varchar(200)} & Motivo del mantenimiento. \\
 
     \bottomrule
   \end{tabular}
@@ -149,20 +147,20 @@ se encuentran definidos en las migraciones de Flyway de cada microservicio.
   \centering
   \caption{Entidad reserva.}
   \label{tab:dic-reserva}
-  \begin{tabular}{L{3.4cm} L{3.2cm} L{6.6cm}}
+  \begin{tabular}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
     \toprule
-    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Descripción} \\
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
     \midrule
 
-    id & Identificador & Identificador único de la reserva. \\
-    cancha\_id & Identificador & Identifica la cancha asociada a la reserva. \\
-    usuario\_id & Identificador & Identifica al usuario que realiza la reserva. \\
-    fecha & Fecha & Fecha para la que se realiza la reserva. \\
-    hora\_inicio & Hora & Hora de inicio del bloque reservado. \\
-    hora\_fin & Hora & Hora de finalización del bloque reservado. \\
-    estado & Enumeración & Estado de la reserva: CONFIRMADA, CANCELADA o FINALIZADA. \\
-    creada\_en & Fecha y hora & Fecha y hora en la que se registró la reserva. \\
-    cancelada\_en & Fecha y hora opcional & Fecha y hora en la que se canceló la reserva, cuando corresponde. \\
+    \id{id} & Identificador & \id{bigint} & Identificador de la reserva registrada. \\
+    \id{cancha_id} & Referencia lógica a cancha & \id{bigint} & Identificador de la cancha reservada. \\
+    \id{usuario_id} & Referencia lógica a usuario & \id{bigint} & Identificador del usuario que realizó la reserva. \\
+    \id{fecha} & Fecha & \id{date} & Fecha calendario de reservación de la cancha. \\
+    \id{hora_inicio} & Hora & \id{time} & Hora de inicio de la reservación. \\
+    \id{hora_fin} & Hora & \id{time} & Hora de finalización de la reservación. \\
+    \id{estado} & Enumeración & \id{varchar(20)} & Estado de la reserva, determina si está confirmada, cancelada o finalizada. \\
+    \id{creada_en} & Fecha y hora & \id{timestamp} & Fecha y hora en que se registró la reserva. \\
+    \id{cancelada_en} & Fecha y hora & \id{timestamp} & Fecha y hora en que se anuló la reserva. \\
 
     \bottomrule
   \end{tabular}
@@ -171,15 +169,15 @@ se encuentran definidos en las migraciones de Flyway de cada microservicio.
 
 \begin{table}[H]
   \centering
-  \caption{Entidad configuracion.}
+  \caption{Entidad \id{configuracion}.}
   \label{tab:dic-configuracion}
-  \begin{tabular}{L{3.4cm} L{3.2cm} L{6.6cm}}
+  \begin{tabular}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
     \toprule
-    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Descripción} \\
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
     \midrule
 
-    clave & Texto & Nombre del parámetro de configuración. \\
-    valor & Texto & Valor asociado al parámetro de configuración. \\
+    \id{clave} & Clave de configuración & \id{varchar(60)} & Nombre que identifica el parámetro de configuración. \\
+    \id{valor} & Valor de la configuración & \id{varchar(120)} & Valor asignado al parámetro de configuración. \\
 
     \bottomrule
   \end{tabular}
@@ -188,21 +186,84 @@ se encuentran definidos en las migraciones de Flyway de cada microservicio.
 \subsection{Integridad entre bases de datos}
 \label{sec:integridad}
 
-\instruccion{Es el apartado que más distingue un modelo de microservicios de
-un monolito con varias tablas. Explica qué referencias cruzan la frontera
-entre bases, por qué no pueden ser claves foráneas y dónde se valida
-entonces la integridad.}
+La tabla reserva contiene dos referencias hacia información de otros
+microservicios: cancha\_id y usuario\_id. Como estos datos pertenecen a
+canchas\_db y usuarios\_db, no se utilizan claves foráneas entre estas bases.
+La validación se realiza antes de guardar la reserva, utilizando la información
+que proporciona el servicio responsable de cada dato.
 
-\ph{Referencias lógicas sin clave foránea: cuáles son, dónde se validan y
-qué ocurre si la validación falla.}
+\begin{itemize}
+    \item \textbf{Cancha.}
+    BookingService utiliza CourtClientPort para consultar a ms-canchas antes de
+    registrar la reserva, para eso se comprueba que la cancha exista, esté activa, que el
+    bloque de tiempo solicitado se encuentre dentro de su horario y que no exista un
+    bloqueo de mantenimiento para ese período. Si la cancha no existe, la
+    operación responde con 404. Si existe pero no puede aceptar la reserva, por
+    ejemplo porque está inactiva, fuera de horario o bloqueada por mantenimiento,
+    se responde con 422. Si ms-canchas no se encuentra disponible, la reserva no
+    puede continuar y se responde con 503.
+
+    \item \textbf{Usuario.}
+    ms-reservas no vuelve a consultar a ms-usuarios para comprobar usuario\_id.
+    En el flujo normal de la aplicación, el API Gateway valida primero las
+    credenciales contra ms-usuarios y luego agrega X-User-Id y X-User-Role a la
+    solicitud. Además, descarta cualquier cabecera X-User-* enviada por el
+    cliente antes de generar estas cabeceras. Por esta razón, ms-reservas utiliza
+    la identidad recibida desde el Gateway para registrar la reserva y aplicar
+    las reglas de acceso correspondientes.
+\end{itemize}
+
+Las claves foráneas sí se utilizan cuando las tablas pertenecen a la misma base
+de datos. Por ejemplo, bloqueo\_mantenimiento.cancha\_id referencia a cancha.id
+dentro de canchas\_db. Por lo tanto, las relaciones internas se validan
+directamente en PostgreSQL, mientras que las referencias hacia otros
+microservicios se validan antes de persistir la información.
 
 \subsection{Restricciones que implementan reglas de negocio}
 \label{sec:restricciones}
 
-\instruccion{Aquí va la restricción de exclusión que impide el solapamiento.
-Es el punto técnico más fuerte del modelo de datos: explica por qué está en
-el motor y no en el código de la aplicación. El detalle de la regla como tal
-va en la \cref{sec:solapamiento}; aquí solo el mecanismo de base de datos.}
+La principal restricción del modelo se encuentra en la tabla reserva y se utiliza
+para evitar que se guarden reservas solapadas para una misma cancha. Aunque
+ms-reservas comprueba la disponibilidad antes de registrar una reserva, esta
+validación por sí sola no cubre el caso en que dos solicitudes intentan reservar
+el mismo horario al mismo tiempo. Por esta razón, la comprobación final también
+se mantiene en PostgreSQL.
 
-\ph{Restricciones e índices que sostienen las reglas y las consultas de
-disponibilidad.}
+La restricción reserva\_sin\_solape utiliza EXCLUDE USING gist sobre cancha\_id
+y el rango formado por fecha, hora\_inicio y hora\_fin. La comparación se aplica
+únicamente a las reservas con estado CONFIRMADA. De esta manera, PostgreSQL
+rechaza una operación si al momento de guardar encuentra otro rango que se
+solapa para la misma cancha. La restricción requiere la extensión btree\_gist
+para poder utilizar la comparación por igualdad de cancha\_id dentro del índice
+GiST. El funcionamiento completo de esta regla se explica en la
+\cref{sec:solapamiento}.
+
+Además de esta restricción, los esquemas contienen validaciones CHECK e índices
+que mantienen valores válidos y apoyan las consultas realizadas por los
+microservicios.
+
+\begin{table}[H]
+  \centering
+  \caption{Restricciones e índices principales del modelo de datos.}
+  \label{tab:restricciones}
+  \begin{tabular}{L{3.2cm} L{4.5cm} L{5.5cm}}
+    \toprule
+    \textbf{Tabla} & \textbf{Restricción o índice} & \textbf{Propósito} \\
+    \midrule
+
+    \id{usuario} & \id{usuario_username_unico} & Evita que se registren dos usuarios con el mismo username. \\
+    \id{usuario} & \id{usuario_rol_valido} & Limita el rol a USUARIO\_FINAL o ADMINISTRADOR. \\
+    \id{cancha} & \id{cancha_deporte_valido} & Limita el deporte a PADEL, TENIS o BASQUET. \\
+    \id{cancha} & \id{cancha_horario_valido} & Impide guardar una hora de cierre menor o igual a la hora de apertura. \\
+    \id{bloqueo_mantenimiento} & \id{bloqueo_rango_valido} & Comprueba que el final del bloqueo por mantenimiento sea posterior a su inicio. \\
+    \id{bloqueo_mantenimiento} & \id{bloqueo_por_cancha} & Apoya la búsqueda de bloqueos por mantenimiento registrados para una cancha. \\
+    \id{reserva} & \id{reserva_estado_valido} & Limita el estado a CONFIRMADA, CANCELADA o FINALIZADA. \\
+    \id{reserva} & \id{reserva_bloque_valido} & Comprueba que la hora de finalización sea posterior a la hora de inicio. \\
+    \id{reserva} & \id{reserva_sin_solape} & Evita el solapamiento de reservas confirmadas para una misma cancha,
+    incluso cuando se reciben solicitudes concurrentes. \\
+    \id{reserva} & \id{reserva_por_usuario} & Apoya las consultas de reservas por usuario y fecha. \\
+    \id{reserva} & \id{reserva_por_cancha_fecha} & Apoya las consultas de disponibilidad por cancha y fecha. \\
+
+    \bottomrule
+  \end{tabular}
+\end{table}
