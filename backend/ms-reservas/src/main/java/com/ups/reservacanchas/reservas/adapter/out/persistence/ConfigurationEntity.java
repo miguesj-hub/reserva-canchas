@@ -19,5 +19,12 @@ class ConfigurationEntity {
 
     protected ConfigurationEntity() {}
 
+    ConfigurationEntity(String clave, String valor) {
+        this.clave = clave;
+        this.valor = valor;
+    }
+
     String getValor() { return valor; }
+
+    void setValor(String valor) { this.valor = valor; }
 }

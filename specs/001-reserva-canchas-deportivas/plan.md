@@ -70,7 +70,7 @@ versiones estaban decididos antes de este plan, y las nueve decisiones que sí e
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-Evaluado contra `.specify/memory/constitution.md` v1.1.1.
+Evaluado contra `.specify/memory/constitution.md` v1.3.0.
 
 | # | Principio | Cómo lo satisface este plan | Estado |
 |---|---|---|---|
@@ -82,7 +82,7 @@ Evaluado contra `.specify/memory/constitution.md` v1.1.1.
 | VI | Contrato antes que implementación | Los contratos de los cuatro servicios, con su catálogo de errores, se cierran en Fase 1 y son la entrada del trabajo de ambos lados. Swagger UI por servicio en `/swagger-ui.html`. | PASA |
 | VII | Levantar con un solo comando | El compose se completa dentro de la primera historia y crece con cada una; el seed cubre los tres dominios desde el arranque. Ver [quickstart.md](./quickstart.md). | PASA |
 
-**Compuertas de calidad**: las ocho aplican a cada historia. La octava —`diagramas/workspace.dsl` y
+**Compuertas de calidad**: las nueve aplican a cada historia. La novena —`diagramas/workspace.dsl` y
 `informe/secciones/` actualizados en el mismo cambio— tiene trabajo identificado ya en este plan:
 el DSL no contempla todavía la ruta `/api/auth` ni el contenedor de PostgreSQL con sus tres bases
 como se despliega realmente. Se corrige al integrar la primera historia, no al final.
@@ -106,7 +106,7 @@ Repetida sobre los artefactos de diseño ya escritos, que es cuando las violacio
   otros cuatro no den; queda justificado en su propia descripción.
 - **Principio VI** — Los cuatro contratos están completos, con su catálogo de errores y el mapa de
   qué pantalla consume qué. Ver [contracts/README.md](./contracts/README.md).
-- **Compuerta 8** — El trabajo sobre `diagramas/workspace.dsl` está identificado y fechado (R-009):
+- **Compuerta 9** — El trabajo sobre `diagramas/workspace.dsl` está identificado y fechado (R-009):
   se integra con la Historia 1, no al final.
 
 Sin violaciones nuevas.

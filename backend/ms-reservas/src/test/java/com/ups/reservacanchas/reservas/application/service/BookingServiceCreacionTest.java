@@ -171,6 +171,37 @@ class BookingServiceCreacionTest {
         verify(bookings, never()).save(any(Booking.class));
     }
 
+    /**
+     * FR-055 (feature 002). Bajar el tope no es retroactivo: se evalúa al crear,
+     * nunca sobre lo ya confirmado.
+     *
+     * Va aquí y no en ConfigurationServiceTest a propósito: quien aplica RN-06
+     * sigue siendo BookingService, y la feature 002 solo hizo escribible el
+     * parámetro que este ya leía. La regla no se movió de sitio, así que la
+     * prueba tampoco.
+     */
+    @Test
+    void bajar_el_tope_no_toca_las_reservas_ya_confirmadas_FR055() {
+        canchaActivaDe07a22();
+        // El administrador acaba de bajar el tope de 3 a 1.
+        lenient().when(configuracion.valorDe("max_reservas_activas")).thenReturn(Optional.of("1"));
+
+        List<Booking> yaConfirmadas = List.of(
+                confirmadaDe(CLIENTE, MANANA, 8),
+                confirmadaDe(CLIENTE, MANANA, 9),
+                confirmadaDe(CLIENTE, MANANA, 10));
+        when(bookings.findByUsuario(CLIENTE)).thenReturn(yaConfirmadas);
+
+        assertThatThrownBy(() -> service.crear(peticionA(19), CLIENTE, "USUARIO_FINAL"))
+                .isInstanceOf(ActiveBookingLimitExceededException.class);
+
+        // Ni se guarda la nueva ni se toca ninguna de las tres que ya existían:
+        // el usuario se queda con sus 3 y simplemente no puede crear la cuarta.
+        verify(bookings, never()).save(any(Booking.class));
+        assertThat(yaConfirmadas)
+                .allSatisfy(reserva -> assertThat(reserva.getEstado()).isEqualTo(BookingStatus.CONFIRMADA));
+    }
+
     @Test
     void las_reservas_ya_terminadas_no_cuentan_para_el_tope_RN06() {
         // Tres confirmadas, pero de ayer: se leen como FINALIZADA y no ocupan

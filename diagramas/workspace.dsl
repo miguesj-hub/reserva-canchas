@@ -35,17 +35,18 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
             }
 
             // --- Microfrontends --------------------------------------------
-            shell = container "Shell (host)" "Main container: layout, navigation, user session, and runtime orchestration of the remotes." "React + Module Federation" {
+            shell = container "Shell (host)" "Host container: renders the application chrome (side menu and header) once, resolves the top-level routes, holds the user session, orchestrates the remotes at runtime, and isolates their failures." "React + Module Federation" {
                 tags "Microfrontend" "Host"
 
                 // --- Internal components ---------------------------------
                 routerShell = component "Router" "Defines the top-level routes and resolves which remote to delegate each one to." "React Router"
-                layoutShell = component "Layout" "Shared visual structure (header, navigation) that wraps the active remote." "React"
+                navegacion = component "Navegacion" "The single definition of the menu entries, one list per role, plus the routes that are shown without chrome." "TypeScript module"
+                layoutShell = component "Chrome" "Renders the side menu and the header once, chooses the menu by the session role, and keeps them mounted while only the centre changes. Full-screen routes are served without it." "React"
                 sessionContext = component "SessionContext" "Holds the authenticated user's identity and role, and exposes session state to the shell and the remotes." "React Context"
                 remoteLoader = component "RemoteLoader" "Loads each microfrontend's remoteEntry.js at runtime." "Module Federation"
             }
 
-            mfReservas = container "mf-reservas" "Availability lookup, booking creation, and cancellation for the end user." "React + Module Federation (remote)" {
+            mfReservas = container "mf-reservas" "Availability lookup, booking creation, and cancellation for the end user. Exposes only its screens: the chrome is the shell's." "React + Module Federation (remote)" {
                 tags "Microfrontend"
 
                 // --- Internal components ---------------------------------
@@ -55,7 +56,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 apiClientReservas = component "ApiClient" "Wraps the HTTP calls to /api/reservas and /api/disponibilidad." "Fetch API"
             }
 
-            mfAdministracion = container "mf-administracion" "Management of the court catalog, schedules, blocks, users, and cancellation of any booking." "React + Module Federation (remote)" {
+            mfAdministracion = container "mf-administracion" "Management of the court catalog, schedules, blocks, users, bookings policy, and cancellation of any booking. Exposes only its screens: the chrome is the shell's." "React + Module Federation (remote)" {
                 tags "Microfrontend"
 
                 // --- Internal components ---------------------------------
@@ -65,7 +66,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 apiClientAdministracion = component "ApiClient" "Wraps the HTTP calls to /api/canchas, /api/reservas, and /api/usuarios." "Fetch API"
             }
 
-            mfReportes = container "mf-reportes" "Displays occupancy reports, bookings by period, cancellations, and the most/least demanded courts." "React + Module Federation (remote)" {
+            mfReportes = container "mf-reportes" "Displays occupancy reports, bookings by period, cancellations, and the most/least demanded courts. Exposes only its screen: the chrome is the shell's." "React + Module Federation (remote)" {
                 tags "Microfrontend"
 
                 // --- Internal components ---------------------------------
@@ -163,6 +164,9 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 bookingController = component "BookingController" "Exposes the REST endpoints for bookings and availability; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
                     tags "Adapter-In"
                 }
+                configurationController = component "ConfigurationController" "Exposes the REST endpoints that read and change the active-bookings limit of RN-06; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                    tags "Adapter-In"
+                }
                 errorHandlerBooking = component "ErrorHandler" "Translates business exceptions (overlap, permissions, booking not found) into HTTP status codes (409 on overlap)." "@RestControllerAdvice" {
                     tags "Adapter-In"
                 }
@@ -174,12 +178,18 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 bookingService = component "BookingService" "Implements the input port: applies RN-01..RN-08 (availability, active-bookings limit RN-06, future-only cancellation RN-04, role-based permissions RN-03)." "Spring @Service" {
                     tags "Application"
                 }
+                configurationUseCase = component "ConfigurationUseCase" "Input port: read and change the active-bookings limit of RN-06. Administrator only." "Java interface" {
+                    tags "Port"
+                }
+                configurationService = component "ConfigurationService" "Implements the input port: reads and writes the limit, rejects values below 1, and requires the ADMINISTRADOR role. Applying RN-06 stays in BookingService; this only governs the parameter." "Spring @Service" {
+                    tags "Application"
+                }
 
                 // --- Domain: output ports ------------------------------------
                 bookingRepositoryPort = component "BookingRepositoryPort" "Output port: persistence operations over bookings that the application core needs." "Java interface" {
                     tags "Port"
                 }
-                configurationRepositoryPort = component "ConfigurationRepositoryPort" "Output port: reads configurable parameters, such as the maximum number of simultaneous active bookings." "Java interface" {
+                configurationRepositoryPort = component "ConfigurationRepositoryPort" "Output port: reads and writes configurable parameters, such as the maximum number of simultaneous active bookings." "Java interface" {
                     tags "Port"
                 }
                 courtClientPort = component "CourtClientPort" "Output port: checks whether a court exists, is active, and its opening hours, without depending on how that check travels over the network." "Java interface" {
@@ -190,7 +200,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 bookingRepositoryAdapter = component "BookingRepositoryAdapter" "Implements the booking-persistence output port. The PostgreSQL EXCLUDE constraint prevents overlap (RN-02)." "Spring Data JPA" {
                     tags "Adapter-Out"
                 }
-                configurationRepositoryAdapter = component "ConfigurationRepositoryAdapter" "Implements the configuration-reading output port." "Spring Data JPA" {
+                configurationRepositoryAdapter = component "ConfigurationRepositoryAdapter" "Implements the configuration output port: reads the limit on every booking creation and writes it when the administrator changes it." "Spring Data JPA" {
                     tags "Adapter-Out"
                 }
                 courtClientAdapter = component "CourtClientAdapter" "Implements the court-check output port by calling ms-canchas over REST." "Spring RestClient" {
@@ -295,6 +305,10 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
 
         bookingController -> bookingUseCase "Invokes"
         bookingController -> errorHandlerBooking "Unhandled exceptions"
+        configurationController -> configurationUseCase "Invokes"
+        configurationController -> errorHandlerBooking "Unhandled exceptions"
+        configurationService -> configurationUseCase "Implements"
+        configurationService -> configurationRepositoryPort "Reads and changes the active-bookings limit (RN-06)"
         bookingService -> bookingUseCase "Implements"
 
         bookingService -> courtClientPort "Checks the court and gets its opening hours"
@@ -307,7 +321,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
 
         courtClientAdapter -> msCanchas "Queries the court (schedule, active state) and its maintenance blocks, to mark blocked slots as unbookable (FR-010)" "JSON/HTTP"
         bookingRepositoryAdapter -> reservasDb "Reads and writes" "JDBC"
-        configurationRepositoryAdapter -> reservasDb "Reads" "JDBC"
+        configurationRepositoryAdapter -> reservasDb "Reads and writes" "JDBC"
 
         // ===================================================================
         //  Relationships — component level (ms-usuarios, hexagonal)
@@ -378,7 +392,8 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
         // ===================================================================
         routerShell -> sessionContext "Checks whether there is an active session before resolving the route"
         routerShell -> layoutShell "Renders within"
-        layoutShell -> remoteLoader "Mounts the remote for the active route"
+        layoutShell -> navegacion "Reads the menu entries for the active role"
+        layoutShell -> remoteLoader "Mounts the remote for the active route, replacing only the centre"
 
         sessionContext -> edge "Authenticates the user" "JSON/HTTPS · /api/auth"
         remoteLoader -> mfReservas "Loads the remote at runtime" "Module Federation (remoteEntry.js)"
@@ -532,7 +547,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
             include *
         }
 
-        component shell "09-Componentes-shell" "Level 3 — Interior of the shell: layout, session, and remote loading." {
+        component shell "09-Componentes-shell" "Level 3 — Interior of the shell: chrome, top-level routing, session, and remote loading." {
             include *
         }
 

@@ -121,6 +121,18 @@ microfrontends en tiempo de ejecución mediante Module Federation. Cada
 microfrontend agrupa las pantallas y funcionalidades correspondientes a su área,
 mientras que el shell permite integrarlos dentro de una misma aplicación web.
 
+El menú lateral y la cabecera se definen una sola vez, en el shell, y permanecen
+montados mientras el usuario navega: al seleccionar una opción únicamente se
+reemplaza el contenido central. Esto se cumple incluso cuando la sección de
+destino la sirve un microfrontend distinto del que sirve la sección actual, como
+ocurre al pasar de la administración a los reportes; en ese caso el shell carga
+el microfrontend correspondiente y sustituye solo esa parte de la pantalla. Los
+microfrontends, por su parte, exponen exclusivamente sus pantallas y conservan la
+resolución de sus rutas internas. La única excepción es la pantalla de creación
+de reserva, que se presenta a pantalla completa por tratarse de un flujo
+transaccional; el shell mantiene para ello una lista explícita de rutas que se
+muestran sin la estructura común.
+
 \begin{xltabular}{\textwidth}{L{3.6cm} L{6.4cm} L{3.4cm}}
   \caption{Composición de microfrontends.}
   \label{tab:microfrontends}
@@ -246,6 +258,14 @@ ms-canchas, mientras que los adaptadores de persistencia se encargan del acceso
 a reservas\_db. Esta separación permite que la lógica de las reservas se mantenga
 independiente de la forma en que se consultan otros servicios o se almacenan los
 datos.
+
+El servicio incorpora además un segundo caso de uso, dedicado a la configuración
+de la política de reservas. ConfigurationController expone las operaciones de
+lectura y cambio del tope de reservas activas de \rn{06}, y
+ConfigurationService las aplica sobre el mismo ConfigurationRepositoryPort que
+consulta BookingService. La regla continúa aplicándose en BookingService: este
+caso de uso solo gobierna el parámetro que aquella lee, y por eso el valor nuevo
+rige desde la siguiente reserva que se intente crear, sin reiniciar el servicio.
 
 \subsubsection{\texorpdfstring{\textsf{V-04}}{V-04} Despliegue}
 \label{v:04}
