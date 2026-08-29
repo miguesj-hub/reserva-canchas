@@ -85,14 +85,34 @@ se pierden mientras tanto.}
 Desde el menú lateral, la opción \boton{Perfil} muestra los datos de tu
 cuenta: nombre, nombre de usuario, rol e identificador interno. Es la
 misma pantalla para usuario final y administrador; solo cambia el rol que
-se muestra.
+se muestra. El menú lateral permanece visible mientras consultas tu
+perfil, igual que en el resto de la aplicación.
 
-\captura{usuario-perfil}{1}{Perfil de un usuario final.}{usuario-perfil}
+\captura{usuario-perfil}{1}{Perfil de un usuario final. El menú lateral se mantiene visible.}{usuario-perfil}
 
-\captura{admin-perfil}{1}{Perfil de un administrador.}{admin-perfil}
+\captura{admin-perfil}{1}{Perfil de un administrador. El menú lateral se mantiene visible.}{admin-perfil}
 
 \subsection{Cerrar sesión}
 
 Pulsa \boton{Cerrar Sesión}, disponible tanto en el menú lateral como en la
 propia pantalla de \boton{Perfil}. La sesión se cierra de inmediato y
 vuelves a la pantalla de acceso.
+
+\subsubsection{Cierre de sesión por inactividad}
+
+Si pasas un minuto sin mover el mouse, escribir ni desplazarte, la
+aplicación muestra un aviso con una cuenta regresiva de 30 segundos antes
+de cerrar la sesión automáticamente.
+
+\captura{sesion-inactividad}{1}{Aviso de inactividad, con la cuenta regresiva antes del cierre automático.}{sesion-inactividad}
+
+\begin{enumerate}
+  \item Pulsa \boton{Estoy Aquí} para seguir trabajando; la cuenta
+        regresiva se cancela y el conteo de inactividad vuelve a empezar.
+  \item Si no respondes, la sesión se cierra sola y vuelves a la pantalla
+        de acceso, igual que si hubieras pulsado \boton{Cerrar Sesión}.
+\end{enumerate}
+
+\nota{Es una medida de seguridad: evita que una sesión quede abierta en un
+equipo compartido. No se pierde ningún dato por el cierre: cualquier
+reserva o cambio ya guardado permanece como estaba.}

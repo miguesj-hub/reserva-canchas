@@ -42,9 +42,10 @@ solicitudes se acepta. Elige otro bloque u otra cancha.
 
 \subsection*{¿Cuántas reservas puedo tener a la vez?}
 
-Como máximo tres reservas en estado \textsc{Confirmada}. Si necesitas una
-cuarta, cancela primero alguna de las que ya tienes
-(\cref{sec:usuario:cancelar}).
+Como máximo el tope de reservas activas que el club tenga configurado —3
+de forma predeterminada, pero el administrador puede cambiarlo
+(\cref{sec:admin:configuracion})—. Si ya llegaste al tope vigente,
+cancela primero alguna de las que ya tienes (\cref{sec:usuario:cancelar}).
 
 \subsection*{Quiero cancelar una reserva y no aparece el botón Cancelar}
 
@@ -72,8 +73,16 @@ cuenta} nace como usuario final (\cref{sec:acceso:crear-cuenta}). Ascender
 una cuenta a administrador es una operación que realiza el equipo técnico
 del club directamente sobre la base de datos.
 
-\subsection*{Como usuario final, intenté ver Reportes o Gestión de Canchas}
+\subsection*{Como usuario final, intenté ver Reportes, Canchas, Usuarios o Configuración}
 
 Esas secciones son exclusivas del rol administrador. Si accedes con una
 cuenta de usuario final, el sistema rechaza la operación; no forman parte
 del menú que ves al iniciar sesión.
+
+\subsection*{¿El administrador también puede reservar desde Disponibilidad?}
+
+No. El administrador tiene su propia sección \boton{Disponibilidad}
+(\cref{sec:admin:disponibilidad}), con los mismos bloques que ve un
+usuario final, pero es de solo consulta: sirve para resolver dudas o
+reclamos, no para crear reservas. Esa acción sigue siendo exclusiva del
+usuario final.

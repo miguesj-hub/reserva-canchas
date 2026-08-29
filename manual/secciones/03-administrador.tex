@@ -6,9 +6,10 @@
 \section{Guía para el administrador}
 \label{sec:administrador}
 
-Al iniciar sesión como administrador, el menú lateral muestra cinco
-secciones: \boton{Dashboard}, \boton{Reservas}, \boton{Canchas},
-\boton{Usuarios} y \boton{Reportes}.
+Al iniciar sesión como administrador, el menú lateral muestra siete
+secciones, en este orden: \boton{Dashboard}, \boton{Reservas},
+\boton{Canchas}, \boton{Disponibilidad}, \boton{Usuarios},
+\boton{Configuración} y \boton{Reportes}.
 
 \captura{admin-login}{1}{Inicio de sesión como administrador.}{admin-login}
 
@@ -20,6 +21,46 @@ indicadores: reservas de hoy, ocupación media de las canchas,
 cancelaciones del día y la cancha con mayor demanda hoy.
 
 \captura{admin-dashboard}{1}{Panel principal con los indicadores del día.}{admin-dashboard}
+
+\subsection{Gestión de reservas}
+\label{sec:admin:reservas}
+
+Desde \boton{Reservas} se ve el listado completo de reservas del club,
+de todos los usuarios, con filtros por fecha, cancha y estado.
+
+\captura{admin-reservas-listado}{1}{Listado global de reservas, con filtros por fecha, cancha y estado.}{admin-reservas-listado}
+
+Cada fila muestra el código de la reserva, el usuario, la cancha, el
+deporte, la fecha, el bloque horario y su estado. La columna
+\boton{Acciones} solo ofrece \boton{Cancelar} para las reservas en estado
+\textsc{Confirmada}.
+
+\subsubsection{Cancelar la reserva de un usuario}
+
+\begin{enumerate}
+  \item Localiza la reserva y pulsa \boton{Cancelar} en su fila.
+  \item El sistema pide confirmación, mostrando el código, el usuario, la
+        cancha y el horario exactos.
+\end{enumerate}
+
+\captura{admin-confirmar-cancelacion}{1}{Confirmación antes de cancelar la reserva de un usuario.}{admin-confirmar-cancelacion}
+
+\begin{enumerate}
+  \setcounter{enumi}{2}
+  \item Pulsa \boton{Cancelar reserva} para confirmar, o \boton{Volver}
+        para desistir sin cambiar nada.
+\end{enumerate}
+
+La reserva pasa a \textsc{Cancelada} y el bloque horario vuelve a estar
+libre de inmediato, tanto en Disponibilidad como en la sesión del usuario
+dueño de la reserva.
+
+\captura{admin-reserva-cancelada}{1}{La reserva queda \textsc{Cancelada} tras confirmar.}{admin-reserva-cancelada}
+
+\aviso{Cancelar desde aquí afecta a cualquier usuario del club, no solo a
+tus propias reservas. Úsalo cuando la cancelación la pide o la amerita el
+usuario (por ejemplo, un reclamo o un cambio de última hora), ya que la
+acción es inmediata y no tiene deshacer.}
 
 \subsection{Gestión de canchas}
 \label{sec:admin:canchas}
@@ -103,45 +144,37 @@ reservas, pero \textbf{no elimina} las reservas que ya tenía confirmadas
 ni su historial. Es la forma correcta de retirar temporalmente una cancha
 sin perder información.}
 
-\subsection{Gestión de reservas}
-\label{sec:admin:reservas}
+\subsection{Consultar disponibilidad}
+\label{sec:admin:disponibilidad}
 
-Desde \boton{Reservas} se ve el listado completo de reservas del club,
-de todos los usuarios, con filtros por fecha, cancha y estado.
-
-\captura{admin-reservas-listado}{1}{Listado global de reservas, con filtros por fecha, cancha y estado.}{admin-reservas-listado}
-
-Cada fila muestra el código de la reserva, el usuario, la cancha, el
-deporte, la fecha, el bloque horario y su estado. La columna
-\boton{Acciones} solo ofrece \boton{Cancelar} para las reservas en estado
-\textsc{Confirmada}.
-
-\subsubsection{Cancelar la reserva de un usuario}
+Desde \boton{Disponibilidad} el administrador ve, para una cancha y una
+fecha, exactamente los mismos bloques libres, ocupados y en mantenimiento
+que vería un usuario final. Es una pantalla de solo consulta: sirve para
+resolver una duda o un reclamo sin tener que reconstruir el listado global
+de reservas a mano.
 
 \begin{enumerate}
-  \item Localiza la reserva y pulsa \boton{Cancelar} en su fila.
-  \item El sistema pide confirmación, mostrando el código, el usuario, la
-        cancha y el horario exactos.
+  \item Entra a \boton{Disponibilidad} desde el menú lateral.
+  \item Elige el deporte: \boton{Pádel}, \boton{Tenis} o \boton{Básquet}.
+  \item Elige el día, entre hoy y los cuatro días siguientes.
 \end{enumerate}
 
-\captura{admin-confirmar-cancelacion}{1}{Confirmación antes de cancelar la reserva de un usuario.}{admin-confirmar-cancelacion}
+\captura{admin-disponibilidad}{1}{Disponibilidad consultada por el administrador: los mismos bloques que ve un usuario final.}{admin-disponibilidad}
 
-\begin{enumerate}
-  \setcounter{enumi}{2}
-  \item Pulsa \boton{Cancelar reserva} para confirmar, o \boton{Volver}
-        para desistir sin cambiar nada.
-\end{enumerate}
+A diferencia de la pantalla del usuario final (\cref{sec:usuario:disponibilidad}),
+esta vista tiene dos particularidades:
 
-La reserva pasa a \textsc{Cancelada} y el bloque horario vuelve a estar
-libre de inmediato, tanto en Disponibilidad como en la sesión del usuario
-dueño de la reserva.
+\begin{itemize}
+  \item \textbf{No se puede reservar desde aquí.} Los bloques no son
+        pulsables: crear una reserva sigue siendo una acción exclusiva del
+        usuario final.
+  \item \textbf{También muestra las canchas inactivas}, marcadas con la
+        etiqueta \boton{Inactiva} junto al nombre, porque el administrador
+        sí las gestiona (\cref{sec:admin:canchas}); al usuario final no se
+        le ofrecen.
+\end{itemize}
 
-\captura{admin-reserva-cancelada}{1}{La reserva queda \textsc{Cancelada} tras confirmar.}{admin-reserva-cancelada}
-
-\aviso{Cancelar desde aquí afecta a cualquier usuario del club, no solo a
-tus propias reservas. Úsalo cuando la cancelación la pide o la amerita el
-usuario (por ejemplo, un reclamo o un cambio de última hora), ya que la
-acción es inmediata y no tiene deshacer.}
+\captura{admin-disponibilidad-inactiva}{1}{Una cancha inactiva aparece marcada como tal, junto a las demás del mismo deporte.}{admin-disponibilidad-inactiva}
 
 \subsection{Gestión de usuarios}
 \label{sec:admin:usuarios}
@@ -170,6 +203,37 @@ forma de suspender a alguien sin borrar nada de lo que hizo antes.}
 \boton{Crear cuenta} en la pantalla de acceso (\cref{sec:acceso:crear-cuenta})
 y siempre nacen como usuario final; ascenderlas a administrador se hace
 directamente en la base de datos del club, fuera de esta pantalla.}
+
+\subsection{Configuración de reservas activas}
+\label{sec:admin:configuracion}
+
+Desde \boton{Configuración} el administrador cambia la política de
+reservas del club: el número máximo de reservas confirmadas y futuras
+que puede acumular un mismo usuario final al mismo tiempo. Este es el
+tope al que se refiere \cref{sec:usuario:reservar}.
+
+\captura{admin-configuracion}{1}{Configuración: el tope vigente de reservas activas por usuario.}{admin-configuracion}
+
+\begin{enumerate}
+  \item Escribe el nuevo valor en el campo, junto a \textit{«Tope
+        actual»}.
+  \item Pulsa \boton{Guardar}. El botón permanece deshabilitado mientras
+        el valor no cambie respecto al vigente.
+\end{enumerate}
+
+\captura{admin-configuracion-guardado}{1}{Tope actualizado: el aviso confirma el nuevo valor.}{admin-configuracion-guardado}
+
+El cambio rige de inmediato para la siguiente reserva que se intente
+crear, sin reiniciar ni redesplegar nada.
+
+\nota{Bajar el tope no cancela nada: los usuarios que ya tuvieran más
+reservas activas que el nuevo tope las conservan, y siguen ocupando su
+bloque. El tope solo se comprueba al \textbf{crear} una reserva, nunca
+sobre las que ya están confirmadas.}
+
+\aviso{El sistema rechaza un tope que no sea un número entero de 1 en
+adelante y mantiene vigente el valor anterior. Esta pantalla es exclusiva
+del administrador: un usuario final no puede consultarla ni modificarla.}
 
 \subsection{Reportes}
 \label{sec:admin:reportes}
