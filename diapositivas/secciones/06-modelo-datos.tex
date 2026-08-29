@@ -1,41 +1,55 @@
 % !TeX root = ../presentacion.tex
 % ===========================================================================
-%  6. Modelo de datos — 2 min
+%  6. Modelo de datos — 0:45
 %
-%  Criterio: «Modelo de datos y persistencia» (15 %). Dos cosas puntúan:
-%  que esté normalizado y que la independencia entre servicios sea real.
-%  Lo segundo se demuestra, no se afirma.
+%  Criterio: «Modelo de datos y persistencia» (15 %). Dos cosas puntúan: que
+%  el modelo esté normalizado y que la independencia entre servicios sea
+%  real. Lo segundo se demuestra, no se afirma: de ahí la salida de psql.
+%
+%  Esa salida es literal, capturada contra el contenedor rc-postgres. Para
+%  reproducirla:
+%    docker compose up -d postgres
+%    docker compose exec postgres \
+%      psql "postgresql://reservas_app:reservas_app@localhost/canchas_db"
+%
+%  El modelo entidad-relación completo está en el respaldo, a lámina entera.
 % ===========================================================================
 
-\bloque{Modelo de datos}{1 min}{\exponeBackend}%
+\bloque{Modelo de datos}{0:45}{\exponeBackend}%
        {Modelo de datos y persistencia (15\,\%)}
 
-\laminafiguratitulo{Modelo entidad-relación}{modelo-datos}%
-  {Tres bases separadas, no tres esquemas del mismo modelo. Las líneas que
-   cruzan la frontera son referencias por identificador, no claves foráneas.}
-
-\begin{frame}{La independencia de datos es verificable}
-  \guion{El argumento fuerte: no es una convención de equipo, es un permiso
-  denegado por PostgreSQL. Si alguien duda, se puede probar en la demo.}
+\begin{frame}[fragile]{Tres bases aisladas, y el aislamiento es verificable}
+  \note{El argumento fuerte: la independencia de datos no es una convención
+  de equipo, es un permiso denegado por PostgreSQL. Si alguien duda, este
+  mismo comando se corre en la demo.}
 
   \begin{columns}[T]
-    \begin{column}{0.52\textwidth}
-      \begin{itemize}\footnotesize
-        \item Un rol de PostgreSQL por servicio, con permisos solo sobre su base.
-        \item \id{ms-reservas} guarda el \id{id} de la cancha, no una clave
-              foránea a \id{canchas\_db}: la coherencia se valida llamando al
-              servicio dueño del dato.
-        \item El esquema y los datos de prueba se crean solos al levantar
+    \begin{column}{0.47\textwidth}
+      \begin{itemize}\scriptsize
+        \item Tres bases, cada una con \textbf{su propio rol} de PostgreSQL:
+              \id{usuarios\_db}, \id{canchas\_db}, \id{reservas\_db}.
+        \item \id{ms-reservas} guarda el \emph{identificador} de la cancha, no
+              una clave foránea a otra base: la coherencia se valida llamando
+              al servicio dueño del dato.
+        \item Esquema y datos de demostración los crea Flyway al arrancar
               (\ent{4}): ningún paso manual.
+        \item \id{ms-reportes} no tiene rol porque no tiene base.
       \end{itemize}
     \end{column}
-    \begin{column}{0.44\textwidth}
-      \begin{block}{Cómo se comprueba}
-        \footnotesize
-        Conectarse con el rol de \id{ms-reservas} e intentar leer una tabla de
-        \id{canchas\_db}: \alert{permiso denegado}.
-      \end{block}
-      \ph{Comando psql exacto, ya probado, por si lo piden}
+    \begin{column}{0.50\textwidth}
+      {\scriptsize El rol de \id{ms-reservas} intentando leer la base de
+      canchas:}
+      \begin{lstlisting}[basicstyle=\ttfamily\tiny]
+$ psql "postgresql://reservas_app@/canchas_db"
+
+psql: error: connection to server failed:
+FATAL:  permission denied for database
+        "canchas_db"
+DETAIL: User does not have CONNECT privilege.
+      \end{lstlisting}
+      {\scriptsize\color{textoSuave} No es una convención de equipo:
+      es un \alert{REVOKE CONNECT} en
+      \id{infra/postgres/init/01-bases-y-roles.sql}.}
     \end{column}
   \end{columns}
 \end{frame}

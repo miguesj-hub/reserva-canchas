@@ -9,18 +9,30 @@
 %  Con notas:      make notas      -> presentacion-notas.pdf, para el ponente
 %  Limpiar:        make clean
 %
-%  CÓMO USAR ESTA PLANTILLA
-%  ------------------------
-%  1. Rellena los datos del equipo y el reparto de secciones en
-%     config/datos.tex. Es el único archivo con datos propios.
-%  2. Escribe dentro de secciones/. Cada archivo es un bloque de la
-%     exposición y lleva arriba su minutaje y qué criterio de la rúbrica
-%     defiende. Las cajas de \guion{...} dicen qué contar en cada lámina.
-%  3. Las figuras salen de ../informe/figuras (los diagramas C4 ya
-%     exportados). Las capturas de pantalla van en figuras/.
-%  4. ANTES DE EXPONER, en config/plantilla.tex:
-%         \guiafalse        oculta las cajas de guion
-%         \marcadoresfalse  deja los [Insertar ...] en negro
+%  PRESUPUESTO DE TIEMPO
+%  ---------------------
+%  Quince minutos en total, repartidos entre las diapositivas y la
+%  demostración del sistema corriendo. Las láminas están medidas para 7:30:
+%
+%     Portada .................. 0:15      Modelo de datos .......... 0:45
+%     El encargo ............... 0:45      Reglas de negocio ........ 1:10
+%     Cómo lo construimos ...... 0:50      Reportes ................. 0:35
+%     Arquitectura ............. 0:50      Calidad y despliegue ..... 0:35
+%     Frontend ................. 0:50      Guion de la demo ......... 0:20
+%     Backend .................. 0:45      Cierre ................... 0:40
+%
+%  Todo lo que sobre es demostración. Si hay que recortar, se recorta
+%  «Cómo lo construimos» y luego «Arquitectura»; NUNCA la demo, que es donde
+%  se defiende el 25 % del alcance funcional.
+%
+%  ESTADO
+%  ------
+%  Cerrada y lista para proyectar: en config/plantilla.tex, \guiafalse y
+%  \marcadoresfalse ya están puestos. Para volver a maquetar con las cajas
+%  de guion a la vista, ponlos en \guiatrue y \marcadorestrue.
+%
+%  Las figuras salen de ../informe/figuras (los diagramas C4 exportados desde
+%  Structurizr y las capturas del informe).
 %
 %  ALCANCE DE ESTE DOCUMENTO
 %  -------------------------
@@ -45,12 +57,13 @@
 
 \input{config/portada}
 
-% --- Agenda ----------------------------------------------------------------
-\input{secciones/00-agenda}
-
 % --- Cuerpo de la exposición ------------------------------------------------
-% El orden sigue la rúbrica de evaluación, de mayor a menor peso, con la
-% demostración en vivo en el centro (que es cuando la sala está más atenta).
+% Sin lámina de agenda: en una charla de siete minutos, veinte segundos
+% enumerando lo que se va a decir es tiempo que se le quita a decirlo.
+%
+% El orden recorre los siete criterios de la rúbrica de mayor a menor peso y
+% desemboca en la demostración, que es donde se defiende el criterio más
+% pesado de todos.
 \input{secciones/01-problema-alcance}
 \input{secciones/02-metodo}
 \input{secciones/03-arquitectura}
@@ -59,8 +72,8 @@
 \input{secciones/06-modelo-datos}
 \input{secciones/07-reglas-negocio}
 \input{secciones/08-reportes}
-\input{secciones/09-demo}
 \input{secciones/10-calidad-despliegue}
+\input{secciones/09-demo}
 \input{secciones/11-cierre}
 
 % --- Láminas de respaldo ----------------------------------------------------

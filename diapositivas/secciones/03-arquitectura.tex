@@ -1,69 +1,56 @@
 % !TeX root = ../presentacion.tex
 % ===========================================================================
-%  3. Arquitectura de la solución — 3 min
+%  3. Arquitectura — 0:50
 %
-%  Bloque bisagra: no puntúa por sí solo, pero es el que hace inteligibles
-%  los dos siguientes (15 % + 15 %). Los diagramas se leen de
-%  ../informe/figuras: se exportan una vez desde Structurizr y sirven al E1
-%  y al E6 a la vez.
+%  Bloque bisagra: no puntúa por sí solo, pero hace inteligibles los dos
+%  siguientes (15 % + 15 %).
+%
+%  POR QUÉ UN MAPA PROPIO Y NO LA VISTA C4 EXPORTADA
+%  -------------------------------------------------
+%  La vista de contenedores (V-02) mide 2254 x 2720 puntos: es más alta que
+%  ancha. Proyectada en una lámina 16:9 se queda en un quinto del ancho y
+%  sus etiquetas dejan de leerse desde el fondo del aula. Este mapa dice lo
+%  mismo con los mismos colores de Structurizr y sí se lee.
+%
+%  Las cuatro vistas C4 completas están en el respaldo, a lámina entera,
+%  para proyectarlas si alguien pregunta por el detalle.
 % ===========================================================================
 
-\bloque{Arquitectura de la solución}{2 min}{\exponeArquitectura}%
+\bloque{Arquitectura}{0:50}{\exponeArquitectura}%
        {Base de los criterios de microfrontends y microservicios (30\,\%)}
 
-\begin{frame}{Cómo describimos la arquitectura}
-  \guion{Veinte segundos. Solo para que nadie pregunte «¿qué notación es
-  esta?» en mitad del diagrama siguiente.}
+\begin{frame}{Once contenedores, un solo origen}
+  \note{Recorrer el mapa de arriba abajo en veinte segundos. El detalle que
+  merece énfasis: el edge es el único conectado a las dos redes de Docker,
+  y por eso el navegador no puede alcanzar un microservicio saltándose el
+  gateway. El diagrama C4 completo está en el respaldo.}
 
-  \begin{columns}[T]
-    \begin{column}{0.55\textwidth}
-      Modelo \textbf{C4}, cuatro vistas, generadas desde una única
-      descripción en Structurizr DSL:
-      \begin{itemize}\small
-        \item \vista{01} Contexto — quién usa el sistema
-        \item \vista{02} Contenedores — las once piezas que se despliegan
-        \item \vista{03} Componentes de \id{ms-reservas}
-        \item \vista{04} Despliegue — cómo caen en Docker
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.42\textwidth}
-      \begin{block}{Por qué importa}
-        \footnotesize
-        Un solo origen para los diagramas: no hay una versión en el informe y
-        otra distinta en las diapositivas.
-      \end{block}
-    \end{column}
-  \end{columns}
-\end{frame}
+  \begin{center}
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{@{}*{4}{p{0.232\textwidth}}@{}}
+    \multicolumn{4}{@{}p{0.98\textwidth}@{}}{%
+      \caja{tintaEdge}{Navegador $\rightarrow$ \id{edge} (nginx)}{un único origen: sirve el shell, los tres remotes y \id{/api}}}\\[0.5pt]
+    \multicolumn{4}{@{}c@{}}{\bajada{Module Federation: los remotes se resuelven en ejecución}}\\[0.5pt]
+    \caja{tintaFront}{\id{shell}}{host} &
+    \caja{tintaFront}{\id{mf-reservas}}{remote} &
+    \caja{tintaFront}{\id{mf-adminis\-tracion}}{remote} &
+    \caja{tintaFront}{\id{mf-reportes}}{remote} \\[0.5pt]
+    \multicolumn{4}{@{}c@{}}{\bajada{\id{/api} — entrada única}}\\[0.5pt]
+    \multicolumn{4}{@{}p{0.98\textwidth}@{}}{%
+      \caja{tintaGw}{\id{api-gateway}}{autentica y propaga \id{X-User-Id} y \id{X-User-Role}}}\\[0.5pt]
+    \multicolumn{4}{@{}c@{}}{\bajada{HTTP/REST síncrono}}\\[0.5pt]
+    \caja{tintaMs}{\id{ms-usuarios}}{} &
+    \caja{tintaMs}{\id{ms-canchas}}{} &
+    \caja{tintaMs}{\id{ms-reservas}}{} &
+    \caja{tintaMs}{\id{ms-reportes}}{sin base: agrega por REST} \\[0.5pt]
+    \caja{tintaDb}{\id{usuarios\_db}}{} &
+    \caja{tintaDb}{\id{canchas\_db}}{} &
+    \caja{tintaDb}{\id{reservas\_db}}{} &
+    \\
+  \end{tabular}
+  \end{center}
 
-\laminafiguratitulo{Contexto del sistema (\vista{01})}{contexto}%
-  {Socio y administrador frente al sistema. Sin integraciones externas: es
-   parte del alcance acordado.}
-
-\laminafiguratitulo{Contenedores (\vista{02})}{contenedores}%
-  {Once contenedores. El \id{edge} es el único conectado a las dos redes:
-   es lo que impide alcanzar un microservicio saltándose el gateway.}
-
-\begin{frame}[t]{Tres decisiones que explican el resto de la charla}
-  \note{Estas tres son las que hay que saber defender. Si solo queda tiempo
-  para una, la primera: es la que demuestra que la regla crítica no depende
-  de que el código se porte bien. El registro completo de decisiones está en
-  el informe (E1, §4).}
-
-  \footnotesize
-  \decisionslide{01}{Solapamiento resuelto en la base de datos}%
-    {Restricción \id{EXCLUDE} sobre \id{tstzrange} en \id{reservas\_db},
-     además de la comprobación en el servicio.}%
-    {Confiar solo en la validación aplicativa: bajo peticiones concurrentes
-     deja pasar la doble reserva.}
-
-  \decisionslide{02}{Una base por microservicio, con rol propio}%
-    {Tres bases aisladas por credenciales; ningún servicio lee las tablas de
-     otro aunque quiera.}%
-    {Esquema compartido: convierte la independencia de datos en una promesa
-     que nadie verifica.}
-
-  \decisionslide{03}{Un \id{edge} que unifica el origen}%
-    {Nginx sirve shell, remotes y \id{/api} bajo un mismo origen.}%
-    {CORS servicio por servicio: filtra los puertos internos al navegador.}
+  \vspace{-6pt}
+  {\tiny\color{textoSuave} Modelo C4 en Structurizr DSL. Las cuatro vistas
+  completas, en el respaldo.}
 \end{frame}

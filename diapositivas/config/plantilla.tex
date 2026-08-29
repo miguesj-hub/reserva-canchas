@@ -8,8 +8,10 @@
 %=======================================================================
 
 %------------------------ Interruptores --------------------------------
-\newif\ifguia          \guiatrue        % \guiafalse  oculta los guiones
-\newif\ifmarcadores    \marcadorestrue  % \marcadoresfalse deja los [Insertar ...] en negro
+%  Estado actual: los dos en «false». La presentación está cerrada y lista
+%  para proyectar. Ponlos en «true» solo si se vuelve a maquetar.
+\newif\ifguia          \guiafalse       % \guiatrue  muestra los guiones al maquetar
+\newif\ifmarcadores    \marcadoresfalse % \marcadorestrue resalta en ámbar lo que falte
 
 %--------------------------- Guion de la lámina ------------------------
 % \guion{...} — qué se cuenta de viva voz en esta lámina. Se apaga con
@@ -69,7 +71,10 @@
 \newcommand{\ent}[1]{\textbf{E#1}}
 
 % Identificador técnico en monoespaciado: \id{ms-reservas}
-\newcommand{\id}[1]{\texttt{\small #1}}
+% \smaller y no \small: el identificador tiene que encoger respecto al texto
+% que lo rodea, sea este \normalsize o \scriptsize. Con un tamaño fijo, un
+% \id dentro de una lista pequeña se veía MÁS grande que la lista.
+\newcommand{\id}[1]{\texttt{\smaller #1}}
 
 %-------------------------- Marcas de estado ---------------------------
 % Para las tablas de cumplimiento. Nunca marques \si{} algo que no hayas
@@ -124,3 +129,18 @@
     \textbf{Decisión.} #3\\[2pt]
     \textbf{Descartado.} #4
   \end{block}}
+
+%----------------------- Mapa de arquitectura --------------------------
+% \caja{tinta}{Rótulo}{Segunda línea} — un recuadro del mapa de la lámina
+% de arquitectura. Existe para que las cinco filas del mapa se escriban
+% igual y queden alineadas: una tabla de \colorbox sueltos se descuadra en
+% cuanto una celda lleva dos líneas y otra una.
+\newcommand{\caja}[3]{%
+  \setlength{\fboxsep}{3pt}%
+  \colorbox{#1}{\parbox[c][19pt][c]{\dimexpr\linewidth-6pt\relax}{%
+    \centering\scriptsize\textbf{#2}%
+    \ifx\relax#3\relax\else\\[-2pt]{\tiny\color{textoSuave}#3}\fi}}}
+
+% Flecha de una fila a la siguiente, con su rótulo al lado.
+\newcommand{\bajada}[1]{%
+  \makebox[\linewidth]{\scriptsize\color{textoSuave}$\downarrow$\enspace #1}}

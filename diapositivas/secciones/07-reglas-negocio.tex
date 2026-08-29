@@ -1,70 +1,87 @@
 % !TeX root = ../presentacion.tex
 % ===========================================================================
-%  7. Reglas de negocio — 2 min
+%  7. Reglas de negocio — 1:10 (dos láminas)
 %
 %  Criterio: «Reglas de negocio y validaciones» (10 %), donde la rúbrica
 %  señala «en especial la validación de solapamiento de horarios». Por eso
-%  RN-02 se lleva una lámina entera para ella sola.
+%  RN-02 se lleva una lámina entera.
+%
+%  Las clases y métodos de la tabla están verificados contra el código:
+%  BookingService.crear, Booking.sePuedeCancelarEn, Booking.cancelar,
+%  BookingService.verificarTope, Booking.estadoVigente, CourtService.
+%  El fragmento SQL es literal de
+%  backend/ms-reservas/src/main/resources/db/migration/V1__reservas.sql
 % ===========================================================================
 
-\bloque{Reglas de negocio}{2 min}{\exponeBackend}%
+\bloque{Reglas de negocio}{1:10}{\exponeBackend}%
        {Reglas de negocio y validaciones (10\,\%)}
 
-\begin{frame}{Ocho reglas, ocho lugares donde vive cada una}
-  \guion{No leer la tabla entera. Señalar la columna de la derecha y decir la
-  idea: ninguna regla vive solo en la prosa del informe.}
+\begin{frame}{Ocho reglas, y dónde vive cada una}
+  \note{No leer la tabla entera. Señalar la columna de la derecha y decir la
+  idea: ninguna regla vive solo en la prosa del informe, y ninguna fila está
+  sin prueba.}
 
   \begin{center}
     \scriptsize
     \setlength{\tabcolsep}{4pt}
-    \renewcommand{\arraystretch}{1.1}
+    \renewcommand{\arraystretch}{1.08}
     \begin{tabular}{@{}lll@{}}
       \toprule
       & \textbf{Regla} & \textbf{Dónde vive}\\
       \midrule
-      \rn{01} & Cancha, fecha y bloque de una hora        & \id{BookingService.crear} · \id{TimeSlot}\\
-      \rn{02} & Sin solapamiento, ni bajo concurrencia    & Servicio \alert{y} \id{EXCLUDE} en la base\\
-      \rn{03} & Cada quien cancela lo suyo; el admin, todo& \id{BookingService.cancelar}\\
-      \rn{04} & No se cancela una reserva ya empezada     & \id{Booking.sePuedeCancelarEn}\\
-      \rn{05} & Cancelar libera el bloque, sin borrar     & \id{Booking.cancelar}\\
-      \rn{06} & Tope de reservas activas (3 por defecto)  & \id{BookingService.verificarTope}\\
-      \rn{07} & Solo el admin gestiona el catálogo        & \id{CourtService} en \id{ms-canchas}\\
-      \rn{08} & Confirmada / Cancelada / Finalizada       & \id{Booking.estadoVigente}\\
+      \rn{01} & Cancha, fecha y bloque de una hora         & \id{BookingService.crear} · \id{TimeSlot}\\
+      \rn{02} & Sin solapamiento, ni bajo concurrencia     & Servicio \alert{y} \id{EXCLUDE} en la base\\
+      \rn{03} & Cada quien cancela lo suyo; el admin, todo & \id{BookingService.cancelar}\\
+      \rn{04} & No se cancela una reserva ya empezada      & \id{Booking.sePuedeCancelarEn}\\
+      \rn{05} & Cancelar libera el bloque, sin borrar      & \id{Booking.cancelar}\\
+      \rn{06} & Tope de reservas activas (3 por defecto)   & \id{BookingService.verificarTope}\\
+      \rn{07} & Solo el admin gestiona el catálogo         & \id{CourtService} en \id{ms-canchas}\\
+      \rn{08} & Confirmada / Cancelada / Finalizada        & \id{Booking.estadoVigente}\\
       \bottomrule
     \end{tabular}
   \end{center}
 
   \vspace{2pt}
-  {\scriptsize Cada fila tiene además una prueba con nombre propio. La
-  correspondencia completa está en el informe (\ent{1}, §6).}
+  {\scriptsize Las ocho están cubiertas por \textbf{73 pruebas
+  automatizadas} en 12 clases. La correspondencia completa, en el informe
+  (\ent{1}, §7).}
 \end{frame}
 
-\begin{frame}[fragile]{\rn{02}: por qué no basta con validar en el servicio}
-  \guion{La lámina técnica de la charla. Contar la carrera: dos peticiones
-  simultáneas, las dos preguntan «¿está libre?», las dos oyen que sí. La
-  comprobación en el servicio es necesaria para dar un mensaje decente; la
-  restricción es la que hace que la regla sea cierta.}
+\begin{frame}[fragile]{\rn{02}: validar en el servicio no basta}
+  \note{La lámina técnica de la charla. Contar la carrera: dos peticiones
+  simultáneas preguntan «¿está libre?», las dos oyen que sí, las dos
+  insertan. La comprobación en el servicio es necesaria para dar un mensaje
+  decente; la restricción es la que hace que la regla sea CIERTA.}
 
   \begin{columns}[T]
-    \begin{column}{0.47\textwidth}
-      \begin{block}{El problema}
-        \footnotesize
-        Dos peticiones concurrentes sobre el mismo bloque consultan antes de
-        que ninguna haya escrito. Ambas ven el bloque libre. Ambas insertan.
+    \begin{column}{0.44\textwidth}
+      \begin{block}{La carrera}
+        \scriptsize
+        Dos peticiones sobre el mismo bloque consultan antes de que ninguna
+        haya escrito. Ambas lo ven libre. Ambas insertan.
       \end{block}
-      \begin{block}{La solución}
-        \footnotesize
-        La regla la impone PostgreSQL. Si la carrera ocurre, la segunda
-        inserción falla y el servicio la traduce a un \id{409 Conflict}.
+      \begin{block}{Quién impone la regla}
+        \scriptsize
+        PostgreSQL. Si la carrera ocurre, la segunda inserción falla y el
+        servicio la traduce a \id{409 Conflict}.
       \end{block}
+      {\scriptsize\color{textoSuave} \id{ConcurrenciaReservaIT} lanza las dos
+      a la vez, 10 veces seguidas, y exige que gane exactamente una.}
     \end{column}
-    \begin{column}{0.49\textwidth}
-      \ph{Fragmento del DDL con la restricción EXCLUDE sobre tstzrange,
-      recortado a cinco o seis líneas}
-      \\[4pt]
-      {\scriptsize\color{textoSuave} Y la prueba que lo respalda:
-      \id{ConcurrenciaReservaIT}, que lanza las dos peticiones a la vez y
-      exige que exactamente una gane.}
+    \begin{column}{0.53\textwidth}
+      \begin{lstlisting}[language=sql-pg,basicstyle=\ttfamily\tiny]
+ALTER TABLE reserva
+  ADD CONSTRAINT reserva_sin_solape
+  EXCLUDE USING gist (
+    cancha_id WITH =,
+    tsrange(fecha + hora_inicio,
+            fecha + hora_fin, '[)') WITH &&
+  ) WHERE (estado = 'CONFIRMADA');
+      \end{lstlisting}
+      {\scriptsize\color{textoSuave}
+      \id{WHERE estado = 'CONFIRMADA'} es lo que hace que cancelar libere el
+      bloque (\rn{05}) sin borrar la fila, conservando la traza de \rn{08} y
+      el dato del reporte de cancelaciones.}
     \end{column}
   \end{columns}
 \end{frame}

@@ -1,67 +1,53 @@
 % !TeX root = ../presentacion.tex
 % ===========================================================================
-%  9. Demostración en vivo — 6 min
+%  9. Demostración en vivo — 0:20 de lámina, el resto es el sistema
 %
-%  Es la mitad del entregable E6 («Presentación + demo») y lo que sostiene el
-%  25 % del alcance funcional. El bloque más largo de la charla, y el único
-%  que hay que ensayar cronómetro en mano.
+%  Es la mitad del entregable E6 y lo que sostiene el 25 % del alcance
+%  funcional. Con 15 minutos totales, las diapositivas ocupan 7:30 y todo lo
+%  que queda es esta demostración: es el bloque que NUNCA se recorta.
 %
-%  Regla de la casa: el sistema se levanta ANTES de empezar la charla, no
-%  durante este bloque. Un `docker compose up` en frío tarda minutos.
+%  Esta lámina se proyecta mientras se cambia de ventana, para que la sala
+%  sepa qué va a ver y no haya silencio. Se sale de ella en cuanto el
+%  navegador está delante.
+%
+%  Regla de la casa: el sistema se levanta ANTES de entrar al aula. La lista
+%  de comprobación previa está en el respaldo.
 % ===========================================================================
 
-\bloque{Demostración en vivo}{4 min}{\exponeDemo}%
+\bloque{Demostración en vivo}{el tiempo restante}{\exponeDemo}%
        {Alcance funcional implementado (25\,\%)}
 
-\begin{frame}{El guion de la demo}
-  \guion{Esta lámina se proyecta mientras se cambia de ventana: le dice al
-  público qué va a ver y evita el silencio incómodo. Se sale de ella en
-  cuanto el navegador está delante.}
+\begin{frame}{Lo que vais a ver corriendo}
+  \note{Proyectar esta lámina mientras se cambia de ventana. El paso 3 es el
+  momento importante de toda la charla: el 10 % de reglas de negocio y parte
+  del 25 % de alcance, demostrado en diez segundos. Si algo falla, se pasa
+  al vídeo de respaldo sin anunciarlo.}
 
   \begin{columns}[T]
-    \begin{column}{0.5\textwidth}
+    \begin{column}{0.49\textwidth}
       \textbf{Como socio}
-      \begin{enumerate}\footnotesize
+      \begin{enumerate}\scriptsize
         \item Entrar y ver la disponibilidad de una cancha para hoy.
         \item Reservar un bloque libre.
-        \item Intentar reservar \alert{el mismo bloque} desde otra sesión
-              $\rightarrow$ el sistema lo rechaza (\rn{02}).
-        \item Ver «mis reservas» y cancelar una.
-        \item Comprobar que el bloque volvió a estar libre (\rn{05}).
+        \item Intentar reservar \alert{el mismo bloque} desde otra sesión:
+              el sistema lo rechaza (\rn{02}).
+        \item Cancelar la reserva desde «mis reservas».
+        \item El bloque vuelve a estar libre (\rn{05}).
       \end{enumerate}
     \end{column}
-    \begin{column}{0.46\textwidth}
+    \begin{column}{0.49\textwidth}
       \textbf{Como administrador}
-      \begin{enumerate}[start=6]\footnotesize
-        \item Crear una cancha y verla aparecer en el catálogo del socio.
+      \begin{enumerate}[start=6]\scriptsize
+        \item Crear una cancha y verla en el catálogo del socio.
         \item Cancelar la reserva de otro usuario (\rn{03}).
         \item Abrir reportes: el número refleja lo que acaba de pasar.
       \end{enumerate}
       \vspace{4pt}
       \begin{block}{Si sobra tiempo}
         \scriptsize
-        Reconstruir un solo remote con el sistema en pie.
+        Reconstruir \id{mf-reportes} con el sistema en pie, para enseñar el
+        despliegue independiente.
       \end{block}
     \end{column}
   \end{columns}
-\end{frame}
-
-\begin{frame}{Antes de empezar}
-  \note{Lámina para el ensayo, no para proyectar: muévela al apéndice o
-  bórrala cuando la lista esté interiorizada. Existe porque todo lo que falla
-  en una demo, falla por algo de esta lista.}
-
-  \begin{itemize}\scriptsize
-    \item \id{docker compose up -d --wait} lanzado \alert{antes} de entrar al aula;
-          \id{docker compose ps} con los once servicios en \id{healthy}.
-    \item Dos navegadores (o uno normal y uno privado) ya con sesión iniciada:
-          uno como socio, otro como administrador.
-    \item Datos de prueba recién sembrados: sin reservas viejas que ensucien
-          los reportes.
-    \item Zoom del navegador al \ph{120\,\%}: lo que se lee en el portátil no
-          se lee en el proyector.
-    \item Notificaciones del sistema operativo silenciadas.
-    \item \textbf{Plan B:} un vídeo corto de la demo, ya en el escritorio.
-          \ph{Grabarlo}
-  \end{itemize}
 \end{frame}

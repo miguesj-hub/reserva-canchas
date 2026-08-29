@@ -10,7 +10,10 @@
 \usetheme{metropolis}
 
 \metroset{
-  sectionpage  = progressbar,  % separador entre bloques, con barra
+  % Sin lámina separadora entre bloques: en una charla de siete minutos, once
+  % separadoras son casi un minuto de pantallas que no dicen nada. Las
+  % secciones se conservan para el índice del PDF y la barra de progreso.
+  sectionpage  = none,
   subsectionpage = none,
   numbering    = fraction,     % «12 / 34» abajo a la derecha
   progressbar  = frametitle,   % barra fina bajo el título de cada lámina
@@ -32,6 +35,17 @@
 \definecolor{alerta}{HTML}{B3261E}     % rojo: lo que no, o lo que se cayó
 \definecolor{guiaback}{HTML}{F3F4F6}
 \definecolor{guiaframe}{HTML}{9AA3AF}
+
+%--------------------- Tintas del mapa de arquitectura -----------------
+% Versiones claras de los colores que Structurizr da a cada tipo de
+% elemento, para que la lámina de arquitectura y los diagramas C4 del
+% respaldo se lean como la misma cosa. Claras a propósito: el texto va
+% encima en negro y tiene que leerse desde el fondo del aula.
+\definecolor{tintaEdge}{HTML}{E4E7EA}
+\definecolor{tintaFront}{HTML}{EDE3F7}
+\definecolor{tintaGw}{HTML}{FAE7D0}
+\definecolor{tintaMs}{HTML}{DDEFE2}
+\definecolor{tintaDb}{HTML}{EADCF3}
 
 \setbeamercolor{normal text}{fg=texto, bg=fondo}
 \setbeamercolor{alerted text}{fg=acento}

@@ -3,34 +3,59 @@
 %  Láminas de respaldo
 %
 %  Van después de \appendix: no cuentan en la numeración ni en la barra de
-%  progreso. Son las respuestas a las preguntas que uno espera, ya
-%  maquetadas. Se llega a ellas saltando por número desde el visor.
+%  progreso. Son las respuestas ya maquetadas a lo que uno espera que
+%  pregunten, más las vistas C4 completas que no caben en una charla de
+%  siete minutos.
 %
-%  Anota aquí el número de cada lámina cuando la presentación esté cerrada,
-%  y llévalo en un papel: buscar una lámina de respaldo pasando páginas
-%  delante del público arruina el efecto.
+%  ANTES DE EXPONER: apunta en un papel el número de lámina de cada una.
+%  Buscar una pasando páginas delante del público arruina el efecto.
 % ===========================================================================
 
 \begin{frame}{Índice de respaldo}
-  \guion{Para el ponente. Apunta el número de lámina de cada fila cuando la
+  \note{Para el ponente. Apuntar el número de lámina de cada fila cuando la
   presentación esté congelada.}
 
   \begin{itemize}\footnotesize
-    \item Vistas C4 restantes: componentes de cada servicio y microfrontend
-    \item Despliegue (\vista{04}) y el papel del \id{edge}
-    \item Registro completo de decisiones (ADR)
-    \item Diccionario de datos y DDL
-    \item Traducción de reglas de negocio a códigos HTTP
+    \item Las cuatro vistas C4: contexto, contenedores, componentes de
+          \id{ms-reservas}, despliegue
+    \item Modelo entidad-relación
+    \item Componentes del \id{shell}, \id{api-gateway} y del resto de servicios
+    \item Reglas de negocio traducidas a respuestas HTTP
     \item Estrategia de pruebas
-    \item Por qué DDD y dónde están los agregados
+    \item Lista de comprobación previa a la demo
+    \item Preguntas que esperamos
   \end{itemize}
 \end{frame}
 
+% --- Vistas C4 --------------------------------------------------------------
+% A lámina entera y sin título: si hay que entrecerrar los ojos para leer una
+% etiqueta, la lámina no sirve. Aun así, la versión legible de verdad es la
+% del informe impreso (E1, §5), donde cada diagrama ocupa una página.
+\laminafiguratitulo{Contexto (\vista{01})}{contexto}%
+  {Socio y administrador frente al sistema. Sin integraciones externas: es
+   parte del alcance acordado.}
+
+\laminafiguratitulo{Contenedores (\vista{02})}{contenedores}%
+  {Las once piezas. El \id{edge} es el único conectado a las dos redes de
+   Docker: es lo que impide alcanzar un microservicio saltándose el gateway.}
+
+\laminafiguratitulo{Componentes de \id{ms-reservas} (\vista{03})}{componentes-reservas}%
+  {Donde viven las reglas de negocio. Adaptadores fuera, dominio dentro: el
+   dominio no conoce ni HTTP ni JPA.}
+
 \laminafiguratitulo{Despliegue (\vista{04})}{despliegue}%
-  {Dos redes Docker. Solo el \id{edge} toca las dos.}
+  {Dos redes Docker, once contenedores y un volumen. Solo el \id{edge} toca
+   las dos redes.}
+
+\laminafiguratitulo{Modelo entidad-relación}{modelo-datos}%
+  {Tres bases separadas, no tres esquemas del mismo modelo. Lo que cruza la
+   frontera es una referencia por identificador, no una clave foránea.}
 
 \laminafiguratitulo{Componentes del \id{shell}}{componentes-shell}%
   {Cómo el host resuelve los remotes y comparte la sesión.}
+
+\laminafiguratitulo{Componentes del \id{api-gateway}}{componentes-gateway}%
+  {Dónde se verifica la credencial antes de rutear.}
 
 \laminafiguratitulo{Componentes de \id{ms-canchas}}{componentes-canchas}{}
 
@@ -39,47 +64,101 @@
 \laminafiguratitulo{Componentes de \id{ms-reportes}}{componentes-reportes}%
   {El único servicio sin base de datos: compone por HTTP.}
 
-\laminafiguratitulo{Componentes del \id{api-gateway}}{componentes-gateway}%
-  {Dónde se verifica la credencial antes de rutear.}
-
+% --- Respuestas HTTP --------------------------------------------------------
 \begin{frame}{Reglas de negocio $\rightarrow$ respuestas HTTP}
-  \guion{Respuesta preparada para «¿y qué le devuelve al cliente cuando la
-  regla no se cumple?». Rellenar con lo que hace el servicio de verdad.}
+  \note{Respuesta preparada para «¿y qué le devuelve al cliente cuando la
+  regla no se cumple?». Estos códigos están verificados uno a uno contra
+  ErrorHandler de ms-reservas, no supuestos.}
 
   \begin{center}
-    \small
-    \begin{tabular}{@{}llp{5.2cm}@{}}
+    \scriptsize
+    \setlength{\tabcolsep}{4pt}
+    \renewcommand{\arraystretch}{1.05}
+    \begin{tabular}{@{}llL{5.8cm}@{}}
       \toprule
-      \textbf{Situación} & \textbf{Código} & \textbf{Regla}\\
+      \textbf{Situación} & \textbf{Código} & \textbf{Regla / motivo}\\
       \midrule
-      Bloque ya ocupado          & \id{409} & \rn{02}\\
-      Cancelar una reserva ajena & \id{403} & \rn{03}\\
-      Cancelar una reserva pasada& \id{422} & \rn{04}\\
-      Tope de reservas alcanzado & \id{422} & \rn{06}\\
-      \ph{Completar con el resto}& \ph{---} & \\
+      Bloque ya ocupado             & \id{409} & \rn{02} — igual si lo detecta el servicio o la restricción \id{EXCLUDE}\\
+      Tope de reservas alcanzado    & \id{409} & \rn{06}\\
+      Cancelar una reserva ya iniciada & \id{409} & \rn{04}\\
+      Cancelar una reserva ajena    & \id{403} & \rn{03} — y no 404: fingir que no existe ocultaría el motivo\\
+      Reserva o cancha inexistente  & \id{404} & \\
+      Cancha inactiva o bloqueada   & \id{422} & Existe, pero no admite esa reserva\\
+      Cuerpo inválido               & \id{400} & Validación del \emph{request}\\
+      Sin credencial válida         & \id{401} & Rechazado en el gateway\\
+      \id{ms-canchas} no responde   & \id{503} & El servicio del que se depende está caído\\
       \bottomrule
     \end{tabular}
   \end{center}
-  {\footnotesize\color{textoSuave} Verifica cada código contra el
-  controlador antes de exponer: un número inventado aquí se nota enseguida.}
+  {\tiny\color{textoSuave} Fuente:
+  \id{ms-reservas/.../adapter/in/web/ErrorHandler.java}.}
 \end{frame}
 
+% --- Pruebas ----------------------------------------------------------------
 \begin{frame}{Estrategia de pruebas}
-  \ph{Pirámide de pruebas del proyecto: unitarias de dominio, de integración
-  con base real, y de contrato. Cifras concretas si las tenéis.}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{itemize}\footnotesize
+        \item \textbf{73 métodos de prueba} en 12 clases.
+        \item \textbf{Unitarias de dominio y aplicación} sobre las reglas:
+              \id{BookingServiceCreacionTest},
+              \id{BookingServiceCancelacionTest}, \id{CourtServiceTest},
+              \id{ReportServiceTest}, \id{UserServiceTest}.
+        \item \textbf{De integración con PostgreSQL real}:
+              \id{ConcurrenciaReservaIT}, que es la única forma de probar
+              \rn{02} bajo concurrencia.
+        \item \textbf{Del gateway}: \id{AuthenticationFilterTest}, sobre la
+              propagación de identidad y rol.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \begin{block}{Por qué \id{ConcurrenciaReservaIT} repite}
+        \footnotesize
+        Una carrera que se gana una vez puede ser suerte. La prueba lanza las
+        dos peticiones simultáneas \textbf{diez veces seguidas} y exige que en
+        las diez gane exactamente una.
+      \end{block}
+    \end{column}
+  \end{columns}
 \end{frame}
 
+% --- Antes de la demo -------------------------------------------------------
+\begin{frame}{Lista de comprobación previa a la demo}
+  \note{Para el ensayo, no para el aula. Existe porque casi todo lo que falla
+  en una demo, falla por algo de esta lista.}
+
+  \begin{itemize}\footnotesize
+    \item \id{docker compose up -d --wait} lanzado \alert{antes} de entrar al
+          aula; \id{docker compose ps} con los once servicios en
+          \id{healthy}.
+    \item Dos navegadores (o uno normal y uno privado) con sesión iniciada:
+          uno como socio, otro como administrador.
+    \item Datos recién sembrados: \id{docker compose down -v \&\& docker
+          compose up -d --wait}, para que los reportes no arrastren reservas
+          viejas.
+    \item Zoom del navegador al 125\,\%: lo que se lee en el portátil no se
+          lee en el proyector.
+    \item Notificaciones del sistema operativo silenciadas.
+    \item \textbf{Plan B:} un vídeo corto de la demo, ya abierto en el
+          escritorio.
+  \end{itemize}
+\end{frame}
+
+% --- Preguntas --------------------------------------------------------------
 \begin{frame}{Preguntas que esperamos}
-  \guion{Ensayad las respuestas en voz alta. Una respuesta pensada en el
-  momento suena a que no se pensó nunca.}
+  \note{Ensayarlas en voz alta. Una respuesta pensada en el momento suena a
+  que no se pensó nunca.}
 
   \begin{itemize}\footnotesize
     \item ¿Por qué microservicios para un sistema de este tamaño?
     \item ¿Qué pasa si \id{ms-canchas} está caído cuando alguien reserva?
+          \emph{(Devuelve 503: no se crea una reserva sobre una cancha que no
+          se pudo validar.)}
     \item ¿Por qué no una cola de mensajes entre servicios?
-    \item ¿Cómo escalaríais si mañana hubiera cien clubes?
-    \item ¿Module Federation no acopla los remotes al shell por la versión de React?
+    \item ¿Module Federation no acopla los remotes al shell por la versión de
+          React? \emph{(Sí: por eso React va como \id{singleton} declarado en
+          los cuatro.)}
     \item ¿Cómo evitáis que un remote roto tumbe toda la aplicación?
-    \item \ph{La que os dé más miedo}
+    \item ¿Cuánto de esto lo escribió el modelo y cuánto vosotros?
   \end{itemize}
 \end{frame}

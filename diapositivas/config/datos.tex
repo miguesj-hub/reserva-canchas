@@ -9,7 +9,7 @@
 \newcommand{\nombreCurso}{Desarrollo de Aplicaciones Empresariales}
 \newcommand{\nombreCursoCorto}{Reserva de Canchas · Proyecto Integrador}
 \newcommand{\nombrePrograma}{Maestría en Ingeniería de Software}
-\newcommand{\nombreUniversidad}{\ph{Nombre de la Universidad}}
+\newcommand{\nombreUniversidad}{Universidad Politécnica Salesiana}
 \newcommand{\tipoTrabajo}{Presentación final del proyecto integrador (\ent{6})}
 
 % --- Integrantes del equipo ------------------------------------------------
@@ -19,8 +19,11 @@
 \newcommand{\autorTres}{Sebastián Uyaguari}
 \newcommand{\autorCuatro}{Adrián Espinoza}
 
-\newcommand{\nombreDocente}{\ph{Nombre del Docente}}
-\newcommand{\ciudadFecha}{\ph{Ciudad}, \today}
+\newcommand{\nombreDocente}{Christian Merchán Millán}
+% Solo la fecha: un marcador «[Ciudad]» proyectado en la portada canta más
+% que la ausencia de la ciudad. Si el docente la pide, se antepone aquí:
+%   \newcommand{\ciudadFecha}{Cuenca, \today}
+\newcommand{\ciudadFecha}{\today}
 
 % --- Reparto de la exposición ----------------------------------------------
 % Quién expone cada bloque. Se imprime en la lámina separadora mientras la
@@ -32,9 +35,11 @@
 \newcommand{\exponeDemo}{\ph{Integrante}}
 
 % --- Tiempo total ----------------------------------------------------------
-% Ajusta este valor al que asigne el docente y revisa que los minutajes de
-% los \bloque{...} sumen esta cifra menos el turno de preguntas.
-\newcommand{\duracionTotal}{20 minutos + 5 de preguntas}
+% Quince minutos en total, repartidos entre las diapositivas y la
+% demostración del sistema corriendo. Los minutajes de los \bloque{...}
+% suman 7:30 para dejar el resto a la demo; si se recorta, se recorta
+% arquitectura, nunca la demo.
+\newcommand{\duracionTotal}{15 minutos: 7--8 de diapositivas y el resto de demostración en vivo}
 
 % --- Metadatos del PDF -----------------------------------------------------
 % pdftitle y pdfauthor los fija beamer a partir de \title y \author de

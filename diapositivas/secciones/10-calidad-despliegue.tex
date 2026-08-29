@@ -1,65 +1,47 @@
 % !TeX root = ../presentacion.tex
 % ===========================================================================
-%  10. Calidad y despliegue — 2 min
+%  10. Calidad y despliegue — 0:35
 %
-%  Criterio: «Calidad técnica y documentación» (10 %). También es donde se
-%  enlaza con la sesión de atributos de calidad del curso: no basta con decir
-%  «hicimos pruebas», hay que decir qué atributo se buscó y cómo se sostiene.
+%  Criterio: «Calidad técnica y documentación» (10 %). Un atributo de calidad
+%  sin mecanismo es una intención: por eso la tabla tiene dos columnas.
+%
+%  Cifras verificadas: docker-compose.yml define 11 servicios; el backend
+%  tiene 73 métodos @Test repartidos en 12 clases de prueba.
 % ===========================================================================
 
-\bloque{Calidad y despliegue}{1 min}{\exponeArquitectura}%
+\bloque{Calidad y despliegue}{0:35}{\exponeArquitectura}%
        {Calidad técnica y documentación (10\,\%)}
 
-\begin{frame}{Un solo comando}
+\begin{frame}{Un comando, once contenedores, ningún requisito previo}
   \note{La cifra grande es el argumento: no hay guía de instalación de
-  cuatro páginas porque no hace falta instalar nada.}
+  cuatro páginas porque no hace falta instalar nada. Que la evaluación no
+  dependa de qué tenga instalado quien evalúa no es comodidad, es una
+  decisión.}
 
   \begin{columns}[c]
-    \begin{column}{0.33\textwidth}\cifra{1}{comando para levantar todo}\end{column}
-    \begin{column}{0.33\textwidth}\cifra{11}{contenedores}\end{column}
-    \begin{column}{0.33\textwidth}\cifra{1}{requisito: Docker}\end{column}
+    \begin{column}{0.24\textwidth}\cifra{1}{\id{docker compose up}}\end{column}
+    \begin{column}{0.24\textwidth}\cifra{11}{contenedores}\end{column}
+    \begin{column}{0.24\textwidth}\cifra{73}{pruebas automatizadas}\end{column}
+    \begin{column}{0.24\textwidth}\cifra{0}{cosas que instalar}\end{column}
   \end{columns}
 
-  \vspace{6pt}
-  \begin{columns}[T]
-    \begin{column}{0.52\textwidth}
-      \begin{itemize}\footnotesize
-        \item No hace falta Java, Node, Maven ni PostgreSQL en la máquina:
-              todo se compila dentro de los contenedores.
-        \item Esquema y datos de prueba se crean al arrancar.
-        \item Puertos sustituibles por variable de entorno, por si el
-              evaluador ya tiene el 8080 ocupado.
-        \item Manual de despliegue como entregable aparte (\ent{5}).
-      \end{itemize}
-    \end{column}
-    \begin{column}{0.44\textwidth}
-      \begin{block}{Por qué es una decisión, no comodidad}
-        \footnotesize
-        Que la evaluación no dependa de qué tenga instalado quien evalúa.
-      \end{block}
-    \end{column}
-  \end{columns}
-\end{frame}
-
-\begin{frame}{Qué atributos de calidad perseguimos, y cómo}
-  \note{Enlazar con la sesión de atributos de calidad. Elegir dos o tres y
-  decir el mecanismo concreto: un atributo sin mecanismo es una intención.}
-
+  \vspace{8pt}
   \begin{center}
-    \footnotesize
-    \begin{tabular}{@{}lp{7.6cm}@{}}
+    \scriptsize
+    \begin{tabular}{@{}lL{7.4cm}@{}}
       \toprule
-      \textbf{Atributo} & \textbf{Mecanismo concreto en este sistema}\\
+      \textbf{Atributo} & \textbf{Mecanismo concreto}\\
       \midrule
       Mantenibilidad & Dominio aislado de HTTP y de JPA; cada regla con su prueba\\
       Escalabilidad  & Servicios sin estado tras el gateway; se replican por separado\\
-      Seguridad      & Bases aisladas por credenciales; el navegador nunca alcanza un servicio directamente\\
+      Seguridad      & Bases aisladas por credenciales; el navegador nunca alcanza un servicio\\
       Disponibilidad & \id{healthcheck} por contenedor; un remote caído degrada una ruta, no la aplicación\\
       \bottomrule
     \end{tabular}
   \end{center}
 
-  \vspace{2pt}
-  {\scriptsize \ph{Añade aquí la cifra de cobertura de pruebas o el número
-  de pruebas que corren, si la tienes}}
+  \vspace{-2pt}
+  {\tiny\color{textoSuave} Ni Java, ni Node, ni Maven, ni PostgreSQL en la
+  máquina: todo se compila dentro de los contenedores. Manual de despliegue
+  aparte (\ent{5}).}
 \end{frame}

@@ -1,81 +1,58 @@
 % !TeX root = ../presentacion.tex
 % ===========================================================================
-%  2. Cómo lo construimos — 2 min
+%  2. Cómo lo construimos — 0:50
 %
-%  Este bloque no lo pide la rúbrica de forma explícita: cae dentro de
-%  «Calidad técnica y documentación» (10 %). Va aquí, y no al final, porque
-%  enlaza directamente con la sesión 08 del curso (Vibe Coding vs.
-%  Spec-Driven Development) y explica por qué el resto de la charla puede
-%  enseñar trazabilidad de un requisito a una línea de código.
+%  Cae dentro de «Calidad técnica y documentación» (10 %) y enlaza con la
+%  sesión del curso sobre Vibe Coding vs. Spec-Driven Development.
 %
-%  Si el tiempo aprieta, este es el primer bloque que se recorta a una sola
-%  lámina. No el de arquitectura.
+%  Va antes de la arquitectura, y no al final, porque explica por qué el
+%  resto de la charla puede señalar el archivo del que sale cada cosa.
+%
+%  Las cifras de esta lámina salen de specs/001-reserva-canchas-deportivas/
+%  y de .specify/memory/constitution.md. Si la especificación cambia, hay
+%  que volver a contarlas.
 % ===========================================================================
 
-\bloque{Cómo lo construimos}{1,5 min}{\exponeArquitectura}%
+\bloque{Cómo lo construimos}{0:50}{\exponeArquitectura}%
        {Calidad técnica y documentación (10\,\%)}
 
-\begin{frame}{Especificación primero, no «vibe coding»}
-  \guion{Enlazar explícitamente con la sesión del curso. El mensaje: elegimos
-  el enfoque que el propio curso señala como el indicado para sistemas con
-  reglas de negocio y varios equipos tocando el mismo contrato.}
+\begin{frame}{No fue \emph{vibe coding}: fue especificación primero, con Spec Kit}
+  \note{El mensaje en una frase: el esfuerzo se puso ANTES de generar
+  código. Los prompts de /specify no fueron «hazme un sistema de reservas»,
+  sino el alcance entero traducido a escenarios verificables. Por eso el
+  código salió alineado con el documento del docente y no con lo que el
+  modelo imaginó.}
 
-  \begin{columns}[T]
-    \begin{column}{0.48\textwidth}
-      \begin{block}{Vibe coding}
-        \footnotesize
-        Se describe el destino, no la ruta. Fricción mínima, iteración
-        conversacional.\\[3pt]
-        Bien para: prototipos, exploración de una API, demos.
-      \end{block}
-    \end{column}
-    \begin{column}{0.48\textwidth}
-      \begin{block}{Spec-Driven Development}
-        \footnotesize
-        La especificación es la fuente de verdad; el código es su
-        consecuencia.\\[3pt]
-        Necesario cuando hay: reglas de negocio críticas, contratos entre
-        equipos, trazabilidad exigible.
-      \end{block}
-    \end{column}
-  \end{columns}
-
-  \vfill
-  \begin{center}
-    Este proyecto tiene las tres cosas. \alert{Elegimos la segunda.}
-  \end{center}
-\end{frame}
-
-\begin{frame}{El flujo, y lo que dejó como evidencia}
-  \guion{Enseñar el camino de un requisito hasta su prueba. Es el argumento
-  que sostiene la tabla de reglas de negocio del bloque 7: cada RN apunta a
-  una clase y a un test con nombre propio.}
-
-  \begin{center}
-    \small
-    constitución $\rightarrow$ \textbf{spec} $\rightarrow$ plan $\rightarrow$
-    tasks $\rightarrow$ implementación $\rightarrow$ pruebas
+  \begin{center}\footnotesize
+    \id{/constitution} $\rightarrow$ \alert{\id{/specify}} $\rightarrow$
+    \id{/plan} $\rightarrow$ \id{/tasks} $\rightarrow$ \id{/implement}
   \end{center}
 
-  \vspace{4pt}
+  \vspace{2pt}
   \begin{columns}[T]
-    \begin{column}{0.5\textwidth}
-      \begin{itemize}\footnotesize
-        \item Contrato OpenAPI acordado \emph{antes} de escribir el servicio.
-        \item Criterios de aceptación como pruebas, no como prosa.
-        \item Cada regla de negocio tiene una clase y un test con nombre.
-        \item Las compuertas de revisión quedan en el historial del repositorio.
+    \begin{column}{0.54\textwidth}
+      {\footnotesize Antes de generar la primera línea de código, los prompts
+      de \id{/specify} dejaron escrito:}
+      \begin{itemize}\scriptsize
+        \item \textbf{7 principios} de constitución, 2 de ellos no negociables.
+        \item \textbf{48 requisitos funcionales} y \textbf{31 escenarios}
+              \emph{Given / When / Then}.
+        \item \textbf{10 criterios de éxito medibles}, no adjetivos.
+        \item \textbf{4 contratos OpenAPI} (20 rutas), acordados antes del
+              primer \emph{endpoint}.
+        \item \textbf{134 tareas} derivadas del plan. Todas cerradas.
       \end{itemize}
     \end{column}
-    \begin{column}{0.46\textwidth}
-      \begin{block}{Lo que compró}
-        \footnotesize
-        Poder responder «¿de dónde sale esto?» señalando un archivo, en vez
-        de reconstruirlo de memoria.
+    \begin{column}{0.42\textwidth}
+      \begin{block}{Qué compró ese esfuerzo}
+        \scriptsize
+        Cada regla de negocio se puede seguir desde el §3.4 del alcance hasta
+        una clase y una prueba con nombre propio.\\[3pt]
+        El agente no inventó alcance: lo que no estaba especificado, no se
+        construyó.
       \end{block}
+      {\scriptsize\color{textoSuave} $\approx$ 17\,500 palabras de
+      especificación antes de la primera línea de código.}
     \end{column}
   \end{columns}
-
-  \note{Si el docente pregunta por herramientas: Spec Kit sobre el
-  repositorio. Tenerlo listo, pero no abrir ese melón sin que lo pidan.}
 \end{frame}

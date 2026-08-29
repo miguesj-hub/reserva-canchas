@@ -45,6 +45,12 @@
 \usepackage{pifont}
 \usepackage{fontawesome5}
 
+% relsize da \smaller: «un paso menos que el tamaño actual». Es lo que hace
+% que \id{...} encoja RESPECTO al texto que lo rodea. Con un \small fijo, un
+% identificador dentro de una lista en \scriptsize salía más grande que la
+% propia lista.
+\usepackage{relsize}
+
 %------------------------------ Listas ---------------------------------
 \usepackage{enumitem}
 \setlist{itemsep=4pt,parsep=0pt,topsep=4pt}
@@ -94,6 +100,21 @@
     comment         = [l]{\#},
     morestring      = [b]",
     morestring      = [b]'
+}
+% listings no trae JavaScript/TypeScript de fábrica: sin esta definición,
+% un lstlisting con language=jsts aborta la compilación.
+\lstdefinelanguage{jsts}{
+    keywords        = {const,let,var,import,from,export,default,function,
+                       return,true,false,null,undefined,async,await,new},
+    keywordstyle    = \color{codePalabra}\bfseries,
+    ndkeywords      = {name,remotes,shared,singleton},
+    ndkeywordstyle  = \color{codeCadena}\bfseries,
+    sensitive       = true,
+    comment         = [l]{//},
+    morecomment     = [s]{/*}{*/},
+    morestring      = [b]",
+    morestring      = [b]',
+    morestring      = [b]`
 }
 \lstdefinelanguage{sql-pg}{
     language        = SQL,

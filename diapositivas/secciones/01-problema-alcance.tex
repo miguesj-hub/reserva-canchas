@@ -1,68 +1,43 @@
 % !TeX root = ../presentacion.tex
 % ===========================================================================
-%  1. El problema y el alcance — 2 min
+%  1. El encargo — 0:45
 %
-%  Defiende el criterio «Alcance funcional implementado» (25 %), el de mayor
-%  peso de la rúbrica. Aquí solo se enuncia lo prometido; que funciona se
-%  demuestra en el bloque 9, no se afirma aquí.
+%  Defiende «Alcance funcional implementado» (25 %), el criterio de mayor
+%  peso. Aquí solo se enuncia lo prometido; que funciona se demuestra en la
+%  demo, no se afirma en una lámina.
+%
+%  Una sola lámina a propósito: el docente escribió el documento de alcance,
+%  no hay que explicárselo. Hay que demostrar que se leyó.
 % ===========================================================================
 
-\bloque{El problema y el alcance}{1,5 min}{\exponeArquitectura}%
+\bloque{El encargo}{0:45}{\exponeArquitectura}%
        {Alcance funcional implementado (25\,\%)}
 
-\begin{frame}{El problema}
-  \guion{Una frase de contexto y pasar. El docente escribió el documento de
-  alcance: no hay que explicárselo, hay que demostrar que se leyó.}
-
+\begin{frame}{Lo que pedía el documento de alcance}
   \begin{columns}[T]
-    \begin{column}{0.55\textwidth}
-      Un club con canchas de \textbf{pádel, tenis y básquet} necesita que:
-      \begin{itemize}
-        \item el socio vea qué bloques quedan libres, reserve y cancele;
-        \item el administrador gestione el catálogo, cancele ante un
-              mantenimiento imprevisto y mida el uso real.
+    \begin{column}{0.56\textwidth}
+      Un club con canchas de \textbf{pádel, tenis y básquet}. Dos roles:
+      \begin{itemize}\footnotesize
+        \item \textbf{Socio:} consulta disponibilidad, reserva un bloque y
+              cancela lo suyo.
+        \item \textbf{Administrador:} gestiona el catálogo y los bloqueos,
+              cancela cualquier reserva, activa e inactiva usuarios y mide el
+              uso real.
       \end{itemize}
 
-      \vspace{6pt}
-      Dos roles, cuatro módulos, ocho reglas de negocio.
+      \vspace{4pt}
+      {\footnotesize Sobre eso, \textbf{ocho reglas de negocio}
+      (\rn{01}--\rn{08}) y \textbf{seis criterios de aceptación} (§7).
+      Todo lo que sigue está atado a ese documento.}
     \end{column}
-    \begin{column}{0.42\textwidth}
-      \begin{block}{Lo que NO está en alcance}
+    \begin{column}{0.40\textwidth}
+      \begin{block}{Fuera de alcance (§3.5)}
         \footnotesize
         Pagos en línea · notificaciones · reservas recurrentes · torneos ·
         app móvil nativa · BI avanzado.
       \end{block}
-      {\scriptsize\color{textoSuave} Delimitado así en el documento de
-      alcance, §3.5. No lo construimos, y es deliberado.}
+      {\scriptsize\color{textoSuave} No lo construimos, y es deliberado:
+      está delimitado así en el propio documento.}
     \end{column}
   \end{columns}
-\end{frame}
-
-\begin{frame}{Las cuatro historias que sostienen el alcance}
-  \note{Nombrar las cuatro y decir que las cuatro se van a ver corriendo.
-  Esta lámina y la tabla de cumplimiento del cierre son el mismo compromiso,
-  al principio y al final.}
-
-  \begin{columns}[T]
-    \begin{column}{0.48\textwidth}
-      \begin{block}{Usuario final}
-        Consultar disponibilidad por cancha y fecha\\
-        Reservar un bloque libre\\
-        Ver sus reservas y cancelarlas
-      \end{block}
-    \end{column}
-    \begin{column}{0.48\textwidth}
-      \begin{block}{Administrador}
-        Alta, edición e inactivación de canchas\\
-        Bloqueos de mantenimiento\\
-        Cancelar cualquier reserva\\
-        Activar e inactivar usuarios\\
-        Los cuatro indicadores de uso
-      \end{block}
-    \end{column}
-  \end{columns}
-
-  \vspace{4pt}
-  {\footnotesize Las cuatro están construidas y son demostrables por
-  separado. \alert{Se verán en vivo en el bloque 9.}}
 \end{frame}
