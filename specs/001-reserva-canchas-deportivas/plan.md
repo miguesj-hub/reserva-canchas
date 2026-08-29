@@ -70,11 +70,11 @@ versiones estaban decididos antes de este plan, y las nueve decisiones que sí e
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-Evaluado contra `.specify/memory/constitution.md` v1.1.1.
+Evaluado contra `.specify/memory/constitution.md` v1.3.0.
 
 | # | Principio | Cómo lo satisface este plan | Estado |
 |---|---|---|---|
-| I | Alcance cerrado y trazable | Todo el trabajo sale de los 48 FR del spec, que ya trazan a §3.1–§3.3, RN-01…RN-08 y E1–E6. Las cuatro piezas del frontend que **no** trazan (dashboard de KPIs inventados, edición de perfil, filtro "Fútbol", estado "pasada") se recortan o se reconducen en R-005 a R-008 de research.md, no se conservan por inercia. | PASA |
+| I | Alcance cerrado y trazable | Todo el trabajo sale de los 53 FR del spec, que ya trazan a §3.1–§3.3, RN-01…RN-08 y E1–E6. FR-049 a FR-053 entran por la enmienda 1.3.0, que declara la configuración del tope de RN-06 dentro del alcance implementado. Las cuatro piezas del frontend que **no** trazan (dashboard de KPIs inventados, edición de perfil, filtro "Fútbol", estado "pasada") se recortan o se reconducen en R-005 a R-008 de research.md, no se conservan por inercia. | PASA |
 | II | Reglas de negocio en el dominio, con prueba | Las ocho RN viven en `application/service/` del servicio dueño: RN-01…RN-06 y RN-08 en `BookingService` de `ms-reservas`, RN-07 en `CourtService` de `ms-canchas`. Cada una con prueba unitaria y puerto de salida mockeado; RN-02 además con prueba de concurrencia. | PASA |
 | III | Regla de dependencia hexagonal | Los cinco proyectos conservan `com.ups.reservacanchas.<dominio>` y se estructuran según `template-backend/ARQUITECTURA.md`, con los nombres de clase de las cajas del DSL. El `api-gateway` queda exceptuado por decisión de la constitución: es enrutamiento e identificación, sin dominio propio. | PASA |
 | IV | Independencia de datos | Tres roles de PostgreSQL, uno por base, sin permiso cruzado. `ms-reservas` valida la cancha llamando a `ms-canchas` por `CourtClientPort`. `ms-reportes` sin base, sin driver JDBC y sin Flyway. | PASA |
@@ -82,7 +82,7 @@ Evaluado contra `.specify/memory/constitution.md` v1.1.1.
 | VI | Contrato antes que implementación | Los contratos de los cuatro servicios, con su catálogo de errores, se cierran en Fase 1 y son la entrada del trabajo de ambos lados. Swagger UI por servicio en `/swagger-ui.html`. | PASA |
 | VII | Levantar con un solo comando | El compose se completa dentro de la primera historia y crece con cada una; el seed cubre los tres dominios desde el arranque. Ver [quickstart.md](./quickstart.md). | PASA |
 
-**Compuertas de calidad**: las ocho aplican a cada historia. La octava —`diagramas/workspace.dsl` y
+**Compuertas de calidad**: las nueve aplican a cada historia. La novena —`diagramas/workspace.dsl` y
 `informe/secciones/` actualizados en el mismo cambio— tiene trabajo identificado ya en este plan:
 el DSL no contempla todavía la ruta `/api/auth` ni el contenedor de PostgreSQL con sus tres bases
 como se despliega realmente. Se corrige al integrar la primera historia, no al final.
@@ -106,8 +106,9 @@ Repetida sobre los artefactos de diseño ya escritos, que es cuando las violacio
   otros cuatro no den; queda justificado en su propia descripción.
 - **Principio VI** — Los cuatro contratos están completos, con su catálogo de errores y el mapa de
   qué pantalla consume qué. Ver [contracts/README.md](./contracts/README.md).
-- **Compuerta 8** — El trabajo sobre `diagramas/workspace.dsl` está identificado y fechado (R-009):
-  se integra con la Historia 1, no al final.
+- **Compuerta 9** — El trabajo sobre `diagramas/workspace.dsl` está identificado y fechado: R-009
+  se integra con la Historia 1, y R-010 con la Historia 5, que añade tres componentes a la vista de
+  componentes de `ms-reservas`. Ninguno se deja para el final.
 
 Sin violaciones nuevas.
 
@@ -280,6 +281,11 @@ ocupado, cancelar y ver el bloque liberarse. Cubre §7.1 y §7.3.
 global y la cancelación por rol administrador. En frontend, `GestionCanchas` y `GestionReservas`.
 La disponibilidad de US1 empieza a descontar los bloqueos de mantenimiento. Cubre §7.2.
 
+Incluye además la **pantalla de disponibilidad del administrador** (escenario 9, FR-007), que es
+solo frontend: `mf-administracion` gana su propia vista de solo lectura contra el mismo endpoint,
+en vez de abrirle a los dos roles la de `mf-reservas`. El porqué está en R-011. Sin trabajo de
+backend, sin contrato nuevo y sin cambio en el DSL.
+
 ### Recorrido 3 — Historia US3 (P3): reportes
 
 `ms-reportes` completo: sin base, agregando por `BookingsClientPort` y `CourtsClientPort` los cuatro
@@ -291,6 +297,23 @@ administrador. Cubre §7.4.
 `ms-usuarios` gana listado y cambio de estado; el gateway rechaza al usuario inactivo. En frontend,
 `GestionUsuarios`. Cubre la fila de gestión de usuarios de §3.1.
 
+### Recorrido 5 — Historia US5 (P5): configuración del tope de reservas
+
+`ms-reservas` gana un adaptador de entrada y un caso de uso propios —`ConfigurationController`,
+`ConfigurationUseCase`, `ConfigurationService`— y `ConfigurationRepositoryPort` gana su método de
+escritura. En frontend, una pantalla de configuración en `mf-administracion`. Forma del contrato y
+alternativas descartadas, en R-010.
+
+No hay migración: la tabla `configuracion` y su fila existen desde `V2__configuracion.sql`. Lo que
+cambia es que su valor deja de ser de solo lectura.
+
+**Compuerta 9**: los tres componentes nuevos entran en la vista 03 del `workspace.dsl`, se
+reexporta `componentes-reservas.pdf` y §4 del informe gana la mención del puerto de configuración,
+que hoy describe solo los tres existentes.
+
+**Demostrable al terminar**: bajar el tope a 1, ser rechazado al crear la segunda reserva activa
+citando el tope nuevo, devolverlo a 3 y ver la misma reserva confirmarse. Cubre RN-06 y SC-011.
+
 ## Riesgos
 
 | Riesgo | Señal temprana | Respuesta |
@@ -299,3 +322,4 @@ administrador. Cubre §7.4.
 | La restricción `EXCLUDE` se escribe con una expresión no inmutable y Flyway falla al migrar | La migración V1 de `ms-reservas` no aplica | La forma exacta está fijada en data-model.md: `tsrange(fecha + hora_inicio, fecha + hora_fin, '[)')`, inmutable, con `WHERE estado = 'CONFIRMADA'` |
 | Alguien "arregla" una violación de la regla de dependencia inyectando el repositorio JPA en el servicio | Aparece un import de `adapter/` en `application/service/` | Compuerta 4 de la constitución, revisada en cada integración |
 | El seed caduca: las reservas confirmadas quedan en el pasado y RN-04 deja de poder demostrarse | La demo no encuentra nada que cancelar | El seed usa fechas relativas al arranque, no absolutas (Principio VII) |
+| El tope se deja en un valor raro tras la demo de US5 y el seed deja de poder poblar "Mis reservas" | Un usuario final no puede crear la segunda reserva de la demo | El seed reafirma `max_reservas_activas = 3` en cada arranque desde cero, y la demo devuelve el tope a 3 como último paso (FR-050 lo hace inmediato) |

@@ -294,6 +294,69 @@ roles" en el DSL: la ruta nueva cae exactamente dentro de su responsabilidad dec
 
 ---
 
+## R-010 — Forma del endpoint de configuración del tope
+
+**Contexto**: la enmienda 1.3.0 de la constitución declara en alcance la configuración del tope de
+RN-06 (FR-049 a FR-053). La tabla `configuracion` de `reservas_db` es clave/valor y hoy solo se
+lee, desde `BookingService.verificarTope` a través de `ConfigurationRepositoryPort`.
+
+**Decisión**: un recurso propio, `GET /api/reservas/configuracion` y
+`PUT /api/reservas/configuracion`, con cuerpo tipado `{ "maxReservasActivas": 3 }`. En el
+microservicio entra por un adaptador de entrada nuevo —`ConfigurationController`— y un caso de uso
+propio —`ConfigurationUseCase` / `ConfigurationService`—, no colgando de `BookingService`.
+`ConfigurationRepositoryPort` gana un método de escritura.
+
+**No hay caché que invalidar**: `BookingService` lee la clave en cada creación de reserva, así que
+un cambio del tope rige para la siguiente petición sin reiniciar ni redesplegar nada. Es
+exactamente lo que exige FR-050, y es una propiedad del diseño actual, no algo que haya que
+construir. Si alguna vez se añade caché a esa lectura, FR-050 pasa a exigir su invalidación.
+
+**Rationale**: exponer un objeto tipado y no el par clave/valor crudo mantiene el contrato honesto
+—el frontend no tiene que saber que detrás hay una tabla genérica— y deja sitio para más
+parámetros sin abrir rutas nuevas. Separar el caso de uso evita que `BookingService`, que ya
+concentra RN-01 a RN-06 y RN-08, cargue además con una responsabilidad de administración.
+
+**Consecuencia sobre la compuerta 9**: `ConfigurationController`, `ConfigurationUseCase` y
+`ConfigurationService` son componentes nuevos de `ms-reservas`. Entran en la vista 03 del
+`workspace.dsl`, hay que reexportar `componentes-reservas.pdf`, y §4 del informe describe hoy los
+puertos de ese servicio sin mencionarlos. Se actualiza en el mismo cambio, no al final.
+
+**Alternativas descartadas**:
+- *`PATCH /api/reservas/configuracion/max-reservas-activas`*: una ruta por parámetro multiplica el
+  contrato sin ganar nada con un único parámetro.
+- *Colgarlo de `BookingUseCase`*: mezcla la política de reservas con la operación de reservar, y
+  obliga a que la pantalla de administración consuma el caso de uso del usuario final.
+- *Variable de entorno del contenedor*: cambiarla exige redesplegar `ms-reservas`, que es justo lo
+  que FR-050 prohíbe.
+
+---
+
+## R-011 — Dónde vive la consulta de disponibilidad del administrador
+
+**Contexto**: FR-007 exige la consulta de disponibilidad para ambos roles desde el principio, pero
+solo `mf-reservas` tiene pantalla, y el shell la restringe a `USUARIO_FINAL` con `RoleRoute`. El
+backend ya cumple: `GET /api/reservas/disponibilidad` no comprueba rol.
+
+**Decisión**: una pantalla propia en `mf-administracion`, no abrir la de `mf-reservas` a los dos
+roles.
+
+**Rationale**: el Principio V prohíbe que un remote importe código de otro, así que reutilizar la
+pantalla obligaría a abrir la ruta `/reservas` al administrador entera. Y esa pantalla lleva un
+botón "Reservar" que navega a `/reservas/nueva`, contra un endpoint que devuelve 403 al
+administrador porque §3.1 no le atribuye crear reservas: sería ofrecer una acción que siempre
+falla. La barra de `mf-reservas` muestra además "Mis Reservas", que para un administrador siempre
+estaría vacía.
+
+**Alcance real**: la pantalla nueva es de solo lectura y reusa el mismo endpoint. No hay trabajo de
+backend, ni contrato nuevo, ni migración.
+
+**Consecuencia sobre la compuerta 9**: ninguna en el DSL. La vista 11 de `mf-administracion` usa
+capas genéricas —Vistas, Componentes UI, Estado, ApiClient— y no una caja por pantalla, así que una
+pantalla más no cambia el diagrama. El informe ya afirma que el administrador consulta
+disponibilidad: con esto pasa a ser cierto.
+
+---
+
 ## Resumen de decisiones
 
 | # | Decisión | Toca |
@@ -307,5 +370,7 @@ roles" en el DSL: la ruta nueva cae exactamente dentro de su responsabilidad dec
 | R-007 | Estados `CONFIRMADA` / `CANCELADA` / `FINALIZADA` | `mf-reservas`, contrato, esquema |
 | R-008 | Deportes `PADEL` / `TENIS` / `BASQUET`, enumeración cerrada | `mf-administracion`, `mf-reservas`, contrato, esquema |
 | R-009 | `/api/auth/**` hacia `ms-usuarios`; el DSL se actualiza con la Historia 1 | gateway, `ms-usuarios`, `diagramas/workspace.dsl` |
+| R-010 | `GET`/`PUT /api/reservas/configuracion` con cuerpo tipado y caso de uso propio; sin caché que invalidar | `ms-reservas`, contrato, `mf-administracion`, `diagramas/workspace.dsl` |
+| R-011 | La disponibilidad del administrador es pantalla propia de `mf-administracion`, no la de `mf-reservas` abierta a dos roles | `mf-administracion`, `shell` |
 
 Sin `NEEDS CLARIFICATION` pendientes.
