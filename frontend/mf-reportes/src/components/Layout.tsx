@@ -2,8 +2,11 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { NavLink } from 'react-router-dom';
 import type { Sesion } from '../tipos';
 
-/** Debe coincidir con la duración total del keyframe curtain-sweep en App.css. */
-const DURACION_MS = 800;
+/**
+ * Debe coincidir con la duración total del keyframe curtain-sweep en App.css.
+ * En 0 la cortina queda desactivada; ver la nota de App.css.
+ */
+const DURACION_MS = 0;
 
 // Rutas absolutas a propósito: este remote siempre se monta bajo /reportes
 // (lo fija el shell), y estos enlaces vuelven a las páginas de
@@ -12,7 +15,14 @@ const navItems = [
   { to: '/administracion', label: 'Dashboard', icon: 'dashboard', end: true },
   { to: '/administracion/reservas', label: 'Reservas', icon: 'event_available', end: false },
   { to: '/administracion/canchas', label: 'Canchas', icon: 'sports_tennis', end: false },
+  {
+    to: '/administracion/disponibilidad',
+    label: 'Disponibilidad',
+    icon: 'calendar_month',
+    end: false,
+  },
   { to: '/administracion/usuarios', label: 'Usuarios', icon: 'group', end: false },
+  { to: '/administracion/configuracion', label: 'Configuración', icon: 'tune', end: false },
 ];
 
 function NavItems({ onNavigate }: { onNavigate?: () => void }) {

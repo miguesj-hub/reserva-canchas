@@ -142,7 +142,7 @@ body {
    hasta salir por arriba — el mismo gesto que en mf-reservas y
    mf-administracion, para que la transición se vea igual sin importar el rol. */
 :root {
-  --curtain-duration: 800ms;
+  --curtain-duration: 0ms;
 }
 
 .curtain-panel {
