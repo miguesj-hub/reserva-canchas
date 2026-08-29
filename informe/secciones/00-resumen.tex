@@ -9,7 +9,26 @@
 \section*{Resumen}
 \addcontentsline{toc}{section}{Resumen}
 
-% [Escribir aquí el resumen]
+Se desarrolló un sistema web para la reserva de canchas deportivas de tenis,
+básquet y pádel, que permite consultar disponibilidad, crear y cancelar reservas,
+administrar canchas y usuarios, y visualizar reportes básicos. La aplicación se
+organizó mediante una arquitectura basada en microfrontends y microservicios. En
+el frontend se implementó un shell junto con tres microfrontends remotos
+utilizando React y Module Federation, mientras que el backend se dividió en los
+microservicios ms-usuarios, ms-canchas, ms-reservas y ms-reportes desarrollados
+con Spring Boot. La persistencia se organizó en PostgreSQL mediante bases de
+datos independientes para los microservicios que requieren almacenar
+información, evitando el acceso directo a los datos administrados por otros
+servicios. También se implementaron las reglas relacionadas con permisos,
+cancelaciones, estados de reserva, límite de reservas activas y control de
+solapamiento de horarios. Para este último caso, la validación realizada por
+ms-reservas se complementó con una restricción de exclusión en PostgreSQL para
+evitar conflictos ante solicitudes concurrentes. Los componentes del sistema se
+ejecutan de forma conjunta mediante Docker Compose. Como resultado, se
+implementaron las funcionalidades definidas para el usuario final y el
+administrador, y los seis criterios de aceptación establecidos para el proyecto
+se encuentran cubiertos por la implementación y las pruebas realizadas.
 
 \vspace{0.5cm}
-\noindent\textbf{Palabras clave:} % microservicios, microfrontends, Module Federation, Spring Boot, PostgreSQL, Docker
+\noindent\textbf{Palabras clave:} microservicios, microfrontends,
+Module Federation, Spring Boot, PostgreSQL, Docker.

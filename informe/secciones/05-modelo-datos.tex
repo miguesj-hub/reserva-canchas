@@ -55,9 +55,11 @@ ms-reservas y ms-canchas.
 \subsection{Diagrama entidad-relación}
 \label{sec:der}
 
-\instruccion{Un DER por base, o uno global con las fronteras entre bases
-marcadas. Lo segundo comunica mejor la independencia, que es justo lo que se
-evalúa.}
+El modelo de datos se presenta mediante un único diagrama entidad-relación,
+agrupando las tablas según la base de datos a la que pertenecen. De esta forma,
+se pueden observar en conjunto las fronteras de usuarios\_db, canchas\_db y
+reservas\_db, así como distinguir las relaciones internas de las referencias
+que cruzan entre bases de datos.
 
 \begin{figure}[H]
   \centering

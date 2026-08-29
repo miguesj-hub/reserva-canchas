@@ -1,19 +1,34 @@
 % !TeX root = ../informe.tex
 % ===========================================================================
 %  Anexos
-%  Material de respaldo: scripts completos, colecciones de pruebas, capturas.
-%  Con \appendix ya activo, las secciones se numeran A, B, C...
 % ===========================================================================
 
 \section{Scripts de base de datos}
 \label{anexo:sql}
 
-% [DDL completo y datos de prueba, o referencia a la ruta del repositorio]
+Los scripts completos se mantienen versionados junto con la implementación.
+Las siguientes rutas permiten consultar la versión exacta aplicada por cada
+microservicio, incluidos los datos semilla:
+
+\begin{itemize}
+  \item Inicialización de PostgreSQL:
+  \url{https://github.com/miguesj-hub/reserva-canchas/tree/main/infra/postgres/init}
+  \item Migraciones de usuarios:
+  \url{https://github.com/miguesj-hub/reserva-canchas/tree/main/backend/ms-usuarios/src/main/resources/db/migration}
+  \item Migraciones de canchas:
+  \url{https://github.com/miguesj-hub/reserva-canchas/tree/main/backend/ms-canchas/src/main/resources/db/migration}
+  \item Migraciones de reservas:
+  \url{https://github.com/miguesj-hub/reserva-canchas/tree/main/backend/ms-reservas/src/main/resources/db/migration}
+\end{itemize}
 
 \section{Colección de pruebas de la API}
 \label{anexo:api}
 
-% [Peticiones de ejemplo por servicio]
+La colección Postman contiene las peticiones de prueba que atraviesan el API
+Gateway, incluidas las variables de conexión, autenticación y los endpoints
+de usuarios, canchas, reservas y reportes:
+
+\url{https://github.com/miguesj-hub/reserva-canchas/blob/main/Postman-collection/reserva-canchas.postman_collection.json}
 
 \section{Capturas de la aplicación}
 \label{anexo:capturas}
@@ -23,4 +38,7 @@
 \section{Repositorio del proyecto}
 \label{anexo:repositorio}
 
-% [URL del repositorio e instrucciones de acceso]
+La implementación, las migraciones de base de datos y la colección de
+pruebas Postman se encuentran disponibles en el siguiente repositorio:
+
+\url{https://github.com/miguesj-hub/reserva-canchas}

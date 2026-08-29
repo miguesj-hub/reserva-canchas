@@ -51,7 +51,8 @@ solicitudes, persistir información o comunicarse con otros servicios.
 \subsection{Notación}
 \label{sec:notacion}
 
-Para representar la arquitectura se utiliza el modelo C4 creado por Simon Brown,
+Para representar la arquitectura se utiliza el modelo C4 creado por Simon Brown
+\cite{c4model},
 considerando los niveles de contexto, contenedores y componentes, complementados
 con una vista de despliegue.
 
@@ -143,7 +144,15 @@ mientras que el shell permite integrarlos dentro de una misma aplicación web.
   \end{tabular}
 \end{table}
 
+Module Federation permite cargar y compartir m\'odulos entre aplicaciones web
+separadas \cite{module-federation}, mecanismo utilizado para integrar los
+microfrontends remotos en el shell.
+
 \paragraph*{Backend.}
+
+Los microservicios del proyecto se implementan con Spring Boot, cuya
+documentaci\'on oficial cubre aplicaciones web y configuraci\'on de almacenes SQL
+\cite{spring-boot}.
 
 El backend se organiza mediante un API Gateway y cuatro microservicios. El Gateway
 funciona como punto de entrada a las APIs del sistema y se encarga de dirigir cada
@@ -227,6 +236,11 @@ datos.
 
 \subsubsection{\texorpdfstring{\textsf{V-04}}{V-04} Despliegue}
 \label{v:04}
+
+Docker Compose permite definir y ejecutar aplicaciones compuestas por varios
+contenedores desde una configuraci\'on \`unica \cite{docker-compose}. PostgreSQL
+se utiliza como motor de persistencia para los servicios que almacenan datos
+\cite{postgresql-docs}.
 
 \begin{figure}[p]
   \thisfloatpagestyle{empty}

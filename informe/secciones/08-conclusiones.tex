@@ -88,4 +88,13 @@ del modelo de datos y almacenar los cambios de estado necesarios.
 \subsection{Trabajo futuro}
 \label{sec:trabajo-futuro}
 
-% [Extensiones naturales del sistema, incluidas las excluidas del alcance]
+A partir de las limitaciones identificadas durante la implementación, una
+evolución del sistema podría incorporar paginación en los listados de usuarios,
+canchas y reservas. También se podría revisar la forma en que se generan los
+reportes, ya que actualmente parte de los cálculos se realiza en memoria a partir
+de la información obtenida desde ms-reservas y ms-canchas. En caso de manejar un
+mayor volumen de información, este proceso debería adaptarse para evitar obtener
+y procesar colecciones completas en cada consulta.
+
+Estas funcionalidades se plantean como posibles extensiones del sistema y no
+forman parte de la implementación desarrollada en el alcance actual del proyecto.
