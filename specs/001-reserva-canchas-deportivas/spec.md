@@ -16,7 +16,8 @@ capa del sistema constituye una historia.
 
 Las historias están priorizadas por los criterios de aceptación de §7, que es lo que se califica.
 Los criterios §7.5 y §7.6 son estructurales y no producen historias: se satisfacen por la forma
-en que se construyen estas cuatro.
+en que se construyen las cuatro primeras. La Historia 5 no traza a §7 sino a RN-06, por la vía que
+abre la constitución 1.3.0.
 
 ---
 
@@ -91,8 +92,9 @@ de RN-03 que distingue los dos roles.
 **Independent Test**: Con la Historia 1 en pie, se demuestra sola: crear una cancha de básquet con
 horario 07:00–22:00, verla aparecer disponible para un usuario final, editarle el horario y ver
 cambiar los bloques ofrecidos, inactivarla y comprobar que deja de ofrecerse, registrar un bloqueo
-de mantenimiento y comprobar que sus bloques no se pueden reservar, y cancelar desde el listado
-global la reserva de otro usuario. Cubre §7.2.
+de mantenimiento y comprobar que sus bloques no se pueden reservar, cancelar desde el listado
+global la reserva de otro usuario, y consultar la disponibilidad de una cancha sin poder reservar
+ninguno de sus bloques. Cubre §7.2.
 
 **Acceptance Scenarios**:
 
@@ -119,6 +121,10 @@ global la reserva de otro usuario. Cubre §7.2.
    el dueño la ve cancelada en "Mis reservas" (RN-03, RN-05).
 8. **Given** cualquier reserva cuya hora de inicio ya pasó, **When** el administrador intenta
    cancelarla, **Then** el sistema lo impide: RN-04 aplica también al administrador.
+9. **Given** un administrador autenticado, **When** consulta la disponibilidad de una cancha para
+   una fecha, **Then** ve los mismos bloques libres y ocupados que vería un usuario final, y la
+   pantalla no le ofrece acción de reservar, porque §3.1 no le atribuye la creación de reservas
+   (FR-007).
 
 ---
 
@@ -193,6 +199,40 @@ intentar iniciar sesión con sus credenciales y ser rechazado, reactivarlo, y vo
 
 ---
 
+### User Story 5 - Configurar el tope de reservas activas (Priority: P5)
+
+El administrador consulta cuántas reservas activas simultáneas puede tener un usuario final y
+cambia ese número cuando la política del club cambia. El nuevo valor rige para las reservas que se
+creen a partir de ese momento, sin reiniciar nada.
+
+**Why this priority**: RN-06 exige que el límite sea "configurable", pero §3.1 no le da fila y §3.2
+no le da pantalla. La constitución del proyecto (enmienda 1.3.0) lo declara dentro del alcance
+implementado por traza a la regla, con el mismo criterio con el que ya declaró la gestión de
+usuarios. Va en último lugar porque no bloquea ninguna otra historia y no aparece en los criterios
+de aceptación de §7: sin ella, RN-06 sigue cumpliéndose con su valor por defecto.
+
+**Independent Test**: Se demuestra sola, con la Historia 1 en pie: leer el tope vigente, bajarlo a
+1, intentar crear una segunda reserva activa con un usuario final y ser rechazado citando el tope
+nuevo, devolverlo a 3, y comprobar que la misma reserva ahora se confirma. Cubre RN-06.
+
+**Acceptance Scenarios**:
+
+1. **Given** un administrador autenticado, **When** abre la configuración de reservas, **Then** ve
+   el tope de reservas activas simultáneas vigente en el sistema.
+2. **Given** un tope vigente de 3, **When** el administrador lo cambia a 1, **Then** el sistema
+   confirma el cambio y un usuario final con una reserva activa que intenta crear otra es
+   rechazado indicando que el tope es 1 y que ya tiene 1 activa (RN-06).
+3. **Given** un tope recién reducido a 1 y un usuario final que ya tenía 3 reservas activas,
+   **When** se consultan sus reservas, **Then** las 3 se conservan confirmadas y siguen ocupando
+   sus bloques: el tope se evalúa al crear, no retroactivamente.
+4. **Given** un administrador autenticado, **When** intenta fijar un tope de 0, negativo o no
+   entero, **Then** el sistema rechaza el cambio, explica el valor admitido, y el tope anterior
+   sigue vigente.
+5. **Given** un usuario final autenticado, **When** intenta consultar o modificar el tope,
+   **Then** el sistema se lo impide por falta de permiso.
+
+---
+
 ### Edge Cases
 
 - **Dos solicitudes simultáneas sobre el mismo bloque**: exactamente una se confirma; la otra
@@ -204,6 +244,9 @@ intentar iniciar sesión con sus credenciales y ser rechazado, reactivarlo, y vo
 - **Reserva sobre una cancha inactiva o inexistente**: se rechaza, aunque el bloque esté libre.
 - **Cancha inactivada con reservas futuras confirmadas**: las reservas se conservan; el
   administrador decide si las cancela una por una desde el listado global.
+- **Tope de reservas activas reducido por debajo de lo que algún usuario ya tiene**: sus reservas
+  se conservan y siguen ocupando sus bloques. El tope se evalúa al crear una reserva, nunca sobre
+  las ya confirmadas; ese usuario simplemente no puede crear más hasta bajar del nuevo tope.
 - **Bloqueo de mantenimiento que se solapa con reservas ya confirmadas**: el bloqueo impide nuevas
   reservas, pero no cancela las existentes; el administrador las cancela explícitamente.
 - **Cancelación de una reserva ya cancelada**: la operación no tiene efecto y se informa que la
@@ -345,6 +388,18 @@ intentar iniciar sesión con sus credenciales y ser rechazado, reactivarlo, y vo
   automáticamente.
 - **FR-048**: El sistema MUST impedir que un usuario final acceda a la gestión de usuarios.
 
+**Configuración del tope de reservas activas (RN-06)**
+
+- **FR-049**: Un administrador MUST poder consultar el valor vigente del tope de reservas activas
+  simultáneas de un usuario final.
+- **FR-050**: Un administrador MUST poder cambiar ese tope, y el valor nuevo MUST regir para las
+  reservas que se creen a partir de ese momento, sin reiniciar ningún servicio ni redesplegar.
+- **FR-051**: El sistema MUST rechazar un tope que no sea un entero mayor o igual a 1, explicando
+  el valor admitido y dejando vigente el anterior.
+- **FR-052**: El sistema MUST conservar las reservas activas que superen un tope recién reducido:
+  el tope se evalúa al crear una reserva y nunca retroactivamente (ver Edge Cases).
+- **FR-053**: El sistema MUST impedir que un usuario final consulte o modifique el tope.
+
 ### Key Entities
 
 - **Usuario**: Persona que usa el sistema. Tiene credenciales, un rol y un estado (activo o
@@ -392,6 +447,9 @@ intentar iniciar sesión con sus credenciales y ser rechazado, reactivarlo, y vo
   el acceso inmediatamente después de ser reactivado.
 - **SC-010**: Las tres canchas de los tres deportes —pádel, tenis y básquet— se pueden reservar y
   cancelar, demostrado con al menos una reserva completa por deporte.
+- **SC-011**: Un cambio del tope de reservas activas hecho desde la interfaz de administración rige
+  para la siguiente reserva que se intente crear, sin reiniciar ningún servicio, y el rechazo cita
+  el valor nuevo.
 
 ## Fuera de Alcance
 
@@ -417,9 +475,10 @@ o comentarios sobre canchas, y cualquier pantalla de configuración de parámetr
 | Historia | Criterio §7 | Funcionalidades §3 | Reglas de negocio |
 | --- | --- | --- | --- |
 | US1 — Reservar y cancelar (P1) | §7.1, §7.3 | §3.2 Seguridad, §3.3.1, §3.3.2, §3.3.3, §3.2 "Mis reservas" | RN-01, RN-02, RN-03, RN-04, RN-05, RN-06, RN-08 |
-| US2 — Catálogo y cancelación administrativa (P2) | §7.2 | §3.3.4, §3.2 "Gestión de canchas", §3.2 "Gestión de reservas", §3.1 horarios y bloqueos | RN-03, RN-04, RN-05, RN-07 |
+| US2 — Catálogo y cancelación administrativa (P2) | §7.2 | §3.3.4, §3.2 "Gestión de canchas", §3.2 "Gestión de reservas", §3.1 horarios y bloqueos, §3.3.1 (consulta del administrador) | RN-03, RN-04, RN-05, RN-07 |
 | US3 — Reportes (P3) | §7.4 | §3.3.5 (los cuatro indicadores) | RN-08 |
 | US4 — Gestión de usuarios (P4) | — | §3.1 fila "Gestionar usuarios" | — |
+| US5 — Configuración del tope (P5) | — | RN-06 vía constitución 1.3.0 | RN-06 |
 
 | Regla | Dónde se verifica |
 | --- | --- |
@@ -428,7 +487,7 @@ o comentarios sobre canchas, y cualquier pantalla de configuración de parámetr
 | RN-03 — Solo lo propio; el administrador, cualquiera | US1 esc. 10; US2 esc. 7; FR-019, FR-020 |
 | RN-04 — No se cancela lo ya iniciado | US1 esc. 9; US2 esc. 8; FR-021 |
 | RN-05 — Cancelar libera el bloque | US1 esc. 8 y 11; FR-022, FR-024 |
-| RN-06 — Tope configurable de reservas activas | US1 esc. 6; FR-015 |
+| RN-06 — Tope configurable de reservas activas | US1 esc. 6; US5 esc. 2 a 4; FR-015, FR-049 a FR-053; SC-011 |
 | RN-07 — Solo el administrador gestiona canchas | US2 esc. 1 y 4; FR-029 a FR-033 |
 | RN-08 — Tres estados de la reserva | US1 esc. 7; FR-017, FR-027, FR-028 |
 
@@ -469,5 +528,5 @@ por ser la lectura más simple compatible con §3 y con §3.5, y ninguna amplía
 - **Volumen**: escala de un club —decenas de canchas, cientos de usuarios, miles de reservas—, no
   de una plataforma multi-sede.
 - **Datos iniciales**: el sistema se entrega con canchas de los tres deportes, usuarios de ambos
-  roles y reservas de ejemplo, para que las cuatro historias sean demostrables desde el primer
+  roles y reservas de ejemplo, para que las historias sean demostrables desde el primer
   arranque.
