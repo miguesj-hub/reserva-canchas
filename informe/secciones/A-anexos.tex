@@ -33,7 +33,151 @@ de usuarios, canchas, reservas y reportes:
 \section{Capturas de la aplicación}
 \label{anexo:capturas}
 
-% [Pantallas de los flujos principales]
+Las siguientes capturas evidencian, sobre el sistema desplegado con
+\texttt{docker compose up}, los flujos principales descritos en el
+\emph{quickstart} del proyecto: el escenario V1 (reservar y cancelar) desde
+la sesión de un usuario final, y los escenarios V3, V4 y V5 (catálogo,
+reportes y roles) desde la sesión del administrador.
+
+\subsection{Usuario final}
+\label{anexo:capturas:usuario}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{capturas/usuario-login}
+  \caption{Inicio de sesión como usuario final (\texttt{cliente1}).}
+  \label{fig:cap-usuario-login}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{capturas/usuario-disponibilidad}
+  \caption{Disponibilidad de una cancha: bloques libres, ocupados y en
+           mantenimiento sobre el horario de atención.}
+  \label{fig:cap-usuario-disponibilidad}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{capturas/usuario-seleccion-bloque}
+  \caption{Selección de un bloque libre para reservar.}
+  \label{fig:cap-usuario-seleccion}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\linewidth]{capturas/usuario-confirmar-reserva}
+  \caption{Confirmación de los datos de la reserva antes de crearla.}
+  \label{fig:cap-usuario-confirmar}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{capturas/usuario-reserva-confirmada}
+  \caption{Reserva creada: aparece como \textsc{Confirmada} en Mis Reservas,
+           con la acción de cancelar disponible.}
+  \label{fig:cap-usuario-confirmada}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{capturas/usuario-reserva-cancelada}
+  \caption{Reserva cancelada por el propio usuario: pasa a estado
+           \textsc{Cancelada}.}
+  \label{fig:cap-usuario-cancelada}
+\end{figure}
+
+\subsection{Administrador}
+\label{anexo:capturas:admin}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{capturas/admin-login}
+  \caption{Inicio de sesión como administrador.}
+  \label{fig:cap-admin-login}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{capturas/admin-dashboard}
+  \caption{Panel principal de administración con los indicadores del día.}
+  \label{fig:cap-admin-dashboard}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{capturas/admin-canchas-listado}
+  \caption{Gestión de canchas: catálogo con su horario y estado.}
+  \label{fig:cap-admin-canchas}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\linewidth]{capturas/admin-nueva-cancha}
+  \caption{Alta de una nueva cancha, con deporte y horario de atención.}
+  \label{fig:cap-admin-nueva-cancha}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{capturas/admin-cancha-creada}
+  \caption{La cancha creada aparece de inmediato en el catálogo.}
+  \label{fig:cap-admin-cancha-creada}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{capturas/admin-reservas-listado}
+  \caption{Gestión de reservas: el administrador puede cancelar cualquier
+           reserva del club.}
+  \label{fig:cap-admin-reservas}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.65\linewidth]{capturas/admin-confirmar-cancelacion}
+  \caption{Confirmación antes de cancelar una reserva de un usuario final.}
+  \label{fig:cap-admin-confirmar-cancelacion}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{capturas/admin-reserva-cancelada}
+  \caption{La reserva queda \textsc{Cancelada} y el bloque vuelve a estar
+           libre.}
+  \label{fig:cap-admin-reserva-cancelada}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{capturas/admin-reportes-indicadores}
+  \caption{Reportes: total de reservas, ocupación media, cancelaciones y
+           cancha de mayor demanda para el rango seleccionado.}
+  \label{fig:cap-admin-reportes-indicadores}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{capturas/admin-reportes-ranking}
+  \caption{Ranking de demanda por cancha, con sus extremos de mayor y menor
+           ocupación.}
+  \label{fig:cap-admin-reportes-ranking}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{capturas/admin-usuarios-listado}
+  \caption{Gestión de usuarios: roles y estado de cada cuenta.}
+  \label{fig:cap-admin-usuarios}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{capturas/admin-usuario-activado}
+  \caption{Activación de la cuenta \texttt{inactivo}, que pasa a poder
+           iniciar sesión (FR-005, FR-006).}
+  \label{fig:cap-admin-usuario-activado}
+\end{figure}
 
 \section{Repositorio del proyecto}
 \label{anexo:repositorio}
