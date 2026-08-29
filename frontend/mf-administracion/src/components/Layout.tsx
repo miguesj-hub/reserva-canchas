@@ -38,6 +38,12 @@ const navItems = [
   { to: '/administracion', label: 'Dashboard', icon: 'dashboard', end: true },
   { to: '/administracion/reservas', label: 'Reservas', icon: 'event_available', end: false },
   { to: '/administracion/canchas', label: 'Canchas', icon: 'sports_tennis', end: false },
+  {
+    to: '/administracion/disponibilidad',
+    label: 'Disponibilidad',
+    icon: 'calendar_month',
+    end: false,
+  },
   { to: '/administracion/usuarios', label: 'Usuarios', icon: 'group', end: false },
 ];
 

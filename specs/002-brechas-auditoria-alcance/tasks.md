@@ -57,11 +57,11 @@ final para esa misma cancha y fecha, y que no hay ninguna acción de reservar.
 
 ### Implementation for User Story 1
 
-- [ ] T135 [P] [US1] Añadir a `frontend/mf-administracion/src/api/client.ts` el tipo `Disponibilidad` y la función `consultarDisponibilidad(canchaId, fecha)` contra `GET /api/reservas/disponibilidad`, según el `DisponibilidadResponse` de `specs/001-reserva-canchas-deportivas/contracts/reservas.yaml`
-- [ ] T136 [US1] Crear `frontend/mf-administracion/src/pages/Disponibilidad.tsx`: selector de cancha y de fecha, y la grilla de bloques con sus estados libre / ocupado / mantenimiento (FR-049, FR-050). **Adaptada de `frontend/mf-reservas/src/pages/Disponibilidad.tsx`, no copiada**: sin el botón "Reservar" ni el `navigate('/reservas/nueva')`, porque §3.1 no atribuye al administrador la creación de reservas (FR-051)
-- [ ] T137 [US1] Registrar la ruta `disponibilidad` en `frontend/mf-administracion/src/App.tsx` dentro del `Layout`, y su entrada en `navItems` de `frontend/mf-administracion/src/components/Layout.tsx`
-- [ ] T138 [US1] Verificar SC-011: con sesión de administrador y sesión de usuario final abiertas a la vez, comprobar en **al menos 3 combinaciones** de cancha y fecha que ambas ven los mismos bloques y los mismos estados, incluida una cancha con bloqueo de mantenimiento vigente (esc. 4)
-- [ ] T139 [US1] Verificar FR-051 y la compuerta 8: la pantalla no ofrece ninguna acción de creación, y lo que muestra viene de la base a través del gateway, sin datos fijos
+- [X] T135 [P] [US1] Añadir a `frontend/mf-administracion/src/api/client.ts` el tipo `Disponibilidad` y la función `consultarDisponibilidad(canchaId, fecha)` contra `GET /api/reservas/disponibilidad`, según el `DisponibilidadResponse` de `specs/001-reserva-canchas-deportivas/contracts/reservas.yaml`
+- [X] T136 [US1] Crear `frontend/mf-administracion/src/pages/Disponibilidad.tsx`: selector de cancha y de fecha, y la grilla de bloques con sus estados libre / ocupado / mantenimiento (FR-049, FR-050). **Adaptada de `frontend/mf-reservas/src/pages/Disponibilidad.tsx`, no copiada**: sin el botón "Reservar" ni el `navigate('/reservas/nueva')`, porque §3.1 no atribuye al administrador la creación de reservas (FR-051)
+- [X] T137 [US1] Registrar la ruta `disponibilidad` en `frontend/mf-administracion/src/App.tsx` dentro del `Layout`, y su entrada en `navItems` de `frontend/mf-administracion/src/components/Layout.tsx`
+- [X] T138 [US1] Verificar SC-011: con sesión de administrador y sesión de usuario final abiertas a la vez, comprobar en **al menos 3 combinaciones** de cancha y fecha que ambas ven los mismos bloques y los mismos estados, incluida una cancha con bloqueo de mantenimiento vigente (esc. 4)
+- [X] T139 [US1] Verificar FR-051 y la compuerta 8: la pantalla no ofrece ninguna acción de creación, y lo que muestra viene de la base a través del gateway, sin datos fijos
 
 **Checkpoint**: la Historia 1 funciona sola. La fila "Consultar disponibilidad · Administrador: Sí"
 de §3.1 pasa a ser cierta en la interfaz, y §4 del informe deja de afirmar algo que el sistema no

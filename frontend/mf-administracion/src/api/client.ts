@@ -123,6 +123,23 @@ export type Bloqueo = {
   motivo: string | null;
 };
 
+// Disponibilidad (feature 002, US1). Mismos tipos que el contrato de
+// ms-reservas: se repiten aquí y no se importan de mf-reservas porque los
+// remotes son autónomos (Principio V).
+export type EstadoBloque = 'LIBRE' | 'OCUPADO' | 'MANTENIMIENTO';
+
+export type Bloque = {
+  horaInicio: string;
+  horaFin: string;
+  estado: EstadoBloque;
+};
+
+export type Disponibilidad = {
+  canchaId: number;
+  fecha: string;
+  bloques: Bloque[];
+};
+
 export type Reserva = {
   id: number;
   canchaId: number;
@@ -161,6 +178,18 @@ export function cambiarEstadoCancha(id: number, activa: boolean): Promise<Cancha
 }
 
 // --- Bloqueos de mantenimiento ---------------------------------------------
+
+/**
+ * FR-049 y FR-050. El mismo endpoint que consume mf-reservas: no comprueba rol,
+ * así que el administrador ve exactamente los mismos bloques y estados que un
+ * usuario final. Solo lectura: §3.1 no le atribuye crear reservas (FR-051).
+ */
+export function consultarDisponibilidad(
+  canchaId: number,
+  fecha: string,
+): Promise<Disponibilidad> {
+  return api<Disponibilidad>(`/reservas/disponibilidad?canchaId=${canchaId}&fecha=${fecha}`);
+}
 
 export function listarBloqueos(canchaId: number): Promise<Bloqueo[]> {
   return api<Bloqueo[]>(`/canchas/${canchaId}/bloqueos`);
