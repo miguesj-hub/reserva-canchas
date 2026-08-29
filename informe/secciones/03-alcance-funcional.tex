@@ -23,14 +23,20 @@ diferenciados dentro de la aplicación.
 La \cref{tab:roles} presenta las funcionalidades disponibles para cada rol y las
 restricciones aplicadas en aquellas operaciones que dependen del usuario autenticado.
 
-\begin{table}[H]
-  \centering
+\begin{xltabular}{\textwidth}{L{6.2cm} C{2.6cm} C{2.6cm}}
   \caption{Matriz de roles y permisos.}
   \label{tab:roles}
-  \begin{tabular}{L{6.2cm} C{2.6cm} C{2.6cm}}
+  \\
     \toprule
     \textbf{Funcionalidad} & \textbf{Usuario final} & \textbf{Administrador} \\
     \midrule
+    \endfirsthead
+    \multicolumn{3}{r}{\small\itshape Continuación de la Tabla \ref{tab:roles}} \\
+    \toprule
+    \textbf{Funcionalidad} & \textbf{Usuario final} & \textbf{Administrador} \\
+    \midrule
+    \endhead
+    \tablasigue{3}
 
     Registro e inicio de sesión & Sí & Sí \\
     Consultar disponibilidad de canchas & Sí & Sí \\
@@ -44,8 +50,7 @@ restricciones aplicadas en aquellas operaciones que dependen del usuario autenti
     Visualizar reportes básicos de ocupación & No & Sí \\
 
     \bottomrule
-  \end{tabular}
-\end{table}
+\end{xltabular}
 
 \subsection{Módulos y pantallas}
 \label{sec:modulos}
@@ -55,14 +60,20 @@ administración y reportes. Esta organización permite agrupar las operaciones s
 su responsabilidad funcional y mantener una separación clara entre autenticación,
 gestión de reservas, administración del sistema y consulta de información.
 
-\begin{table}[H]
-  \centering
+\begin{xltabular}{\textwidth}{L{3.2cm} L{4.4cm} L{5.4cm}}
   \caption{Módulos y pantallas del sistema.}
   \label{tab:modulos}
-  \begin{tabular}{L{3.2cm} L{4.4cm} L{5.4cm}}
+  \\
     \toprule
     \textbf{Módulo} & \textbf{Pantalla} & \textbf{Descripción} \\
     \midrule
+    \endfirsthead
+    \multicolumn{3}{r}{\small\itshape Continuación de la Tabla \ref{tab:modulos}} \\
+    \toprule
+    \textbf{Módulo} & \textbf{Pantalla} & \textbf{Descripción} \\
+    \midrule
+    \endhead
+    \tablasigue{3}
 
     Seguridad & Inicio de sesión / Registro & Autenticación de usuario final y administrador. \\
     Reservas & Consulta de disponibilidad & Calendario o grilla de horarios disponibles por cancha y deporte. \\
@@ -73,8 +84,7 @@ gestión de reservas, administración del sistema y consulta de información.
     Reportes & Reportes básicos & Ocupación por cancha y deporte, reservas por período y cancelaciones. \\
 
     \bottomrule
-  \end{tabular}
-\end{table}
+\end{xltabular}
 
 \subsection{Fuera de alcance}
 \label{sec:fuera-alcance}

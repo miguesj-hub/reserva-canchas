@@ -156,8 +156,8 @@ de las reservas:
 \end{itemize}
 
 La restricción requiere la extensión \id{btree_gist}, ya que
-\id{cancha_id} debe compararse por igualdad dentro del índice GiST. Este
-requisito se prepara en \texttt{infra/postgres/init/02-extensiones.sql},
+\id{cancha_id} debe compararse por igualdad dentro del índice GiST.
+Este requisito se prepara en \path{infra/postgres/init/02-extensiones.sql},
 antes de aplicar la migración \id{V1__reservas.sql}.
 
 Si el conflicto se detecta al momento de guardar, \id{BookingRepositoryAdapter}
@@ -221,14 +221,20 @@ una cancha existe pero no puede aceptar la reserva solicitada, se utiliza
 \id{422 Unprocessable Entity}. Los permisos se manejan mediante
 \id{403 Forbidden} y la ausencia de un recurso mediante \id{404 Not Found}.
 
-\begin{table}[H]
-  \centering
+\begin{xltabular}{\textwidth}{C{1.6cm} C{2.4cm} L{8.6cm}}
   \caption{Correspondencia entre violación de regla y respuesta HTTP.}
   \label{tab:errores}
-  \begin{tabular}{C{1.6cm} C{2.4cm} L{8.6cm}}
+  \\
     \toprule
     \textbf{Regla} & \textbf{HTTP} & \textbf{Excepción y significado} \\
     \midrule
+    \endfirsthead
+    \multicolumn{3}{r}{\small\itshape Continuación de la Tabla \ref{tab:errores}} \\
+    \toprule
+    \textbf{Regla} & \textbf{HTTP} & \textbf{Excepción y significado} \\
+    \midrule
+    \endhead
+    \tablasigue{3}
 
     \rn{02} &
     \textbf{409} &
@@ -277,8 +283,7 @@ una cancha existe pero no puede aceptar la reserva solicitada, se utiliza
     esperado. \\
 
     \bottomrule
-  \end{tabular}
-\end{table}
+\end{xltabular}
 
 Las \rn{01}, \rn{05} y \rn{08} no generan una respuesta de error propia.
 La \rn{01} se controla al construir el bloque horario y mediante las

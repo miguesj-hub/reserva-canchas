@@ -58,6 +58,18 @@
 % existir («Unknown float option `H'» en cada tabla que la usa).
 \usepackage{floatpag}
 \usepackage{float}
+\usepackage{needspace}
+% Mantiene tablas y figuras dentro de la seccion donde se las presenta.
+\usepackage[section]{placeins}
+
+% Da prioridad a colocar los flotantes cerca de su texto de referencia.
+\renewcommand{\topfraction}{.90}
+\renewcommand{\bottomfraction}{.80}
+\renewcommand{\textfraction}{.08}
+\renewcommand{\floatpagefraction}{.75}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
 \usepackage{caption}
 \usepackage{subcaption}
 \captionsetup{font=small,labelfont=bf}

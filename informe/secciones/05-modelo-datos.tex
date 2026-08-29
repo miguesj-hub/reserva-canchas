@@ -34,14 +34,20 @@ mantenga sus propias migraciones y cambios de estructura. ms-reportes no dispone
 de una base de datos, ya que obtiene la información necesaria mediante las APIs de
 ms-reservas y ms-canchas.
 
-\begin{table}[H]
-  \centering
+\begin{xltabular}{\textwidth}{L{3.2cm} L{3.4cm} L{6.6cm}}
   \caption{Reparto de bases de datos.}
   \label{tab:bases}
-  \begin{tabular}{L{3.2cm} L{3.4cm} L{6.6cm}}
+  \\
     \toprule
     \textbf{Base} & \textbf{Servicio dueño} & \textbf{Contenido} \\
     \midrule
+    \endfirsthead
+    \multicolumn{3}{r}{\small\itshape Continuación de la Tabla \ref{tab:bases}} \\
+    \toprule
+    \textbf{Base} & \textbf{Servicio dueño} & \textbf{Contenido} \\
+    \midrule
+    \endhead
+    \tablasigue{3}
 
     usuarios\_db & ms-usuarios & Usuarios, credenciales, roles y estado de las cuentas. \\
     canchas\_db & ms-canchas & Canchas, deportes, horarios de atención y bloqueos de mantenimiento. \\
@@ -49,8 +55,7 @@ ms-reservas y ms-canchas.
     el proceso de reserva. \\
 
     \bottomrule
-  \end{tabular}
-\end{table}
+\end{xltabular}
 
 \subsection{Diagrama entidad-relación}
 \label{sec:der}
@@ -76,16 +81,23 @@ base de datos. usuarios\_db contiene la tabla usuario; canchas\_db contiene
 cancha y bloqueo\_mantenimiento; mientras que reservas\_db contiene reserva y
 \id{configuracion}.
 
-\paragraph{Base usuarios\_db.}
+\Needspace{4\baselineskip}
+\subsubsection*{Base usuarios\_db}
 
-\begin{table}[H]
-  \centering
+\begin{xltabular}{\textwidth}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
   \caption{Entidad usuario.}
   \label{tab:dic-usuario}
-  \begin{tabular}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
+  \\
     \toprule
     \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
     \midrule
+    \endfirsthead
+    \multicolumn{4}{r}{\small\itshape Continuación de la Tabla \ref{tab:dic-usuario}} \\
+    \toprule
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
+    \midrule
+    \endhead
+    \tablasigue{4}
 
     \id{id} & Identificador & \id{bigint} & Identificador de cuenta de usuario. \\
     \id{username} & Texto & \id{varchar(60)} & Nombre con el que el usuario es reconocido en el sistema. \\
@@ -96,20 +108,26 @@ cancha y bloqueo\_mantenimiento; mientras que reservas\_db contiene reserva y
     \id{creado_en} & Fecha y hora & \id{timestamp} & Fecha y hora en que se registró la cuenta. \\
 
     \bottomrule
-  \end{tabular}
-\end{table}
+\end{xltabular}
 
 
-\paragraph{Base canchas\_db.}
+\Needspace{4\baselineskip}
+\subsubsection*{Base canchas\_db}
 
-\begin{table}[H]
-  \centering
+\begin{xltabular}{\textwidth}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
   \caption{Entidad cancha.}
   \label{tab:dic-cancha}
-  \begin{tabular}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
+  \\
     \toprule
     \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
     \midrule
+    \endfirsthead
+    \multicolumn{4}{r}{\small\itshape Continuación de la Tabla \ref{tab:dic-cancha}} \\
+    \toprule
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
+    \midrule
+    \endhead
+    \tablasigue{4}
 
     \id{id} & Identificador & \id{bigint} & Identificador de la cancha dentro del catálogo. \\
     \id{nombre} & Texto & \id{varchar(120)} & Nombre con el que la cancha se muestra al usuario. \\
@@ -119,18 +137,23 @@ cancha y bloqueo\_mantenimiento; mientras que reservas\_db contiene reserva y
     \id{activa} & Booleano & \id{boolean} & Indica si la cancha se encuentra disponible para las reservas. \\
 
     \bottomrule
-  \end{tabular}
-\end{table}
+\end{xltabular}
 
 
-\begin{table}[H]
-  \centering
+\begin{xltabular}{\textwidth}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
   \caption{Entidad bloqueo\_mantenimiento.}
   \label{tab:dic-bloqueo}
-  \begin{tabular}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
+  \\
     \toprule
     \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
     \midrule
+    \endfirsthead
+    \multicolumn{4}{r}{\small\itshape Continuación de la Tabla \ref{tab:dic-bloqueo}} \\
+    \toprule
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
+    \midrule
+    \endhead
+    \tablasigue{4}
 
     \id{id} & Identificador & \id{bigint} & Identificador del período de mantenimiento. \\
     \id{cancha_id} & Referencia a cancha & \id{bigint} & Cancha a la que pertenece el período de mantenimiento. \\
@@ -139,20 +162,26 @@ cancha y bloqueo\_mantenimiento; mientras que reservas\_db contiene reserva y
     \id{motivo} & Texto & \id{varchar(200)} & Motivo del mantenimiento. \\
 
     \bottomrule
-  \end{tabular}
-\end{table}
+\end{xltabular}
 
 
-\paragraph{Base reservas\_db.}
+\Needspace{4\baselineskip}
+\subsubsection*{Base reservas\_db}
 
-\begin{table}[H]
-  \centering
+\begin{xltabular}{\textwidth}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
   \caption{Entidad reserva.}
   \label{tab:dic-reserva}
-  \begin{tabular}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
+  \\
     \toprule
     \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
     \midrule
+    \endfirsthead
+    \multicolumn{4}{r}{\small\itshape Continuación de la Tabla \ref{tab:dic-reserva}} \\
+    \toprule
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
+    \midrule
+    \endhead
+    \tablasigue{4}
 
     \id{id} & Identificador & \id{bigint} & Identificador de la reserva registrada. \\
     \id{cancha_id} & Referencia lógica a cancha & \id{bigint} & Identificador de la cancha reservada. \\
@@ -165,25 +194,29 @@ cancha y bloqueo\_mantenimiento; mientras que reservas\_db contiene reserva y
     \id{cancelada_en} & Fecha y hora & \id{timestamp} & Fecha y hora en que se anuló la reserva. \\
 
     \bottomrule
-  \end{tabular}
-\end{table}
+\end{xltabular}
 
 
-\begin{table}[H]
-  \centering
+\begin{xltabular}{\textwidth}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
   \caption{Entidad \id{configuracion}.}
   \label{tab:dic-configuracion}
-  \begin{tabular}{L{3.4cm} L{2.3cm} L{2.7cm} L{4.8cm}}
+  \\
     \toprule
     \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
     \midrule
+    \endfirsthead
+    \multicolumn{4}{r}{\small\itshape Continuación de la Tabla \ref{tab:dic-configuracion}} \\
+    \toprule
+    \textbf{Campo} & \textbf{Tipo lógico} & \textbf{Tipo SQL} & \textbf{Descripción} \\
+    \midrule
+    \endhead
+    \tablasigue{4}
 
     \id{clave} & Clave de configuración & \id{varchar(60)} & Nombre que identifica el parámetro de configuración. \\
     \id{valor} & Valor de la configuración & \id{varchar(120)} & Valor asignado al parámetro de configuración. \\
 
     \bottomrule
-  \end{tabular}
-\end{table}
+\end{xltabular}
 
 \subsection{Integridad entre bases de datos}
 \label{sec:integridad}
@@ -244,20 +277,28 @@ Además de esta restricción, los esquemas contienen validaciones CHECK e índic
 que mantienen valores válidos y apoyan las consultas realizadas por los
 microservicios.
 
-\begin{table}[H]
-  \centering
+\footnotesize
+\begin{xltabular}{\textwidth}{L{4.1cm} L{4.2cm} L{4.4cm}}
   \caption{Restricciones e índices principales del modelo de datos.}
   \label{tab:restricciones}
-  \begin{tabular}{L{3.2cm} L{4.5cm} L{5.5cm}}
+  \\
     \toprule
     \textbf{Tabla} & \textbf{Restricción o índice} & \textbf{Propósito} \\
     \midrule
+    \endfirsthead
+    \multicolumn{3}{r}{\small\itshape Continuación de la Tabla \ref{tab:restricciones}} \\
+    \toprule
+    \textbf{Tabla} & \textbf{Restricción o índice} & \textbf{Propósito} \\
+    \midrule
+    \endhead
+    \tablasigue{3}
 
     \id{usuario} & \id{usuario_username_unico} & Evita que se registren dos usuarios con el mismo username. \\
     \id{usuario} & \id{usuario_rol_valido} & Limita el rol a USUARIO\_FINAL o ADMINISTRADOR. \\
     \id{cancha} & \id{cancha_deporte_valido} & Limita el deporte a PADEL, TENIS o BASQUET. \\
     \id{cancha} & \id{cancha_horario_valido} & Impide guardar una hora de cierre menor o igual a la hora de apertura. \\
-    \id{bloqueo_mantenimiento} & \id{bloqueo_rango_valido} & Comprueba que el final del bloqueo por mantenimiento sea posterior a su inicio. \\
+    \id{bloqueo_
+    mantenimiento} & \id{bloqueo_rango_valido} & Comprueba que el final del bloqueo por mantenimiento sea posterior a su inicio. \\
     \id{bloqueo_mantenimiento} & \id{bloqueo_por_cancha} & Apoya la búsqueda de bloqueos por mantenimiento registrados para una cancha. \\
     \id{reserva} & \id{reserva_estado_valido} & Limita el estado a CONFIRMADA, CANCELADA o FINALIZADA. \\
     \id{reserva} & \id{reserva_bloque_valido} & Comprueba que la hora de finalización sea posterior a la hora de inicio. \\
@@ -267,5 +308,5 @@ microservicios.
     \id{reserva} & \id{reserva_por_cancha_fecha} & Apoya las consultas de disponibilidad por cancha y fecha. \\
 
     \bottomrule
-  \end{tabular}
-\end{table}
+\end{xltabular}
+\normalsize

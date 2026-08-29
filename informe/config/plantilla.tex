@@ -177,3 +177,11 @@
          \string\diagramapagina}{Usa 'vertical' u 'horizontal'.}%
      \fi}%
     {\faltafig{#3}}}
+
+% Pie uniforme para las tablas que continúan en la página siguiente.
+\newcommand{\tablasigue}[1]{%
+  \midrule
+  \multicolumn{#1}{r}{\small\itshape Continúa en la siguiente página} \\
+  \endfoot
+  \endlastfoot
+}

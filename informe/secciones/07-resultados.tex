@@ -68,14 +68,25 @@ verificación se consideran las funcionalidades disponibles en los
 microfrontends, los casos de uso implementados en el backend, las pruebas
 existentes y la configuración de despliegue.
 
-\begin{table}[H]
-  \centering
+\small
+\begin{xltabular}{\textwidth}{C{1.2cm} L{4.4cm} C{1.5cm} Y}
   \caption{Cumplimiento de los criterios de aceptación.}
   \label{tab:cumplimiento}
-  \begin{tabularx}{\textwidth}{C{1.4cm} Y C{2cm} L{3cm}}
-    \toprule
-    \textbf{\#} & \textbf{Criterio} & \textbf{Estado} & \textbf{Evidencia} \\
-    \midrule
+  \\
+  \toprule
+  \textbf{\#} & \textbf{Criterio} & \textbf{Estado} & \textbf{Evidencia} \\
+  \midrule
+  \endfirsthead
+  \multicolumn{4}{r}{\small\itshape Continuación de la Tabla \ref{tab:cumplimiento}} \\
+  \toprule
+  \textbf{\#} & \textbf{Criterio} & \textbf{Estado} & \textbf{Evidencia} \\
+  \midrule
+  \endhead
+  \midrule
+  \multicolumn{4}{r}{\small\itshape Continúa en la siguiente página} \\
+  \endfoot
+  \bottomrule
+  \endlastfoot
 
     \textsf{CA-1}\label{ca:1} &
     El usuario final puede consultar disponibilidad, crear y cancelar reservas
@@ -131,9 +142,8 @@ existentes y la configuración de despliegue.
     \id{reservas_db} en PostgreSQL, mientras que \id{ms-reportes}
     obtiene la información por HTTP sin mantener una base propia. \\
 
-    \bottomrule
-  \end{tabularx}
-\end{table}
+\end{xltabular}
+\normalsize
 
 De acuerdo con estas evidencias, los seis criterios de aceptación definidos
 para el proyecto se encuentran cubiertos por la implementación actual.
@@ -147,14 +157,25 @@ con los recorridos funcionales del sistema. De esta manera, se comprueban
 tanto los casos válidos como las situaciones que deben ser rechazadas,
 sin depender únicamente de la interfaz gráfica.
 
-\begin{table}[H]
-  \centering
+\small
+\begin{xltabular}{\textwidth}{C{1.6cm} Y Y}
   \caption{Comprobación de las reglas de negocio.}
   \label{tab:pruebas-reglas}
-  \begin{tabular}{C{1.6cm} L{6.6cm} L{4.8cm}}
-    \toprule
-    \textbf{Regla} & \textbf{Escenario} & \textbf{Resultado} \\
-    \midrule
+  \\
+  \toprule
+  \textbf{Regla} & \textbf{Escenario} & \textbf{Resultado} \\
+  \midrule
+  \endfirsthead
+  \multicolumn{3}{r}{\small\itshape Continuación de la Tabla \ref{tab:pruebas-reglas}} \\
+  \toprule
+  \textbf{Regla} & \textbf{Escenario} & \textbf{Resultado} \\
+  \midrule
+  \endhead
+  \midrule
+  \multicolumn{3}{r}{\small\itshape Continúa en la siguiente página} \\
+  \endfoot
+  \bottomrule
+  \endlastfoot
 
     \rn{01} &
     Crear una reserva para una cancha, una fecha futura y un bloque que inicia
@@ -214,9 +235,8 @@ sin depender únicamente de la interfaz gráfica.
     cancelación la deje en \id{CANCELADA} y que las reservas cuyo bloque ya
     terminó dejen de contarse como activas al obtener su estado vigente. \\
 
-    \bottomrule
-  \end{tabular}
-\end{table}
+\end{xltabular}
+\normalsize
 
 Para el caso concurrente de la \rn{02}, la comprobación se realiza contra
 PostgreSQL y no únicamente con dependencias simuladas. La prueba

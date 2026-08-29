@@ -104,10 +104,9 @@ se representan el Edge, el shell y los microfrontends, el API Gateway, los cuatr
 microservicios y las bases de datos asociadas a los servicios que requieren
 persistencia.
 
-\begin{figure}[p]
-  \thisfloatpagestyle{empty}
+\begin{figure}[H]
   \centering
-  \diagramapagina{contenedores}
+  \diagrama{contenedores}
   \caption{Vista de contenedores: microfrontends, gateway, microservicios y
            bases de datos.}
   \label{fig:contenedores}
@@ -122,14 +121,20 @@ microfrontends en tiempo de ejecución mediante Module Federation. Cada
 microfrontend agrupa las pantallas y funcionalidades correspondientes a su área,
 mientras que el shell permite integrarlos dentro de una misma aplicación web.
 
-\begin{table}[H]
-  \centering
+\begin{xltabular}{\textwidth}{L{3.6cm} L{6.4cm} L{3.4cm}}
   \caption{Composición de microfrontends.}
   \label{tab:microfrontends}
-  \begin{tabular}{L{3.6cm} L{6.4cm} L{3.4cm}}
+  \\
     \toprule
     \textbf{Microfrontend} & \textbf{Responsabilidad} & \textbf{Tipo} \\
     \midrule
+    \endfirsthead
+    \multicolumn{3}{r}{\small\itshape Continuación de la Tabla \ref{tab:microfrontends}} \\
+    \toprule
+    \textbf{Microfrontend} & \textbf{Responsabilidad} & \textbf{Tipo} \\
+    \midrule
+    \endhead
+    \tablasigue{3}
 
     shell & Gestiona la estructura general, navegación, sesión del usuario y carga de los 
     microfrontends remotos. & Host \\
@@ -141,8 +146,7 @@ mientras que el shell permite integrarlos dentro de una misma aplicación web.
     cancelaciones y demanda de las canchas. & Remote \\
 
     \bottomrule
-  \end{tabular}
-\end{table}
+\end{xltabular}
 
 Module Federation permite cargar y compartir m\'odulos entre aplicaciones web
 separadas \cite{module-federation}, mecanismo utilizado para integrar los
@@ -159,14 +163,20 @@ funciona como punto de entrada a las APIs del sistema y se encarga de dirigir ca
 solicitud hacia el microservicio correspondiente. Las reglas de negocio permanecen
 dentro de los servicios responsables de cada área funcional.
 
-\begin{table}[H]
-  \centering
+\begin{xltabular}{\textwidth}{L{3.2cm} L{6.4cm} L{3.6cm}}
   \caption{Composición de microservicios.}
   \label{tab:microservicios}
-  \begin{tabular}{L{3.2cm} L{6.4cm} L{3.6cm}}
+  \\
     \toprule
     \textbf{Microservicio} & \textbf{Responsabilidad} & \textbf{Base de datos} \\
     \midrule
+    \endfirsthead
+    \multicolumn{3}{r}{\small\itshape Continuación de la Tabla \ref{tab:microservicios}} \\
+    \toprule
+    \textbf{Microservicio} & \textbf{Responsabilidad} & \textbf{Base de datos} \\
+    \midrule
+    \endhead
+    \tablasigue{3}
 
     ms-usuarios & Gestiona el registro, autenticación, usuarios y roles del sistema. &
     usuarios\_db \\
@@ -178,8 +188,7 @@ dentro de los servicios responsables de cada área funcional.
     servicios de reservas y canchas. & Ninguna \\
 
     \bottomrule
-  \end{tabular}
-\end{table}
+\end{xltabular}
 
 \paragraph*{Comunicación.}
 
@@ -207,10 +216,9 @@ El diagrama muestra cómo se organiza internamente el servicio y cómo se
 separa la lógica de negocio de los mecanismos utilizados para recibir solicitudes,
 consultar otros servicios y acceder a la base de datos.
 
-\begin{figure}[p]
-  \thisfloatpagestyle{empty}
+\begin{figure}[H]
   \centering
-  \diagramapagina{componentes-reservas}
+  \diagrama{componentes-reservas}
   \caption{Vista de componentes de \id{ms-reservas}.}
   \label{fig:componentes-reservas}
 \end{figure}
@@ -242,10 +250,9 @@ contenedores desde una configuraci\'on \`unica \cite{docker-compose}. PostgreSQL
 se utiliza como motor de persistencia para los servicios que almacenan datos
 \cite{postgresql-docs}.
 
-\begin{figure}[p]
-  \thisfloatpagestyle{empty}
+\begin{figure}[H]
   \centering
-  \diagramapagina{despliegue}
+  \diagrama{despliegue}
   \caption{Vista de despliegue: contenedores Docker, redes y volumen.}
   \label{fig:despliegue}
 \end{figure}
