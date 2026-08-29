@@ -142,9 +142,13 @@ transacciones que comprueban a la vez y ambas ven el bloque libre— y es lo que
 | `clave` | `varchar(60)` | PK | |
 | `valor` | `varchar(120)` | NOT NULL | |
 
-Una sola fila obligatoria: `max_reservas_activas = 3` (RN-06). Se lee por
-`ConfigurationRepositoryPort`. Es un parámetro, no una pantalla: §3.2 no lista ninguna de
-configuración y añadirla sería alcance nuevo.
+Una sola fila obligatoria: `max_reservas_activas = 3` (RN-06). En esta feature se lee por
+`ConfigurationRepositoryPort` y no se escribe desde ninguna pantalla.
+
+Este documento decía además que añadir una pantalla de configuración "sería alcance nuevo". La
+enmienda 1.3.0 de la constitución la declaró en alcance por traza a RN-06, así que esa frase queda
+sin efecto; la escritura del valor se especifica en la feature 002. La tabla no cambia: ni
+columnas, ni migración nueva.
 
 ### Migraciones
 
