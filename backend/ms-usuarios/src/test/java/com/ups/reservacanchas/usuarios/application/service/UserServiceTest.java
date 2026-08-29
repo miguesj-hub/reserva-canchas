@@ -199,6 +199,18 @@ class UserServiceTest {
     }
 
     @Test
+    void rechaza_inactivar_una_cuenta_administradora() {
+        User admin = usuarioGuardado("admin", "admin", Role.ADMINISTRADOR, true);
+        when(repository.findById(7L)).thenReturn(Optional.of(admin));
+
+        assertThatThrownBy(() -> service.cambiarEstado(7L, false, "ADMINISTRADOR"))
+                .isInstanceOf(ForbiddenOperationException.class)
+                .hasMessageContaining("ADMINISTRADOR");
+
+        verify(repository, never()).save(any(User.class));
+    }
+
+    @Test
     void cambiar_el_estado_de_un_usuario_inexistente_da_404() {
         when(repository.findById(404L)).thenReturn(Optional.empty());
 
