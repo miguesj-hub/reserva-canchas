@@ -216,12 +216,17 @@ El diagrama muestra cómo se organiza internamente el servicio y cómo se
 separa la lógica de negocio de los mecanismos utilizados para recibir solicitudes,
 consultar otros servicios y acceder a la base de datos.
 
-\begin{figure}[H]
+% Girada: esta vista es más del doble de ancha que alta (3437 x 1587 pt), y
+% ajustada al ancho del bloque de texto queda como una franja donde las
+% etiquetas no se leen. En una página apaisada el ancho disponible pasa a ser
+% \textheight, lo que casi duplica la escala. Un «sidewaysfigure» ocupa
+% siempre su propia página: no admite el modificador [H].
+\begin{sidewaysfigure}
   \centering
-  \diagrama{componentes-reservas}
+  \diagramaancho{componentes-reservas}
   \caption{Vista de componentes de \id{ms-reservas}.}
   \label{fig:componentes-reservas}
-\end{figure}
+\end{sidewaysfigure}
 
 Cuando se crea una reserva, la solicitud llega desde el API Gateway a
 BookingController, que funciona como punto de entrada de ms-reservas. Desde
