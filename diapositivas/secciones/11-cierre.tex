@@ -1,0 +1,70 @@
+% !TeX root = ../presentacion.tex
+% ===========================================================================
+%  11. Cierre — 2 min
+%
+%  Cierra el círculo con los seis criterios de aceptación del documento de
+%  alcance (§7). Es la tabla que el evaluador busca. Ninguna fila se marca
+%  cumplida sin haberla visto correr.
+% ===========================================================================
+
+\bloque{Cierre}{1,5 min}{\exponeArquitectura}{Todos}
+
+\begin{frame}{Los seis criterios de aceptación}
+  \note{La lámina más importante del cierre. Leer solo la columna de la
+  derecha, y no adornar: si algo está a medias, se dice. Un criterio dado por
+  bueno que luego falla cuesta más que uno declarado pendiente.}
+
+  \begin{center}
+    \scriptsize
+    \setlength{\tabcolsep}{3pt}
+    \renewcommand{\arraystretch}{1.05}
+    \begin{tabular}{@{}cp{4.4cm}p{4.9cm}@{}}
+      \toprule
+      & \textbf{Criterio del alcance (§7)} & \textbf{Evidencia}\\
+      \midrule
+      \si & \crit{1} Socio consulta, reserva y cancela & Demo, pasos 1--5\\
+      \si & \crit{2} Admin gestiona canchas y cancela cualquier reserva & Demo, pasos 6--7\\
+      \si & \crit{3} No se reserva un bloque ocupado & Demo, paso 3; \rn{02} y \id{ConcurrenciaReservaIT}\\
+      \si & \crit{4} Reportes de ocupación y reservas por período & Demo, paso 8; cuatro indicadores\\
+      \si & \crit{5} Shell y $\geq$ 2 remotes con Module Federation & Tres remotes; prueba de despliegue independiente\\
+      \si & \crit{6} $\geq$ 2 microservicios en PostgreSQL & Cuatro servicios, tres bases aisladas\\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+
+  \note{Revisa estas marcas la víspera, con el sistema delante: marca con
+  \ding{51} solo lo que hayas visto correr ese día, y con \ding{108} lo que
+  esté a medias.}
+\end{frame}
+
+\begin{frame}{Lo que aprendimos y lo que dejamos abierto}
+  \guion{Honestidad concreta, no humildad genérica. «Trabajo futuro» que no
+  sea la lista de cosas fuera de alcance: eso no es aprendizaje, es el
+  enunciado.}
+
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{Lecciones}
+      \begin{itemize}\footnotesize
+        \item Una regla crítica que solo vive en el código de aplicación no
+              es una regla: es una intención. \rn{02} nos lo enseñó.
+        \item La independencia de datos hay que hacerla imposible de violar,
+              no acordarla en una reunión.
+        \item Escribir el contrato antes ahorró más tiempo del que costó.
+        \item \ph{La tercera, la vuestra de verdad}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{Trabajo futuro}
+      \begin{itemize}\footnotesize
+        \item \ph{Lo que quedó a medias y sabéis cómo terminar}
+        \item \ph{Lo que la arquitectura ya permite y no construimos}
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[standout]
+  Gracias\\[6pt]
+  {\normalsize ¿Preguntas?}
+\end{frame}

@@ -1,0 +1,67 @@
+% !TeX root = ../presentacion.tex
+% ===========================================================================
+%  9. Demostración en vivo — 6 min
+%
+%  Es la mitad del entregable E6 («Presentación + demo») y lo que sostiene el
+%  25 % del alcance funcional. El bloque más largo de la charla, y el único
+%  que hay que ensayar cronómetro en mano.
+%
+%  Regla de la casa: el sistema se levanta ANTES de empezar la charla, no
+%  durante este bloque. Un `docker compose up` en frío tarda minutos.
+% ===========================================================================
+
+\bloque{Demostración en vivo}{4 min}{\exponeDemo}%
+       {Alcance funcional implementado (25\,\%)}
+
+\begin{frame}{El guion de la demo}
+  \guion{Esta lámina se proyecta mientras se cambia de ventana: le dice al
+  público qué va a ver y evita el silencio incómodo. Se sale de ella en
+  cuanto el navegador está delante.}
+
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{Como socio}
+      \begin{enumerate}\footnotesize
+        \item Entrar y ver la disponibilidad de una cancha para hoy.
+        \item Reservar un bloque libre.
+        \item Intentar reservar \alert{el mismo bloque} desde otra sesión
+              $\rightarrow$ el sistema lo rechaza (\rn{02}).
+        \item Ver «mis reservas» y cancelar una.
+        \item Comprobar que el bloque volvió a estar libre (\rn{05}).
+      \end{enumerate}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \textbf{Como administrador}
+      \begin{enumerate}[start=6]\footnotesize
+        \item Crear una cancha y verla aparecer en el catálogo del socio.
+        \item Cancelar la reserva de otro usuario (\rn{03}).
+        \item Abrir reportes: el número refleja lo que acaba de pasar.
+      \end{enumerate}
+      \vspace{4pt}
+      \begin{block}{Si sobra tiempo}
+        \scriptsize
+        Reconstruir un solo remote con el sistema en pie.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Antes de empezar}
+  \note{Lámina para el ensayo, no para proyectar: muévela al apéndice o
+  bórrala cuando la lista esté interiorizada. Existe porque todo lo que falla
+  en una demo, falla por algo de esta lista.}
+
+  \begin{itemize}\scriptsize
+    \item \id{docker compose up -d --wait} lanzado \alert{antes} de entrar al aula;
+          \id{docker compose ps} con los once servicios en \id{healthy}.
+    \item Dos navegadores (o uno normal y uno privado) ya con sesión iniciada:
+          uno como socio, otro como administrador.
+    \item Datos de prueba recién sembrados: sin reservas viejas que ensucien
+          los reportes.
+    \item Zoom del navegador al \ph{120\,\%}: lo que se lee en el portátil no
+          se lee en el proyector.
+    \item Notificaciones del sistema operativo silenciadas.
+    \item \textbf{Plan B:} un vídeo corto de la demo, ya en el escritorio.
+          \ph{Grabarlo}
+  \end{itemize}
+\end{frame}

@@ -1,0 +1,41 @@
+% !TeX root = ../presentacion.tex
+% ===========================================================================
+%  6. Modelo de datos — 2 min
+%
+%  Criterio: «Modelo de datos y persistencia» (15 %). Dos cosas puntúan:
+%  que esté normalizado y que la independencia entre servicios sea real.
+%  Lo segundo se demuestra, no se afirma.
+% ===========================================================================
+
+\bloque{Modelo de datos}{1 min}{\exponeBackend}%
+       {Modelo de datos y persistencia (15\,\%)}
+
+\laminafiguratitulo{Modelo entidad-relación}{modelo-datos}%
+  {Tres bases separadas, no tres esquemas del mismo modelo. Las líneas que
+   cruzan la frontera son referencias por identificador, no claves foráneas.}
+
+\begin{frame}{La independencia de datos es verificable}
+  \guion{El argumento fuerte: no es una convención de equipo, es un permiso
+  denegado por PostgreSQL. Si alguien duda, se puede probar en la demo.}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{itemize}\footnotesize
+        \item Un rol de PostgreSQL por servicio, con permisos solo sobre su base.
+        \item \id{ms-reservas} guarda el \id{id} de la cancha, no una clave
+              foránea a \id{canchas\_db}: la coherencia se valida llamando al
+              servicio dueño del dato.
+        \item El esquema y los datos de prueba se crean solos al levantar
+              (\ent{4}): ningún paso manual.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \begin{block}{Cómo se comprueba}
+        \footnotesize
+        Conectarse con el rol de \id{ms-reservas} e intentar leer una tabla de
+        \id{canchas\_db}: \alert{permiso denegado}.
+      \end{block}
+      \ph{Comando psql exacto, ya probado, por si lo piden}
+    \end{column}
+  \end{columns}
+\end{frame}

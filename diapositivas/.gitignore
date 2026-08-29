@@ -1,0 +1,13 @@
+# Salidas y archivos intermedios de LaTeX. El PDF sí se versiona: es el
+# entregable E6, y quien lo evalúe no tiene por qué compilarlo.
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.synctex.gz
+presentacion-notas.pdf

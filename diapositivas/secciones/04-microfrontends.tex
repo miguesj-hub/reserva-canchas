@@ -1,0 +1,81 @@
+% !TeX root = ../presentacion.tex
+% ===========================================================================
+%  4. Frontend: Module Federation — 3 min
+%
+%  Criterio: «Arquitectura de microfrontends» (15 %). La rúbrica exige
+%  shell + al menos dos remotes «integrados y desplegables de forma
+%  independiente». Lo segundo es lo que casi nadie enseña: la lámina de la
+%  prueba de independencia es la que hace la diferencia.
+% ===========================================================================
+
+\bloque{Frontend: Module Federation}{2 min}{\exponeFrontend}%
+       {Arquitectura de microfrontends (15\,\%)}
+
+\begin{frame}{Un host y tres remotes}
+  \guion{Nombrar los cuatro y su responsabilidad. No entrar todavía en cómo
+  se cargan: eso es la lámina siguiente.}
+
+  \begin{center}
+    \footnotesize
+    \begin{tabular}{@{}llp{5.6cm}@{}}
+      \toprule
+      \textbf{Microfrontend} & \textbf{Tipo} & \textbf{Responsabilidad}\\
+      \midrule
+      \id{shell}             & Host   & Layout, navegación, sesión y orquestación de los remotes\\
+      \id{mf-reservas}       & Remote & Disponibilidad, nueva reserva, mis reservas\\
+      \id{mf-administracion} & Remote & Canchas, bloqueos, reservas y usuarios\\
+      \id{mf-reportes}       & Remote & Los cuatro indicadores de uso\\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+
+  \vspace{2pt}
+  {\scriptsize La rúbrica pide un host y \emph{al menos dos} remotes.
+  \alert{Entregamos tres}, cada uno con su \id{package.json}, su build y su imagen.}
+\end{frame}
+
+\begin{frame}[fragile]{Cómo se integran en tiempo de ejecución}
+  \note{El punto técnico: los remotes se resuelven al cargar la página, no
+  al compilar el shell. Por eso se puede redesplegar uno sin tocar los otros.}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \ph{Fragmento real de rsbuild.config.ts del shell: bloque
+      \id{moduleFederation} con \id{remotes} y \id{shared}}
+      \\[4pt]
+      {\scriptsize\color{textoSuave} Recórtalo a diez líneas. En pantalla, un
+      archivo entero no se lee.}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \begin{itemize}\scriptsize
+        \item Los remotes se cargan por URL, en ejecución.
+        \item \id{shared}: React y el enrutador se cargan una sola vez.
+        \item El shell inyecta la sesión; el remote no la reimplementa.
+        \item Si un remote no responde, el shell degrada esa ruta y sigue en pie.
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{La prueba de que son independientes}
+  \guion{Esta es la lámina que casi nadie trae. Si hay tiempo en la demo,
+  hacerlo en vivo: reconstruir un remote con el shell corriendo y recargar.}
+
+  \begin{block}{Demostración de despliegue independiente}
+    \small
+    \begin{enumerate}
+      \item El sistema está corriendo, con el shell servido por el \id{edge}.
+      \item Se cambia algo visible en \id{mf-reportes} y se reconstruye
+            \emph{solo} ese contenedor.
+      \item Se recarga el navegador: el cambio está.
+            \alert{El shell y los otros dos remotes nunca se reconstruyeron.}
+    \end{enumerate}
+  \end{block}
+
+  \vspace{4pt}
+  \ph{Captura o comando exacto que se usará: docker compose build/up de un
+  solo servicio}
+
+  \note{Tener el comando escrito y probado. Improvisar un comando de Docker
+  delante del proyector es la forma más rápida de perder dos minutos.}
+\end{frame}

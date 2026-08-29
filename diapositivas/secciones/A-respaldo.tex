@@ -1,0 +1,85 @@
+% !TeX root = ../presentacion.tex
+% ===========================================================================
+%  Láminas de respaldo
+%
+%  Van después de \appendix: no cuentan en la numeración ni en la barra de
+%  progreso. Son las respuestas a las preguntas que uno espera, ya
+%  maquetadas. Se llega a ellas saltando por número desde el visor.
+%
+%  Anota aquí el número de cada lámina cuando la presentación esté cerrada,
+%  y llévalo en un papel: buscar una lámina de respaldo pasando páginas
+%  delante del público arruina el efecto.
+% ===========================================================================
+
+\begin{frame}{Índice de respaldo}
+  \guion{Para el ponente. Apunta el número de lámina de cada fila cuando la
+  presentación esté congelada.}
+
+  \begin{itemize}\footnotesize
+    \item Vistas C4 restantes: componentes de cada servicio y microfrontend
+    \item Despliegue (\vista{04}) y el papel del \id{edge}
+    \item Registro completo de decisiones (ADR)
+    \item Diccionario de datos y DDL
+    \item Traducción de reglas de negocio a códigos HTTP
+    \item Estrategia de pruebas
+    \item Por qué DDD y dónde están los agregados
+  \end{itemize}
+\end{frame}
+
+\laminafiguratitulo{Despliegue (\vista{04})}{despliegue}%
+  {Dos redes Docker. Solo el \id{edge} toca las dos.}
+
+\laminafiguratitulo{Componentes del \id{shell}}{componentes-shell}%
+  {Cómo el host resuelve los remotes y comparte la sesión.}
+
+\laminafiguratitulo{Componentes de \id{ms-canchas}}{componentes-canchas}{}
+
+\laminafiguratitulo{Componentes de \id{ms-usuarios}}{componentes-usuarios}{}
+
+\laminafiguratitulo{Componentes de \id{ms-reportes}}{componentes-reportes}%
+  {El único servicio sin base de datos: compone por HTTP.}
+
+\laminafiguratitulo{Componentes del \id{api-gateway}}{componentes-gateway}%
+  {Dónde se verifica la credencial antes de rutear.}
+
+\begin{frame}{Reglas de negocio $\rightarrow$ respuestas HTTP}
+  \guion{Respuesta preparada para «¿y qué le devuelve al cliente cuando la
+  regla no se cumple?». Rellenar con lo que hace el servicio de verdad.}
+
+  \begin{center}
+    \small
+    \begin{tabular}{@{}llp{5.2cm}@{}}
+      \toprule
+      \textbf{Situación} & \textbf{Código} & \textbf{Regla}\\
+      \midrule
+      Bloque ya ocupado          & \id{409} & \rn{02}\\
+      Cancelar una reserva ajena & \id{403} & \rn{03}\\
+      Cancelar una reserva pasada& \id{422} & \rn{04}\\
+      Tope de reservas alcanzado & \id{422} & \rn{06}\\
+      \ph{Completar con el resto}& \ph{---} & \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  {\footnotesize\color{textoSuave} Verifica cada código contra el
+  controlador antes de exponer: un número inventado aquí se nota enseguida.}
+\end{frame}
+
+\begin{frame}{Estrategia de pruebas}
+  \ph{Pirámide de pruebas del proyecto: unitarias de dominio, de integración
+  con base real, y de contrato. Cifras concretas si las tenéis.}
+\end{frame}
+
+\begin{frame}{Preguntas que esperamos}
+  \guion{Ensayad las respuestas en voz alta. Una respuesta pensada en el
+  momento suena a que no se pensó nunca.}
+
+  \begin{itemize}\footnotesize
+    \item ¿Por qué microservicios para un sistema de este tamaño?
+    \item ¿Qué pasa si \id{ms-canchas} está caído cuando alguien reserva?
+    \item ¿Por qué no una cola de mensajes entre servicios?
+    \item ¿Cómo escalaríais si mañana hubiera cien clubes?
+    \item ¿Module Federation no acopla los remotes al shell por la versión de React?
+    \item ¿Cómo evitáis que un remote roto tumbe toda la aplicación?
+    \item \ph{La que os dé más miedo}
+  \end{itemize}
+\end{frame}

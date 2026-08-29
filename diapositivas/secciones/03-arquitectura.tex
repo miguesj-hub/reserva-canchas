@@ -1,0 +1,69 @@
+% !TeX root = ../presentacion.tex
+% ===========================================================================
+%  3. Arquitectura de la solución — 3 min
+%
+%  Bloque bisagra: no puntúa por sí solo, pero es el que hace inteligibles
+%  los dos siguientes (15 % + 15 %). Los diagramas se leen de
+%  ../informe/figuras: se exportan una vez desde Structurizr y sirven al E1
+%  y al E6 a la vez.
+% ===========================================================================
+
+\bloque{Arquitectura de la solución}{2 min}{\exponeArquitectura}%
+       {Base de los criterios de microfrontends y microservicios (30\,\%)}
+
+\begin{frame}{Cómo describimos la arquitectura}
+  \guion{Veinte segundos. Solo para que nadie pregunte «¿qué notación es
+  esta?» en mitad del diagrama siguiente.}
+
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      Modelo \textbf{C4}, cuatro vistas, generadas desde una única
+      descripción en Structurizr DSL:
+      \begin{itemize}\small
+        \item \vista{01} Contexto — quién usa el sistema
+        \item \vista{02} Contenedores — las once piezas que se despliegan
+        \item \vista{03} Componentes de \id{ms-reservas}
+        \item \vista{04} Despliegue — cómo caen en Docker
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{block}{Por qué importa}
+        \footnotesize
+        Un solo origen para los diagramas: no hay una versión en el informe y
+        otra distinta en las diapositivas.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\laminafiguratitulo{Contexto del sistema (\vista{01})}{contexto}%
+  {Socio y administrador frente al sistema. Sin integraciones externas: es
+   parte del alcance acordado.}
+
+\laminafiguratitulo{Contenedores (\vista{02})}{contenedores}%
+  {Once contenedores. El \id{edge} es el único conectado a las dos redes:
+   es lo que impide alcanzar un microservicio saltándose el gateway.}
+
+\begin{frame}[t]{Tres decisiones que explican el resto de la charla}
+  \note{Estas tres son las que hay que saber defender. Si solo queda tiempo
+  para una, la primera: es la que demuestra que la regla crítica no depende
+  de que el código se porte bien. El registro completo de decisiones está en
+  el informe (E1, §4).}
+
+  \footnotesize
+  \decisionslide{01}{Solapamiento resuelto en la base de datos}%
+    {Restricción \id{EXCLUDE} sobre \id{tstzrange} en \id{reservas\_db},
+     además de la comprobación en el servicio.}%
+    {Confiar solo en la validación aplicativa: bajo peticiones concurrentes
+     deja pasar la doble reserva.}
+
+  \decisionslide{02}{Una base por microservicio, con rol propio}%
+    {Tres bases aisladas por credenciales; ningún servicio lee las tablas de
+     otro aunque quiera.}%
+    {Esquema compartido: convierte la independencia de datos en una promesa
+     que nadie verifica.}
+
+  \decisionslide{03}{Un \id{edge} que unifica el origen}%
+    {Nginx sirve shell, remotes y \id{/api} bajo un mismo origen.}%
+    {CORS servicio por servicio: filtra los puertos internos al navegador.}
+\end{frame}

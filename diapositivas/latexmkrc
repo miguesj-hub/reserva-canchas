@@ -1,0 +1,10 @@
+# Configuración de latexmk para la presentación.
+# Renombrar a .latexmkrc (con punto) si se prefiere que sea un archivo oculto.
+
+$pdf_mode = 4;          # compilar con lualatex (lo exige metropolis/fontspec)
+
+# Archivos intermedios que latexmk debe considerar suyos al limpiar.
+push @generated_exts, 'nav', 'snm', 'vrb', 'synctex.gz';
+
+# SyncTeX: permite saltar del PDF al .tex y al revés desde el editor.
+$synctex = 1;

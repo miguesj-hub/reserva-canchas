@@ -1,0 +1,126 @@
+% !TeX root = ../presentacion.tex
+%=======================================================================
+%  config/plantilla.tex — mecanismos propios de la plantilla
+%
+%  Dos interruptores gobiernan qué se ve. ANTES DE EXPONER pon los dos en
+%  «false»: desaparecen las cajas de guion y los marcadores quedan en negro,
+%  sin que haya que borrar nada del texto.
+%=======================================================================
+
+%------------------------ Interruptores --------------------------------
+\newif\ifguia          \guiatrue        % \guiafalse  oculta los guiones
+\newif\ifmarcadores    \marcadorestrue  % \marcadoresfalse deja los [Insertar ...] en negro
+
+%--------------------------- Guion de la lámina ------------------------
+% \guion{...} — qué se cuenta de viva voz en esta lámina. Se apaga con
+% \guiafalse. Es distinto de \note{...}: el guion se IMPRIME en la lámina
+% mientras se prepara la charla (para verlo al maquetar); la nota va a la
+% pantalla del ponente y nunca al proyector.
+\newcommand{\guion}[1]{%
+  \ifguia
+    \begin{tcolorbox}[enhanced,
+        colback=guiaback,colframe=guiaframe,boxrule=0.4pt,arc=1pt,
+        left=5pt,right=5pt,top=3pt,bottom=3pt,
+        fontupper=\scriptsize\itshape]
+      \textbf{\textup{Guion.}}\enspace #1
+    \end{tcolorbox}%
+  \fi}
+
+% \ph{...} — marcador de relleno, el equivalente de «[Insertar X]».
+% En ámbar mientras se prepara; en negro al exponer, para que salte a la
+% vista si alguno se quedó sin rellenar.
+\newcommand{\ph}[1]{%
+  \ifmarcadores{\color{marcador}\textsf{[#1]}}\else\textsf{[#1]}\fi}
+
+%------------------------- Cabecera de sección -------------------------
+% \bloque{Título}{minutos}{quién expone}{qué criterio de la rúbrica defiende}
+%
+% Genera la lámina separadora de metropolis y, debajo del título, la ficha
+% del bloque. El minutaje sale impreso a propósito: obliga a que la suma de
+% los bloques quepa en el tiempo asignado, en vez de descubrirlo ensayando.
+\newcommand{\bloque}[4]{%
+  \section{#1}%
+  \ifguia
+    \begin{frame}[plain]{#1}
+      \begin{tcolorbox}[enhanced,
+          colback=acentoClaro,colframe=acento,boxrule=0.6pt,arc=2pt,
+          left=8pt,right=8pt,top=6pt,bottom=6pt]
+        \small
+        \textbf{Duración:} #2 \quad\textbullet\quad
+        \textbf{Expone:} #3\\[2pt]
+        \textbf{Criterio de la rúbrica:} #4
+      \end{tcolorbox}
+    \end{frame}%
+  \fi}
+
+%----------------------- Identificadores trazables ---------------------
+% Los mismos que el informe, para que el público que tenga el E1 delante
+% reconozca el identificador sin traducirlo.
+%
+%   \rn{02}      RN-02   regla de negocio
+%   \adrref{01}  ADR-01  decisión de arquitectura
+%   \vista{02}   V-02    vista arquitectónica
+%   \crit{3}     CA-3    criterio de aceptación
+%   \ent{1}      E1      entregable del proyecto
+\newcommand{\rn}[1]{\textbf{RN-#1}}
+\newcommand{\adrref}[1]{\textsf{ADR-#1}}
+\newcommand{\vista}[1]{\textsf{V-#1}}
+\newcommand{\crit}[1]{\textsf{CA-#1}}
+\newcommand{\ent}[1]{\textbf{E#1}}
+
+% Identificador técnico en monoespaciado: \id{ms-reservas}
+\newcommand{\id}[1]{\texttt{\small #1}}
+
+%-------------------------- Marcas de estado ---------------------------
+% Para las tablas de cumplimiento. Nunca marques \si{} algo que no hayas
+% visto correr: un criterio dado por bueno que falla en la demo cuesta más
+% que uno declarado pendiente.
+\newcommand{\si}{{\color{ok}\ding{51}}}
+\newcommand{\no}{{\color{alerta}\ding{55}}}
+\newcommand{\parcial}{{\color{marcador}\ding{108}}}
+
+%------------------------- Figura a lámina completa --------------------
+% \laminafigura{archivo}{Pie de figura}
+%
+% Un diagrama ocupa toda la lámina, sin título ni pie de página que le
+% roben altura. Es como se proyectan los C4: si hay que entrecerrar los
+% ojos para leer una etiqueta, la lámina no sirve.
+\newcommand{\laminafigura}[2]{%
+  \begin{frame}[plain]
+    \begin{center}
+      \includegraphics[width=\textwidth,height=0.84\textheight,keepaspectratio]{#1}\\[2pt]
+      {\scriptsize\color{textoSuave} #2}
+    \end{center}
+  \end{frame}}
+
+% \laminafiguratitulo{Título}{archivo}{Pie}
+% Igual, pero conservando el título: útil cuando el diagrama necesita que se
+% diga en la propia lámina qué se está mirando.
+\newcommand{\laminafiguratitulo}[3]{%
+  \begin{frame}{#1}
+    \begin{center}
+      \includegraphics[width=\textwidth,height=0.66\textheight,keepaspectratio]{#2}\\[2pt]
+      {\scriptsize\color{textoSuave} #3}
+    \end{center}
+  \end{frame}}
+
+%--------------------------- Cifra destacada ---------------------------
+% \cifra{11}{contenedores} — un dato grande y su rótulo. Para las láminas de
+% resultados, donde un número se recuerda y una frase no.
+\newcommand{\cifra}[2]{%
+  \begin{minipage}[t]{\linewidth}
+    \centering
+    {\fontsize{34}{38}\selectfont\bfseries\color{acento} #1}\\[2pt]
+    {\footnotesize\color{textoSuave} #2}
+  \end{minipage}}
+
+%------------------------- Bloque de decisión (ADR) --------------------
+% \decisionslide{01}{Título}{Decisión}{Alternativa descartada}
+% Versión de lámina del ADR del informe: en pantalla solo caben la decisión
+% y lo que se descartó. El contexto y las consecuencias, en el E1.
+\newcommand{\decisionslide}[4]{%
+  \begin{block}{\adrref{#1} — #2}
+    \scriptsize
+    \textbf{Decisión.} #3\\[2pt]
+    \textbf{Descartado.} #4
+  \end{block}}

@@ -1,0 +1,78 @@
+% !TeX root = ../presentacion.tex
+%=======================================================================
+%  config/tema.tex — identidad visual de la presentación
+%
+%  Base: metropolis. Encima, la paleta del informe (E1), para que la
+%  charla y el documento se lean como una sola entrega y no como dos
+%  trabajos distintos.
+%=======================================================================
+
+\usetheme{metropolis}
+
+\metroset{
+  sectionpage  = progressbar,  % separador entre bloques, con barra
+  subsectionpage = none,
+  numbering    = fraction,     % «12 / 34» abajo a la derecha
+  progressbar  = frametitle,   % barra fina bajo el título de cada lámina
+  block        = fill,         % los bloques llevan fondo, no solo título
+  background   = light
+}
+
+%------------------------------ Paleta ---------------------------------
+% acento: el mismo azul del informe (es también el azul de Structurizr, con
+% lo que los diagramas C4 no desentonan al proyectarse).
+\definecolor{acento}{HTML}{1168BD}
+\definecolor{acentoOscuro}{HTML}{0B4C8C}
+\definecolor{acentoClaro}{HTML}{E7F0FA}
+\definecolor{texto}{HTML}{23272A}
+\definecolor{textoSuave}{HTML}{5B6570}
+\definecolor{fondo}{HTML}{FFFFFF}
+\definecolor{marcador}{HTML}{B45309}   % ámbar: los [Insertar ...] pendientes
+\definecolor{ok}{HTML}{0F766E}         % verde azulado: lo que sí se cumple
+\definecolor{alerta}{HTML}{B3261E}     % rojo: lo que no, o lo que se cayó
+\definecolor{guiaback}{HTML}{F3F4F6}
+\definecolor{guiaframe}{HTML}{9AA3AF}
+
+\setbeamercolor{normal text}{fg=texto, bg=fondo}
+\setbeamercolor{alerted text}{fg=acento}
+\setbeamercolor{example text}{fg=ok}
+\setbeamercolor{frametitle}{fg=fondo, bg=acento}
+\setbeamercolor{progress bar}{fg=acentoOscuro, bg=acentoClaro}
+\setbeamercolor{title separator}{fg=acento}
+\setbeamercolor{progress bar in head/foot}{fg=acento}
+\setbeamercolor{progress bar in section page}{fg=acento}
+\setbeamercolor{block title}{fg=acentoOscuro, bg=acentoClaro}
+\setbeamercolor{block body}{fg=texto, bg=guiaback}
+\setbeamercolor{itemize item}{fg=acento}
+\setbeamercolor{itemize subitem}{fg=textoSuave}
+\setbeamercolor{section in toc}{fg=texto}
+
+%--------------------------- Tipografía --------------------------------
+\setbeamerfont{frametitle}{size=\large, series=\bfseries}
+\setbeamerfont{title}{size=\LARGE, series=\bfseries}
+\setbeamerfont{subtitle}{size=\normalsize, series=\mdseries}
+\setbeamerfont{caption}{size=\scriptsize}
+\setbeamerfont{footnote}{size=\tiny}
+
+% Viñetas discretas: en pantalla, un triangulito relleno lee mejor que el
+% guion largo por defecto de metropolis.
+\setbeamertemplate{itemize item}{\raisebox{0.15ex}{\scriptsize\ding{110}}}
+\setbeamertemplate{itemize subitem}{\raisebox{0.15ex}{\tiny\ding{110}}}
+
+%--------------------------- Pie de página -----------------------------
+% Metropolis solo pone el número. Se le añade el nombre del curso a la
+% izquierda: sirve de marca de agua discreta si alguien fotografía una lámina.
+\setbeamertemplate{frame footline}{%
+  \begin{beamercolorbox}[wd=\textwidth, sep=3ex]{footline}%
+    \usebeamerfont{page number in head/foot}%
+    \usebeamercolor[fg]{page number in head/foot}%
+    \nombreCursoCorto\hfill\usebeamertemplate*{frame numbering}%
+  \end{beamercolorbox}%
+}
+
+%------------------- Notas del ponente (segunda pantalla) --------------
+% Se activa desde el Makefile: `make notas` compila una versión con las
+% notas al lado, para el portátil del ponente. La de proyectar no las lleva.
+\ifdefined\connotas
+  \setbeameroption{show notes on second screen=right}
+\fi

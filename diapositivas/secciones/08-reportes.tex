@@ -1,0 +1,36 @@
+% !TeX root = ../presentacion.tex
+% ===========================================================================
+%  8. Reportes — 1,5 min
+%
+%  Criterio: «Módulo de reportes básicos» (10 %). La rúbrica pide que los
+%  datos sean «consistentes respecto a las reservas registradas»: por eso la
+%  demo crea una reserva y luego vuelve al reporte a ver el número moverse.
+% ===========================================================================
+
+\bloque{Reportes}{1 min}{\exponeFrontend}%
+       {Módulo de reportes básicos (10\,\%)}
+
+\begin{frame}{Cuatro indicadores, sobre el rango que elija el administrador}
+  \guion{Enumerar los cuatro rápido y anunciar la prueba de consistencia: en
+  la demo se crea una reserva y se vuelve aquí a ver el número subir. Es lo
+  que separa un reporte de una pantalla con datos de adorno.}
+
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{enumerate}\footnotesize
+        \item Reservas por cancha y por deporte, en un rango de fechas.
+        \item Porcentaje de ocupación por cancha (horas reservadas sobre
+              horas disponibles).
+        \item Cancelaciones por período.
+        \item Canchas de mayor y menor demanda.
+      \end{enumerate}
+      \vspace{4pt}
+      {\scriptsize Solo lectura, solo administrador. Sin almacén analítico:
+      \id{ms-reportes} compone lo que ya está en \id{ms-reservas} y
+      \id{ms-canchas}.}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \ph{Captura del panel de reportes con datos de prueba}
+    \end{column}
+  \end{columns}
+\end{frame}

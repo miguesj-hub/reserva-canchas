@@ -1,0 +1,76 @@
+% ===========================================================================
+%  Presentación final del proyecto  (entregable E6)
+%  Sistema de Reserva de Canchas Deportivas
+%
+%  Desarrollo de Aplicaciones Empresariales
+%  Maestría en Ingeniería de Software — 2026
+%
+%  Compilar con:   make            (usa lualatex; metropolis necesita fontspec)
+%  Con notas:      make notas      -> presentacion-notas.pdf, para el ponente
+%  Limpiar:        make clean
+%
+%  CÓMO USAR ESTA PLANTILLA
+%  ------------------------
+%  1. Rellena los datos del equipo y el reparto de secciones en
+%     config/datos.tex. Es el único archivo con datos propios.
+%  2. Escribe dentro de secciones/. Cada archivo es un bloque de la
+%     exposición y lleva arriba su minutaje y qué criterio de la rúbrica
+%     defiende. Las cajas de \guion{...} dicen qué contar en cada lámina.
+%  3. Las figuras salen de ../informe/figuras (los diagramas C4 ya
+%     exportados). Las capturas de pantalla van en figuras/.
+%  4. ANTES DE EXPONER, en config/plantilla.tex:
+%         \guiafalse        oculta las cajas de guion
+%         \marcadoresfalse  deja los [Insertar ...] en negro
+%
+%  ALCANCE DE ESTE DOCUMENTO
+%  -------------------------
+%  Es el entregable E6: la presentación. El documento de arquitectura es el
+%  E1 (informe/) y el manual de despliegue el E5 (docs/MANUAL-DESPLIEGUE.md).
+%  No copies contenido de ellos: enlaza y resume. Se desincronizan.
+% ===========================================================================
+
+\documentclass[
+  aspectratio=169,   % 16:9. Cambia a 43 si el proyector del aula es 4:3.
+  11pt,
+  spanish,
+  xcolor={table,dvipsnames}
+]{beamer}
+
+\input{config/preambulo}
+\input{config/tema}
+\input{config/plantilla}
+\input{config/datos}
+
+\begin{document}
+
+\input{config/portada}
+
+% --- Agenda ----------------------------------------------------------------
+\input{secciones/00-agenda}
+
+% --- Cuerpo de la exposición ------------------------------------------------
+% El orden sigue la rúbrica de evaluación, de mayor a menor peso, con la
+% demostración en vivo en el centro (que es cuando la sala está más atenta).
+\input{secciones/01-problema-alcance}
+\input{secciones/02-metodo}
+\input{secciones/03-arquitectura}
+\input{secciones/04-microfrontends}
+\input{secciones/05-microservicios}
+\input{secciones/06-modelo-datos}
+\input{secciones/07-reglas-negocio}
+\input{secciones/08-reportes}
+\input{secciones/09-demo}
+\input{secciones/10-calidad-despliegue}
+\input{secciones/11-cierre}
+
+% --- Láminas de respaldo ----------------------------------------------------
+% Van después de \appendix: dejan de contar en la numeración y en la barra de
+% progreso. Son las que se sacan solo si alguien pregunta.
+\appendix
+% En las láminas de respaldo no hay progreso que mostrar: la charla ya
+% terminó. Sin esto, la barra de metropolis se sale del ancho de la lámina
+% en cuanto se pasa del total contado por appendixnumberbeamer.
+\metroset{progressbar=none, numbering=none}
+\input{secciones/A-respaldo}
+
+\end{document}

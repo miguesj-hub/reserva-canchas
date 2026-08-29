@@ -1,0 +1,107 @@
+% !TeX root = ../presentacion.tex
+%=======================================================================
+%  config/preambulo.tex — paquetes e idioma
+%
+%  Nada de este archivo es específico del proyecto. El aspecto visual vive
+%  en config/tema.tex y los mecanismos de la plantilla en config/plantilla.tex.
+%=======================================================================
+
+%----------------------- Motor, idioma y tipografía --------------------
+% Metropolis usa Fira Sans vía fontspec: hay que compilar con lualatex o
+% xelatex. El Makefile ya lo hace. Con pdflatex la compilación aborta.
+\usepackage{fontspec}
+\usepackage[spanish,es-tabla,es-noquoting]{babel}
+\usepackage{csquotes}
+
+% Sin microtype a propósito: la versión de microtype que trae esta
+% distribución usa \partokencontext, que el LuaTeX instalado no conoce, y la
+% compilación se llena de «Undefined control sequence». En una lámina, con
+% cuatro líneas de texto, el ajuste micrométrico no se echa de menos.
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+%------------------------------- Tablas --------------------------------
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{ragged2e}
+\usepackage{multirow}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\renewcommand{\arraystretch}{1.2}
+
+%--------------------------- Gráficos y color --------------------------
+\usepackage{graphicx}
+\usepackage{adjustbox}
+% Los diagramas C4 no se duplican: se leen del informe (E1), que es donde
+% se generan. Las capturas de pantalla propias de la charla van en figuras/.
+\graphicspath{{figuras/}{../informe/figuras/}}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+
+\usepackage{pifont}
+\usepackage{fontawesome5}
+
+%------------------------------ Listas ---------------------------------
+\usepackage{enumitem}
+\setlist{itemsep=4pt,parsep=0pt,topsep=4pt}
+
+%------------------------------ Columnas -------------------------------
+% Metropolis ya carga la maquinaria de columnas de beamer; esto solo fija
+% un separador razonable para las láminas a dos columnas.
+\setlength{\columnsep}{16pt}
+
+%--------------------------- Código fuente -----------------------------
+% Mismos colores que el informe, para que un fragmento se reconozca igual
+% en el PDF y en la pantalla.
+\usepackage{listings}
+
+\definecolor{codeFondo}{HTML}{F7F7F7}
+\definecolor{codeComentario}{HTML}{6A737D}
+\definecolor{codePalabra}{HTML}{0B5394}
+\definecolor{codeCadena}{HTML}{9C27B0}
+\definecolor{codeBorde}{HTML}{DDDDDD}
+
+\lstdefinestyle{estilobase}{
+    backgroundcolor = \color{codeFondo},
+    basicstyle      = \ttfamily\scriptsize,
+    commentstyle    = \color{codeComentario}\itshape,
+    keywordstyle    = \color{codePalabra}\bfseries,
+    stringstyle     = \color{codeCadena},
+    numbers         = none,          % en pantalla, los números estorban
+    frame           = single,
+    rulecolor       = \color{codeBorde},
+    breaklines      = true,
+    showstringspaces= false,
+    tabsize         = 2,
+    captionpos      = b,
+    xleftmargin     = 6pt,
+    literate =
+      {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+      {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+      {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {ü}{{\"u}}1 {¿}{{?`}}1 {¡}{{!`}}1
+}
+\lstset{style=estilobase}
+
+\lstdefinelanguage{yaml}{
+    keywords        = {true,false,null,version,services,image,build,ports,
+                       environment,volumes,networks,depends_on,healthcheck,name},
+    keywordstyle    = \color{codePalabra}\bfseries,
+    sensitive       = false,
+    comment         = [l]{\#},
+    morestring      = [b]",
+    morestring      = [b]'
+}
+\lstdefinelanguage{sql-pg}{
+    language        = SQL,
+    morekeywords    = {EXCLUDE,USING,gist,tstzrange,WITH,CONSTRAINT,DEFERRABLE},
+    sensitive       = false
+}
+
+%----------------------- Numeración del apéndice -----------------------
+% Sin esto, las láminas de respaldo inflan el «12 / 40» de la esquina y la
+% barra de progreso: el público cree que faltan diez minutos más.
+\usepackage{appendixnumberbeamer}

@@ -1,0 +1,46 @@
+% !TeX root = ../presentacion.tex
+% ===========================================================================
+%  Datos de la portada, reparto de la exposición y metadatos del PDF.
+%  Este es el único archivo que hay que editar con los datos del equipo.
+% ===========================================================================
+
+\newcommand{\tituloCharla}{Sistema de Reserva de Canchas Deportivas}
+\newcommand{\subtituloCharla}{Microfrontends con Module Federation y microservicios Spring Boot}
+\newcommand{\nombreCurso}{Desarrollo de Aplicaciones Empresariales}
+\newcommand{\nombreCursoCorto}{Reserva de Canchas · Proyecto Integrador}
+\newcommand{\nombrePrograma}{Maestría en Ingeniería de Software}
+\newcommand{\nombreUniversidad}{\ph{Nombre de la Universidad}}
+\newcommand{\tipoTrabajo}{Presentación final del proyecto integrador (\ent{6})}
+
+% --- Integrantes del equipo ------------------------------------------------
+% Mismos nombres que la portada del informe (informe/config/datos.tex).
+\newcommand{\autorUno}{Pablo Jara Muñoz}
+\newcommand{\autorDos}{Miguel Lara}
+\newcommand{\autorTres}{Sebastián Uyaguari}
+\newcommand{\autorCuatro}{Adrián Espinoza}
+
+\newcommand{\nombreDocente}{\ph{Nombre del Docente}}
+\newcommand{\ciudadFecha}{\ph{Ciudad}, \today}
+
+% --- Reparto de la exposición ----------------------------------------------
+% Quién expone cada bloque. Se imprime en la lámina separadora mientras la
+% guía esté activa, de modo que al ensayar nadie dude de cuándo le toca.
+% Si expone una sola persona, pon el mismo nombre en los cuatro.
+\newcommand{\exponeArquitectura}{\ph{Integrante}}
+\newcommand{\exponeFrontend}{\ph{Integrante}}
+\newcommand{\exponeBackend}{\ph{Integrante}}
+\newcommand{\exponeDemo}{\ph{Integrante}}
+
+% --- Tiempo total ----------------------------------------------------------
+% Ajusta este valor al que asigne el docente y revisa que los minutajes de
+% los \bloque{...} sumen esta cifra menos el turno de preguntas.
+\newcommand{\duracionTotal}{20 minutos + 5 de preguntas}
+
+% --- Metadatos del PDF -----------------------------------------------------
+% pdftitle y pdfauthor los fija beamer a partir de \title y \author de
+% config/portada.tex; repetirlos aquí solo produce un aviso de hyperref.
+\hypersetup{
+    pdfsubject= {\nombreCurso\ --- \nombrePrograma},
+    pdfkeywords = {microservicios, microfrontends, Module Federation,
+                   Spring Boot, PostgreSQL, Docker}
+}

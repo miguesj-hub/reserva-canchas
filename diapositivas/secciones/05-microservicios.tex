@@ -1,0 +1,62 @@
+% !TeX root = ../presentacion.tex
+% ===========================================================================
+%  5. Backend: microservicios Spring Boot — 3 min
+%
+%  Criterio: «Arquitectura de microservicios» (15 %). La rúbrica pide
+%  responsabilidades delimitadas y API documentada con OpenAPI. Enseñar
+%  Swagger corriendo vale más que decir que existe.
+% ===========================================================================
+
+\bloque{Backend: microservicios Spring Boot}{2 min}{\exponeBackend}%
+       {Arquitectura de microservicios (15\,\%)}
+
+\begin{frame}{Cuatro servicios y un gateway}
+  \note{Leer la tabla de izquierda a derecha una sola vez. El detalle que
+  merece énfasis: ms-reportes no tiene base de datos propia.}
+
+  \begin{center}
+    \footnotesize
+    \begin{tabular}{@{}llp{5cm}@{}}
+      \toprule
+      \textbf{Servicio} & \textbf{Base} & \textbf{Responsabilidad}\\
+      \midrule
+      \id{api-gateway} & --- & Entrada única; verifica la credencial y rutea\\
+      \id{ms-usuarios} & \id{usuarios\_db} & Registro, autenticación, usuarios y roles\\
+      \id{ms-canchas}  & \id{canchas\_db}  & Catálogo, horarios de atención y bloqueos\\
+      \id{ms-reservas} & \id{reservas\_db} & Disponibilidad, creación y cancelación\\
+      \id{ms-reportes} & \alert{sin base}  & Indicadores, componiendo datos de los otros dos\\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+
+  \vspace{2pt}
+  {\scriptsize \id{ms-reportes} no persiste nada: compone por HTTP lo que ya
+  está en \id{ms-reservas} y \id{ms-canchas}.}
+\end{frame}
+
+\laminafiguratitulo{Componentes de \id{ms-reservas} (\vista{03})}{componentes-reservas}%
+  {El servicio donde viven las reglas de negocio. Adaptadores fuera, dominio
+   dentro: el dominio no conoce ni HTTP ni JPA.}
+
+\begin{frame}{Contrato antes que código}
+  \guion{Aquí se abre Swagger si el proyector coopera; si no, la captura.
+  El mensaje: el contrato se acordó primero y el servicio se escribió contra
+  él, no al revés.}
+
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}\footnotesize
+        \item Cada servicio publica su OpenAPI en \id{/swagger-ui}.
+        \item El gateway propaga identidad y rol en cada petición
+              (\id{X-User-Role}); el servicio no vuelve a confiar en el navegador.
+        \item Comunicación síncrona por HTTP entre servicios, sin cola de
+              mensajes: el alcance no la justifica.
+        \item Colección de pruebas de la API como parte del entregable \ent{3}.
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \ph{Captura de Swagger UI de ms-reservas, recortada a los cuatro
+      endpoints principales}
+    \end{column}
+  \end{columns}
+\end{frame}
