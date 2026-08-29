@@ -39,22 +39,22 @@ de `mf-administracion` a `mf-reportes`— y comprobar que el menú no se remonta
 
 ### Recorrido 1 — el shell aprende a pintar el chrome
 
-- [ ] T160 [US1] Crear `frontend/shell/src/navegacion.ts` con la única definición de las entradas del menú: la lista del administrador (Dashboard, Reservas, Canchas, Disponibilidad, Usuarios, Configuración, Reportes) y la del socio (Mis Reservas, Disponibilidad), más `RUTAS_SIN_CHROME` con `/reservas/nueva` (FR-061, FR-062)
-- [ ] T161 [US1] Crear `frontend/shell/src/components/Chrome.tsx` trasladando el marco desde los layouts de los remotes: barra lateral fija; en móvil, cabecera con menú desplegable para el administrador y barra inferior con la acción *Nueva* para el socio. Elige variante por `sesion.rol` y lee la sesión de `useAuth()` (FR-057, FR-058)
-- [ ] T162 [US1] Reproducir en `Chrome.tsx` el envoltorio del contenido que hoy pone cada layout: `md:ml-64` en las dos variantes, y `p-container-margin` con el hueco inferior solo en la del socio, porque las páginas de administración ya traen el suyo
-- [ ] T163 [US1] Envolver en `frontend/shell/src/App.tsx` las rutas autenticadas con `Chrome`, dejando fuera `/login`, y que `Chrome` entregue el contenido sin marco cuando la ruta esté en `RUTAS_SIN_CHROME`, sin duplicar el punto de montaje del remote (FR-059, FR-062)
-- [ ] T164 [US1] Verificar en el navegador que el menú del shell aparece y navega, aunque de momento se vea duplicado con el de los remotes
+- [X] T160 [US1] Crear `frontend/shell/src/navegacion.ts` con la única definición de las entradas del menú: la lista del administrador (Dashboard, Reservas, Canchas, Disponibilidad, Usuarios, Configuración, Reportes) y la del socio (Mis Reservas, Disponibilidad), más `RUTAS_SIN_CHROME` con `/reservas/nueva` (FR-061, FR-062)
+- [X] T161 [US1] Crear `frontend/shell/src/components/Chrome.tsx` trasladando el marco desde los layouts de los remotes: barra lateral fija; en móvil, cabecera con menú desplegable para el administrador y barra inferior con la acción *Nueva* para el socio. Elige variante por `sesion.rol` y lee la sesión de `useAuth()` (FR-057, FR-058)
+- [X] T162 [US1] Reproducir en `Chrome.tsx` el envoltorio del contenido que hoy pone cada layout: `md:ml-64` en las dos variantes, y `p-container-margin` con el hueco inferior solo en la del socio, porque las páginas de administración ya traen el suyo
+- [X] T163 [US1] Envolver en `frontend/shell/src/App.tsx` las rutas autenticadas con `Chrome`, dejando fuera `/login`, y que `Chrome` entregue el contenido sin marco cuando la ruta esté en `RUTAS_SIN_CHROME`, sin duplicar el punto de montaje del remote (FR-059, FR-062)
+- [X] T164 [US1] Verificar en el navegador que el menú del shell aparece y navega, aunque de momento se vea duplicado con el de los remotes
 
 **Checkpoint intermedio**: el menú del shell funciona; todavía convive con el de
 los remotes.
 
 ### Recorrido 2 — los remotes se quedan solo con sus páginas
 
-- [ ] T165 [P] [US1] Borrar `frontend/mf-administracion/src/components/Layout.tsx` y `CurtainTransition.tsx`, y dejar en su `App.tsx` solo las rutas de sus páginas (FR-060, FR-063)
-- [ ] T166 [P] [US1] Lo mismo en `frontend/mf-reportes/src/`: borrar `components/Layout.tsx`, que además lleva su cortina incrustada, y simplificar su `App.tsx`
-- [ ] T167 [P] [US1] Lo mismo en `frontend/mf-reservas/src/`, conservando que `/reservas/nueva` siga siendo una ruta suya: el que decide no pintar marco es el shell
-- [ ] T168 [P] [US1] Quitar de los tres `src/App.css` la variable `--curtain-duration`, la clase `.curtain-panel` y los `@keyframes curtain-sweep` (FR-063)
-- [ ] T169 [US1] Comprobar que los cuatro paquetes pasan `tsc --noEmit` y `npm run build` por separado, sin compilar el shell ni los otros remotes (SC-016, compuerta 2)
+- [X] T165 [P] [US1] Borrar `frontend/mf-administracion/src/components/Layout.tsx` y `CurtainTransition.tsx`, y dejar en su `App.tsx` solo las rutas de sus páginas (FR-060, FR-063)
+- [X] T166 [P] [US1] Lo mismo en `frontend/mf-reportes/src/`: borrar `components/Layout.tsx`, que además lleva su cortina incrustada, y simplificar su `App.tsx`
+- [X] T167 [P] [US1] Lo mismo en `frontend/mf-reservas/src/`, conservando que `/reservas/nueva` siga siendo una ruta suya: el que decide no pintar marco es el shell
+- [X] T168 [P] [US1] Quitar de los tres `src/App.css` la variable `--curtain-duration`, la clase `.curtain-panel` y los `@keyframes curtain-sweep` (FR-063)
+- [X] T169 [US1] Comprobar que los cuatro paquetes pasan `tsc --noEmit` y `npm run build` por separado, sin compilar el shell ni los otros remotes (SC-016, compuerta 2)
 
 **Checkpoint**: un único menú, el del shell. Ir de *Canchas* a *Reportes* no lo
 remonta.
@@ -63,8 +63,8 @@ remonta.
 
 ## Phase 4: User Story 2 — Una sola copia del menú (P2)
 
-- [ ] T170 [US2] Verificar SC-015: buscar en todo `frontend/` las definiciones de la lista de navegación; debe haber exactamente una, en el shell
-- [ ] T171 [US2] Verificar SC-018: no queda ninguna referencia a `curtain`, `Cortina` ni `navItems` fuera de `frontend/shell/`
+- [X] T170 [US2] Verificar SC-015: buscar en todo `frontend/` las definiciones de la lista de navegación; debe haber exactamente una, en el shell
+- [X] T171 [US2] Verificar SC-018: no queda ninguna referencia a `curtain`, `Cortina` ni `navItems` fuera de `frontend/shell/`
 
 ---
 
@@ -79,9 +79,9 @@ remonta.
 
 ## Phase 6: Verificación en vivo y cierre
 
-- [ ] T176 Reconstruir los cuatro contenedores del frontend y comprobar que quedan sanos
-- [ ] T177 Verificar SC-014 y SC-017 en un navegador real: recorrer las siete opciones del administrador y las dos del socio, comprobar que en todas está el menú completo, que ir de *Canchas* a *Reportes* no remonta el menú, y medir el tiempo del salto entre remotes frente a los 2 592 ms de referencia
-- [ ] T178 Verificar los casos de borde: `/reservas/nueva` sigue a pantalla completa sin menú, `/login` sin menú, y `/perfil` **con** menú, que hoy lo pierde
+- [X] T176 Reconstruir los cuatro contenedores del frontend y comprobar que quedan sanos
+- [X] T177 Verificar SC-014 y SC-017 en un navegador real: recorrer las siete opciones del administrador y las dos del socio, comprobar que en todas está el menú completo, que ir de *Canchas* a *Reportes* no remonta el menú, y medir el tiempo del salto entre remotes frente a los 2 592 ms de referencia
+- [X] T178 Verificar los casos de borde: `/reservas/nueva` sigue a pantalla completa sin menú, `/login` sin menú, y `/perfil` **con** menú, que hoy lo pierde
 - [ ] T179 Actualizar `docs/AUDITORIA-ALCANCE.md` con este hallazgo y su cierre
 
 ---

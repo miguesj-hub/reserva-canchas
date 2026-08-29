@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from './auth/AuthContext';
 import { InactivityGuard } from './auth/InactivityGuard';
 import { ProtectedRoute } from './auth/ProtectedRoute';
 import { RoleRoute, HOME_BY_ROLE } from './auth/RoleRoute';
+import { Chrome } from './components/Chrome';
 import Login from './pages/Login';
 import Perfil from './pages/Perfil';
 import './App.css';
@@ -33,9 +34,16 @@ function Remoto({
   );
 }
 
-/** Layout autenticado: la navegación entre secciones vive solo en el menú
- * lateral de cada remote (mf-reservas / mf-administracion), no aquí. El shell
- * solo enruta y aísla fallos. */
+/**
+ * Layout autenticado. Desde la feature 003, el shell aporta el MARCO —barra
+ * lateral, cabecera y navegación— y cada remote solo el contenido, que es lo que
+ * exige el Principio V y lo que propone el patrón de Module Federation.
+ *
+ * `Chrome` se monta como ruta padre de todo lo autenticado: así permanece montado
+ * al cambiar de sección, incluso cuando la sección de destino la sirve otro
+ * microfrontend. Antes cada remote traía su propio menú, y saltar de
+ * /administracion a /reportes remontaba la interfaz entera.
+ */
 function AppLayout() {
   const { sesion, logout } = useAuth();
 
@@ -48,6 +56,10 @@ function AppLayout() {
           element={<Navigate to={sesion ? HOME_BY_ROLE[sesion.rol] : '/login'} replace />}
         />
 
+        {/* Todo lo de dentro se pinta dentro del marco. Chrome decide por sí
+            mismo entregar el contenido desnudo en las rutas a pantalla completa
+            (RUTAS_SIN_CHROME), de modo que el remote se monta una sola vez. */}
+        <Route element={<Chrome />}>
         <Route path="/perfil" element={<Perfil />} />
 
         {/* Cada sección queda restringida a su rol: si un cliente entra a
@@ -80,6 +92,7 @@ function AppLayout() {
               </Remoto>
             }
           />
+        </Route>
         </Route>
       </Routes>
     </main>

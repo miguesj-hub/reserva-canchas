@@ -137,30 +137,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Transición de cortina entre secciones del menú (CurtainTransition.tsx).
-   Un panel sólido sube desde abajo, cubre toda la pantalla y sigue subiendo
-   hasta salir por arriba, revelando la sección siguiente debajo — el mismo
-   gesto que un telón vertical, no un deslizamiento lateral.
-   --curtain-duration debe coincidir con DURACION_MS del componente.
-
-   En 0ms la cortina queda desactivada: el panel no llega a verse y el cambio
-   de sección es inmediato. Se bajó a 0 porque 800ms por navegación se leían
-   como lentitud del sistema durante la demostración, no como una transición.
-   Para recuperarla, subir este valor Y los DURACION_MS / DURACION_ENTRADA_MS
-   de components/, que tienen que seguir coincidiendo. */
 :root {
-  --curtain-duration: 0ms;
 }
 
-.curtain-panel {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--color-primary-container), var(--color-secondary));
-  animation: curtain-sweep var(--curtain-duration) ease-in-out both;
-}
 
-@keyframes curtain-sweep {
-  0%   { transform: translateY(100%); }
-  50%  { transform: translateY(0%); }
-  100% { transform: translateY(-100%); }
-}

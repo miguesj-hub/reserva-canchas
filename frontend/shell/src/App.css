@@ -136,3 +136,39 @@ body {
   direction: ltr;
   -webkit-font-smoothing: antialiased;
 }
+
+
+/* ---------------------------------------------------------------------------
+   Responsividad del chrome (feature 003).
+
+   NO se usan las variantes responsive de Tailwind (`md:hidden`, `md:flex`,
+   `md:ml-64`) para esto. El shell y CADA remote inyectan su propia hoja de
+   Tailwind, y la del remote se carga después: sus utilidades base —`.flex`,
+   `.hidden`, `.ml-64`— se declaran más tarde en la cascada y ganan a las
+   variantes responsive del shell, que tienen la misma especificidad. El
+   síntoma era la cabecera móvil visible en escritorio.
+
+   Con nombres propios el conflicto desaparece: ningún remote genera estas
+   clases. Los colores y el espaciado sí siguen siendo utilidades de Tailwind,
+   porque ahí una redefinición del remote produce exactamente la misma regla
+   (los tokens son idénticos) y el orden da igual.
+   ------------------------------------------------------------------------- */
+
+.chrome-escritorio { display: none; }
+.chrome-movil { display: flex; }
+
+.chrome-contenido {
+  flex: 1 1 0%;
+  width: 100%;
+}
+
+.chrome-contenido-socio {
+  padding-bottom: 6rem;
+}
+
+@media (min-width: 768px) {
+  .chrome-escritorio { display: flex; }
+  .chrome-movil { display: none; }
+  .chrome-contenido { margin-left: 16rem; }
+  .chrome-contenido-socio { padding-bottom: var(--spacing-container-margin, 1.5rem); }
+}

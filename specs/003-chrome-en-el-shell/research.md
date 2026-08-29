@@ -95,6 +95,31 @@ secciones, se diseña sobre el chrome del shell, que es donde ahora tiene sentid
 
 ---
 
+## R-015 — Las variantes responsive de Tailwind no cruzan la frontera del remote
+
+**Encontrado al implementar, no previsto en la Fase 0.** Trasladado el chrome, la
+cabecera móvil aparecía en escritorio: `md:hidden` no surtía efecto.
+
+**Causa**: el shell y **cada remote** inyectan su propia hoja de Tailwind. La del
+remote se carga después, y sus utilidades base —`.flex`, `.hidden`, `.ml-64`— se
+declaran más tarde en la cascada. Como una variante responsive tiene la misma
+especificidad que la utilidad base, el orden decide: `.flex` del remote ganaba a
+`@media (min-width: 48rem) { .md\:hidden }` del shell. Mientras el chrome vivía
+dentro del remote las dos reglas salían de la misma hoja y el problema no existía.
+
+**Decisión**: la responsividad del chrome se escribe como CSS propio en el
+`App.css` del shell, con nombres que ningún remote genera —`.chrome-escritorio`,
+`.chrome-movil`, `.chrome-contenido`—. Los colores y el espaciado siguen siendo
+utilidades de Tailwind: ahí una redefinición del remote produce exactamente la
+misma regla, porque los tokens son idénticos (R-012), y el orden da igual.
+
+**Lo que esto enseña**: en Module Federation, dos paquetes con Tailwind comparten
+un espacio de nombres de clases sin coordinarse. Todo lo que dependa del ORDEN de
+la cascada es frágil entre paquetes; lo que dependa solo del valor, no. Vale la
+pena recordarlo si algún día se comparte más marco.
+
+---
+
 ## Resumen de decisiones
 
 | # | Decisión | Toca |
@@ -102,5 +127,6 @@ secciones, se diseña sobre el chrome del shell, que es donde ahora tiene sentid
 | R-012 | El shell ya tiene Tailwind y los mismos tokens: el chrome se traslada sin tocar estilos | `frontend/shell/` |
 | R-013 | Dos chromes elegidos por rol, y `RUTAS_SIN_CHROME` con una entrada explícita | `frontend/shell/src/` |
 | R-014 | Las cortinas se borran, no se desactivan | los tres remotes |
+| R-015 | La responsividad del chrome va en CSS propio, no en variantes de Tailwind, porque entre paquetes manda el orden de la cascada | `frontend/shell/src/App.css` |
 
 Sin `NEEDS CLARIFICATION` pendientes.
