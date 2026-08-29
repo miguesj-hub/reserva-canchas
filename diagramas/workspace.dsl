@@ -163,6 +163,9 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 bookingController = component "BookingController" "Exposes the REST endpoints for bookings and availability; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
                     tags "Adapter-In"
                 }
+                configurationController = component "ConfigurationController" "Exposes the REST endpoints that read and change the active-bookings limit of RN-06; translates HTTP requests into calls to the input port." "Spring MVC @RestController" {
+                    tags "Adapter-In"
+                }
                 errorHandlerBooking = component "ErrorHandler" "Translates business exceptions (overlap, permissions, booking not found) into HTTP status codes (409 on overlap)." "@RestControllerAdvice" {
                     tags "Adapter-In"
                 }
@@ -174,12 +177,18 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 bookingService = component "BookingService" "Implements the input port: applies RN-01..RN-08 (availability, active-bookings limit RN-06, future-only cancellation RN-04, role-based permissions RN-03)." "Spring @Service" {
                     tags "Application"
                 }
+                configurationUseCase = component "ConfigurationUseCase" "Input port: read and change the active-bookings limit of RN-06. Administrator only." "Java interface" {
+                    tags "Port"
+                }
+                configurationService = component "ConfigurationService" "Implements the input port: reads and writes the limit, rejects values below 1, and requires the ADMINISTRADOR role. Applying RN-06 stays in BookingService; this only governs the parameter." "Spring @Service" {
+                    tags "Application"
+                }
 
                 // --- Domain: output ports ------------------------------------
                 bookingRepositoryPort = component "BookingRepositoryPort" "Output port: persistence operations over bookings that the application core needs." "Java interface" {
                     tags "Port"
                 }
-                configurationRepositoryPort = component "ConfigurationRepositoryPort" "Output port: reads configurable parameters, such as the maximum number of simultaneous active bookings." "Java interface" {
+                configurationRepositoryPort = component "ConfigurationRepositoryPort" "Output port: reads and writes configurable parameters, such as the maximum number of simultaneous active bookings." "Java interface" {
                     tags "Port"
                 }
                 courtClientPort = component "CourtClientPort" "Output port: checks whether a court exists, is active, and its opening hours, without depending on how that check travels over the network." "Java interface" {
@@ -190,7 +199,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 bookingRepositoryAdapter = component "BookingRepositoryAdapter" "Implements the booking-persistence output port. The PostgreSQL EXCLUDE constraint prevents overlap (RN-02)." "Spring Data JPA" {
                     tags "Adapter-Out"
                 }
-                configurationRepositoryAdapter = component "ConfigurationRepositoryAdapter" "Implements the configuration-reading output port." "Spring Data JPA" {
+                configurationRepositoryAdapter = component "ConfigurationRepositoryAdapter" "Implements the configuration output port: reads the limit on every booking creation and writes it when the administrator changes it." "Spring Data JPA" {
                     tags "Adapter-Out"
                 }
                 courtClientAdapter = component "CourtClientAdapter" "Implements the court-check output port by calling ms-canchas over REST." "Spring RestClient" {
@@ -295,6 +304,10 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
 
         bookingController -> bookingUseCase "Invokes"
         bookingController -> errorHandlerBooking "Unhandled exceptions"
+        configurationController -> configurationUseCase "Invokes"
+        configurationController -> errorHandlerBooking "Unhandled exceptions"
+        configurationService -> configurationUseCase "Implements"
+        configurationService -> configurationRepositoryPort "Reads and changes the active-bookings limit (RN-06)"
         bookingService -> bookingUseCase "Implements"
 
         bookingService -> courtClientPort "Checks the court and gets its opening hours"
@@ -307,7 +320,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
 
         courtClientAdapter -> msCanchas "Queries the court (schedule, active state) and its maintenance blocks, to mark blocked slots as unbookable (FR-010)" "JSON/HTTP"
         bookingRepositoryAdapter -> reservasDb "Reads and writes" "JDBC"
-        configurationRepositoryAdapter -> reservasDb "Reads" "JDBC"
+        configurationRepositoryAdapter -> reservasDb "Reads and writes" "JDBC"
 
         // ===================================================================
         //  Relationships — component level (ms-usuarios, hexagonal)

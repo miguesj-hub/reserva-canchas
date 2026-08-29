@@ -45,6 +45,7 @@ const navItems = [
     end: false,
   },
   { to: '/administracion/usuarios', label: 'Usuarios', icon: 'group', end: false },
+  { to: '/administracion/configuracion', label: 'Configuración', icon: 'tune', end: false },
 ];
 
 function NavItems({ onNavigate }: { onNavigate?: () => void }) {

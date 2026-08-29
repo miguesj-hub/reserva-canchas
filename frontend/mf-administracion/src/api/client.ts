@@ -140,6 +140,11 @@ export type Disponibilidad = {
   bloques: Bloque[];
 };
 
+/** Tope de reservas activas simultáneas por usuario final (RN-06). */
+export type Configuracion = {
+  maxReservasActivas: number;
+};
+
 export type Reserva = {
   id: number;
   canchaId: number;
@@ -258,6 +263,24 @@ export type Usuario = {
   rol: Rol;
   activo: boolean;
 };
+
+// --- Configuración de la política de reservas (RN-06, feature 002) ----------
+
+/** FR-052. Solo ADMINISTRADOR: al usuario final el backend le responde 403. */
+export function consultarConfiguracion(): Promise<Configuracion> {
+  return api<Configuracion>('/reservas/configuracion');
+}
+
+/**
+ * FR-053. El valor nuevo rige para la siguiente reserva que se intente crear,
+ * sin reiniciar nada: `ms-reservas` lee la clave en cada creación.
+ */
+export function cambiarTope(maxReservasActivas: number): Promise<Configuracion> {
+  return api<Configuracion>('/reservas/configuracion', {
+    method: 'PUT',
+    body: { maxReservasActivas },
+  });
+}
 
 export function listarUsuarios(): Promise<Usuario[]> {
   return api<Usuario[]>('/usuarios');

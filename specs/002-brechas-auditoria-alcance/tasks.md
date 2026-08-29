@@ -83,30 +83,30 @@ pantalla lo consuma.
 
 ### Backend — `ms-reservas`
 
-- [ ] T140 [US2] Añadir a `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/port/out/ConfigurationRepositoryPort.java` el método de escritura del par clave/valor, e implementarlo en `adapter/out/persistence/ConfigurationRepositoryAdapter.java`
-- [ ] T141 [US2] Crear `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/port/in/ConfigurationUseCase.java` con leer y cambiar el tope
-- [ ] T142 [US2] Implementar `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/service/ConfigurationService.java`: lectura (FR-052), cambio (FR-053), rechazo de un tope que no sea entero ≥ 1 dejando vigente el anterior (FR-054), y exigencia de rol ADMINISTRADOR lanzando `ForbiddenOperationException` de `domain/exception/` (FR-056), que el `ErrorHandler` ya traduce a 403
-- [ ] T143 [P] [US2] Crear `backend/ms-reservas/src/test/java/com/ups/reservacanchas/reservas/application/service/ConfigurationServiceTest.java` con `ConfigurationRepositoryPort` mockeado, siguiendo el patrón de `BookingServiceCreacionTest`: lectura del valor vigente, cambio válido, rechazo por rol de usuario final, y rechazo de 0, negativo y no entero
-- [ ] T144 [P] [US2] Añadir a `backend/ms-reservas/src/test/java/com/ups/reservacanchas/reservas/application/service/BookingServiceCreacionTest.java` el caso de FR-055: con un usuario que ya tiene 3 reservas activas y el tope recién bajado a 1, las 3 siguen confirmadas y la creación de una cuarta se rechaza citando el tope nuevo. **El tope se evalúa al crear, nunca retroactivamente**
-- [ ] T145 [US2] Implementar `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/adapter/in/web/ConfigurationController.java` con `GET` y `PUT /api/reservas/configuracion`, tomando el rol de `X-User-Role`, según [contracts/reservas-configuracion.yaml](./contracts/reservas-configuracion.yaml)
-- [ ] T146 [US2] Verificar la compuerta 6: el Swagger UI de `ms-reservas` en `/swagger-ui.html` publica el recurso nuevo con sus códigos 400, 401 y 403, y coincide con el contrato escrito
+- [X] T140 [US2] Añadir a `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/port/out/ConfigurationRepositoryPort.java` el método de escritura del par clave/valor, e implementarlo en `adapter/out/persistence/ConfigurationRepositoryAdapter.java`
+- [X] T141 [US2] Crear `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/port/in/ConfigurationUseCase.java` con leer y cambiar el tope
+- [X] T142 [US2] Implementar `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/application/service/ConfigurationService.java`: lectura (FR-052), cambio (FR-053), rechazo de un tope que no sea entero ≥ 1 dejando vigente el anterior (FR-054), y exigencia de rol ADMINISTRADOR lanzando `ForbiddenOperationException` de `domain/exception/` (FR-056), que el `ErrorHandler` ya traduce a 403
+- [X] T143 [P] [US2] Crear `backend/ms-reservas/src/test/java/com/ups/reservacanchas/reservas/application/service/ConfigurationServiceTest.java` con `ConfigurationRepositoryPort` mockeado, siguiendo el patrón de `BookingServiceCreacionTest`: lectura del valor vigente, cambio válido, rechazo por rol de usuario final, y rechazo de 0, negativo y no entero
+- [X] T144 [P] [US2] Añadir a `backend/ms-reservas/src/test/java/com/ups/reservacanchas/reservas/application/service/BookingServiceCreacionTest.java` el caso de FR-055: con un usuario que ya tiene 3 reservas activas y el tope recién bajado a 1, las 3 siguen confirmadas y la creación de una cuarta se rechaza citando el tope nuevo. **El tope se evalúa al crear, nunca retroactivamente**
+- [X] T145 [US2] Implementar `backend/ms-reservas/src/main/java/com/ups/reservacanchas/reservas/adapter/in/web/ConfigurationController.java` con `GET` y `PUT /api/reservas/configuracion`, tomando el rol de `X-User-Role`, según [contracts/reservas-configuracion.yaml](./contracts/reservas-configuracion.yaml)
+- [X] T146 [US2] Verificar la compuerta 6: el Swagger UI de `ms-reservas` en `/swagger-ui.html` publica el recurso nuevo con sus códigos 400, 401 y 403, y coincide con el contrato escrito
 
 ### Frontend — `mf-administracion`
 
-- [ ] T147 [P] [US2] Añadir a `frontend/mf-administracion/src/api/client.ts` el tipo `Configuracion` y las funciones de lectura y cambio del tope contra `/api/reservas/configuracion`
-- [ ] T148 [US2] Crear `frontend/mf-administracion/src/pages/Configuracion.tsx`: muestra el tope vigente y permite cambiarlo, mostrando el mensaje de error del backend cuando el valor no es admitido (FR-054)
-- [ ] T149 [US2] Registrar la ruta `configuracion` en `frontend/mf-administracion/src/App.tsx` y su entrada en `navItems` de `frontend/mf-administracion/src/components/Layout.tsx`
+- [X] T147 [P] [US2] Añadir a `frontend/mf-administracion/src/api/client.ts` el tipo `Configuracion` y las funciones de lectura y cambio del tope contra `/api/reservas/configuracion`
+- [X] T148 [US2] Crear `frontend/mf-administracion/src/pages/Configuracion.tsx`: muestra el tope vigente y permite cambiarlo, mostrando el mensaje de error del backend cuando el valor no es admitido (FR-054)
+- [X] T149 [US2] Registrar la ruta `configuracion` en `frontend/mf-administracion/src/App.tsx` y su entrada en `navItems` de `frontend/mf-administracion/src/components/Layout.tsx`
 
 ### Compuerta 9 — diagrama e informe, dentro del recorrido
 
-- [ ] T150 [US2] Añadir a la vista 03 de `diagramas/workspace.dsl` los tres componentes nuevos de `ms-reservas` con sus tags: `ConfigurationController` (`Adapter-In`), `ConfigurationUseCase` (`Port`) y `ConfigurationService` (`Application`), con sus relaciones hacia `ConfigurationRepositoryPort`
-- [ ] T151 [US2] Reexportar los diagramas y regenerar `informe/figuras/componentes-reservas.pdf` con `diagramas/start.sh` y `node diagramas/exportar.js`
-- [ ] T152 [US2] Añadir el puerto de configuración a `informe/secciones/04-arquitectura.tex`, en el párrafo que hoy enumera solo `CourtClientPort`, `ConfigurationRepositoryPort` y `BookingRepositoryPort` como puertos de lectura, y recompilar el informe
+- [X] T150 [US2] Añadir a la vista 03 de `diagramas/workspace.dsl` los tres componentes nuevos de `ms-reservas` con sus tags: `ConfigurationController` (`Adapter-In`), `ConfigurationUseCase` (`Port`) y `ConfigurationService` (`Application`), con sus relaciones hacia `ConfigurationRepositoryPort`
+- [X] T151 [US2] Reexportar los diagramas y regenerar `informe/figuras/componentes-reservas.pdf` con `diagramas/start.sh` y `node diagramas/exportar.js`
+- [X] T152 [US2] Añadir el puerto de configuración a `informe/secciones/04-arquitectura.tex`, en el párrafo que hoy enumera solo `CourtClientPort`, `ConfigurationRepositoryPort` y `BookingRepositoryPort` como puertos de lectura, y recompilar el informe
 
 ### Verificación de la historia
 
-- [ ] T153 [US2] Verificar SC-012 de punta a punta y sin reiniciar ningún servicio: bajar el tope a 1, ver el rechazo citando el valor nuevo, devolverlo a 3 y ver la misma reserva confirmarse
-- [ ] T154 [US2] Verificar SC-013: tras reducir el tope por debajo de las reservas activas de un usuario, el 100% de esas reservas sigue confirmada y ocupando su bloque
+- [X] T153 [US2] Verificar SC-012 de punta a punta y sin reiniciar ningún servicio: bajar el tope a 1, ver el rechazo citando el valor nuevo, devolverlo a 3 y ver la misma reserva confirmarse
+- [X] T154 [US2] Verificar SC-013: tras reducir el tope por debajo de las reservas activas de un usuario, el 100% de esas reservas sigue confirmada y ocupando su bloque
 
 **Checkpoint**: las dos historias funcionan de forma independiente. RN-06 pasa de "configurable
 según el documento" a configurable y demostrable.
@@ -115,11 +115,11 @@ según el documento" a configurable y demostrable.
 
 ## Phase 5: Polish & Cross-Cutting Concerns
 
-- [ ] T155 Verificar que un arranque desde cero (`docker compose down -v && docker compose up -d --wait`) deja `max_reservas_activas = 3` por el seed de `V2__configuracion.sql`, que es lo que hace repetible la demostración de la Historia 2
-- [ ] T156 [P] Verificar la compuerta 4 sobre las clases nuevas: `ConfigurationService` sin ningún import de `adapter/`, y `ForbiddenOperationException` sin `HttpStatus`
-- [ ] T157 [P] Verificar la compuerta 2 y el Principio V: `npm run build` en verde dentro de `frontend/mf-administracion` **sin** compilar el shell ni los otros dos remotes
-- [ ] T158 Actualizar `docs/AUDITORIA-ALCANCE.md` marcando cerradas las dos brechas, con la fecha y el commit que las cierra
-- [ ] T159 Revisar si la entrega necesita reflejar esta feature: el informe (E1) y la lámina 2 de `diapositivas/` describen la feature 001 y sus cifras siguen siendo ciertas, así que **solo se tocan si 002 se implementa antes de la defensa**; en ese caso, añadir sus dos historias donde corresponda en lugar de alterar los números de 001
+- [X] T155 Verificar que un arranque desde cero (`docker compose down -v && docker compose up -d --wait`) deja `max_reservas_activas = 3` por el seed de `V2__configuracion.sql`, que es lo que hace repetible la demostración de la Historia 2
+- [X] T156 [P] Verificar la compuerta 4 sobre las clases nuevas: `ConfigurationService` sin ningún import de `adapter/`, y `ForbiddenOperationException` sin `HttpStatus`
+- [X] T157 [P] Verificar la compuerta 2 y el Principio V: `npm run build` en verde dentro de `frontend/mf-administracion` **sin** compilar el shell ni los otros dos remotes
+- [X] T158 Actualizar `docs/AUDITORIA-ALCANCE.md` marcando cerradas las dos brechas, con la fecha y el commit que las cierra
+- [X] T159 Revisar si la entrega necesita reflejar esta feature. **Revisado:** §4 del informe se actualizó por la compuerta 9 (T152) y se recompiló; la figura del respaldo de `diapositivas/` se regeneró y el deck se recompiló. Las cifras de la lámina 2 —48 FR, 31 escenarios, 10 criterios, 134 tareas— **siguen siendo ciertas**, porque describen la feature 001 y 001 no se reabrió. Queda a decisión del equipo añadir una lámina de respaldo sobre la auditoría; no se toca el cuerpo de 7:30
 
 ---
 

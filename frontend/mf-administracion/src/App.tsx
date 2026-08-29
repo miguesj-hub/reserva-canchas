@@ -5,6 +5,7 @@ import GestionReservas from './pages/GestionReservas';
 import GestionUsuarios from './pages/GestionUsuarios';
 import GestionCanchas from './pages/GestionCanchas';
 import Disponibilidad from './pages/Disponibilidad';
+import Configuracion from './pages/Configuracion';
 import type { PropsDeRemote } from './tipos';
 import './App.css';
 
@@ -16,6 +17,7 @@ const App = ({ sesion, onLogout }: PropsDeRemote) => (
       <Route path="usuarios" element={<GestionUsuarios />} />
       <Route path="canchas" element={<GestionCanchas />} />
       <Route path="disponibilidad" element={<Disponibilidad />} />
+      <Route path="configuracion" element={<Configuracion />} />
     </Route>
   </Routes>
 );

@@ -247,6 +247,14 @@ a reservas\_db. Esta separación permite que la lógica de las reservas se mante
 independiente de la forma en que se consultan otros servicios o se almacenan los
 datos.
 
+El servicio incorpora además un segundo caso de uso, dedicado a la configuración
+de la política de reservas. ConfigurationController expone las operaciones de
+lectura y cambio del tope de reservas activas de \rn{06}, y
+ConfigurationService las aplica sobre el mismo ConfigurationRepositoryPort que
+consulta BookingService. La regla continúa aplicándose en BookingService: este
+caso de uso solo gobierna el parámetro que aquella lee, y por eso el valor nuevo
+rige desde la siguiente reserva que se intente crear, sin reiniciar el servicio.
+
 \subsubsection{\texorpdfstring{\textsf{V-04}}{V-04} Despliegue}
 \label{v:04}
 
