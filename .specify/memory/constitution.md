@@ -1,7 +1,7 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Versión: (plantilla sin ratificar) → 1.0.0 → 1.1.0 → 1.1.1 → 1.2.0
+Versión: (plantilla sin ratificar) → 1.0.0 → 1.1.0 → 1.1.1 → 1.2.0 → 1.3.0
 Tipo de cambio: MAJOR — ratificación inicial (1.0.0). La plantilla no tenía ningún
 principio definido; esa versión estableció los siete principios rectores y la
 estructura de gobierno del proyecto integrador.
@@ -22,9 +22,30 @@ al endpoint real" (las anteriores 8 pasan a ser 9) y se corrige la descripción 
 frontend en "Estado del repositorio al ratificar", que lo daba por resuelto. Es
 MINOR y no PATCH porque añade obligaciones nuevas y verificables: una feature con
 interfaz puede ahora fallar una compuerta que antes no existía.
+Enmienda 1.3.0 (MINOR): el Principio I declara en alcance la configuración del
+tope de reservas activas de RN-06. La auditoría del sistema contra el documento
+de alcance (`docs/AUDITORIA-ALCANCE.md`, 2026-08-29) encontró que la regla se
+aplica bien en `BookingService.verificarTope`, que lee la clave
+`max_reservas_activas`, pero que ese valor no se puede cambiar desde ninguna
+interfaz ni endpoint: solo con un UPDATE a mano sobre la tabla `configuracion`.
+El caso es fronterizo bajo el Principio I porque traza a una regla de §3.4 y no
+a una fila de §3.1, y este documento ya resuelve esa clase de ambigüedad
+enumerando el caso —es el precedente con el que se añadieron los dos puntos
+anteriores de esa lista—. Es MINOR y no PATCH porque añade una obligación nueva
+y verificable: una feature puede ahora fallar la compuerta 1 por dejar el tope
+sin forma de configurarse.
+
+Evaluado y NO incluido en 1.3.0, por decisión explícita: endurecer la compuerta 8
+para detectar el patrón "capacidad que §3.1 atribuye a un rol, servida por la API
+pero sin pantalla para ese rol", que es el que dejó pasar la consulta de
+disponibilidad del administrador. Se difiere a una enmienda posterior y separada,
+para no mezclar el cierre de un hueco con el candado que evita repetirlo.
 
 Principios modificados en 1.2.0:
   - VI. Contrato Antes que Implementación — ampliado, no renombrado.
+
+Principios modificados en 1.3.0:
+  - I. Alcance Cerrado y Trazable — ampliado, no renombrado.
 
 Principios definidos (ninguno renombrado; no había versión previa):
   - I. Alcance Cerrado y Trazable
@@ -100,6 +121,14 @@ administrador y la rúbrica los cuenta:
 - Los cuatro indicadores de §3.3.5: reservas por cancha y por deporte en un rango,
   porcentaje de ocupación por cancha, cancelaciones por período, y el ranking de
   canchas con mayor y menor demanda.
+
+Se incluye además, por traza a la regla y no a una fila de §3.1, la configuración
+del tope de reservas activas de RN-06. §3.4 exige que el límite sea "configurable"
+pero §3.2 no le da pantalla: se resuelve con un endpoint de `ms-reservas`
+restringido a ADMINISTRADOR sobre la clave `max_reservas_activas` de la tabla
+`configuracion`, editable desde `mf-administracion`. Un tope que solo se cambia
+con un UPDATE a mano deja la palabra "configurable" sin respaldo demostrable en
+la defensa.
 
 Cada spec y cada tarea DEBE nombrar en su encabezado la funcionalidad, RN o
 entregable que la justifica.
@@ -593,4 +622,4 @@ atienden antes de entregar.
 (qué componentes existen y cómo se relacionan). Esta constitución dice por qué, y
 qué no se negocia.
 
-**Version**: 1.2.0 | **Ratified**: 2026-08-24 | **Last Amended**: 2026-08-24
+**Version**: 1.3.0 | **Ratified**: 2026-08-24 | **Last Amended**: 2026-08-29
