@@ -1,0 +1,14 @@
+# Auxiliares de LaTeX. El PDF sí se versiona: es el entregable E5.
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bcf
+*.run.xml
+*.blg
+*.bbl

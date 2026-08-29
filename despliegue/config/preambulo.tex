@@ -1,0 +1,101 @@
+% !TeX root = ../despliegue.tex
+%=======================================================================
+%  config/preambulo.tex — paquetes, idioma y estilo visual
+%
+%  Copia del preámbulo de manual/: mismo aspecto visual. Añade fancyvrb,
+%  porque este documento es casi todo comandos de consola.
+%=======================================================================
+
+%----------------------- Codificación e idioma -------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-tabla,es-noquoting]{babel}
+\usepackage{csquotes}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+%------------------------------ Geometría ------------------------------
+\usepackage[a4paper,top=2.6cm,bottom=2.6cm,left=2.8cm,right=2.5cm,
+            headheight=16pt]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\setlength{\parskip}{6pt}
+\setlength{\parindent}{0pt}
+
+%------------------------------- Tablas --------------------------------
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{xltabular}
+\usepackage{ragged2e}
+\usepackage{multirow}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\Centering\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\renewcommand{\arraystretch}{1.25}
+
+%--------------------------- Gráficos y color --------------------------
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\graphicspath{{figuras/}}
+\usepackage{fancyvrb}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+\usepackage{floatpag}
+\usepackage{float}
+% needspace y placeins, que sí usan informe/ y manual/, se omiten a propósito:
+% este documento no tiene una sola figura, así que no hay flotantes que anclar,
+% y así el manual compila en una instalación de BasicTeX sin añadidos.
+
+\renewcommand{\topfraction}{.90}
+\renewcommand{\bottomfraction}{.80}
+\renewcommand{\textfraction}{.08}
+\renewcommand{\floatpagefraction}{.75}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup{font=small,labelfont=bf}
+\usepackage{pifont}
+
+%------------------------------ Listas ---------------------------------
+\usepackage{enumitem}
+\setlist{itemsep=2pt,parsep=0pt,topsep=4pt}
+
+%--------------------------- Estilo de página --------------------------
+\definecolor{acento}{HTML}{1168BD}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\nouppercase{\leftmark}}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\fancypagestyle{plain}{%
+    \fancyhf{}%
+    \fancyhead[R]{\small\thepage}%
+    \renewcommand{\headrulewidth}{0pt}%
+}
+
+\usepackage{titlesec}
+\titleformat{\section}[hang]
+  {\normalfont\Large\bfseries\color{acento}}
+  {\thesection.}{10pt}{}
+\titlespacing*{\section}{0pt}{18pt}{10pt}
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+%----------------------- Referencias cruzadas --------------------------
+\usepackage[hidelinks]{hyperref}
+\usepackage[spanish,nameinlink,capitalise]{cleveref}
+\crefname{table}{Tabla}{Tablas}
+\Crefname{table}{Tabla}{Tablas}

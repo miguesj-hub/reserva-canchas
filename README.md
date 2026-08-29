@@ -155,7 +155,7 @@ docker compose exec postgres \
 | **E2** | Shell y microfrontends integrados | [`frontend/`](frontend/) |
 | **E3** | Microservicios con Swagger y colección de pruebas | [`backend/`](backend/) · [`Postman-collection/`](Postman-collection/) |
 | **E4** | Scripts de base de datos y datos de prueba | [`infra/postgres/init/`](infra/postgres/init/) y las migraciones Flyway de cada servicio |
-| **E5** | Manual de despliegue | [`docs/MANUAL-DESPLIEGUE.md`](docs/MANUAL-DESPLIEGUE.md) |
+| **E5** | Manual de despliegue | [`despliegue/despliegue.pdf`](despliegue/despliegue.pdf) · fuente en [`docs/MANUAL-DESPLIEGUE.md`](docs/MANUAL-DESPLIEGUE.md) |
 | **E6** | Presentación con demostración en vivo | [`diapositivas/presentacion.pdf`](diapositivas/presentacion.pdf) |
 
 ---

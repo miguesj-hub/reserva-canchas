@@ -1,0 +1,66 @@
+% !TeX root = ../despliegue.tex
+% ===========================================================================
+%  Requisito previo y arranque.
+% ===========================================================================
+
+\section{Requisito único}
+
+\textbf{Docker 24 o superior, con Compose v2.} Nada más.
+
+No hace falta instalar Java, Node, Maven ni PostgreSQL: todo se compila y se
+ejecuta dentro de contenedores. Es una decisión deliberada —el Principio VII de
+la constitución del proyecto exige que el sistema levante con un solo comando— y
+también lo que hace que la evaluación no dependa de qué tenga instalado quien
+evalúa.
+
+Para comprobar la versión instalada:
+
+\begin{comando}
+docker --version        # Docker version 24.x o superior
+docker compose version  # Docker Compose version v2.x
+\end{comando}
+
+\section{Levantar el sistema}
+
+\begin{comando}
+git clone <url-del-repositorio> && cd reserva-canchas
+docker compose up
+\end{comando}
+
+Y abrir \url{http://localhost}.
+
+El primer arranque compila las imágenes y tarda varios minutos; los siguientes
+son cuestión de segundos, porque Docker reutiliza las capas ya construidas.
+
+Para dejarlo corriendo en segundo plano y que el comando no devuelva el control
+hasta que todo esté sano:
+
+\begin{comando}
+docker compose up -d --wait
+\end{comando}
+
+Cuando termina, \cmd{docker compose ps} debe mostrar los once servicios en
+estado \cmd{healthy}.
+
+\subsection{Si algún puerto está ocupado}
+
+El gateway se publica en el puerto 8080 del anfitrión. Si esa máquina ya lo
+usa, el arranque falla con \cmd{port is already allocated}. Se cambia sin tocar
+el archivo de Compose, definiendo la variable al vuelo:
+
+\begin{comando}
+GATEWAY_PORT=18080 docker compose up -d --wait
+\end{comando}
+
+Todos los puertos publicados admiten esa sustitución:
+
+\begin{comando}
+SHELL_PORT              MS_USUARIOS_PORT        GATEWAY_PORT
+MF_RESERVAS_PORT        MS_CANCHAS_PORT         POSTGRES_PORT
+MF_ADMINISTRACION_PORT  MS_RESERVAS_PORT        EDGE_PORT
+MF_REPORTES_PORT        MS_REPORTES_PORT
+\end{comando}
+
+\nota{Cambiar esos puertos no afecta a la aplicación. El navegador solo usa
+\url{http://localhost}, que es el puerto 80 del \emph{edge}; los demás puertos
+existen para inspeccionar cada servicio por separado.}

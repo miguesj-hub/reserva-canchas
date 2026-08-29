@@ -30,6 +30,192 @@ de usuarios, canchas, reservas y reportes:
 
 \url{https://github.com/miguesj-hub/reserva-canchas/blob/main/Postman-collection/reserva-canchas.postman_collection.json}
 
+\section{Manual de despliegue}
+\label{anexo:despliegue}
+
+Este anexo resume el procedimiento de puesta en marcha del sistema, de modo que
+el informe sea autosuficiente para reproducir el entorno descrito en los
+capítulos anteriores. El manual completo, con la guía de operación y el
+diagnóstico de fallos, constituye el entregable \ent{5} y se encuentra en
+\id{despliegue/despliegue.pdf} dentro del repositorio.
+
+\subsection{Requisito previo}
+\label{anexo:despliegue:requisito}
+
+El único requisito es \textbf{Docker 24 o superior con Compose v2}. No es
+necesario instalar Java, Node, Maven ni PostgreSQL en la máquina anfitriona:
+la totalidad del sistema se compila y se ejecuta dentro de contenedores. Esta
+decisión responde al principio de arranque con un solo comando adoptado por el
+proyecto, y evita que la reproducción del entorno dependa de las herramientas
+instaladas en cada equipo.
+
+\subsection{Puesta en marcha}
+\label{anexo:despliegue:arranque}
+
+\begin{lstlisting}[
+  numbers=none,
+  caption={Clonado y arranque del sistema completo.},
+  label={lst:despliegue-arranque}
+]
+git clone https://github.com/miguesj-hub/reserva-canchas
+cd reserva-canchas
+docker compose up -d --wait
+\end{lstlisting}
+
+La aplicación queda disponible en \url{http://localhost}. El primer arranque
+compila las imágenes y requiere varios minutos; los posteriores reutilizan las
+capas ya construidas. Al finalizar, \id{docker compose ps} debe mostrar los
+once servicios en estado \id{healthy}.
+
+Todos los puertos publicados se pueden reasignar mediante variables de entorno,
+sin modificar el archivo de Compose. Por ejemplo, si el puerto 8080 ya está
+ocupado en la máquina anfitriona:
+
+\begin{lstlisting}[
+  numbers=none,
+  caption={Reasignación del puerto del \emph{gateway}.},
+  label={lst:despliegue-puerto}
+]
+GATEWAY_PORT=18080 docker compose up -d --wait
+\end{lstlisting}
+
+Esta reasignación no afecta al acceso a la aplicación: el navegador utiliza
+únicamente \url{http://localhost}, que corresponde al puerto 80 del contenedor
+\id{edge}. Los puertos de los microservicios se publican solamente para poder
+inspeccionar su documentación Swagger.
+
+\subsection{Servicios desplegados}
+\label{anexo:despliegue:servicios}
+
+La composición levanta once contenedores. Nueve se construyen desde el propio
+repositorio y dos se descargan ya construidos, según se detalla en la
+\cref{tab:anexo-contenedores}.
+
+\begin{table}[H]
+\centering
+\caption{Contenedores que componen el despliegue.}
+\label{tab:anexo-contenedores}
+\small
+\begin{tabularx}{\textwidth}{@{}l L{2.1cm} c Y@{}}
+\toprule
+\textbf{Servicio} & \textbf{Red} & \textbf{Puerto} & \textbf{Responsabilidad} \\
+\midrule
+\id{edge}              & frontend y backend & 80   & Origen único: sirve el \emph{shell}, los \emph{remotes} y \id{/api} \\
+\id{shell}             & frontend & 3000 & Anfitrión de los microfrontends, sesión y enrutado \\
+\id{mf-reservas}       & frontend & 3001 & Disponibilidad, creación y consulta de reservas \\
+\id{mf-administracion} & frontend & 3002 & Canchas, reservas y usuarios \\
+\id{mf-reportes}       & frontend & 3003 & Indicadores de ocupación y uso \\
+\id{gateway}           & backend  & 8080 & Verificación de credenciales y enrutado \\
+\id{ms-usuarios}       & backend  & 8081 & Registro, autenticación y gestión de usuarios \\
+\id{ms-canchas}        & backend  & 8082 & Catálogo, horarios y bloqueos \\
+\id{ms-reservas}       & backend  & 8083 & Reservas y disponibilidad \\
+\id{ms-reportes}       & backend  & 8084 & Indicadores; sin base de datos propia \\
+\id{postgres}          & backend  & 5432 & Las tres bases, aisladas por credenciales \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+El contenedor \id{edge} es el único conectado a ambas redes. Esa disposición
+impide que el navegador alcance un microservicio sin atravesar el
+\emph{gateway}, tal como se describe en el capítulo de arquitectura.
+
+\subsection{Usuarios de prueba}
+\label{anexo:despliegue:usuarios}
+
+La migración \id{V2__seed_usuarios.sql} siembra las cuentas de la
+\cref{tab:anexo-usuarios} durante el primer arranque. Las contraseñas se
+almacenan cifradas con BCrypt; en la base de datos no se conserva ninguna en
+claro. Se trata de credenciales de demostración, destinadas exclusivamente a la
+evaluación del proyecto.
+
+\begin{table}[H]
+\centering
+\caption{Cuentas sembradas para la evaluación.}
+\label{tab:anexo-usuarios}
+\small
+\begin{tabularx}{\textwidth}{@{}l l L{4.0cm} Y@{}}
+\toprule
+\textbf{Usuario} & \textbf{Contraseña} & \textbf{Rol} & \textbf{Propósito} \\
+\midrule
+\id{admin}    & \id{admin}    & Administrador & Catálogo, reservas del club, usuarios y reportes \\
+\id{cliente1} & \id{cliente1} & Usuario final & Recorrido de reserva y cancelación \\
+\id{cliente2} & \id{cliente2} & Usuario final & Segundo actor del escenario de concurrencia \\
+\id{inactivo} & \id{inactivo} & Usuario final, inactivo & Rechazo de acceso de una cuenta inactiva \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+El catálogo de canchas y un conjunto de reservas de ejemplo también se siembran.
+Las reservas emplean fechas relativas al momento del arranque, de manera que las
+confirmadas permanezcan en el futuro y puedan cancelarse durante la
+demostración.
+
+\subsection{Verificación del despliegue}
+\label{anexo:despliegue:verificacion}
+
+\begin{lstlisting}[
+  numbers=none,
+  caption={Comprobaciones posteriores al arranque.},
+  label={lst:despliegue-verificacion}
+]
+docker compose ps
+curl -i http://localhost/api/canchas
+curl -u cliente1:cliente1 http://localhost/api/canchas
+\end{lstlisting}
+
+La primera orden debe mostrar los once servicios sanos. La segunda debe
+responder \id{401}, lo que confirma que el \emph{gateway} rechaza las peticiones
+sin credenciales. La tercera devuelve el catálogo sembrado y constituye la
+comprobación más informativa del conjunto: si responde correctamente, entonces
+el \id{edge}, el \emph{gateway}, \id{ms-usuarios} —que validó la credencial—,
+\id{ms-canchas} y PostgreSQL se encuentran operativos y comunicados entre sí.
+
+\subsection{Operación habitual}
+\label{anexo:despliegue:operacion}
+
+\begin{lstlisting}[
+  numbers=none,
+  caption={Órdenes de uso frecuente durante la operación.},
+  label={lst:despliegue-operacion}
+]
+docker compose down -v && docker compose up -d --wait
+docker compose down
+docker compose logs -f ms-reservas
+docker compose up -d --wait --build ms-reservas
+\end{lstlisting}
+
+La primera orden reinicia el sistema desde cero: el modificador \id{-v} elimina
+el volumen de datos, con lo cual vuelven a ejecutarse los guiones de
+inicialización y las migraciones con su carga semilla. Es el procedimiento
+recomendado antes de una demostración, puesto que las reservas de ejemplo se
+generan con fechas relativas al arranque. La segunda detiene el sistema
+conservando los datos, la tercera consulta el registro de un servicio y la
+cuarta reconstruye la imagen de un servicio tras modificar su código; omitir
+\id{--build} en ese último caso es la causa más frecuente de que un cambio no
+se refleje en la ejecución.
+
+\subsection{Diagnóstico de fallos frecuentes}
+\label{anexo:despliegue:problemas}
+
+\begin{table}[H]
+\centering
+\caption{Fallos frecuentes durante el despliegue y su tratamiento.}
+\label{tab:anexo-problemas}
+\small
+\begin{tabularx}{\textwidth}{@{}L{4.1cm} L{4.1cm} Y@{}}
+\toprule
+\textbf{Síntoma} & \textbf{Causa} & \textbf{Tratamiento} \\
+\midrule
+\id{port is already allocated} & Otro proceso ocupa el puerto & Reasignarlo mediante la variable de entorno correspondiente \\
+Respuesta \id{502} en \id{/api} & El \emph{gateway} aún no está sano & Esperar; el \id{edge} resuelve el destino en cada petición y se recupera solo \\
+Respuesta \id{503} en \id{/api} & El microservicio destino no responde & Consultar el registro del servicio \\
+Un microservicio reinicia de forma reiterada & Falló una migración o la base rechazó la conexión & Consultar su registro; si se modificaron contraseñas, reiniciar con \id{down -v} \\
+Un cambio de código no se refleja & Se levantó el servicio sin \id{--build} & Reconstruir la imagen del servicio \\
+La sesión se cierra de forma inesperada & La cuenta fue desactivada & El \emph{gateway} valida la credencial en cada petición; volver a iniciar sesión \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
 \section{Capturas de la aplicación}
 \label{anexo:capturas}
 

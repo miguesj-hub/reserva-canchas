@@ -1,0 +1,57 @@
+% !TeX root = ../despliegue.tex
+% ===========================================================================
+%  Variables de entorno.
+% ===========================================================================
+
+\section{Configuración}
+
+Todo se configura por variables de entorno, con valores por defecto que
+funcionan sin definir ninguna. Las que importan:
+
+\begin{center}
+\small
+\begin{xltabular}{\textwidth}{@{}l l Y@{}}
+\toprule
+\textbf{Variable} & \textbf{Por defecto} & \textbf{Qué controla} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Variable} & \textbf{Por defecto} & \textbf{Qué controla} \\
+\midrule
+\endhead
+\var{POSTGRES_PASSWORD} & \cmd{postgres} &
+  Contraseña del superusuario de PostgreSQL \\
+\var{USUARIOS_DB_PASSWORD} & \cmd{usuarios_app} &
+  Contraseña del rol de \cmd{usuarios_db} \\
+\var{CANCHAS_DB_PASSWORD} & \cmd{canchas_app} &
+  Contraseña del rol de \cmd{canchas_db} \\
+\var{RESERVAS_DB_PASSWORD} & \cmd{reservas_app} &
+  Contraseña del rol de \cmd{reservas_db} \\
+\var{GATEWAY_PORT} & \cmd{8080} &
+  Puerto del gateway en el anfitrión \\
+\var{EDGE_PORT} & \cmd{80} &
+  Puerto por el que se sirve la aplicación \\
+\bottomrule
+\end{xltabular}
+\end{center}
+
+Se definen en un archivo \cmd{.env} en la raíz del repositorio, que Compose lee
+por su cuenta:
+
+\begin{comando}
+POSTGRES_PASSWORD=una-contraseña-larga
+USUARIOS_DB_PASSWORD=otra
+CANCHAS_DB_PASSWORD=otra-más
+RESERVAS_DB_PASSWORD=y-otra
+\end{comando}
+
+\textbf{Ese archivo no se versiona}: está en \cmd{.gitignore}, de modo que
+ninguna credencial llega al repositorio.
+
+\aviso{Las contraseñas de base se aplican \textbf{al crear el volumen}. Si se
+cambian con \cmd{pgdata} ya existente, los servicios no podrán conectarse y
+reiniciarán en bucle. Hay que hacer \cmd{docker compose down -v} antes.}
+
+Cada microservicio recibe \textbf{solo la credencial de su propia base}.
+\servicio{ms-reportes} no recibe ninguna porque no tiene base de datos: obtiene
+todo por HTTP de \servicio{ms-reservas} y \servicio{ms-canchas}.

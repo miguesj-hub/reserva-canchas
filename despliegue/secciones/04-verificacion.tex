@@ -1,0 +1,34 @@
+% !TeX root = ../despliegue.tex
+% ===========================================================================
+%  Comprobaciones tras el arranque.
+% ===========================================================================
+
+\section{Verificar que levantó bien}
+
+Tres comprobaciones bastan:
+
+\begin{comando}
+docker compose ps                                       # los once en healthy
+curl -u cliente1:cliente1 http://localhost/api/canchas   # el catálogo
+open http://localhost                                    # la aplicación
+\end{comando}
+
+La segunda es la más informativa de las tres: si devuelve el catálogo, entonces
+el edge, el gateway, \servicio{ms-usuarios} —que verificó la credencial—,
+\servicio{ms-canchas} y PostgreSQL están todos funcionando y comunicándose entre
+sí.
+
+Una petición sin credenciales debe responder \cmd{401}:
+
+\begin{comando}
+curl -i http://localhost/api/canchas
+\end{comando}
+
+El Swagger de cada microservicio queda accesible por su puerto directo:
+
+\begin{itemize}
+  \item \url{http://localhost:8081/swagger-ui.html} — usuarios y autenticación
+  \item \url{http://localhost:8082/swagger-ui.html} — canchas
+  \item \url{http://localhost:8083/swagger-ui.html} — reservas
+  \item \url{http://localhost:8084/swagger-ui.html} — reportes
+\end{itemize}

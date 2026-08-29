@@ -1,0 +1,47 @@
+% !TeX root = ../despliegue.tex
+% ===========================================================================
+%  Diagnóstico.
+% ===========================================================================
+
+\section{Problemas frecuentes}
+
+\begin{center}
+\small
+\begin{xltabular}{\textwidth}{@{}L{4.2cm} L{4.2cm} Y@{}}
+\toprule
+\textbf{Síntoma} & \textbf{Causa} & \textbf{Solución} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Síntoma} & \textbf{Causa} & \textbf{Solución} \\
+\midrule
+\endhead
+\cmd{port is already allocated} al arrancar &
+  Otro proceso usa ese puerto &
+  \cmd{GATEWAY_PORT=18080 docker compose up -d} \\
+\cmd{/api/...} devuelve \textbf{502} &
+  El gateway aún no está sano &
+  Esperar; el edge resuelve los destinos en cada petición y se recupera solo \\
+\cmd{/api/...} devuelve \textbf{503} &
+  El microservicio destino no responde &
+  \cmd{docker compose logs <servicio>} \\
+Un microservicio reinicia en bucle &
+  Flyway falló, o la base rechazó la conexión &
+  Revisar sus registros; si se cambiaron contraseñas, \cmd{down -v} \\
+Los frontends quedan \cmd{unhealthy} &
+  Su healthcheck no responde &
+  \cmd{docker compose logs shell} \\
+Un cambio de código no se refleja &
+  Se levantó sin \cmd{--build} &
+  \cmd{docker compose up -d --build <servicio>} \\
+La sesión se cierra sola &
+  La cuenta fue inactivada &
+  El gateway verifica la credencial en cada petición; volver a entrar \\
+\bottomrule
+\end{xltabular}
+\end{center}
+
+\nota{Ante cualquier síntoma no listado, el primer comando es siempre
+\cmd{docker compose logs <servicio>}. Los cuatro microservicios registran el
+motivo real del fallo al arrancar, y Flyway es especialmente explícito cuando
+una migración no cuadra con el esquema existente.}

@@ -1,0 +1,42 @@
+% !TeX root = ../despliegue.tex
+% ===========================================================================
+%  Credenciales sembradas.
+% ===========================================================================
+
+\section{Usuarios de prueba}
+
+Los siembra la migración \cmd{V2__seed_usuarios.sql} en el primer arranque.
+
+\begin{center}
+\small
+\begin{xltabular}{\textwidth}{@{}l l L{3.4cm} Y@{}}
+\toprule
+\textbf{Usuario} & \textbf{Contraseña} & \textbf{Rol} & \textbf{Para qué sirve} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Usuario} & \textbf{Contraseña} & \textbf{Rol} & \textbf{Para qué sirve} \\
+\midrule
+\endhead
+\cmd{admin} & \cmd{admin} & ADMINISTRADOR &
+  Catálogo, listado global de reservas, usuarios y reportes \\
+\cmd{cliente1} & \cmd{cliente1} & USUARIO\_FINAL &
+  El recorrido de reserva y cancelación \\
+\cmd{cliente2} & \cmd{cliente2} & USUARIO\_FINAL &
+  El segundo lado del escenario de concurrencia \\
+\cmd{inactivo} & \cmd{inactivo} & USUARIO\_FINAL, inactivo &
+  Demostrar el rechazo de una cuenta inactiva \\
+\bottomrule
+\end{xltabular}
+\end{center}
+
+Las contraseñas se guardan hasheadas con BCrypt; en la base no hay ninguna en
+claro.
+
+\aviso{Son credenciales de demostración, y la contraseña coincide con el nombre
+de usuario. En un despliegue real se cambian antes de exponer el sistema.}
+
+El catálogo de canchas y unas reservas de ejemplo también se siembran. Las
+reservas usan \textbf{fechas relativas al arranque}, no absolutas, para que las
+confirmadas sigan siendo futuras y se puedan cancelar en vivo por mucho tiempo
+que pase desde que se escribió el seed.

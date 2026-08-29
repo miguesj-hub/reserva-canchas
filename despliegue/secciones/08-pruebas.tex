@@ -1,0 +1,50 @@
+% !TeX root = ../despliegue.tex
+% ===========================================================================
+%  Cómo ejecutar la batería de pruebas.
+% ===========================================================================
+
+\section{Ejecutar las pruebas}
+
+Las pruebas de reglas de negocio no necesitan base de datos ni Spring, pero sí
+un JDK 21. Las de arranque (\cmd{*ApplicationTests}) levantan un PostgreSQL
+efímero con Testcontainers, así que necesitan además acceso al demonio de
+Docker.
+
+Si la máquina no tiene JDK 21 instalado, todo se ejecuta dentro de un
+contenedor, sin instalar nada:
+
+\begin{comando}
+docker volume create rc-m2
+docker run --rm \
+  -v "$PWD/backend/ms-reservas:/build" -v rc-m2:/root/.m2 -w /build \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -e TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal \
+  eclipse-temurin:21-jdk-alpine ./mvnw -B test
+\end{comando}
+
+El volumen \cmd{rc-m2} guarda las dependencias de Maven entre ejecuciones: sin
+él, cada corrida vuelve a descargarlas enteras.
+
+Las \textbf{85 pruebas} de los cinco servicios pasan.
+
+\subsection{La prueba de concurrencia}
+
+La verificación de RN-02 —que dos reservas simultáneas sobre el mismo bloque no
+puedan confirmarse las dos— sí necesita un PostgreSQL real, porque lo que se
+está probando es la restricción de exclusión del motor. Se ejecuta con el
+sistema levantado:
+
+\begin{comando}
+docker run --rm --network reserva-canchas_backend \
+  -v "$PWD/backend/ms-reservas:/build" -v rc-m2:/root/.m2 -w /build \
+  -e RESERVAS_IT_DB_URL="jdbc:postgresql://postgres:5432/reservas_db" \
+  eclipse-temurin:21-jdk-alpine \
+  ./mvnw -B test -Dtest=ConcurrenciaReservaIT
+\end{comando}
+
+Son diez repeticiones, y en todas exactamente una reserva se confirma y la otra
+se rechaza.
+
+\nota{La variable \var{RESERVAS_IT_DB_URL} es también el interruptor de esa
+prueba: sin ella definida, la clase se omite. Así la batería normal sigue
+corriendo en cualquier máquina sin exigir una base de datos levantada.}

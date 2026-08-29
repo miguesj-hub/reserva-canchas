@@ -1,0 +1,57 @@
+% !TeX root = ../despliegue.tex
+% ===========================================================================
+%  Inventario de contenedores.
+% ===========================================================================
+
+\section{Qué se levanta}
+
+Once contenedores, definidos en \cmd{docker-compose.yml}. Nueve se construyen
+desde el propio repositorio —cada uno con su \cmd{Dockerfile} en
+\cmd{frontend/<nombre>} o \cmd{backend/<nombre>}— y dos se descargan ya hechos:
+
+\begin{center}
+\small
+\begin{xltabular}{\textwidth}{@{}l L{2.3cm} L{2.0cm} c Y@{}}
+\toprule
+\textbf{Servicio} & \textbf{Origen} & \textbf{Red} & \textbf{Puerto} &
+\textbf{Para qué} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Servicio} & \textbf{Origen} & \textbf{Red} & \textbf{Puerto} &
+\textbf{Para qué} \\
+\midrule
+\endhead
+\servicio{edge} & \cmd{nginx}\newline\cmd{1.27-alpine} & frontend\newline + backend & 80 &
+  Único origen: sirve el shell, los remotes y \cmd{/api} \\
+\servicio{shell} & build local & frontend & 3000 &
+  Host de los microfrontends, sesión y enrutado \\
+\servicio{mf-reservas} & build local & frontend & 3001 &
+  Disponibilidad, nueva reserva, mis reservas \\
+\servicio{mf-administracion} & build local & frontend & 3002 &
+  Canchas, reservas y usuarios \\
+\servicio{mf-reportes} & build local & frontend & 3003 &
+  Los cuatro indicadores \\
+\servicio{gateway} & build local & backend & 8080 &
+  Verifica la credencial y rutea \\
+\servicio{ms-usuarios} & build local & backend & 8081 &
+  Registro, autenticación y usuarios \\
+\servicio{ms-canchas} & build local & backend & 8082 &
+  Catálogo, horarios y bloqueos \\
+\servicio{ms-reservas} & build local & backend & 8083 &
+  Reservas y disponibilidad \\
+\servicio{ms-reportes} & build local & backend & 8084 &
+  Indicadores; \textbf{sin base de datos} \\
+\servicio{postgres} & \cmd{postgres}\newline\cmd{16-alpine} & backend & 5432 &
+  Las tres bases, aisladas por credenciales \\
+\bottomrule
+\end{xltabular}
+\end{center}
+
+\textbf{El \servicio{edge} es el único contenedor conectado a las dos redes.} Es
+lo que impide que el navegador alcance un microservicio saltándose el gateway:
+los servicios de la red \emph{backend} sencillamente no son visibles desde
+fuera.
+
+Los puertos de los microservicios se publican solo para poder inspeccionar su
+Swagger durante la evaluación; la aplicación no los usa.

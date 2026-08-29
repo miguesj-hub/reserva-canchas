@@ -1,0 +1,53 @@
+% !TeX root = ../despliegue.tex
+% ===========================================================================
+%  Operación del día a día.
+% ===========================================================================
+
+\section{Operación}
+
+\subsection{Arranque limpio}
+
+\begin{comando}
+docker compose down -v && docker compose up -d --wait
+\end{comando}
+
+El \cmd{-v} borra el volumen \cmd{pgdata}. Es lo que hace que vuelvan a
+ejecutarse los scripts de \cmd{infra/postgres/init/} y las migraciones con su
+seed, dejando el sistema exactamente como la primera vez.
+
+\aviso{Sin \cmd{-v} los datos se conservan entre arranques: es lo que se quiere
+entre sesiones de trabajo, y lo que \textbf{no} se quiere antes de una
+demostración, porque las reservas de ejemplo se sembraron con fechas relativas
+al primer arranque y con el tiempo quedan en el pasado.}
+
+\subsection{Detener sin borrar}
+
+\begin{comando}
+docker compose down     # para los contenedores, conserva los datos
+\end{comando}
+
+\subsection{Ver los registros}
+
+\begin{comando}
+docker compose logs -f ms-reservas     # uno
+docker compose logs -f                 # todos
+\end{comando}
+
+\subsection{Reconstruir tras un cambio de código}
+
+\begin{comando}
+docker compose up -d --wait --build ms-reservas
+\end{comando}
+
+Sin \cmd{--build}, Compose reutiliza la imagen anterior y el cambio no surte
+efecto. Es la equivocación más fácil de cometer, y la más desconcertante,
+porque el sistema arranca sin error alguno mostrando la versión vieja.
+
+\subsection{Trabajar solo en el frontend}
+
+\begin{comando}
+docker compose up shell mf-reservas mf-administracion mf-reportes
+\end{comando}
+
+Levanta los cuatro microfrontends sin el backend. Las llamadas a \cmd{/api}
+fallarán, que es lo esperado en ese modo.

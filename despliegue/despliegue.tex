@@ -1,0 +1,54 @@
+% ===========================================================================
+%  Manual de Despliegue — Entregable E5
+%  Sistema de Reserva de Canchas Deportivas
+%
+%  Desarrollo de Aplicaciones Empresariales
+%  Maestría en Ingeniería de Software — 2026
+%
+%  Compilar:  pdflatex -interaction=nonstopmode despliegue.tex   (dos veces,
+%             la segunda para que cuadre el índice). No usa bibliografía,
+%             así que no hace falta biber.
+%
+%  ALCANCE DE ESTE DOCUMENTO
+%  -------------------------
+%  Cómo levantar, verificar y operar el sistema. La descripción de qué hace
+%  cada pieza y por qué está diseñada así vive en informe/ (entregable E1);
+%  cómo se usa la aplicación, en manual/ (manual de usuario).
+%
+%  La fuente de este contenido es docs/MANUAL-DESPLIEGUE.md. Si se cambia
+%  uno, hay que cambiar el otro.
+% ===========================================================================
+
+\documentclass[12pt,a4paper,oneside]{article}
+
+\input{config/preambulo}
+\input{config/plantilla}
+\input{config/datos}
+
+\begin{document}
+
+% --- Páginas preliminares (numeración romana) ------------------------------
+\pagenumbering{roman}
+
+\input{config/portada}
+
+\input{secciones/00-introduccion}
+
+\cleardoublepage
+\tableofcontents
+
+% --- Cuerpo del manual ------------------------------------------------------
+\cleardoublepage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\input{secciones/01-levantar}
+\input{secciones/02-que-se-levanta}
+\input{secciones/03-usuarios-prueba}
+\input{secciones/04-verificacion}
+\input{secciones/05-operacion}
+\input{secciones/06-configuracion}
+\input{secciones/07-problemas}
+\input{secciones/08-pruebas}
+
+\end{document}

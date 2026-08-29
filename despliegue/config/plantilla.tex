@@ -1,0 +1,61 @@
+% !TeX root = ../despliegue.tex
+%=======================================================================
+%  config/plantilla.tex — mecanismos propios de este manual
+%=======================================================================
+
+%------------------------- Bloques de comandos --------------------------
+% Este documento es, en buena parte, comandos que alguien va a copiar y
+% pegar en una terminal. Se componen con fancyvrb dentro de una tcolorbox:
+% fancyvrb —a diferencia de listings— compone sin problema los acentos de
+% los comentarios bajo inputenc + T1, y la caja aporta el fondo gris.
+%
+% \VerbatimEnvironment es obligatorio: sin él, envolver un entorno
+% verbatim dentro de \newenvironment no funciona.
+\definecolor{codeback}{HTML}{F6F8FA}
+\definecolor{codeframe}{HTML}{D0D7DE}
+
+\newenvironment{comando}
+  {\VerbatimEnvironment
+   \begin{tcolorbox}[enhanced,breakable,
+       colback=codeback,colframe=codeframe,boxrule=0.6pt,arc=2pt,
+       left=8pt,right=8pt,top=6pt,bottom=6pt]
+   \begin{Verbatim}[fontsize=\small,xleftmargin=0pt]}
+  {\end{Verbatim}\end{tcolorbox}}
+
+%--------------------------- Cajas de aviso -----------------------------
+\definecolor{notaback}{HTML}{EFF6FF}
+\definecolor{notaframe}{HTML}{1168BD}
+\definecolor{avisoback}{HTML}{FEF3C7}
+\definecolor{avisoframe}{HTML}{B45309}
+
+% \nota{...} — información útil o aclaración, sin urgencia.
+\newcommand{\nota}[1]{%
+  \begin{tcolorbox}[enhanced,breakable,
+      colback=notaback,colframe=notaframe,boxrule=0.6pt,arc=2pt,
+      left=8pt,right=8pt,top=5pt,bottom=5pt,
+      title={Nota},fonttitle=\bfseries\small,
+      coltitle=notaframe,colbacktitle=notaback,
+      fontupper=\small]
+    #1
+  \end{tcolorbox}}
+
+% \aviso{...} — advertencia sobre algo irreversible o que requiere cuidado.
+\newcommand{\aviso}[1]{%
+  \begin{tcolorbox}[enhanced,breakable,
+      colback=avisoback,colframe=avisoframe,boxrule=0.6pt,arc=2pt,
+      left=8pt,right=8pt,top=5pt,bottom=5pt,
+      title={Atención},fonttitle=\bfseries\small,
+      coltitle=avisoframe,colbacktitle=avisoback,
+      fontupper=\small]
+    #1
+  \end{tcolorbox}}
+
+%--------------------------- Marcas en el texto -------------------------
+% \cmd{docker compose up} — comando o nombre técnico dentro de un párrafo.
+% \detokenize deja pasar el guion bajo de POSTGRES_PASSWORD y compañía sin
+% tener que escaparlo en cada aparición.
+\newcommand{\cmd}[1]{\texttt{\small\detokenize{#1}}}
+% \var{GATEWAY_PORT} — variable de entorno.
+\newcommand{\var}[1]{\texttt{\small\detokenize{#1}}}
+% \servicio{ms-reservas} — nombre de un contenedor o servicio del compose.
+\newcommand{\servicio}[1]{\texttt{\small\detokenize{#1}}}
