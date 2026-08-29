@@ -2,6 +2,7 @@ package com.ups.reservacanchas.usuarios.application.service;
 
 import com.ups.reservacanchas.usuarios.application.port.in.UserUseCase;
 import com.ups.reservacanchas.usuarios.application.port.out.UserRepositoryPort;
+import com.ups.reservacanchas.usuarios.domain.Role;
 import com.ups.reservacanchas.usuarios.domain.User;
 import com.ups.reservacanchas.usuarios.domain.exception.ForbiddenOperationException;
 import com.ups.reservacanchas.usuarios.domain.exception.InvalidCredentialsException;
@@ -106,6 +107,15 @@ public class UserService implements UserUseCase {
         exigirAdministrador(rol, "activar o inactivar cuentas");
         User user = repository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("El usuario " + id + " no existe."));
+
+        // Una cuenta ADMINISTRADOR nunca se inactiva desde este endpoint: si se
+        // bloqueara la única cuenta con ese rol, nadie podría volver a activarla
+        // ni gestionar el resto del panel. Reactivar sigue permitido: no hay
+        // forma de que este chequeo deje a un administrador fuera por error.
+        if (!activo && user.getRol() == Role.ADMINISTRADOR) {
+            throw new ForbiddenOperationException(
+                    "No se puede inactivar una cuenta con rol ADMINISTRADOR.");
+        }
 
         // FR-047: inactivar NO toca las reservas del usuario. Ni siquiera
         // podría: viven en reservas_db, una base a la que este servicio no

@@ -162,21 +162,25 @@ export default function GestionUsuarios() {
                       </span>
                     </td>
                     <td className="py-4 px-6 text-right">
-                      <button
-                        type="button"
-                        onClick={() => alternarEstado(u)}
-                        disabled={cambiando === u.id}
-                        className={`px-3 py-1.5 rounded-lg font-label-sm text-label-sm inline-flex items-center gap-1 transition-colors disabled:opacity-60 ${
-                          u.activo
-                            ? 'text-error hover:bg-error/10'
-                            : 'text-success hover:bg-success/10'
-                        }`}
-                      >
-                        <span className="material-symbols-outlined text-[18px]">
-                          {u.activo ? 'block' : 'check_circle'}
-                        </span>
-                        {cambiando === u.id ? 'Guardando…' : u.activo ? 'Inactivar' : 'Activar'}
-                      </button>
+                      {u.rol === 'ADMINISTRADOR' ? (
+                        <span className="text-text-muted">—</span>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => alternarEstado(u)}
+                          disabled={cambiando === u.id}
+                          className={`px-3 py-1.5 rounded-lg font-label-sm text-label-sm inline-flex items-center gap-1 transition-colors disabled:opacity-60 ${
+                            u.activo
+                              ? 'text-error hover:bg-error/10'
+                              : 'text-success hover:bg-success/10'
+                          }`}
+                        >
+                          <span className="material-symbols-outlined text-[18px]">
+                            {u.activo ? 'block' : 'check_circle'}
+                          </span>
+                          {cambiando === u.id ? 'Guardando…' : u.activo ? 'Inactivar' : 'Activar'}
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
