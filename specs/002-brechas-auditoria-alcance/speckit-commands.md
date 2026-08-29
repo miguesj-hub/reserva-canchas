@@ -145,7 +145,7 @@ auditoría en lugar de repetirlo.
 
 ## 4 · `/speckit-tasks`
 
-**Pendiente.** Mensaje previsto:
+**Ejecutado como skill, con este mensaje:**
 
 ```
 Genera las tareas de las dos historias, agrupadas por historia y en rebanadas verticales, con la
@@ -163,6 +163,8 @@ Cierra con las tareas de la compuerta 9 de la Historia 2: los tres componentes n
 §4 del informe.
 ```
 
-**Aviso para quien lo lance**: la skill genera `tasks.md` desde plantilla. Sobre 002 es lo correcto,
-porque el archivo no existe. Sobre 001 habría borrado los 134 tasks cerrados — que es exactamente
-la razón por la que este trabajo acabó en una feature propia.
+**Cómo se ejecutó**: tal cual, con la skill, y esta vez sin reservas. La skill genera `tasks.md`
+desde plantilla, que sobre 002 es lo correcto porque el archivo no existía. Sobre 001 habría borrado
+los 134 tasks cerrados — exactamente la razón por la que este trabajo acabó en una feature propia.
+
+Resultado: 25 tareas, **T135 a T159**, sin ninguna colisión con las 134 de 001.
