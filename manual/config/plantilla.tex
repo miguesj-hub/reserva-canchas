@@ -1,0 +1,58 @@
+% !TeX root = ../manual.tex
+%=======================================================================
+%  config/plantilla.tex — mecanismos propios de este manual
+%=======================================================================
+
+%----------------------- Inclusión de capturas --------------------------
+% \captura{archivo}{ancho}{pie}{etiqueta} — figura centrada con la captura
+% de pantalla, tomada de figuras/capturas/. Si el archivo no existe, deja
+% un recuadro visible en vez de fallar la compilación.
+\newcommand{\faltacaptura}[1]{%
+  \fbox{\parbox{0.92\linewidth}{\centering\small
+    \textcolor{BrickRed}{\textbf{Falta \texttt{figuras/capturas/#1.jpg}}}}}}
+
+\newcommand{\captura}[4]{%
+  \begin{figure}[H]
+    \centering
+    \IfFileExists{figuras/capturas/#1.jpg}%
+      {\includegraphics[width=#2\linewidth]{capturas/#1}}%
+      {\faltacaptura{#1}}
+    \caption{#3}
+    \label{fig:#4}
+  \end{figure}}
+
+%--------------------------- Cajas de aviso -----------------------------
+\definecolor{notaback}{HTML}{EFF6FF}
+\definecolor{notaframe}{HTML}{1168BD}
+\definecolor{avisoback}{HTML}{FEF3C7}
+\definecolor{avisoframe}{HTML}{B45309}
+
+% \nota{...} — información útil o aclaración, sin urgencia.
+\newcommand{\nota}[1]{%
+  \begin{tcolorbox}[enhanced,breakable,
+      colback=notaback,colframe=notaframe,boxrule=0.6pt,arc=2pt,
+      left=8pt,right=8pt,top=5pt,bottom=5pt,
+      title={Nota},fonttitle=\bfseries\small,
+      coltitle=notaframe,colbacktitle=notaback,
+      fontupper=\small]
+    #1
+  \end{tcolorbox}}
+
+% \aviso{...} — advertencia sobre algo irreversible o que requiere cuidado.
+\newcommand{\aviso}[1]{%
+  \begin{tcolorbox}[enhanced,breakable,
+      colback=avisoback,colframe=avisoframe,boxrule=0.6pt,arc=2pt,
+      left=8pt,right=8pt,top=5pt,bottom=5pt,
+      title={Atención},fonttitle=\bfseries\small,
+      coltitle=avisoframe,colbacktitle=avisoback,
+      fontupper=\small]
+    #1
+  \end{tcolorbox}}
+
+%------------------------- Referencias a la interfaz ---------------------
+% \boton{Guardar} — nombre de un botón, campo o elemento de la interfaz.
+\newcommand{\boton}[1]{\textbf{#1}}
+% \ruta{Canchas > Editar} — ruta de navegación dentro del menú.
+\newcommand{\ruta}[1]{\textsf{#1}}
+% \campo{usuario} — nombre de un campo de formulario.
+\newcommand{\campo}[1]{\textit{#1}}

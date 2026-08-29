@@ -1,0 +1,111 @@
+% !TeX root = ../manual.tex
+% ===========================================================================
+%  Guía para el usuario final
+% ===========================================================================
+
+\section{Guía para el usuario final}
+\label{sec:usuario-final}
+
+Al iniciar sesión como usuario final, el menú lateral muestra dos
+secciones: \boton{Mis Reservas} y \boton{Disponibilidad}.
+
+\subsection{Consultar disponibilidad}
+\label{sec:usuario:disponibilidad}
+
+Esta es la pantalla desde la que se reserva. Muestra, para un deporte y una
+fecha, todas las canchas de ese deporte y sus bloques horarios.
+
+\begin{enumerate}
+  \item Entra a \boton{Disponibilidad} desde el menú lateral.
+  \item Elige el deporte: \boton{Pádel}, \boton{Tenis} o \boton{Básquet}.
+  \item Elige el día, entre hoy y los cuatro días siguientes.
+\end{enumerate}
+
+\captura{usuario-disponibilidad}{1}{Disponibilidad de las canchas de un deporte, para el día seleccionado.}{usuario-disponibilidad}
+
+Cada cancha aparece con su nombre, su horario de atención y una fila de
+bloques horarios de una hora. El color del bloque indica su estado, según
+la leyenda de la esquina superior derecha:
+
+\begin{itemize}
+  \item \textbf{Libre} (verde): se puede reservar.
+  \item \textbf{Ocupado} (gris): ya tiene una reserva confirmada.
+  \item \textbf{Mantenimiento} (naranja): el administrador bloqueó ese
+        rango; no admite reservas nuevas aunque esté vacío.
+\end{itemize}
+
+\subsection{Crear una reserva}
+\label{sec:usuario:reservar}
+
+\begin{enumerate}
+  \item En \boton{Disponibilidad}, pulsa un bloque \textbf{libre} de la
+        cancha que quieras. El bloque se marca en azul y aparece el botón
+        \boton{Reservar HH:MM} junto al nombre de la cancha.
+\end{enumerate}
+
+\captura{usuario-seleccion-bloque}{1}{Bloque libre seleccionado: aparece el botón para reservarlo.}{usuario-seleccion-bloque}
+
+\begin{enumerate}
+  \setcounter{enumi}{1}
+  \item Pulsa \boton{Reservar HH:MM}. El sistema muestra una pantalla de
+        confirmación con la cancha, la fecha, el horario y a nombre de
+        quién queda la reserva.
+\end{enumerate}
+
+\captura{usuario-confirmar-reserva}{1}{Confirmación de los datos antes de crear la reserva.}{usuario-confirmar-reserva}
+
+\begin{enumerate}
+  \setcounter{enumi}{2}
+  \item Revisa los datos y pulsa \boton{Confirmar Reserva}. Si prefieres no
+        continuar, pulsa \boton{Cancelar} para volver a Disponibilidad sin
+        reservar nada.
+\end{enumerate}
+
+Al confirmar, aparece un aviso de \textit{«Reserva Confirmada»} y el
+sistema te lleva a \boton{Mis Reservas}, donde la nueva reserva figura
+como \textsc{Confirmada}.
+
+\aviso{Solo puedes tener hasta \textbf{3 reservas confirmadas} al mismo
+tiempo. Si ya tienes tres, cancela alguna antes de crear una nueva.}
+
+\aviso{Si otra persona reserva el mismo bloque un instante antes que tú, tu
+solicitud se rechaza con un mensaje en pantalla y el bloque pasa a verse
+como ocupado. Es normal: el sistema garantiza que un mismo bloque nunca
+quede reservado dos veces.}
+
+\subsection{Ver Mis Reservas}
+\label{sec:usuario:mis-reservas}
+
+\boton{Mis Reservas} lista todas tus reservas, pasadas y futuras. Los
+filtros de la parte superior —\boton{Todas}, \boton{Confirmadas},
+\boton{Finalizadas}, \boton{Canceladas}— acotan la lista por estado:
+
+\begin{itemize}
+  \item \textsc{Confirmada}: la reserva es válida y todavía no ha
+        comenzado su bloque horario. Se puede cancelar.
+  \item \textsc{Finalizada}: el bloque horario de la reserva ya pasó. No
+        se puede cancelar.
+  \item \textsc{Cancelada}: la reserva se canceló, por ti o por el
+        administrador. El bloque quedó libre nuevamente.
+\end{itemize}
+
+\captura{usuario-reservas-finalizadas}{1}{Filtro «Finalizadas»: reservas cuyo bloque horario ya pasó.}{usuario-reservas-finalizadas}
+
+\subsection{Cancelar una reserva}
+\label{sec:usuario:cancelar}
+
+\begin{enumerate}
+  \item En \boton{Mis Reservas}, localiza la reserva \textsc{Confirmada}
+        que quieres cancelar.
+  \item Pulsa \boton{Cancelar} en esa tarjeta.
+\end{enumerate}
+
+La reserva cambia de inmediato a estado \textsc{Cancelada} y el bloque
+horario vuelve a aparecer como libre en \boton{Disponibilidad}.
+
+\captura{usuario-reserva-confirmada}{1}{Antes de cancelar: la reserva está \textsc{Confirmada} y muestra el botón Cancelar.}{usuario-reserva-confirmada}
+
+\captura{usuario-reserva-cancelada}{1}{Después de cancelar: la reserva pasa a \textsc{Cancelada}.}{usuario-reserva-cancelada}
+
+\aviso{Una reserva cuyo bloque horario ya pasó (estado \textsc{Finalizada})
+no se puede cancelar, aunque en su momento haya estado confirmada.}

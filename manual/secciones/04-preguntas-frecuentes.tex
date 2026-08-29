@@ -1,0 +1,79 @@
+% !TeX root = ../manual.tex
+% ===========================================================================
+%  Preguntas frecuentes
+% ===========================================================================
+
+\section{Preguntas frecuentes}
+\label{sec:faq}
+
+\subsection*{¿Olvidé mi contraseña, cómo la recupero?}
+\addcontentsline{toc}{subsection}{¿Olvidé mi contraseña, cómo la recupero?}
+
+La aplicación no tiene un flujo de autoservicio para restablecer la
+contraseña. Contacta al administrador del club para que verifique tu
+identidad y gestione el cambio.
+
+\subsection*{Inicié sesión pero no veo ninguna reserva}
+
+Revisa el filtro activo en \boton{Mis Reservas}: si está en
+\boton{Confirmadas}, \boton{Finalizadas} o \boton{Canceladas} y tu reserva
+está en otro estado, no aparecerá. Pulsa \boton{Todas} para ver el
+historial completo (\cref{sec:usuario:mis-reservas}).
+
+\subsection*{No veo ningún bloque libre en una cancha}
+
+Puede deberse a alguna de estas causas:
+
+\begin{itemize}
+  \item Todos los bloques del día ya están ocupados por otras reservas.
+  \item Hay un bloqueo de mantenimiento vigente sobre ese rango
+        (\cref{sec:admin:mantenimiento}); se ve en color naranja.
+  \item La cancha está fuera de su horario de atención para esa hora.
+\end{itemize}
+
+Prueba con otro día, u otra cancha del mismo deporte.
+
+\subsection*{Intenté reservar un bloque y me lo rechazó}
+
+Si el mensaje indica que el bloque ya no está disponible, es porque otra
+persona lo reservó un instante antes que tú. El sistema garantiza que un
+mismo bloque nunca quede reservado dos veces, así que solo una de las dos
+solicitudes se acepta. Elige otro bloque u otra cancha.
+
+\subsection*{¿Cuántas reservas puedo tener a la vez?}
+
+Como máximo tres reservas en estado \textsc{Confirmada}. Si necesitas una
+cuarta, cancela primero alguna de las que ya tienes
+(\cref{sec:usuario:cancelar}).
+
+\subsection*{Quiero cancelar una reserva y no aparece el botón Cancelar}
+
+Solo se pueden cancelar reservas en estado \textsc{Confirmada}. Si el
+bloque horario de la reserva ya pasó, queda en estado \textsc{Finalizada}
+y deja de poder cancelarse.
+
+\subsection*{Mi cuenta dice «inactiva» y no puedo iniciar sesión}
+
+Un administrador desactivó tu cuenta. Contacta al club para que la
+reactive desde Gestión de usuarios (\cref{sec:admin:usuarios}). Tus
+reservas anteriores se conservan mientras tanto.
+
+\subsection*{Cancelé una cancha por error, ¿se pierden sus reservas?}
+
+No. Inactivar una cancha solo la retira de Disponibilidad para reservas
+nuevas; las reservas ya confirmadas y el historial no se modifican.
+Reactívala con el mismo icono para volver a ofrecerla
+(\cref{sec:admin:canchas}).
+
+\subsection*{¿Cómo doy de alta a un nuevo administrador?}
+
+Desde la aplicación no es posible: toda cuenta creada con \boton{Crear
+cuenta} nace como usuario final (\cref{sec:acceso:crear-cuenta}). Ascender
+una cuenta a administrador es una operación que realiza el equipo técnico
+del club directamente sobre la base de datos.
+
+\subsection*{Como usuario final, intenté ver Reportes o Gestión de Canchas}
+
+Esas secciones son exclusivas del rol administrador. Si accedes con una
+cuenta de usuario final, el sistema rechaza la operación; no forman parte
+del menú que ves al iniciar sesión.

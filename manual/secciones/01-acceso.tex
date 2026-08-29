@@ -1,0 +1,98 @@
+% !TeX root = ../manual.tex
+% ===========================================================================
+%  Acceso al sistema
+% ===========================================================================
+
+\section{Acceso al sistema}
+\label{sec:acceso}
+
+Toda persona que use ReservaSport —usuario final o administrador— entra por
+la misma pantalla de inicio de sesión. Lo que ve después de entrar depende
+de su rol.
+
+\subsection{Crear una cuenta}
+\label{sec:acceso:crear-cuenta}
+
+Si todavía no tienes una cuenta, puedes crear una desde la propia pantalla
+de acceso:
+
+\begin{enumerate}
+  \item Abre la aplicación. Se muestra la pantalla \boton{Iniciar sesión} /
+        \boton{Crear cuenta}.
+  \item Pulsa la pestaña \boton{Crear cuenta}.
+  \item Completa los tres campos:
+        \begin{itemize}
+          \item \campo{Usuario}: el nombre con el que iniciarás sesión.
+                No puede repetirse con el de otra cuenta.
+          \item \campo{Nombre completo}: cómo quieres que te llamen dentro
+                de la aplicación.
+          \item \campo{Contraseña}: mínimo 6 caracteres.
+        \end{itemize}
+  \item Pulsa \boton{Crear cuenta}.
+\end{enumerate}
+
+\captura{registro-form-vacio}{1}{Formulario de creación de cuenta.}{registro-vacio}
+
+\captura{registro-form-completo}{1}{Formulario completo, listo para enviar.}{registro-completo}
+
+\nota{Las cuentas que se crean desde aquí siempre quedan como
+\textbf{usuario final}. Si necesitas una cuenta de administrador, debe
+crearla o ascenderla el club desde Gestión de usuarios (véase
+\cref{sec:admin:usuarios}).}
+
+Al crear la cuenta, el sistema inicia sesión automáticamente y te lleva a
+\boton{Mis Reservas}. Como es una cuenta nueva, todavía no tiene ninguna
+reserva.
+
+\captura{registro-exito}{1}{Cuenta creada: sesión iniciada automáticamente, sin reservas todavía.}{registro-exito}
+
+\subsection{Iniciar sesión}
+\label{sec:acceso:login}
+
+\begin{enumerate}
+  \item En la pestaña \boton{Iniciar sesión}, escribe tu \campo{Usuario} y
+        tu \campo{Contraseña}.
+  \item Pulsa \boton{Iniciar Sesión}.
+\end{enumerate}
+
+\captura{usuario-login}{1}{Inicio de sesión.}{login-usuario}
+
+Si tus datos son correctos, entras directamente a la sección que
+corresponde a tu rol: \boton{Mis Reservas} si eres usuario final, o el
+\boton{Dashboard} de administración si eres administrador.
+
+\subsubsection{Mensajes al iniciar sesión}
+
+El sistema distingue dos motivos de rechazo y te lo dice explícitamente,
+para que sepas qué hacer:
+
+\captura{login-error-credenciales}{1}{Usuario o contraseña incorrectos.}{login-error-credenciales}
+
+\aviso{Si ves \textit{«Usuario o contraseña incorrectos»}, revisa que no
+haya espacios de más y que el bloqueo de mayúsculas esté desactivado. Por
+seguridad, el sistema no indica cuál de los dos datos falló.}
+
+\captura{login-error-inactivo}{1}{Cuenta inactiva: se indica el motivo y a quién contactar.}{login-error-inactivo}
+
+\aviso{Si ves \textit{«La cuenta está inactiva»}, tu cuenta existe pero un
+administrador la desactivó. Contacta al club para que la reactive desde
+Gestión de usuarios (\cref{sec:admin:usuarios}); tus reservas anteriores no
+se pierden mientras tanto.}
+
+\subsection{Mi Perfil}
+\label{sec:acceso:perfil}
+
+Desde el menú lateral, la opción \boton{Perfil} muestra los datos de tu
+cuenta: nombre, nombre de usuario, rol e identificador interno. Es la
+misma pantalla para usuario final y administrador; solo cambia el rol que
+se muestra.
+
+\captura{usuario-perfil}{1}{Perfil de un usuario final.}{usuario-perfil}
+
+\captura{admin-perfil}{1}{Perfil de un administrador.}{admin-perfil}
+
+\subsection{Cerrar sesión}
+
+Pulsa \boton{Cerrar Sesión}, disponible tanto en el menú lateral como en la
+propia pantalla de \boton{Perfil}. La sesión se cierra de inmediato y
+vuelves a la pantalla de acceso.

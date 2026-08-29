@@ -1,0 +1,201 @@
+% !TeX root = ../manual.tex
+% ===========================================================================
+%  Guía para el administrador
+% ===========================================================================
+
+\section{Guía para el administrador}
+\label{sec:administrador}
+
+Al iniciar sesión como administrador, el menú lateral muestra cinco
+secciones: \boton{Dashboard}, \boton{Reservas}, \boton{Canchas},
+\boton{Usuarios} y \boton{Reportes}.
+
+\captura{admin-login}{1}{Inicio de sesión como administrador.}{admin-login}
+
+\subsection{Panel principal (Dashboard)}
+\label{sec:admin:dashboard}
+
+Es la primera pantalla al entrar. Resume el día actual con cuatro
+indicadores: reservas de hoy, ocupación media de las canchas,
+cancelaciones del día y la cancha con mayor demanda hoy.
+
+\captura{admin-dashboard}{1}{Panel principal con los indicadores del día.}{admin-dashboard}
+
+\subsection{Gestión de canchas}
+\label{sec:admin:canchas}
+
+Desde \boton{Canchas} se administra el catálogo completo del club: alta,
+edición, horario, bloqueos de mantenimiento y estado activo/inactivo.
+
+\captura{admin-canchas-listado}{1}{Catálogo de canchas, con su horario y estado.}{admin-canchas-listado}
+
+El buscador y los chips de deporte (\boton{Todas}, \boton{Pádel},
+\boton{Tenis}, \boton{Básquet}) filtran la lista. Cada tarjeta de cancha
+tiene tres acciones, de izquierda a derecha: \boton{Editar}, el icono de
+llave inglesa (mantenimiento) y el icono circular (activar/inactivar).
+
+\subsubsection{Crear una cancha}
+
+\begin{enumerate}
+  \item Pulsa \boton{+ Nueva Cancha}, arriba a la derecha.
+  \item Completa \campo{Nombre}, \campo{Deporte}, y el horario de atención
+        (\campo{Apertura} y \campo{Cierre}).
+  \item Pulsa \boton{Guardar}.
+\end{enumerate}
+
+\captura{admin-nueva-cancha}{1}{Alta de una cancha nueva.}{admin-nueva-cancha}
+
+La cancha aparece de inmediato en el catálogo y queda disponible para
+reservar desde ese mismo horario.
+
+\captura{admin-cancha-creada}{1}{La cancha recién creada, ya visible en el catálogo.}{admin-cancha-creada}
+
+\subsubsection{Editar una cancha}
+
+Pulsa \boton{Editar} en la tarjeta de la cancha. Se abre el mismo
+formulario que en el alta, con los datos actuales precargados: nombre,
+deporte y horario de atención.
+
+\captura{admin-canchas-editar}{1}{Edición de una cancha existente.}{admin-canchas-editar}
+
+\aviso{Cambiar el horario de atención cambia también los bloques que se
+ofrecen a partir de ese momento en Disponibilidad. Las reservas ya
+confirmadas fuera del nuevo horario no se cancelan automáticamente.}
+
+\subsubsection{Bloquear una cancha por mantenimiento}
+\label{sec:admin:mantenimiento}
+
+El icono de llave inglesa abre el panel de \textbf{mantenimiento} de la
+cancha: un rango de fechas y horas durante el cual no se admiten reservas
+nuevas.
+
+\captura{admin-canchas-mantenimiento}{1}{Panel de mantenimiento: bloqueos vigentes y alta de uno nuevo.}{admin-canchas-mantenimiento}
+
+\begin{enumerate}
+  \item Completa \campo{Desde}, \campo{Hasta} y, opcionalmente,
+        \campo{Motivo} (por ejemplo, «Mantenimiento de la malla»).
+  \item Pulsa \boton{Bloquear}.
+\end{enumerate}
+
+El bloqueo aparece en la lista inferior del mismo panel, con la opción
+\boton{Retirar} para levantarlo antes de tiempo.
+
+\nota{Un bloqueo de mantenimiento impide reservas \textbf{nuevas} en su
+rango; no cancela las reservas que ya estaban confirmadas ahí. Si hace
+falta liberar la cancha por completo, cancela también esas reservas desde
+Gestión de Reservas (\cref{sec:admin:reservas}).}
+
+\subsubsection{Activar o inactivar una cancha}
+
+El icono circular de la derecha alterna el estado de la cancha:
+
+\begin{itemize}
+  \item Con la cancha \textbf{activa}, el icono es una prohibición roja:
+        púlsalo para inactivarla.
+  \item Con la cancha \textbf{inactiva}, el icono es un visto verde:
+        púlsalo para reactivarla.
+\end{itemize}
+
+\captura{admin-cancha-inactiva}{1}{Cancha inactiva: deja de ofrecerse en Disponibilidad, sin afectar sus reservas ya hechas.}{admin-cancha-inactiva}
+
+\aviso{Inactivar una cancha la retira de Disponibilidad para nuevas
+reservas, pero \textbf{no elimina} las reservas que ya tenía confirmadas
+ni su historial. Es la forma correcta de retirar temporalmente una cancha
+sin perder información.}
+
+\subsection{Gestión de reservas}
+\label{sec:admin:reservas}
+
+Desde \boton{Reservas} se ve el listado completo de reservas del club,
+de todos los usuarios, con filtros por fecha, cancha y estado.
+
+\captura{admin-reservas-listado}{1}{Listado global de reservas, con filtros por fecha, cancha y estado.}{admin-reservas-listado}
+
+Cada fila muestra el código de la reserva, el usuario, la cancha, el
+deporte, la fecha, el bloque horario y su estado. La columna
+\boton{Acciones} solo ofrece \boton{Cancelar} para las reservas en estado
+\textsc{Confirmada}.
+
+\subsubsection{Cancelar la reserva de un usuario}
+
+\begin{enumerate}
+  \item Localiza la reserva y pulsa \boton{Cancelar} en su fila.
+  \item El sistema pide confirmación, mostrando el código, el usuario, la
+        cancha y el horario exactos.
+\end{enumerate}
+
+\captura{admin-confirmar-cancelacion}{1}{Confirmación antes de cancelar la reserva de un usuario.}{admin-confirmar-cancelacion}
+
+\begin{enumerate}
+  \setcounter{enumi}{2}
+  \item Pulsa \boton{Cancelar reserva} para confirmar, o \boton{Volver}
+        para desistir sin cambiar nada.
+\end{enumerate}
+
+La reserva pasa a \textsc{Cancelada} y el bloque horario vuelve a estar
+libre de inmediato, tanto en Disponibilidad como en la sesión del usuario
+dueño de la reserva.
+
+\captura{admin-reserva-cancelada}{1}{La reserva queda \textsc{Cancelada} tras confirmar.}{admin-reserva-cancelada}
+
+\aviso{Cancelar desde aquí afecta a cualquier usuario del club, no solo a
+tus propias reservas. Úsalo cuando la cancelación la pide o la amerita el
+usuario (por ejemplo, un reclamo o un cambio de última hora), ya que la
+acción es inmediata y no tiene deshacer.}
+
+\subsection{Gestión de usuarios}
+\label{sec:admin:usuarios}
+
+Desde \boton{Usuarios} se ve el listado de todas las cuentas del club,
+con su rol y su estado.
+
+\captura{admin-usuarios-listado}{1}{Cuentas del club: rol y estado de cada una.}{admin-usuarios-listado}
+
+La única acción disponible es \boton{Activar} / \boton{Inactivar}, según
+el estado actual de la cuenta:
+
+\begin{enumerate}
+  \item Localiza la cuenta en la lista.
+  \item Pulsa \boton{Inactivar} (cuenta activa) o \boton{Activar} (cuenta
+        inactiva).
+\end{enumerate}
+
+\captura{admin-usuario-activado}{1}{Activación de una cuenta: pasa a poder iniciar sesión de nuevo.}{admin-usuario-activado}
+
+\nota{Una cuenta inactiva no puede iniciar sesión (véase
+\cref{sec:acceso:login}), pero conserva su historial de reservas. Es la
+forma de suspender a alguien sin borrar nada de lo que hizo antes.}
+
+\aviso{Esta pantalla no crea cuentas nuevas. Las cuentas se crean desde
+\boton{Crear cuenta} en la pantalla de acceso (\cref{sec:acceso:crear-cuenta})
+y siempre nacen como usuario final; ascenderlas a administrador se hace
+directamente en la base de datos del club, fuera de esta pantalla.}
+
+\subsection{Reportes}
+\label{sec:admin:reportes}
+
+Desde \boton{Reportes} se consultan los cuatro indicadores de uso del
+club para un rango de fechas: total de reservas, ocupación media,
+cancelaciones y la cancha de mayor demanda.
+
+\begin{enumerate}
+  \item Ajusta \campo{Desde} y \campo{Hasta}.
+  \item Pulsa \boton{Actualizar}.
+\end{enumerate}
+
+\captura{admin-reportes-indicadores}{1}{Los cuatro indicadores y el desglose por deporte y por cancha, para el rango elegido.}{admin-reportes-indicadores}
+
+Debajo de los indicadores, dos vistas complementan el análisis:
+\textbf{Reservas por deporte} (un conteo por deporte) y
+\textbf{Ocupación por cancha} (porcentaje de horas reservadas sobre las
+horas de atención de cada cancha en el rango).
+
+Más abajo, el \textbf{Ranking de demanda} ordena todas las canchas por
+número de reservas en el rango, señalando además cuál tuvo la menor
+demanda.
+
+\captura{admin-reportes-ranking}{1}{Ranking de demanda por cancha, con sus extremos de mayor y menor ocupación.}{admin-reportes-ranking}
+
+\nota{Los reportes se recalculan sobre el rango de fechas elegido cada vez
+que pulsas \boton{Actualizar}; no quedan guardados como un informe
+aparte.}
