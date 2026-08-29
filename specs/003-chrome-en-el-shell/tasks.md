@@ -70,10 +70,10 @@ remonta.
 
 ## Phase 5: User Story 3 — Modelo, informe y figuras (P3)
 
-- [ ] T172 [US3] Precisar en `diagramas/workspace.dsl` la vista 09 y las descripciones que lo necesiten: el shell aporta el marco y los remotes solo el contenido (FR-064)
-- [ ] T173 [US3] Reexportar los diagramas y regenerar las figuras afectadas en `informe/figuras/`, comprobando que ninguna otra cambia de geometría
-- [ ] T174 [US3] Revisar §4 de `informe/secciones/04-arquitectura.tex`: lo que afirma sobre el shell pasa a ser cierto; añadir la precisión de que los microfrontends aportan solo el contenido (FR-064)
-- [ ] T175 [US3] Recompilar el informe y la presentación, y comprobar que no hay errores ni referencias sin resolver
+- [X] T172 [US3] Precisar en `diagramas/workspace.dsl` la vista 09 y las descripciones que lo necesiten: el shell aporta el marco y los remotes solo el contenido (FR-064)
+- [X] T173 [US3] Reexportar los diagramas y regenerar las figuras afectadas en `informe/figuras/`, comprobando que ninguna otra cambia de geometría
+- [X] T174 [US3] Revisar §4 de `informe/secciones/04-arquitectura.tex`: lo que afirma sobre el shell pasa a ser cierto; añadir la precisión de que los microfrontends aportan solo el contenido (FR-064)
+- [X] T175 [US3] Recompilar el informe y la presentación, y comprobar que no hay errores ni referencias sin resolver
 
 ---
 
@@ -82,7 +82,7 @@ remonta.
 - [X] T176 Reconstruir los cuatro contenedores del frontend y comprobar que quedan sanos
 - [X] T177 Verificar SC-014 y SC-017 en un navegador real: recorrer las siete opciones del administrador y las dos del socio, comprobar que en todas está el menú completo, que ir de *Canchas* a *Reportes* no remonta el menú, y medir el tiempo del salto entre remotes frente a los 2 592 ms de referencia
 - [X] T178 Verificar los casos de borde: `/reservas/nueva` sigue a pantalla completa sin menú, `/login` sin menú, y `/perfil` **con** menú, que hoy lo pierde
-- [ ] T179 Actualizar `docs/AUDITORIA-ALCANCE.md` con este hallazgo y su cierre
+- [X] T179 Actualizar `docs/AUDITORIA-ALCANCE.md` con este hallazgo y su cierre
 
 ---
 

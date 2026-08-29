@@ -35,17 +35,18 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
             }
 
             // --- Microfrontends --------------------------------------------
-            shell = container "Shell (host)" "Main container: layout, navigation, user session, and runtime orchestration of the remotes." "React + Module Federation" {
+            shell = container "Shell (host)" "Host container: renders the application chrome (side menu and header) once, resolves the top-level routes, holds the user session, orchestrates the remotes at runtime, and isolates their failures." "React + Module Federation" {
                 tags "Microfrontend" "Host"
 
                 // --- Internal components ---------------------------------
                 routerShell = component "Router" "Defines the top-level routes and resolves which remote to delegate each one to." "React Router"
-                layoutShell = component "Layout" "Shared visual structure (header, navigation) that wraps the active remote." "React"
+                navegacion = component "Navegacion" "The single definition of the menu entries, one list per role, plus the routes that are shown without chrome." "TypeScript module"
+                layoutShell = component "Chrome" "Renders the side menu and the header once, chooses the menu by the session role, and keeps them mounted while only the centre changes. Full-screen routes are served without it." "React"
                 sessionContext = component "SessionContext" "Holds the authenticated user's identity and role, and exposes session state to the shell and the remotes." "React Context"
                 remoteLoader = component "RemoteLoader" "Loads each microfrontend's remoteEntry.js at runtime." "Module Federation"
             }
 
-            mfReservas = container "mf-reservas" "Availability lookup, booking creation, and cancellation for the end user." "React + Module Federation (remote)" {
+            mfReservas = container "mf-reservas" "Availability lookup, booking creation, and cancellation for the end user. Exposes only its screens: the chrome is the shell's." "React + Module Federation (remote)" {
                 tags "Microfrontend"
 
                 // --- Internal components ---------------------------------
@@ -55,7 +56,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 apiClientReservas = component "ApiClient" "Wraps the HTTP calls to /api/reservas and /api/disponibilidad." "Fetch API"
             }
 
-            mfAdministracion = container "mf-administracion" "Management of the court catalog, schedules, blocks, users, and cancellation of any booking." "React + Module Federation (remote)" {
+            mfAdministracion = container "mf-administracion" "Management of the court catalog, schedules, blocks, users, bookings policy, and cancellation of any booking. Exposes only its screens: the chrome is the shell's." "React + Module Federation (remote)" {
                 tags "Microfrontend"
 
                 // --- Internal components ---------------------------------
@@ -65,7 +66,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
                 apiClientAdministracion = component "ApiClient" "Wraps the HTTP calls to /api/canchas, /api/reservas, and /api/usuarios." "Fetch API"
             }
 
-            mfReportes = container "mf-reportes" "Displays occupancy reports, bookings by period, cancellations, and the most/least demanded courts." "React + Module Federation (remote)" {
+            mfReportes = container "mf-reportes" "Displays occupancy reports, bookings by period, cancellations, and the most/least demanded courts. Exposes only its screen: the chrome is the shell's." "React + Module Federation (remote)" {
                 tags "Microfrontend"
 
                 // --- Internal components ---------------------------------
@@ -391,7 +392,8 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
         // ===================================================================
         routerShell -> sessionContext "Checks whether there is an active session before resolving the route"
         routerShell -> layoutShell "Renders within"
-        layoutShell -> remoteLoader "Mounts the remote for the active route"
+        layoutShell -> navegacion "Reads the menu entries for the active role"
+        layoutShell -> remoteLoader "Mounts the remote for the active route, replacing only the centre"
 
         sessionContext -> edge "Authenticates the user" "JSON/HTTPS · /api/auth"
         remoteLoader -> mfReservas "Loads the remote at runtime" "Module Federation (remoteEntry.js)"
@@ -545,7 +547,7 @@ workspace "Sports Court Booking System" "Microfrontend and microservices archite
             include *
         }
 
-        component shell "09-Componentes-shell" "Level 3 — Interior of the shell: layout, session, and remote loading." {
+        component shell "09-Componentes-shell" "Level 3 — Interior of the shell: chrome, top-level routing, session, and remote loading." {
             include *
         }
 

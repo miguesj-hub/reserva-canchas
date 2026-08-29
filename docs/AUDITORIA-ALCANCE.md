@@ -24,6 +24,7 @@ resto del proyecto, sin reabrir la feature 001.
 | 1 | El administrador no puede consultar disponibilidad desde la interfaz | **Media** | **Cerrado** — feature 002, US1 (T135–T139) |
 | 2 | El tope de reservas activas (RN-06) no se puede editar desde ninguna parte | Baja | **Cerrado** — feature 002, US2 (T140–T154) |
 | 3 | ~~`informe.pdf` compilado con los diagramas anteriores~~ **Resuelto** | — | `informe/` |
+| 4 | El chrome del frontend vivía duplicado en los remotes, no en el shell | Media | **Cerrado** — feature 003 |
 
 ---
 
@@ -145,7 +146,42 @@ de escala. El informe pasa de 55 a 56 páginas.
 
 ---
 
-## Lo que sí está completo
+## 4. El chrome del frontend no vivía donde debía
+
+Hallazgo posterior a esta auditoría, encontrado al revisar por qué el menú de
+administración se había desincronizado entre remotes.
+
+**Qué pasaba.** El menú lateral y la cabecera vivían en el layout de cada
+microfrontend, no en el shell. El menú de administración estaba duplicado en
+`mf-administracion` y `mf-reportes` (95 y 119 líneas) y ya había fallado: las dos
+pantallas de la feature 002 se añadieron a una copia y no a la otra, y las
+entradas desaparecían al entrar en Reportes.
+
+Además contradecía cuatro documentos a la vez. La constitución (Principio V), §4
+del informe y el modelo C4 afirmaban que la navegación de nivel superior vivía en
+el shell; el único artefacto que decía la verdad era un comentario en
+`shell/src/App.tsx`.
+
+**Consecuencia medida.** Cambiar de sección dentro de un microfrontend costaba
+155–232 ms y solo repintaba el centro. Cambiar entre microfrontends costaba
+**2 592 ms** y remontaba la interfaz entera. La transición de cortina de 800 ms
+existía para encubrir ese remontado.
+
+**Gravedad.** Para la rúbrica, baja: el 15 % de microfrontends pide host, dos o
+más remotes, integración por Module Federation y despliegue independiente, y las
+cuatro cosas se cumplían. Para la coherencia de la entrega y para el
+mantenimiento, media.
+
+**Cerrado** en la feature 003, moviendo el chrome al shell. Se evaluó la
+alternativa de corregir los documentos en vez del código y se descartó: hacía
+desaparecer la contradicción sin resolver la duplicación ni el remontado.
+
+El resultado, medido con las mismas herramientas: **el salto entre
+microfrontends baja de 2 592 ms a 64–73 ms**, el mismo coste que un cambio dentro
+del mismo microfrontend; el menú no se remonta en ninguna navegación; queda una
+sola definición del menú; y se borran 859 líneas frente a 90 escritas. La
+constitución no necesitó enmienda: su Principio V pasó de incumplirse a
+cumplirse.
 
 Comprobado leyendo el código, no la documentación:
 
