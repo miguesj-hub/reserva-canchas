@@ -141,9 +141,15 @@ body {
    Un panel sólido sube desde abajo, cubre toda la pantalla y sigue subiendo
    hasta salir por arriba, revelando la sección siguiente debajo — el mismo
    gesto que un telón vertical, no un deslizamiento lateral.
-   --curtain-duration debe coincidir con DURACION_MS del componente. */
+   --curtain-duration debe coincidir con DURACION_MS del componente.
+
+   En 0ms la cortina queda desactivada: el panel no llega a verse y el cambio
+   de sección es inmediato. Se bajó a 0 porque 800ms por navegación se leían
+   como lentitud del sistema durante la demostración, no como una transición.
+   Para recuperarla, subir este valor Y los DURACION_MS / DURACION_ENTRADA_MS
+   de components/, que tienen que seguir coincidiendo. */
 :root {
-  --curtain-duration: 800ms;
+  --curtain-duration: 0ms;
 }
 
 .curtain-panel {

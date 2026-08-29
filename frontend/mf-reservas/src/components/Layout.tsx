@@ -4,7 +4,7 @@ import type { Sesion } from '../tipos';
 import { CurtainTransition } from './CurtainTransition';
 
 /** Debe coincidir con --curtain-duration / DURACION_MS de CurtainTransition. */
-const DURACION_ENTRADA_MS = 800;
+const DURACION_ENTRADA_MS = 0;
 
 /**
  * Cortina de entrada: cuando se llega aquí desde otro remote (mf-administracion

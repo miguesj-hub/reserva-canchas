@@ -1,8 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useOutlet } from 'react-router-dom';
 
-/** Debe coincidir con la duración total definida en App.css (--curtain-duration). */
-const DURACION_MS = 800;
+/**
+ * Debe coincidir con la duración total definida en App.css
+ * (--curtain-duration). En 0 la cortina queda desactivada y el contenido se
+ * reemplaza de inmediato: bajar solo la variable CSS dejaría este temporizador
+ * cambiando la sección a los 400ms sin nada que lo tape, que es peor que la
+ * animación.
+ */
+const DURACION_MS = 0;
 
 /** Primer segmento de la ruta ("/administracion/reservas" → "/administracion"). */
 function primerSegmento(pathname: string): string {
