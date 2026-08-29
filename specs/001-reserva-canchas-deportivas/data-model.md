@@ -142,14 +142,9 @@ transacciones que comprueban a la vez y ambas ven el bloque libre— y es lo que
 | `clave` | `varchar(60)` | PK | |
 | `valor` | `varchar(120)` | NOT NULL | |
 
-Una sola fila obligatoria: `max_reservas_activas = 3` (RN-06). Se lee **y se escribe** por
-`ConfigurationRepositoryPort`.
-
-La escritura entra con la enmienda 1.3.0 de la constitución, que declara en alcance la
-configuración del tope por traza a RN-06. Hasta entonces este documento decía que era "un
-parámetro, no una pantalla, y añadirla sería alcance nuevo": esa frase queda sin efecto. La tabla
-no cambia —ni columnas, ni migración nueva—; lo que cambia es que su única fila deja de ser de
-solo lectura y pasa a editarse desde `mf-administracion` (FR-049 a FR-053).
+Una sola fila obligatoria: `max_reservas_activas = 3` (RN-06). Se lee por
+`ConfigurationRepositoryPort`. Es un parámetro, no una pantalla: §3.2 no lista ninguna de
+configuración y añadirla sería alcance nuevo.
 
 ### Migraciones
 
